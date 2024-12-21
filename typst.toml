@@ -1,6 +1,6 @@
 [package]
 name = "zebraw"
-version = "0.1.0"
+version = "0.1.1"
 entrypoint = "lib.typ"
 authors = ["hongjr03 <https://github.com/hongjr03>"]
 description = "A lightweight and fast package for displaying code blocks with line numbers or highlighting."
