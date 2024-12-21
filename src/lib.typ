@@ -1,4 +1,4 @@
-#let zebraw(highlight-lines: (), body, highlight-color: rgb("#fffd11a1").lighten(70%)) = {
+#let zebraw(highlight-lines: (), body, highlight-color: rgb("#fffd11a1").lighten(70%), inset: (top: 3pt, bottom: 3pt, left: 3pt, right: 3pt)) = {
   show raw.where(block: true): it => {
     set par(justify: false)
     block(
@@ -8,7 +8,7 @@
       width: 100%,
       stack(
         ..it.lines.map(raw_line => block(
-          inset: 3pt,
+          inset: inset,
           width: 100%,
           fill: if highlight-lines.contains(raw_line.number) {
             highlight-color

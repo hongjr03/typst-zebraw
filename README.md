@@ -4,20 +4,33 @@ Zebraw is a lightweight and fast package for displaying code blocks with line nu
 
 ## Example
 
-To show a raw block with line numbers, just import `zebraw` package and then follow with `#show zebraw.with()`.
+To use, import `zebraw` package then follow with `#show zebraw.with()`.
 
 ````typ
-  #import "@preview/zebraw:0.1.0": *
+#import "@preview/zebraw:0.1.0": *
 
-  #show: zebraw.with()
+#show: zebraw.with()
 
-  ```typ
-  hi
-  It's a raw block with line numbers.
-  ```
+```typ
+hi
+It's a raw block with line numbers.
+```
 ````
 
 ![example1](assets/example1.svg)
+
+The line spacing can be adjusted by passing the `inset` parameter to the `zebraw` function. The default value is `top: 3pt, bottom: 3pt, left: 3pt, right: 3pt`.
+
+````typ
+#show: zebraw.with(inset: (top: 6pt, bottom: 6pt))
+
+```typ
+hi
+It's a raw block with line numbers.
+```
+````
+
+![line-spacing](assets/line-spacing.svg)
 
 For cases where code line highlighting is needed, you should use `#zebraw()` function with `highlight-lines` parameter to specify the line numbers that need to be highlighted, as shown below:
 

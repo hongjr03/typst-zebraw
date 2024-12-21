@@ -8,7 +8,7 @@ Zebraw is a lightweight and fast package for displaying code blocks with line nu
 
 == Example
 
-To show a raw block with line numbers, just import `zebraw` package and then follow with ```typ #show zebraw.with() ```.
+To use, import `zebraw` package then follow with ```typ #show zebraw.with() ```.
 
 #grid(columns: 2, column-gutter: 1em)[````typ
   #import "@preview/zebraw:0.1.0": *
@@ -20,6 +20,23 @@ To show a raw block with line numbers, just import `zebraw` package and then fol
   It's a raw block with line numbers.
   ```
   ````][
+  ```typ
+  hi
+  It's a raw block with line numbers.
+  ```
+]
+
+The line spacing can be adjusted by passing the `inset` parameter to the `zebraw` function. The default value is `top: 3pt, bottom: 3pt, left: 3pt, right: 3pt`.
+
+#grid(columns: 2, column-gutter: 1em)[````typ
+  #show: zebraw.with(inset: (top: 6pt, bottom: 6pt))
+
+  ```typ
+  hi
+  It's a raw block with line numbers.
+  ```
+  ````][
+    #show: zebraw.with(inset: (top: 6pt, bottom: 6pt))
   ```typ
   hi
   It's a raw block with line numbers.
