@@ -1,4 +1,5 @@
-#let zebraw(highlight-lines: (), body, highlight-color: rgb("#fffd11a1").lighten(70%), inset: (top: 3pt, bottom: 3pt, left: 3pt, right: 3pt)) = {
+#let zebraw(highlight-lines: (), body, highlight-color: rgb("#fffd11a1").lighten(70%), inset: (:)) = {
+  inset = (top: 3pt, bottom: 3pt, left: 3pt, right: 3pt) + inset
   show raw.where(block: true): it => {
     set par(justify: false, leading: inset.top + inset.bottom)
     block(
