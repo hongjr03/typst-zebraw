@@ -22,7 +22,7 @@
             column-gutter: 0.7em,
             row-gutter: 0.6em,
             if highlight-lines.contains(raw_line.number) {
-              text(highlight-color.darken(89%), [#raw_line.number])
+              align(top, text(highlight-color.darken(89%), [#raw_line.number]))
             } else {
               align(top, text(gray, [#raw_line.number]))
             },
