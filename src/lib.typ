@@ -1,6 +1,6 @@
 #let zebraw(highlight-lines: (), body, highlight-color: rgb("#fffd11a1").lighten(70%), inset: (top: 3pt, bottom: 3pt, left: 3pt, right: 3pt)) = {
   show raw.where(block: true): it => {
-    set par(justify: false)
+    set par(justify: false, leading: inset.top + inset.bottom)
     block(
       fill: luma(245),
       inset: (top: 4pt, bottom: 4pt),
@@ -23,7 +23,7 @@
             if highlight-lines.contains(raw_line.number) {
               text(highlight-color.darken(89%), [#raw_line.number])
             } else {
-              text(gray, [#raw_line.number])
+              align(top, text(gray, [#raw_line.number]))
             },
             raw_line,
           ),
