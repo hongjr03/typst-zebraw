@@ -1,4 +1,4 @@
-#import "src/lib.typ": *
+#import "@preview/zebraw:0.1.0": *
 
 #show: zebraw.with()
 
@@ -11,7 +11,7 @@ Zebraw is a lightweight and fast package for displaying code blocks with line nu
 To use, import `zebraw` package then follow with ```typ #show zebraw.with() ```.
 
 #grid(columns: 2, column-gutter: 1em)[````typ
-  #import "@preview/zebraw:0.1.1": *
+  #import "@preview/zebraw:0.1.0": *
 
   #show: zebraw.with()
 
