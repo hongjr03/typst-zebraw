@@ -49,7 +49,7 @@ For cases where code line highlighting is needed, you should use `#zebraw()` fun
 )
 ````
 
-![example2](assets/example2.svg)
+![example2](assets/example4.svg)
 
 Customize the highlight color by passing the `highlight-color` parameter to the `zebraw` function:
 
@@ -64,17 +64,62 @@ Customize the highlight color by passing the `highlight-color` parameter to the 
 )
 ````
 
-![example3](assets/example3.svg)
+![example3](assets/example5.svg)
+
+For more complex highlighting, you can also add comments to the highlighted lines by passing an array of line numbers and comments to the `highlight-lines` parameter. The comments will be displayed in the code block with the specified `comment-flag` and `comment-font-args`:
+
+````typ
+#zebraw(
+  highlight-lines: (
+    (1, "auto indent!"),
+    (2, [Content available as *well*.]),
+    3,
+  ),
+  highlight-color: blue.lighten(90%),
+  comment-font-args: (fill: blue, font: "IBM Plex Sans"),
+  comment-flag: "~~>",
+  ```typ
+  I'm so blue!
+              -- George III
+  I'm not.
+              -- Alexander Hamilton
+  ```,
+)
+````
+
+![example4](assets/example6.svg)
+
+You can also add a header or footer to the code block by passing the `header` / `footer` parameter to the `zebraw` function, as shown below:
+
+````typ
+#zebraw(
+  header: "this is the example of the header",
+  lang: false,
+  ```typ
+  I'm so blue!
+              -- George III
+  I'm not.
+              -- Alexander Hamilton
+  ```,
+  footer: "this is the end of the code",
+)
+````
+
+![example5](assets/example7.svg)
+
+## Real-world Example
+
+Here is an example of using `zebraw` to highlight lines in a Rust code block:
 
 ## Performance
 
 Focusing on performance, Zebraw is designed to be lightweight and fast with simple and proper features. It can handle code blocks with ease. The following is a test of a typst file with over 2000 code blocks, each containing 3 lines of code and a test of another typst file with only 30 code blocks.
 
-| Package | 2000 code blocks | 30 code blocks |
-| --- | --- | --- |
-| Typst 0.12.0 Native | 0.62s | 0.10s |
-| Zebraw 0.1.0 | 0.86s | 0.10s |
-| Codly 1.2.0 | 4.03s | 0.14s |
+| Package             | 2000 code blocks | 30 code blocks |
+| ------------------- | ---------------- | -------------- |
+| Typst 0.12.0 Native | 0.62s            | 0.10s          |
+| Zebraw 0.1.0        | 0.86s            | 0.10s          |
+| Codly 1.2.0         | 4.03s            | 0.14s          |
 
 Though zebraw is faster than codly, it does not support features as much as codly does. Zebraw is designed to be lightweight and fast with useful features.
 
