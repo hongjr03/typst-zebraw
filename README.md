@@ -1,4 +1,8 @@
-# typst-zebraw
+# 🦓 Zebraw
+
+<a href="https://typst.app/universe/package/zebraw">
+<img src="https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Ftypst.app%2Funiverse%2Fpackage%2Fzebraw&query=%2Fhtml%2Fbody%2Fdiv%2Fmain%2Fdiv%5B2%5D%2Faside%2Fsection%5B2%5D%2Fdl%2Fdd%5B3%5D&logo=typst&label=Universe&color=%2339cccc" />
+</a>
 
 Zebraw is a **lightweight** and **fast** package for displaying code blocks with line numbers in typst, supporting code line highlighting. The term "_**Zebraw**_" is a combination of "**_zebra_**" and "**_raw_**", for the highlighted lines will be displayed in the code block like a zebra lines.
 
@@ -7,7 +11,7 @@ Zebraw is a **lightweight** and **fast** package for displaying code blocks with
 To use, import `zebraw` package then follow with `#show zebraw.with()`.
 
 ````typ
-#import "@preview/zebraw:0.1.0": *
+#import "@preview/zebraw:0.2.0": *
 
 #show: zebraw.with()
 
@@ -68,18 +72,11 @@ Focusing on performance, Zebraw is designed to be lightweight and fast with simp
 
 | Package | 2000 code blocks | 30 code blocks |
 | --- | --- | --- |
-| Typst Native | 0.62s | 0.10s |
-| Zebraw | 0.86s | 0.10s |
-| Codly | 4.03s | 0.14s |
-| Codelst | 24.31s | 0.11s |
+| Typst 0.12.0 Native | 0.62s | 0.10s |
+| Zebraw 0.1.0 | 0.86s | 0.10s |
+| Codly 1.2.0 | 4.03s | 0.14s |
 
-You can see that while in the case of less code blocks, all packages have similar performance. However, when the number of code blocks increases, Zebraw is still able to maintain a good performance, while the performance of Codly and Codelst drops significantly.
-
-## Limitations
-
-- Zebraw does not support features as complex as Codly and Codelst.
-- Zebraw does not support the `highlight-range` parameter **yet**.
-- ...
+Though zebraw is faster than codly, it does not support features as much as codly does. Zebraw is designed to be lightweight and fast with useful features.
 
 ## License
 
