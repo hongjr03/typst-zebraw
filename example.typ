@@ -1,6 +1,14 @@
 #import "src/lib.typ": *
 
 #show raw: set text(font: "Fira Code")
+
+#show: zebraw-init.with(
+  highlight-color: blue.lighten(90%),
+  comment-font-args: (fill: navy, font: "IBM Plex Sans", ligatures: true),
+  comment-flag: "",
+  lang: false,
+)
+
 #show: zebraw.with()
 
 = 🦓 Zebraw
@@ -12,7 +20,7 @@ Zebraw is a lightweight and fast package for displaying code blocks with line nu
 To use, import `zebraw` package then follow with ```typ #show zebraw.with() ```.
 
 #grid(columns: 2, column-gutter: 1em)[````typ
-  #import "@preview/zebraw:0.2.0": *
+  #import "@preview/zebraw:0.3.0": *
 
   #show: zebraw.with()
 
@@ -27,7 +35,7 @@ To use, import `zebraw` package then follow with ```typ #show zebraw.with() ```.
   ```
 ]
 
-The line spacing can be adjusted by passing the `inset` parameter to the `zebraw` function. The default value is `top: 3pt, bottom: 3pt, left: 3pt, right: 3pt`.
+The line spacing can be adjusted by passing the `inset` parameter to the `zebraw` function. The default value is `top: 3pt, bottom: 3pt, left: 3pt, right: 3pt`. Notice that by using ```typ #show ```, the `inset` parameter will be applied to all code blocks except code blocks rendered by ```typ #zebraw() ``` function.
 
 #grid(columns: 2, column-gutter: 1em)[````typ
   #show: zebraw.with(
@@ -97,8 +105,7 @@ For more complex highlighting, you can also add comments to the highlighted line
   #zebraw(
     highlight-lines: (
       (3, "accept array of line number and comments"),
-      (4, [comments can be both #str and #content]),
-      (12, "ligature is supported!"),
+      (4, align(center)[comments can be both #str and #content]),
     ),
     ````typ
     #zebraw(
@@ -149,7 +156,7 @@ You can also add a header or footer to the code block by passing the `header` / 
     ),
     ````typ
     #zebraw(
-      lang: false,
+      lang: true,
       header: "this is the example of the header",
       ```typ
       I'm so blue!
@@ -163,8 +170,8 @@ You can also add a header or footer to the code block by passing the `header` / 
   )][
   #zebraw(
     header: "this is the example of the header",
-    lang: false,
-    ```typ
+    lang: true,
+    ```typst
     I'm so blue!
                 -- George III
     I'm not.
@@ -174,6 +181,30 @@ You can also add a header or footer to the code block by passing the `header` / 
   )
 ]
 
+// highlight-color: rgb("#94e2d5").lighten(50%),
+// inset: (top: 0.3em, right: 0.3em, bottom: 0.3em, left: 0.3em),
+// comment-color: none,
+// comment-flag: ">",
+// comment-font-args: (size: 8pt),
+// lang: true,
+
+To change the rendered results of both pure typst raw block and `zebraw` block, you can use the `zebraw-init` function to set the default values for `highlight-color`, `inset`, `comment-color`, `comment-flag`, `comment-font-args`, and `lang`:
+
+```typ
+#show: zebraw-init.with(
+  highlight-color: rgb("#94e2d5").lighten(50%),
+  inset: (top: 0.3em, right: 0.3em, bottom: 0.3em, left: 0.3em),
+  comment-color: none,
+  comment-flag: ">",
+  comment-font-args: (size: 8pt),
+  lang: true,
+)
+```
+
+Without using `zebraw-init`, you can still begin with just `zebraw` function and use the default values. By using `zebraw-init` without any parameters, the values will be reset to the default values.
+
+#show: zebraw-init
+
 == Real-world Example
 
 Here is an example of using `zebraw` to highlight lines in a Rust code block:
@@ -181,9 +212,12 @@ Here is an example of using `zebraw` to highlight lines in a Rust code block:
 #zebraw(
   highlight-lines: (
     (3, [to avoid negative numbers]),
-    (6, [0️⃣ is not a right argument to fibonacci_reccursive()!]),
+    (9, [
+      \/\*\
+      50    => 12586269025,\
+      \*\/])
   ),
-  header: "// fibonacci_reccursive()",
+  header: "Calculate Fibonacci number using reccursive function",
   ```rust
   pub fn fibonacci_reccursive(n: i32) -> u64 {
       if n < 0 {
@@ -193,9 +227,6 @@ Here is an example of using `zebraw` to highlight lines in a Rust code block:
           0 => panic!("zero is not a right argument to fibonacci_reccursive()!"),
           1 | 2 => 1,
           3 => 2,
-          /*
-          50    => 12586269025,
-          */
           _ => fibonacci_reccursive(n - 1) + fibonacci_reccursive(n - 2),
       }
   }

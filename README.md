@@ -6,12 +6,12 @@
 
 Zebraw is a **lightweight** and **fast** package for displaying code blocks with line numbers in typst, supporting code line highlighting. The term "_**Zebraw**_" is a combination of "**_zebra_**" and "**_raw_**", for the highlighted lines will be displayed in the code block like a zebra lines.
 
-## Example
+## Usage
 
 To use, import `zebraw` package then follow with `#show zebraw.with()`.
 
 ````typ
-#import "@preview/zebraw:0.2.0": *
+#import "@preview/zebraw:0.3.0": *
 
 #show: zebraw.with()
 
@@ -106,6 +106,21 @@ You can also add a header or footer to the code block by passing the `header` / 
 ````
 
 ![example5](assets/example7.svg)
+
+To change the rendered results of both pure typst raw block and `zebraw` block, you can use the `zebraw-init` function to set the default values for `highlight-color`, `inset`, `comment-color`, `comment-flag`, `comment-font-args`, and `lang`:
+
+```typ
+#show: zebraw-init.with(
+  highlight-color: rgb("#94e2d5").lighten(50%),
+  inset: (top: 0.3em, right: 0.3em, bottom: 0.3em, left: 0.3em),
+  comment-color: none,
+  comment-flag: ">",
+  comment-font-args: (size: 8pt),
+  lang: true,
+)
+```
+
+Without using `zebraw-init`, you can still begin with just `zebraw` function and use the default values. By using `zebraw-init` without any parameters, the values will be reset to the default values.
 
 ## Real-world Example
 
