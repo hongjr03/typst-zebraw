@@ -24,7 +24,7 @@
   )
   #show: zebraw
   #grid(
-    ..if args.pos().len() == 0 { (columns: (7.74cm,) * 2) },
+    ..if args.pos().len() == 0 { (columns: 2) },
     ..args,
     column-gutter: 0.5em,
     block(
