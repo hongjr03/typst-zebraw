@@ -1,4 +1,4 @@
-#set page(height: auto)
+#set page(paper: "a4", height: auto)
 
 #import "src/lib.typ": *
 
@@ -13,7 +13,7 @@
   copyable: true,
 )
 
-#let preview(..args, body) = [
+#let preview(..args, body) = context [
   #show: zebraw-init.with(
     comment-font-args: (
       font: "Fira Code",
@@ -24,7 +24,7 @@
   )
   #show: zebraw
   #grid(
-    ..if args.pos().len() == 0 { (columns: (1fr, 1fr)) },
+    ..if args.pos().len() == 0 { (columns: (7.74cm,) * 2) },
     ..args,
     column-gutter: 0.5em,
     block(
@@ -50,13 +50,13 @@
 
 Zebraw is a lightweight and fast package for displaying code blocks with line numbers in typst, supporting code line highlighting. The term _*Zebraw*_ is a combination of _*zebra*_ and _*raw*_, for the highlighted lines will be displayed in the code block like a zebra lines.
 
-#outline(depth: 3)
+// #outline(depth: 3)
 
 == Starting
 
 Import `zebraw` package by ```typ #import "@preview/zebraw:0.4.0": *``` then follow with ```typ #show: zebraw``` to start using zebraw in the simplest way. To manually display some specific code blocks in zebraw, you can use ```typ #zebraw()``` function:
 
-#preview(````typ
+#context preview(````typ
 ```typ
 #grid(
   columns: (1fr, 1fr),
@@ -91,7 +91,7 @@ Import `zebraw` package by ```typ #import "@preview/zebraw:0.4.0": *``` then fol
 
 You can highlight specific lines in the code block by passing the `highlight-lines` parameter to the `zebraw` function. The `highlight-lines` parameter can be a single line number or an array of line numbers.
 
-#preview(````typ
+#context preview(````typ
 #zebraw(
   // Single line number:
   highlight-lines: 2,
@@ -137,7 +137,7 @@ You can highlight specific lines in the code block by passing the `highlight-lin
 
 You can add comments to the highlighted lines by passing an array of line numbers and comments to the `highlight-lines` parameter.
 
-#preview(````typ
+#context preview(````typ
 #zebraw(
   highlight-lines: (
     (1, [The Fibonacci sequence is defined through the recurrence relation $F_n = F_(n-1) + F_(n-2)$\
@@ -167,7 +167,7 @@ You can add comments to the highlighted lines by passing an array of line number
 
 Comments can begin with a flag, which is `">"` by default. You can change the flag by passing the `comment-flag` parameter to the `zebraw` function:
 
-#preview(````typ
+#context preview(````typ
 #zebraw(
   highlight-lines: (
     // Comments can only be passed when highlight-lines is an array, so at the end of the single element array, a comma is needed.
@@ -194,7 +194,7 @@ Comments can begin with a flag, which is `">"` by default. You can change the fl
 
 To disable the flag feature, pass `""` to the `comment-flag` parameter (the indentation of the comment will be disabled as well):
 
-#preview(````typ
+#context preview(````typ
 #zebraw(
   highlight-lines: (
     (6, [The Fibonacci sequence is defined through the recurrence relation $F_n = F_(n-1) + F_(n-2)$]),
@@ -222,7 +222,7 @@ To disable the flag feature, pass `""` to the `comment-flag` parameter (the inde
 
 Usually, the comments passing by a dictionary of line numbers and comments are used to add a header or footer to the code block:
 
-#preview(````typ
+#context preview(````typ
 #zebraw(
   highlight-lines: (
     (header: [*Fibonacci sequence*]),
@@ -250,7 +250,7 @@ Usually, the comments passing by a dictionary of line numbers and comments are u
 
 Or you can use `header` and `footer` parameters to add a header or footer to the code block:
 
-#preview(````typ
+#context preview(````typ
 #zebraw(
   highlight-lines: (
     ..range(8, 13),
@@ -279,7 +279,7 @@ Or you can use `header` and `footer` parameters to add a header or footer to the
 
 If `lang` is set to `true`, then there will be a language tab on the top right corner of the code block:
 
-#preview(````typ
+#context preview(````typ
 #zebraw(
   lang: true,
   ```typst
@@ -295,7 +295,7 @@ If `lang` is set to `true`, then there will be a language tab on the top right c
 
 If `copyable` is set to `true`, line numbers will not be copied when copying exported code.
 
-#preview(````typ
+#context preview(````typ
 #zebraw(
   copyable: true,
   ```typst
@@ -309,7 +309,7 @@ If `copyable` is set to `true`, line numbers will not be copied when copying exp
 
 For comparison:
 
-#grid(
+#context grid(
   columns: 2,
   align: center,
   row-gutter: .5em,
@@ -324,7 +324,7 @@ However when a code block is `copyable`, it won't be able to cross page. Only li
 
 PRs are welcome!
 
-#preview(````typ
+#context preview(````typ
 #show: zebraw-init.with(..zebraw-themes.zebra, lang: false)
 #show: zebraw
 
@@ -343,7 +343,7 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 ```
 ````)
 
-#preview(````typ
+#context preview(````typ
 #show: zebraw-init.with(..zebraw-themes.zebra-reverse, lang: false)
 #show: zebraw
 
@@ -375,7 +375,7 @@ There are 3 ways to customize code blocks in your document:
 
 Customize the inset of each line by passing a #dictionary to the `inset` parameter:
 
-#preview(````typ
+#context preview(````typ
 #zebraw(
   inset: (top: 6pt, bottom: 6pt),
   ```typ
@@ -391,7 +391,7 @@ Customize the inset of each line by passing a #dictionary to the `inset` paramet
 
 Customize the background color by passing a #color or an #array of #color#[s] to the `background-color` parameter.
 
-#preview(````typ
+#context preview(````typ
 #zebraw(
   background-color: luma(235),
   ```typ
@@ -415,7 +415,7 @@ Customize the background color by passing a #color or an #array of #color#[s] to
 
 Customize the highlight color by passing a #color to the `highlight-color` parameter:
 
-#preview(````typ
+#context preview(````typ
 #zebraw(
   highlight-lines: 1,
   highlight-color: blue.lighten(90%),
@@ -428,7 +428,7 @@ Customize the highlight color by passing a #color to the `highlight-color` param
 
 Customize the comments' background color by passing a #color to the `comment-color` parameter:
 
-#preview(````typ
+#context preview(````typ
 #zebraw(
   highlight-lines: (
     (2, "auto indent!"),
@@ -445,7 +445,7 @@ Customize the comments' background color by passing a #color to the `comment-col
 
 Customize the language tab's background color by passing a #color to the `lang-color` parameter.
 
-#preview(````typ
+#context preview(````typ
 #zebraw(
   lang: true,
   lang-color: teal,
@@ -464,7 +464,7 @@ To customize the arguments of comments' font and the language tab's font, pass a
 
 Language tab will be rendered as comments if nothing is passed.
 
-#preview(````typ
+#context preview(````typ
 #zebraw(
   highlight-lines: (
     (2, "columns..."),
@@ -484,7 +484,7 @@ Language tab will be rendered as comments if nothing is passed.
 )
 ````)
 
-#preview(````typ
+#context preview(````typ
 #zebraw(
   highlight-lines: (
     (2, "columns..."),
@@ -513,7 +513,7 @@ Language tab will be rendered as comments if nothing is passed.
 
 Extend at vertical is enabled at default. When there's header or footer it will be automatically disabled.
 
-#preview(````typ
+#context preview(````typ
 #zebraw(
   extend: false,
   ```typst
@@ -531,13 +531,13 @@ The default value of most parameters are `none` for it will use the default valu
 
 #import "@preview/tidy:0.4.1"
 #let docs = tidy.parse-module(read("src/mod.typ"), scope: (zebraw: zebraw))
-#tidy.show-module(docs, style: tidy.styles.default, sort-functions: false)
+#context tidy.show-module(docs, style: tidy.styles.default, sort-functions: false)
 
 #show: zebraw-init
 
 == Example
 
-#zebraw(
+#context zebraw(
   highlight-lines: (
     (3, [to avoid negative numbers]),
     (9, "50 => 12586269025"),
