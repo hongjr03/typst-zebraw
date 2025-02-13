@@ -1,1 +1,4 @@
 dist
+_*
+report
+.DS_Store

@@ -4,168 +4,136 @@
 <img src="https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Ftypst.app%2Funiverse%2Fpackage%2Fzebraw&query=%2Fhtml%2Fbody%2Fdiv%2Fmain%2Fdiv%5B2%5D%2Faside%2Fsection%5B2%5D%2Fdl%2Fdd%5B3%5D&logo=typst&label=Universe&color=%2339cccc" />
 </a>
 
-Zebraw is a **lightweight** and **fast** package for displaying code blocks with line numbers in typst, supporting code line highlighting. The term "_**Zebraw**_" is a combination of "**_zebra_**" and "**_raw_**", for the highlighted lines will be displayed in the code block like a zebra lines.
+Zebraw is a lightweight and fast package for displaying code blocks with line numbers in typst, supporting code line highlighting. The term _**Zebraw**_ is a combination of _**zebra**_ and _**raw**_, for the highlighted lines will be displayed in the code block like a zebra lines.
 
-## Usage
+> [!NOTE]
+> Click on the image example to jump to the corresponding Typst code!
 
-To use, import `zebraw` package then follow with `#show zebraw.with()`.
+## Starting
 
-````typ
-#import "@preview/zebraw:0.3.0": *
+Import `zebraw` package by `#import "@preview/zebraw:0.4.0": *` then follow with `#show: zebraw` to start using zebraw in the simplest way. To manually display some specific code blocks in zebraw, you can use `#zebraw()` function:
 
-#show: zebraw.with()
+<p align="center"><a href="assets/1.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/1_Dark.svg"><img alt="typst-block" src="assets/1_Light.svg" /></picture></a></p>
 
-```typ
-hi
-It's a raw block with line numbers.
-```
-````
+## Features
 
-![example1](assets/example1.svg)
+### Line Highlighting
 
-The line spacing can be adjusted by passing the `inset` parameter to the `zebraw` function. The default value is `top: 3pt, bottom: 3pt, left: 3pt, right: 3pt`.
+You can highlight specific lines in the code block by passing the `highlight-lines` parameter to the `zebraw` function. The `highlight-lines` parameter can be a single line number or an array of line numbers.
 
-````typ
-#show: zebraw.with(inset: (top: 6pt, bottom: 6pt))
+<p align="center"><a href="assets/2.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/2_Dark.svg"><img alt="typst-block" src="assets/2_Light.svg" /></picture></a></p>
 
-```typ
-hi
-It's a raw block with line numbers.
-```
-````
+### Comment
 
-![line-spacing](assets/line-spacing.svg)
+You can add comments to the highlighted lines by passing an array of line numbers and comments to the `highlight-lines` parameter.
 
-For cases where code line highlighting is needed, you should use `#zebraw()` function with `highlight-lines` parameter to specify the line numbers that need to be highlighted, as shown below:
+<p align="center"><a href="assets/3.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/3_Dark.svg"><img alt="typst-block" src="assets/3_Light.svg" /></picture></a></p>
 
-````typ
-#zebraw(
-  highlight-lines: (1, 3),
-  ```typ
-  It's me,
-  hi!
-  I'm the problem it's me.
-  ```
-)
-````
+Comments can begin with a flag, which is `">"` by default. You can change the flag by passing the `comment-flag` parameter to the `zebraw` function:
 
-![example2](assets/example4.svg)
+<p align="center"><a href="assets/4.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/4_Dark.svg"><img alt="typst-block" src="assets/4_Light.svg" /></picture></a></p>
 
-Customize the highlight color by passing the `highlight-color` parameter to the `zebraw` function:
+To disable the flag feature, pass `""` to the `comment-flag` parameter (the indentation of the comment will be disabled as well):
 
-````typ
-#zebraw(
-  highlight-lines: (1,),
-  highlight-color: blue.lighten(90%),
-  ```typ
-  I'm so blue!
-              -- George III
-  ```
-)
-````
+<p align="center"><a href="assets/5.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/5_Dark.svg"><img alt="typst-block" src="assets/5_Light.svg" /></picture></a></p>
 
-![example3](assets/example5.svg)
+### Header and Footer
 
-For more complex highlighting, you can also add comments to the highlighted lines by passing an array of line numbers and comments to the `highlight-lines` parameter. The comments will be displayed in the code block with the specified `comment-flag` and `comment-font-args`:
+Usually, the comments passing by a dictionary of line numbers and comments are used to add a header or footer to the code block:
 
-````typ
-#zebraw(
-  highlight-lines: (
-    (1, "auto indent!"),
-    (2, [Content available as *well*.]),
-    3,
-  ),
-  highlight-color: blue.lighten(90%),
-  comment-font-args: (fill: blue, font: "IBM Plex Sans"),
-  comment-flag: "~~>",
-  ```typ
-  I'm so blue!
-              -- George III
-  I'm not.
-              -- Alexander Hamilton
-  ```,
-)
-````
+<p align="center"><a href="assets/6.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/6_Dark.svg"><img alt="typst-block" src="assets/6_Light.svg" /></picture></a></p>
 
-![example4](assets/example6.svg)
+Or you can use `header` and `footer` parameters to add a header or footer to the code block:
 
-You can also add a header or footer to the code block by passing the `header` / `footer` parameter to the `zebraw` function, as shown below:
+<p align="center"><a href="assets/7.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/7_Dark.svg"><img alt="typst-block" src="assets/7_Light.svg" /></picture></a></p>
 
-````typ
-#zebraw(
-  header: "this is the example of the header",
-  lang: false,
-  ```typ
-  I'm so blue!
-              -- George III
-  I'm not.
-              -- Alexander Hamilton
-  ```,
-  footer: "this is the end of the code",
-)
-````
+### Language Tab
 
-![example5](assets/example7.svg)
+If `lang` is set to `true`, then there will be a language tab on the top right corner of the code block:
 
-To change the rendered results of both pure typst raw block and `zebraw` block, you can use the `zebraw-init` function to set the default values for `highlight-color`, `inset`, `comment-color`, `comment-flag`, `comment-font-args`, and `lang`:
+<p align="center"><a href="assets/8.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/8_Dark.svg"><img alt="typst-block" src="assets/8_Light.svg" /></picture></a></p>
 
-```typ
-#show: zebraw-init.with(
-  highlight-color: rgb("#94e2d5").lighten(50%),
-  inset: (top: 0.3em, right: 0.3em, bottom: 0.3em, left: 0.3em),
-  comment-color: none,
-  comment-flag: ">",
-  comment-font-args: (size: 8pt),
-  lang: true,
-)
-```
+### Copyable
 
-Without using `zebraw-init`, you can still begin with just `zebraw` function and use the default values. By using `zebraw-init` without any parameters, the values will be reset to the default values.
+If `copyable` is set to `true`, line numbers will not be copied when copying exported code.
 
-## Real-world Example
+<p align="center"><a href="assets/9.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/9_Dark.svg"><img alt="typst-block" src="assets/9_Light.svg" /></picture></a></p>
 
-Here is an example of using `zebraw` to highlight lines in a Rust code block:
+For comparison:
 
-````typ
-#zebraw(
-  highlight-lines: (
-    (3, [to avoid negative numbers]),
-    (6, [0️⃣ is not a right argument to fibonacci_reccursive()!]),
-  ),
-  comment-font-args: (font: "IBM Plex Sans"),
-  header: "// fibonacci_reccursive()",
-  ```rust
-  pub fn fibonacci_reccursive(n: i32) -> u64 {
-      if n < 0 {
-          panic!("{} is negative!", n);
-      }
-      match n {
-          0 => panic!("zero is not a right argument to fibonacci_reccursive()!"),
-          1 | 2 => 1,
-          3 => 2,
-          /*
-          50    => 12586269025,
-          */
-          _ => fibonacci_reccursive(n - 1) + fibonacci_reccursive(n - 2),
-      }
-  }
-  ```,
-)
-````
+<p align="center"><a href="assets/10.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/10_Dark.svg"><img alt="typst-block" src="assets/10_Light.svg" /></picture></a></p>
 
-![rw-example](assets/example8.svg)
+However when a code block is `copyable`, it won't be able to cross page. Only line numbers will be excluded for being selected.
+
+### Theme
+
+PRs are welcome!
+
+<p align="center"><a href="assets/11.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/11_Dark.svg"><img alt="typst-block" src="assets/11_Light.svg" /></picture></a></p>
+
+<p align="center"><a href="assets/12.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/12_Dark.svg"><img alt="typst-block" src="assets/12_Light.svg" /></picture></a></p>
+
+## Customization
+
+There are 3 ways to customize code blocks in your document:
+
+- Manually render some specific blocks by `#zebraw()` function and passing parameters to it.
+- By passing parameters to `#show: zebraw.with()` will affect every raw block after the `#show` rule, **except** blocks created manually by `#zebraw()` function.
+- By passing parameters to `#show: zebraw-init.with()` will affect every raw block after the `#show` rule, **including** blocks created manually by `#zebraw()` function. By using `zebraw-init` without any parameters, the values will be reset to default.
+
+### Inset
+
+Customize the inset of each line by passing a dictionary to the `inset` parameter:
+
+<p align="center"><a href="assets/13.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/13_Dark.svg"><img alt="typst-block" src="assets/13_Light.svg" /></picture></a></p>
+
+### Colors
+
+Customize the background color by passing a color or an array of colors to the `background-color` parameter.
+
+<p align="center"><a href="assets/14.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/14_Dark.svg"><img alt="typst-block" src="assets/14_Light.svg" /></picture></a></p>
+
+Customize the highlight color by passing a color to the `highlight-color` parameter:
+
+<p align="center"><a href="assets/15.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/15_Dark.svg"><img alt="typst-block" src="assets/15_Light.svg" /></picture></a></p>
+
+Customize the comments' background color by passing a color to the `comment-color` parameter:
+
+<p align="center"><a href="assets/16.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/16_Dark.svg"><img alt="typst-block" src="assets/16_Light.svg" /></picture></a></p>
+
+Customize the language tab's background color by passing a color to the `lang-color` parameter.
+
+<p align="center"><a href="assets/17.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/17_Dark.svg"><img alt="typst-block" src="assets/17_Light.svg" /></picture></a></p>
+
+### Font
+
+To customize the arguments of comments' font and the language tab's font, pass a dictionary to `comment-font-args` parameter and `lang-font-args` parameter.
+
+Language tab will be rendered as comments if nothing is passed.
+
+<p align="center"><a href="assets/18.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/18_Dark.svg"><img alt="typst-block" src="assets/18_Light.svg" /></picture></a></p>
+
+<p align="center"><a href="assets/19.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/19_Dark.svg"><img alt="typst-block" src="assets/19_Light.svg" /></picture></a></p>
+
+### Extend
+
+Extend at vertical is enabled at default. When there's header or footer it will be automatically disabled.
+
+<p align="center"><a href="assets/20.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/20_Dark.svg"><img alt="typst-block" src="assets/20_Light.svg" /></picture></a></p>
+
+## Documentation
+
+The default value of most parameters are `none` for it will use the default value in `zebraw-init`.
+
+<p align="center"><a href="assets/21.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/21_Dark.svg"><img alt="typst-block" src="assets/21_Light.svg" /></picture></a></p>
+
+## Example
+
+<p align="center"><a href="assets/22.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/22_Dark.svg"><img alt="typst-block" src="assets/22_Light.svg" /></picture></a></p>
 
 ## Performance
 
-Focusing on performance, Zebraw is designed to be lightweight and fast with simple and proper features. It can handle code blocks with ease. The following is a test of a typst file with over 2000 code blocks, each containing 3 lines of code and a test of another typst file with only 30 code blocks.
-
-| Package             | 2000 code blocks | 30 code blocks |
-| ------------------- | ---------------- | -------------- |
-| Typst 0.12.0 Native | 0.62s            | 0.10s          |
-| Zebraw 0.1.0        | 0.86s            | 0.10s          |
-| Codly 1.2.0         | 4.03s            | 0.14s          |
-
-Though zebraw is faster than codly, it does not support features as much as codly does. Zebraw is designed to be lightweight and fast with useful features.
+See [bench.sh](./bench.sh) and [bench](./bench).
 
 ## License
 
