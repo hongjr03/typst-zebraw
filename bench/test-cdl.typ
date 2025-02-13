@@ -2,7 +2,7 @@
 #import "@preview/codly:1.2.0": *
 
 #let bench() = {
-  show: codly-init.with()
+  show: codly-init
   codly(zebra-fill: none, display-name: false, display-icon: false)
 
   ```shell

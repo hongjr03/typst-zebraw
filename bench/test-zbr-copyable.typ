@@ -2,7 +2,7 @@
 #import "src/lib.typ": *
 
 #let bench() = {
-  show: zebraw
+  show: zebraw.with(copyable: true)
 
   ```shell
   git clone https://github.com/FDUCSLG/typst-slides-fudan.git
