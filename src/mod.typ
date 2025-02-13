@@ -351,7 +351,7 @@
   extend: none,
   /// Whether to enable "copyable" feature.
   ///
-  /// If ```typ copyable``` feature is enabled, lines of code are displayed together in a block to allow copying code in an export. However, it uses a lot of ```typ measure``` functions, which may slow down compilation efficiency. Also when this feature is enabled, the code block *cannot* be displayed across pages.
+  /// If ```typ copyable``` feature is enabled, lines of code are displayed together in a block to allow copying code in an export. However when this feature is enabled, the code block *cannot* be displayed across pages.
   ///
   /// #example(````typ
   /// #zebraw(

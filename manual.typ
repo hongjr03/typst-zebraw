@@ -4,35 +4,47 @@
 
 #show raw: set text(font: "Fira Code")
 
-#let preview(..args, body) = grid(
-  ..if args.pos().len() == 0 { (columns: (1fr, 1fr)) },
-  ..args,
-  column-gutter: 0.5em,
-  block(
-    stroke: gray,
-    radius: 0.25em,
-    width: 100%,
-    inset: 0.5em,
-    {
-      set text(size: 0.95em)
-      body
-    },
-  ),
-  block(
-    stroke: gray,
-    radius: 0.25em,
-    inset: 0.5em,
-    eval(body.text, mode: "markup", scope: (zebraw: zebraw, zebraw-init: zebraw-init, zebraw-themes: zebraw-themes)),
-  ),
-)
-
 #show: zebraw-init.with(
   comment-font-args: (
     font: "Fira Code",
     ligatures: true,
   ),
   lang: false,
+  copyable: true,
 )
+
+#let preview(..args, body) = [
+  #show: zebraw-init.with(
+    comment-font-args: (
+      font: "Fira Code",
+      ligatures: true,
+    ),
+    lang: false,
+    copyable: true,
+  )
+  #show: zebraw
+  #grid(
+    ..if args.pos().len() == 0 { (columns: (1fr, 1fr)) },
+    ..args,
+    column-gutter: 0.5em,
+    block(
+      stroke: gray,
+      radius: 0.25em,
+      width: 100%,
+      inset: 0.5em,
+      {
+        set text(size: 0.95em)
+        body
+      },
+    ),
+    block(
+      stroke: gray,
+      radius: 0.25em,
+      inset: 0.5em,
+      eval(body.text, mode: "markup", scope: (zebraw: zebraw, zebraw-init: zebraw-init, zebraw-themes: zebraw-themes)),
+    ),
+  )
+]
 
 = 🦓 Zebraw
 
@@ -42,7 +54,7 @@ Zebraw is a lightweight and fast package for displaying code blocks with line nu
 
 == Starting
 
-Import `zebraw` package by ```typ #import "src/lib.typ": *``` then follow with ```typ #show: zebraw``` to start using zebraw in the simplest way. To manually display some specific code blocks in zebraw, you can use ```typ #zebraw()``` function:
+Import `zebraw` package by ```typ #import "@preview/zebraw:0.4.0": *``` then follow with ```typ #show: zebraw``` to start using zebraw in the simplest way. To manually display some specific code blocks in zebraw, you can use ```typ #zebraw()``` function:
 
 #preview(````typ
 ```typ
@@ -349,9 +361,6 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 }
 ```
 ````)
-
-
-
 
 == Customization
 
