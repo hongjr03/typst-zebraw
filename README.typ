@@ -28,9 +28,21 @@
 )
 
 #show: zebraw-init.with(
+  ..if sys.inputs.at("x-color-theme", default: none) == "dark" {
+    (
+      background-color: luma(55),
+      highlight-color: blue.darken(60%),
+      comment-color: blue.darken(80%),
+    )
+  },
   comment-font-args: (
     font: "Fira Code",
     ligatures: true,
+    ..if sys.inputs.at("x-color-theme", default: none) == "dark" {
+      (
+        fill: blue.lighten(90%),
+      )
+    },
   ),
   lang: false,
   copyable: true,
@@ -371,6 +383,26 @@ There are 3 ways to customize code blocks in your document:
 - By passing parameters to ```typ #show: zebraw.with()``` will affect every raw block after the ```typ #show``` rule, *except* blocks created manually by ```typ #zebraw()``` function.
 - By passing parameters to ```typ #show: zebraw-init.with()``` will affect every raw block after the ```typ #show``` rule, *including* blocks created manually by ```typ #zebraw()``` function. By using `zebraw-init` without any parameters, the values will be reset to default.
 
+#show: zebraw-init.with(
+  ..if sys.inputs.at("x-color-theme", default: none) == "dark" {
+    (
+      background-color: luma(55),
+      highlight-color: blue.darken(60%),
+      comment-color: blue.darken(80%),
+    )
+  },
+  comment-font-args: (
+    font: "Fira Code",
+    ligatures: true,
+    ..if sys.inputs.at("x-color-theme", default: none) == "dark" {
+      (
+        fill: blue.lighten(90%),
+      )
+    },
+  ),
+  lang: false,
+  copyable: true,
+)
 
 === Inset
 
@@ -534,7 +566,20 @@ The default value of most parameters are `none` for it will use the default valu
 #let docs = tidy.parse-module(read("src/mod.typ"), scope: (zebraw: zebraw))
 #context tidy.show-module(docs, style: tidy.styles.default, sort-functions: false)
 
-#show: zebraw-init
+#show: zebraw-init.with(
+  ..if sys.inputs.at("x-color-theme", default: none) == "dark" {
+    (
+      background-color: luma(55),
+      highlight-color: blue.darken(60%),
+      comment-color: blue.darken(80%),
+    )
+  },
+  comment-font-args: if sys.inputs.at("x-color-theme", default: none) == "dark" {
+    (
+      fill: blue.lighten(90%),
+    )
+  },
+)
 
 == Example
 

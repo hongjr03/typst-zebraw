@@ -246,10 +246,10 @@
                         </g>
                     </g>
                     <g transform="translate(5.5 14.706153846153848)">
-                        <path class="typst-shape" fill="#f5f5f5" fill-rule="nonzero" d="M 0 2.992 C 0 1.3395641 1.3395641 0 2.992 0 L 280.89578 0 C 282.54822 0 283.8878 1.3395641 283.8878 2.992 L 283.8878 51.784615 C 283.8878 53.43705 282.54822 54.776615 280.89578 54.776615 L 2.992 54.776615 C 1.3395641 54.776615 0 53.43705 0 51.784615 Z "/>
+                        <path class="typst-shape" fill="#373737" fill-rule="nonzero" d="M 0 2.992 C 0 1.3395641 1.3395641 0 2.992 0 L 280.89578 0 C 282.54822 0 283.8878 1.3395641 283.8878 2.992 L 283.8878 51.784615 C 283.8878 53.43705 282.54822 54.776615 280.89578 54.776615 L 2.992 54.776615 C 1.3395641 54.776615 0 53.43705 0 51.784615 Z "/>
                     </g>
                     <g transform="translate(5.5 14.706153846153848)">
-                        <g class="typst-group" clip-path="url(#c1B2E0D0F706F0660781D20714FB224C7)">
+                        <g class="typst-group" clip-path="url(#c4FE46FB5F112E4482709B7DE0FFCFEAE)">
                             <g>
                                 <g transform="translate(0 2.992000000000001)">
                                     <g class="typst-group">
@@ -258,16 +258,16 @@
                                                 <g class="typst-group">
                                                     <g>
                                                         <g transform="translate(0 0)">
-                                                            <path class="typst-shape" fill="#f5f5f5" fill-rule="nonzero" d="M 0 0 L 0 12.1981535 L 18.48 12.1981535 L 18.48 0 Z "/>
+                                                            <path class="typst-shape" fill="#373737" fill-rule="nonzero" d="M 0 0 L 0 12.1981535 L 18.48 12.1981535 L 18.48 0 Z "/>
                                                         </g>
                                                         <g transform="translate(0 12.198153846153849)">
-                                                            <path class="typst-shape" fill="#f5f5f5" fill-rule="nonzero" d="M 0 0 L 0 12.1981535 L 18.48 12.1981535 L 18.48 0 Z "/>
+                                                            <path class="typst-shape" fill="#373737" fill-rule="nonzero" d="M 0 0 L 0 12.1981535 L 18.48 12.1981535 L 18.48 0 Z "/>
                                                         </g>
                                                         <g transform="translate(0 24.396307692307698)">
-                                                            <path class="typst-shape" fill="#f5f5f5" fill-rule="nonzero" d="M 0 0 L 0 12.1981535 L 18.48 12.1981535 L 18.48 0 Z "/>
+                                                            <path class="typst-shape" fill="#373737" fill-rule="nonzero" d="M 0 0 L 0 12.1981535 L 18.48 12.1981535 L 18.48 0 Z "/>
                                                         </g>
                                                         <g transform="translate(0 36.594461538461545)">
-                                                            <path class="typst-shape" fill="#f5f5f5" fill-rule="nonzero" d="M 0 0 L 0 12.1981535 L 18.48 12.1981535 L 18.48 0 Z "/>
+                                                            <path class="typst-shape" fill="#373737" fill-rule="nonzero" d="M 0 0 L 0 12.1981535 L 18.48 12.1981535 L 18.48 0 Z "/>
                                                         </g>
                                                         <g transform="translate(10.072615384615386 9.206153846153848)">
                                                             <g class="typst-text" transform="scale(1, -1)">
@@ -288,7 +288,7 @@
                                                             <g class="typst-group">
                                                                 <g>
                                                                     <g transform="translate(-0 -0)">
-                                                                        <path class="typst-shape" fill="#f5f5f5" fill-rule="nonzero" d="M 0 0 L 0 12.1981535 L 265.4078 12.1981535 L 265.4078 0 Z "/>
+                                                                        <path class="typst-shape" fill="#373737" fill-rule="nonzero" d="M 0 0 L 0 12.1981535 L 265.4078 12.1981535 L 265.4078 0 Z "/>
                                                                     </g>
                                                                     <g transform="translate(2.992000000000001 9.206153846153848)">
                                                                         <g class="typst-text" transform="scale(1, -1)">
@@ -315,7 +315,7 @@
                                                             <g class="typst-group">
                                                                 <g>
                                                                     <g transform="translate(-0 -0)">
-                                                                        <path class="typst-shape" fill="#f5f5f5" fill-rule="nonzero" d="M 0 0 L 0 12.1981535 L 265.4078 12.1981535 L 265.4078 0 Z "/>
+                                                                        <path class="typst-shape" fill="#373737" fill-rule="nonzero" d="M 0 0 L 0 12.1981535 L 265.4078 12.1981535 L 265.4078 0 Z "/>
                                                                     </g>
                                                                     <g transform="translate(2.992000000000001 9.206153846153848)">
                                                                         <g class="typst-text" transform="scale(1, -1)"/>
@@ -383,7 +383,7 @@
                                                             <g class="typst-group">
                                                                 <g>
                                                                     <g transform="translate(-0 -0)">
-                                                                        <path class="typst-shape" fill="#f5f5f5" fill-rule="nonzero" d="M 0 0 L 0 12.1981535 L 265.4078 12.1981535 L 265.4078 0 Z "/>
+                                                                        <path class="typst-shape" fill="#373737" fill-rule="nonzero" d="M 0 0 L 0 12.1981535 L 265.4078 12.1981535 L 265.4078 0 Z "/>
                                                                     </g>
                                                                     <g transform="translate(2.992000000000001 9.206153846153848)">
                                                                         <g class="typst-text" transform="scale(1, -1)"/>
@@ -447,7 +447,7 @@
                                                             <g class="typst-group">
                                                                 <g>
                                                                     <g transform="translate(-0 -0)">
-                                                                        <path class="typst-shape" fill="#f5f5f5" fill-rule="nonzero" d="M 0 0 L 0 12.1981535 L 265.4078 12.1981535 L 265.4078 0 Z "/>
+                                                                        <path class="typst-shape" fill="#373737" fill-rule="nonzero" d="M 0 0 L 0 12.1981535 L 265.4078 12.1981535 L 265.4078 0 Z "/>
                                                                     </g>
                                                                     <g transform="translate(2.992000000000001 9.206153846153848)">
                                                                         <g class="typst-text" transform="scale(1, -1)">
@@ -664,7 +664,7 @@
         </symbol>
     </defs>
     <defs id="clip-path">
-        <clipPath id="c1B2E0D0F706F0660781D20714FB224C7">
+        <clipPath id="c4FE46FB5F112E4482709B7DE0FFCFEAE">
             <path d="M 0 2.992 C 0 1.3395641 1.3395641 0 2.992 0 L 280.89578 0 C 282.54822 0 283.8878 1.3395641 283.8878 2.992 L 283.8878 51.784615 C 283.8878 53.43705 282.54822 54.776615 280.89578 54.776615 L 2.992 54.776615 C 1.3395641 54.776615 0 53.43705 0 51.784615 Z "/>
         </clipPath>
     </defs>
