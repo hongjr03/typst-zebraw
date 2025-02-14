@@ -83,25 +83,25 @@ There are 3 ways to customize code blocks in your document:
 
 ### Inset
 
-Customize the inset of each line by passing a to the `inset` parameter:
+Customize the inset of each line by passing a dictionary to the `inset` parameter:
 
 <p align="center"><a href="assets/13.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/13_Dark.svg"><img alt="typst-block" src="assets/13_Light.svg" /></picture></a></p>
 
 ### Colors
 
-Customize the background color by passing a or an of s to the `background-color` parameter.
+Customize the background color by passing a color or an array of colors to the `background-color` parameter.
 
 <p align="center"><a href="assets/14.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/14_Dark.svg"><img alt="typst-block" src="assets/14_Light.svg" /></picture></a></p>
 
-Customize the highlight color by passing a to the `highlight-color` parameter:
+Customize the highlight color by passing a color to the `highlight-color` parameter:
 
 <p align="center"><a href="assets/15.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/15_Dark.svg"><img alt="typst-block" src="assets/15_Light.svg" /></picture></a></p>
 
-Customize the comments' background color by passing a to the `comment-color` parameter:
+Customize the comments' background color by passing a color to the `comment-color` parameter:
 
 <p align="center"><a href="assets/16.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/16_Dark.svg"><img alt="typst-block" src="assets/16_Light.svg" /></picture></a></p>
 
-Customize the language tab's background color by passing a to the `lang-color` parameter.
+Customize the language tab's background color by passing a color to the `lang-color` parameter.
 
 <p align="center"><a href="assets/17.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/17_Dark.svg"><img alt="typst-block" src="assets/17_Light.svg" /></picture></a></p>
 
