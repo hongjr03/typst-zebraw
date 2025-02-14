@@ -4,6 +4,28 @@
 
 #show raw: set text(font: "Fira Code")
 
+#let preview(..args, body) = grid(
+  ..if args.pos().len() == 0 { (columns: 2) },
+  ..args,
+  column-gutter: 0.5em,
+  block(
+    stroke: gray,
+    radius: 0.25em,
+    width: 100%,
+    inset: 0.5em,
+    {
+      set text(size: 0.95em)
+      body
+    },
+  ),
+  block(
+    stroke: gray,
+    radius: 0.25em,
+    inset: 0.5em,
+    eval(body.text, mode: "markup", scope: (zebraw: zebraw, zebraw-init: zebraw-init, zebraw-themes: zebraw-themes)),
+  ),
+)
+
 #show: zebraw-init.with(
   comment-font-args: (
     font: "Fira Code",
@@ -12,39 +34,6 @@
   lang: false,
   copyable: true,
 )
-
-#let preview(..args, body) = context [
-  #show: zebraw-init.with(
-    comment-font-args: (
-      font: "Fira Code",
-      ligatures: true,
-    ),
-    lang: false,
-    copyable: true,
-  )
-  #show: zebraw
-  #grid(
-    ..if args.pos().len() == 0 { (columns: 2) },
-    ..args,
-    column-gutter: 0.5em,
-    block(
-      stroke: gray,
-      radius: 0.25em,
-      width: 100%,
-      inset: 0.5em,
-      {
-        set text(size: 0.95em)
-        body
-      },
-    ),
-    block(
-      stroke: gray,
-      radius: 0.25em,
-      inset: 0.5em,
-      eval(body.text, mode: "markup", scope: (zebraw: zebraw, zebraw-init: zebraw-init, zebraw-themes: zebraw-themes)),
-    ),
-  )
-]
 
 = 🦓 Zebraw
 
