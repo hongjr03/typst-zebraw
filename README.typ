@@ -3,6 +3,7 @@
 #import "src/lib.typ": *
 
 #show raw: set text(font: "Fira Code")
+#show raw.where(lang: "typlite"): none
 
 #let preview(..args, body) = grid(
   ..if args.pos().len() == 0 { (columns: 2) },
@@ -36,6 +37,12 @@
 )
 
 = 🦓 Zebraw
+
+```typlite
+<a href="https://typst.app/universe/package/zebraw">
+<img src="https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Ftypst.app%2Funiverse%2Fpackage%2Fzebraw&query=%2Fhtml%2Fbody%2Fdiv%2Fmain%2Fdiv%5B2%5D%2Faside%2Fsection%5B2%5D%2Fdl%2Fdd%5B3%5D&logo=typst&label=Universe&color=%2339cccc" />
+</a>
+```
 
 Zebraw is a lightweight and fast package for displaying code blocks with line numbers in typst, supporting code line highlighting. The term _*Zebraw*_ is a combination of _*zebra*_ and _*raw*_, for the highlighted lines will be displayed in the code block like a zebra lines.
 
@@ -547,3 +554,13 @@ The default value of most parameters are `none` for it will use the default valu
   }
   ```,
 )
+
+```typlite
+## Performance
+
+See [bench.sh](./bench.sh) and [bench](./bench).
+
+## License
+
+Zebraw is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
+```
