@@ -1,4 +1,4 @@
-#set page(paper: "a4", height: auto)
+#set page(paper: "a4")
 
 #import "src/lib.typ": *
 
@@ -45,7 +45,6 @@
     },
   ),
   lang: false,
-  copyable: true,
 )
 
 = 🦓 Zebraw
@@ -96,7 +95,7 @@ Import `zebraw` package by ```typ #import "@preview/zebraw:0.4.0": *``` then fol
 ```
 ````)
 
-#show heading.where(level: 2): it => pagebreak() + it
+// #show heading.where(level: 2): it => pagebreak() + it
 
 == Features
 
@@ -306,21 +305,7 @@ If `lang` is set to `true`, then there will be a language tab on the top right c
 
 === Copyable
 
-If `copyable` is set to `true`, line numbers will not be copied when copying exported code.
-
-#context preview(````typ
-#zebraw(
-  copyable: true,
-  ```typst
-  #grid(
-    columns: (1fr, 1fr),
-    [Hello], [world!],
-  )
-  ```
-)
-````)
-
-For comparison:
+Line numbers will not be selected when selecting exported code in one page.
 
 #context grid(
   columns: 2,
@@ -330,8 +315,6 @@ For comparison:
   grid.header([`copyable: false`], [`copyable: true`]),
   image("assets/copyable-false.png"), image("assets/copyable-true.png"),
 )
-
-However when a code block is `copyable`, it won't be able to cross page. Only line numbers will be excluded for being selected.
 
 === Theme
 
@@ -401,7 +384,6 @@ There are 3 ways to customize code blocks in your document:
     },
   ),
   lang: false,
-  copyable: true,
 )
 
 === Inset
@@ -436,7 +418,7 @@ Customize the background color by passing a #color or an #array of #color#[s] to
 )
 
 #zebraw(
-  background-color: (luma(235), luma(245), luma(255)),
+  background-color: (luma(235), luma(245), luma(255), luma(245)),
   ```typ
   #grid(
     columns: (1fr, 1fr),

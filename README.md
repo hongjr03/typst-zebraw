@@ -55,23 +55,17 @@ If `lang` is set to `true`, then there will be a language tab on the top right c
 
 ### Copyable
 
-If `copyable` is set to `true`, line numbers will not be copied when copying exported code.
+Line numbers will not be selected when selecting exported code in one page.
 
 <p align="center"><a href="assets/9.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/9_Dark.svg"><img alt="typst-block" src="assets/9_Light.svg" /></picture></a></p>
-
-For comparison:
-
-<p align="center"><a href="assets/10.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/10_Dark.svg"><img alt="typst-block" src="assets/10_Light.svg" /></picture></a></p>
-
-However when a code block is `copyable`, it won't be able to cross page. Only line numbers will be excluded for being selected.
 
 ### Theme
 
 PRs are welcome!
 
-<p align="center"><a href="assets/11.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/11_Dark.svg"><img alt="typst-block" src="assets/11_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/10.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/10_Dark.svg"><img alt="typst-block" src="assets/10_Light.svg" /></picture></a></p>
 
-<p align="center"><a href="assets/12.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/12_Dark.svg"><img alt="typst-block" src="assets/12_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/11.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/11_Dark.svg"><img alt="typst-block" src="assets/11_Light.svg" /></picture></a></p>
 
 ## Customization
 
@@ -85,25 +79,25 @@ There are 3 ways to customize code blocks in your document:
 
 Customize the inset of each line by passing a dictionary to the `inset` parameter:
 
-<p align="center"><a href="assets/13.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/13_Dark.svg"><img alt="typst-block" src="assets/13_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/12.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/12_Dark.svg"><img alt="typst-block" src="assets/12_Light.svg" /></picture></a></p>
 
 ### Colors
 
 Customize the background color by passing a color or an array of colors to the `background-color` parameter.
 
-<p align="center"><a href="assets/14.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/14_Dark.svg"><img alt="typst-block" src="assets/14_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/13.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/13_Dark.svg"><img alt="typst-block" src="assets/13_Light.svg" /></picture></a></p>
 
 Customize the highlight color by passing a color to the `highlight-color` parameter:
 
-<p align="center"><a href="assets/15.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/15_Dark.svg"><img alt="typst-block" src="assets/15_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/14.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/14_Dark.svg"><img alt="typst-block" src="assets/14_Light.svg" /></picture></a></p>
 
 Customize the comments' background color by passing a color to the `comment-color` parameter:
 
-<p align="center"><a href="assets/16.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/16_Dark.svg"><img alt="typst-block" src="assets/16_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/15.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/15_Dark.svg"><img alt="typst-block" src="assets/15_Light.svg" /></picture></a></p>
 
 Customize the language tab's background color by passing a color to the `lang-color` parameter.
 
-<p align="center"><a href="assets/17.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/17_Dark.svg"><img alt="typst-block" src="assets/17_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/16.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/16_Dark.svg"><img alt="typst-block" src="assets/16_Light.svg" /></picture></a></p>
 
 ### Font
 
@@ -111,25 +105,25 @@ To customize the arguments of comments' font and the language tab's font, pass a
 
 Language tab will be rendered as comments if nothing is passed.
 
-<p align="center"><a href="assets/18.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/18_Dark.svg"><img alt="typst-block" src="assets/18_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/17.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/17_Dark.svg"><img alt="typst-block" src="assets/17_Light.svg" /></picture></a></p>
 
-<p align="center"><a href="assets/19.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/19_Dark.svg"><img alt="typst-block" src="assets/19_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/18.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/18_Dark.svg"><img alt="typst-block" src="assets/18_Light.svg" /></picture></a></p>
 
 ### Extend
 
 Extend at vertical is enabled at default. When there's header or footer it will be automatically disabled.
 
-<p align="center"><a href="assets/20.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/20_Dark.svg"><img alt="typst-block" src="assets/20_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/19.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/19_Dark.svg"><img alt="typst-block" src="assets/19_Light.svg" /></picture></a></p>
 
 ## Documentation
 
 The default value of most parameters are `none` for it will use the default value in `zebraw-init`.
 
-<p align="center"><a href="assets/21.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/21_Dark.svg"><img alt="typst-block" src="assets/21_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/20.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/20_Dark.svg"><img alt="typst-block" src="assets/20_Light.svg" /></picture></a></p>
 
 ## Example
 
-<p align="center"><a href="assets/22.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/22_Dark.svg"><img alt="typst-block" src="assets/22_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/21.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/21_Dark.svg"><img alt="typst-block" src="assets/21_Light.svg" /></picture></a></p>
 
 ## Performance
 

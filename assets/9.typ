@@ -1,14 +1,11 @@
 #{
 // render_code
-context preview(````typ
-#zebraw(
-  copyable: true,
-  ```typst
-  #grid(
-    columns: (1fr, 1fr),
-    [Hello], [world!],
-  )
-  ```
+context grid(
+  columns: 2,
+  align: center,
+  row-gutter: .5em,
+  column-gutter: .5em,
+  grid.header([`copyable: false`], [`copyable: true`]),
+  image("assets/copyable-false.png"), image("assets/copyable-true.png"),
 )
-````)
 }
