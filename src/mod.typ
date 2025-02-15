@@ -8,7 +8,6 @@
 #let lang-state = state("zebraw-lang", true)
 #let lang-font-args-state = state("zebraw-lang-font-args", (:))
 #let extend-state = state("zebraw-extend", true)
-#let copyable-state = state("zebraw-copyable", false)
 #let block-args-state = state("zebraw-block-args", (:))
 #let grid-args-state = state("zebraw-grid-args", (:))
 
@@ -33,8 +32,8 @@
   /// The flag at the beginning of comments.
   /// -> string | content
   comment-flag: ">",
-  /// Whether to show the language tab.
-  /// -> boolean
+  /// Whether to show the language tab, or a string or content of custom language name to display.
+  /// -> boolean | string | content
   lang: true,
   /// The arguments passed to comments' font.
   /// -> dictionary
@@ -45,9 +44,6 @@
   /// Whether to extend the vertical spacing.
   /// -> boolean
   extend: true,
-  /// Whether to enable "copyable" feature.
-  /// -> boolean
-  copyable: false,
   /// The body
   /// -> content
   body,
@@ -66,39 +62,11 @@
   lang-font-args-state.update(lang-font-args)
 
   extend-state.update(extend)
-  copyable-state.update(copyable)
 
   body
 }
 
 /// Block of code with highlighted lines and comments.
-///
-/// #example(
-/// ````typ
-/// #zebraw(
-///   highlight-lines: (
-///     3,
-///     (9, "50 => 12586269025"),
-///   ),
-///   lang: true,
-///   header: "Calculate Fibonacci number using reccursive function",
-///   ```rust
-///   pub fn fibonacci_reccursive(n: i32) -> u64 {
-///       if n < 0 {
-///           panic!("{} is negative!", n);
-///       }
-///       match n {
-///           0 => panic!("zero is not a right argument to fibonacci_reccursive()!"),
-///           1 | 2 => 1,
-///           3 => 2,
-///           _ => fibonacci_reccursive(n - 1) + fibonacci_reccursive(n - 2),
-///       }
-///   }
-///   ```,
-/// )
-/// ````,
-/// scale-preview: 100%,
-/// )
 ///
 /// -> content
 #let zebraw(
@@ -278,7 +246,7 @@
   ///
   /// -> string | content
   comment-flag: none,
-  /// Whether to show the language tab on the top-right corner of the code block.
+  /// Whether to show the language tab, or a string or content of custom language name to display.
   ///
   /// #example(````typ
   /// #zebraw(
@@ -293,7 +261,20 @@
   /// ````,
   /// scale-preview: 100%)
   ///
-  /// -> boolean
+  /// #example(````typ
+  /// #zebraw(
+  ///   lang: strong[Typst],
+  ///   ```typ
+  ///   #grid(
+  ///     columns: (1fr, 1fr),
+  ///     [Hello,], [world!],
+  ///   )
+  ///   ```
+  /// )
+  /// ````,
+  /// scale-preview: 100%)
+  ///
+  /// -> boolean | string
   lang: none,
   /// The arguments passed to comments' font.
   ///
@@ -349,25 +330,6 @@
   ///
   /// -> boolean
   extend: none,
-  /// Whether to enable "copyable" feature.
-  ///
-  /// If ```typ copyable``` feature is enabled, lines of code are displayed together in a block to allow copying code in an export. However when this feature is enabled, the code block *cannot* be displayed across pages.
-  ///
-  /// #example(````typ
-  /// #zebraw(
-  ///   copyable: true,
-  ///   ```typ
-  ///   #grid(
-  ///     columns: (1fr, 1fr),
-  ///     [Hello,], [world!],
-  ///   )
-  ///   ```
-  /// )
-  /// ````,
-  /// scale-preview: 100%)
-  ///
-  /// -> boolean
-  copyable: none,
   /// The body.
   /// -> content
   body,
@@ -425,11 +387,6 @@
   } else {
     extend
   }
-  let copyable = if copyable == none {
-    copyable-state.get()
-  } else {
-    copyable
-  }
 
   let (highlight-nums, comments) = {
     let nums = ()
@@ -465,8 +422,9 @@
   }
 
   // Define block and grid.
-  let b(..args, body) = block(
+  let b(..args, body) = box(
     width: 100%,
+    inset: inset,
     ..args,
     body,
   )
@@ -478,142 +436,197 @@
 
 
   show raw.where(block: true): it => {
+    // Language tab.
     if lang != false {
-      // Language tab.
       v(-.34em)
       align(
         right,
         block(
-          inset: inset + (bottom: 0pt),
-          outset: if extend { (bottom: inset.bottom + inset.right + .1em) } else { (bottom: inset.bottom + .1em) },
+          sticky: true,
+          inset: 0.34em,
+          outset: (bottom: inset.left),
           radius: (top: inset.left),
           fill: lang-color,
-          text(..lang-font-args, if type(lang) == bool { it.lang } else { lang }),
+          text(bottom-edge: "bounds", ..lang-font-args, if type(lang) == bool { it.lang } else { lang }),
         ),
       )
-      v(.34em, weak: true)
+      v(0em, weak: true)
     }
-    b(
-      fill: curr-background-color(background-color, 0),
-      inset: {
-        let inset-dict = (:)
-        if header == none and not comments.keys().contains("header") and extend { inset-dict += (top: inset.top) }
-        if footer == none and not comments.keys().contains("footer") and extend { inset-dict += (bottom: inset.bottom) }
-        inset-dict
-      },
+
+    // The code block.
+    block(
+      breakable: true,
       radius: inset.left,
       clip: true,
-      context {
-        stack(
+      fill: curr-background-color(background-color, 0),
+      context layout(code-block-size => {
+        let line-render(line, height: none, num: false) = block(
+          width: 100%,
+          inset: inset,
+          if num {
+            let lb = measure(
+              g(line-render((body: [#line.number], fill: none))),
+              width: code-block-size.width,
+            ).height
+            let cnt = calc.ceil(height / lb) - 1
+            let number = (
+              [#if line.keys().contains("comment") { text(fill: line.fill, [#line.number]) } else { line.number }]
+                + [\ #text(fill: line.fill, [#line.number])] * cnt
+            )
+            let rem = (
+              height - measure(g(line-render((body: number, fill: none))), width: code-block-size.width).height
+            )
+            (
+              if line.keys().contains("comment") {
+                set text(fill: line.fill)
+                number
+              } else {
+                number
+              }
+                + v(rem)
+            )
+          } else {
+            if line.body == [] { linebreak() } else { line.body }
+          },
+          fill: line.fill,
+        )
+
+        let get-height(line) = measure(g([], line-render(line)), width: code-block-size.width).height
+
+
+        let lines = it
+          .lines
+          .map(line => {
+            let res = ()
+            if (type(highlight-nums) == array and highlight-nums.contains(line.number)) {
+              // Highlight lines.
+              res.push((
+                number: line.number,
+                body: {
+                  set text(fill: highlight-color.negate().transparentize(12.5%))
+                  line
+                },
+                fill: highlight-color,
+              ))
+
+              // Comments.
+              if comments.keys().contains(str(line.number)) {
+                res.push((
+                  number: line.number,
+                  comment: true,
+                  body: {
+                    if comment-flag != "" {
+                      box(line.text.split(regex("\S")).first())
+                      {
+                        strong(text(ligatures: true, comment-flag))
+                        h(0.35em, weak: true)
+                      }
+                      text(..comment-font-args, comments.at(str(line.number)))
+                    } else {
+                      text(..comment-font-args, comments.at(str(line.number)))
+                    }
+                  },
+                  fill: comment-color,
+                ))
+              }
+            } else {
+              // Default lines.
+              let fill-color = curr-background-color(background-color, line.number)
+              res.push((
+                number: line.number,
+                body: line.body,
+                fill: fill-color,
+              ))
+            }
+            res
+          })
+          .flatten()
+
+        let heights = lines
+          .map(line => measure(g([], line-render(line)), width: code-block-size.width).height)
+          .map(height => if height < 1em.to-absolute() { 1em.to-absolute() } else { height })
+
+        g(
           // Header.
-          if header != none or comments.keys().contains("header") {
-            b(
-              inset: inset.pairs().map(((key, value)) => (key, value * 2)).to-dict(),
-              radius: {
-                if not lang {
-                  (top: inset.left)
-                } else {
-                  (top-left: inset.left)
-                }
-              },
-              fill: comment-color,
-              text(..comment-font-args, if header != none { header } else { comments.at("header") }),
+          ..if header != none or comments.keys().contains("header") {
+            (
+              grid.header(
+                repeat: false,
+                grid.cell(
+                  align: left + top,
+                  colspan: 2,
+                  b(
+                    inset: inset.pairs().map(((key, value)) => (key, value * 2)).to-dict(),
+                    radius: {
+                      if not lang {
+                        (top: inset.left)
+                      } else {
+                        (top-left: inset.left)
+                      }
+                    },
+                    fill: comment-color,
+                    {
+                      text(..comment-font-args, if header != none { header } else { comments.at("header") })
+                    },
+                  ),
+                ),
+              ),
+            )
+          } else if extend {
+            (
+              grid.header(
+                repeat: true,
+                grid.cell(
+                  colspan: 2,
+                  b(
+                    fill: curr-background-color(background-color, 0),
+                    inset: (:) + (top: inset.top),
+                    radius: (top: inset.left),
+                    [],
+                  ),
+                ),
+              ),
             )
           },
-
+          // Line numbers.
+          stack(..lines.map(line => line-render(line, height: get-height(line), num: true))),
           // Code lines.
-          layout(size => {
-            let lines = it
-              .lines
-              .map(line => {
-                let res = ()
-                if (type(highlight-nums) == array and highlight-nums.contains(line.number)) {
-                  // Highlight lines.
-                  res.push((
-                    number: line.number,
-                    body: b(
-                      inset: inset,
-                      fill: highlight-color,
-                      {
-                        set text(fill: highlight-color.negate().transparentize(12.5%))
-                        line
-                      },
-                    ),
-                    fill: highlight-color,
-                  ))
-
-                  // Comments.
-                  if comments.keys().contains(str(line.number)) {
-                    res.push((
-                      number: none,
-                      body: b(
-                        inset: inset,
-                        fill: comment-color,
-                        sticky: true,
-                        {
-                          {
-                            if comment-flag != "" {
-                              box(line.text.split(regex("\S")).first())
-                              {
-                                strong(text(ligatures: true, comment-flag))
-                                h(0.35em, weak: true)
-                              }
-                              text(..comment-font-args, comments.at(str(line.number)))
-                            } else {
-                              text(..comment-font-args, comments.at(str(line.number)))
-                            }
-                          }
-                        },
-                      ),
-                      fill: comment-color,
-                    ))
-                  }
-                } else {
-                  // Default lines.
-                  let fill-color = curr-background-color(background-color, line.number)
-                  res.push((
-                    number: line.number,
-                    body: b(
-                      inset: inset,
-                      fill: fill-color,
-                      line,
-                    ),
-                    fill: fill-color,
-                  ))
-                }
-                res
-              })
-              .flatten()
-            let line-nums = lines.map(x => {
-              grid.cell(
-                inset: (top: inset.top, bottom: inset.bottom),
-                [#x.number#h(0.34em)],
-                fill: x.fill,
-              )
-            })
-            if copyable {
-              g(
-                rows: lines.enumerate().map(((idx, x)) => measure(g([], lines.at(idx).body), width: size.width).height),
-                line-nums.first(),
-                grid.cell(grid(..lines.map(code => (code.body))), rowspan: line-nums.len()),
-                ..line-nums.slice(1),
-              )
-            } else {
-              g(..line-nums.zip(lines).map(((line-num, code)) => (line-num, code.body)).flatten())
-            }
-          }),
-
+          stack(..lines.map(line => line-render(line, height: get-height(line)))),
           // Footer.
-          if footer != none or comments.keys().contains("footer") {
-            b(
-              inset: inset.pairs().map(((key, value)) => (key, value * 2)).to-dict(),
-              radius: (bottom: inset.left),
-              fill: comment-color,
-              text(..comment-font-args, if footer != none { footer } else { comments.at("footer") }),
+          ..if footer != none or comments.keys().contains("footer") {
+            (
+              grid.footer(
+                repeat: false,
+                grid.cell(
+                  align: left + top,
+                  colspan: 2,
+                  b(
+                    inset: inset.pairs().map(((key, value)) => (key, value * 2)).to-dict(),
+                    radius: (bottom: inset.left),
+                    fill: comment-color,
+                    text(..comment-font-args, if footer != none { footer } else { comments.at("footer") }),
+                  ),
+                ),
+              ),
+            )
+          } else if extend {
+            (
+              grid.footer(
+                repeat: true,
+                grid.cell(
+                  colspan: 2,
+                  b(
+                    fill: curr-background-color(background-color, lines.len() + 1),
+                    inset: (:) + (bottom: inset.bottom),
+                    radius: (bottom: inset.left),
+                    [],
+                  ),
+                ),
+              ),
             )
           },
         )
-      },
+      }),
     )
   }
 
