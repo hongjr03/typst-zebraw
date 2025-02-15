@@ -66,7 +66,7 @@ Zebraw is a lightweight and fast package for displaying code blocks with line nu
 
 == Starting
 
-Import `zebraw` package by ```typ #import "@preview/zebraw:0.4.0": *``` then follow with ```typ #show: zebraw``` to start using zebraw in the simplest way. To manually display some specific code blocks in zebraw, you can use ```typ #zebraw()``` function:
+Import `zebraw` package by ```typ #import "@preview/zebraw:0.4.1": *``` then follow with ```typ #show: zebraw``` to start using zebraw in the simplest way. To manually display some specific code blocks in zebraw, you can use ```typ #zebraw()``` function:
 
 #context preview(````typ
 ```typ
