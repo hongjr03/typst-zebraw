@@ -303,6 +303,20 @@ If `lang` is set to `true`, then there will be a language tab on the top right c
 )
 ````)
 
+Customize the language to display by pass a string or content to the `lang` parameter.
+
+#context preview(````typ
+#zebraw(
+  lang: strong[Typst],
+  ```typst
+  #grid(
+    columns: (1fr, 1fr),
+    [Hello], [world!],
+  )
+  ```
+)
+````)
+
 === Copyable
 
 Line numbers will not be selected when selecting exported code in one page.

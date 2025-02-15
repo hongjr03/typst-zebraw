@@ -1,4 +1,14 @@
 #{
 // render_code
-context tidy.show-module(docs, style: tidy.styles.default, sort-functions: false)
+context preview(````typ
+#zebraw(
+  extend: false,
+  ```typst
+  #grid(
+    columns: (1fr, 1fr),
+    [Hello], [world!],
+  )
+  ```
+)
+````)
 }
