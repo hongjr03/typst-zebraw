@@ -6,9 +6,6 @@
 
 Zebraw is a lightweight and fast package for displaying code blocks with line numbers in typst, supporting code line highlighting. The term _**Zebraw**_ is a combination of _**zebra**_ and _**raw**_, for the highlighted lines will be displayed in the code block like a zebra lines.
 
-> [!NOTE]
-> Click on the image example to jump to the corresponding Typst code!
-
 ## Starting
 
 Import `zebraw` package by `#import "@preview/zebraw:0.4.1": *` then follow with `#show: zebraw` to start using zebraw in the simplest way. To manually display some specific code blocks in zebraw, you can use `#zebraw()` function:
@@ -16,7 +13,7 @@ Import `zebraw` package by `#import "@preview/zebraw:0.4.1": *` then follow with
 <table>
 <tbody>
 <tr>
-<td style="width: 48%">
+<td width="50%">
 
 ````typ
 ```typ
@@ -48,9 +45,9 @@ Import `zebraw` package by `#import "@preview/zebraw:0.4.1": *` then follow with
 
 </td>
 
-<td>
+<td width="50%">
 
-<p align="center"><a href="assets/1.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/1_Dark.svg"><img alt="typst-block" src="assets/1_Light.svg" /></picture></a></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/1_Dark.svg"><img alt="typst-block" src="assets/1_Light.svg" /></picture></p>
 
 </td>
 </tr>
@@ -66,7 +63,7 @@ You can highlight specific lines in the code block by passing the `highlight-lin
 <table>
 <tbody>
 <tr>
-<td style="width: 48%">
+<td width="50%">
 
 ````typ
 #zebraw(
@@ -113,9 +110,9 @@ You can highlight specific lines in the code block by passing the `highlight-lin
 
 </td>
 
-<td>
+<td width="50%">
 
-<p align="center"><a href="assets/2.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/2_Dark.svg"><img alt="typst-block" src="assets/2_Light.svg" /></picture></a></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/2_Dark.svg"><img alt="typst-block" src="assets/2_Light.svg" /></picture></p>
 
 </td>
 </tr>
@@ -129,7 +126,7 @@ You can add comments to the highlighted lines by passing an array of line number
 <table>
 <tbody>
 <tr>
-<td style="width: 48%">
+<td width="50%">
 
 ````typ
 #zebraw(
@@ -162,9 +159,9 @@ You can add comments to the highlighted lines by passing an array of line number
 
 </td>
 
-<td>
+<td width="50%">
 
-<p align="center"><a href="assets/3.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/3_Dark.svg"><img alt="typst-block" src="assets/3_Light.svg" /></picture></a></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/3_Dark.svg"><img alt="typst-block" src="assets/3_Light.svg" /></picture></p>
 
 </td>
 </tr>
@@ -176,7 +173,7 @@ Comments can begin with a flag, which is `">"` by default. You can change the fl
 <table>
 <tbody>
 <tr>
-<td style="width: 48%">
+<td width="50%">
 
 ````typ
 #zebraw(
@@ -206,9 +203,9 @@ Comments can begin with a flag, which is `">"` by default. You can change the fl
 
 </td>
 
-<td>
+<td width="50%">
 
-<p align="center"><a href="assets/4.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/4_Dark.svg"><img alt="typst-block" src="assets/4_Light.svg" /></picture></a></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/4_Dark.svg"><img alt="typst-block" src="assets/4_Light.svg" /></picture></p>
 
 </td>
 </tr>
@@ -220,7 +217,7 @@ To disable the flag feature, pass `""` to the `comment-flag` parameter (the inde
 <table>
 <tbody>
 <tr>
-<td style="width: 48%">
+<td width="50%">
 
 ````typ
 #zebraw(
@@ -249,9 +246,9 @@ To disable the flag feature, pass `""` to the `comment-flag` parameter (the inde
 
 </td>
 
-<td>
+<td width="50%">
 
-<p align="center"><a href="assets/5.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/5_Dark.svg"><img alt="typst-block" src="assets/5_Light.svg" /></picture></a></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/5_Dark.svg"><img alt="typst-block" src="assets/5_Light.svg" /></picture></p>
 
 </td>
 </tr>
@@ -265,7 +262,7 @@ Usually, the comments passing by a dictionary of line numbers and comments are u
 <table>
 <tbody>
 <tr>
-<td style="width: 48%">
+<td width="50%">
 
 ````typ
 #zebraw(
@@ -296,9 +293,9 @@ Usually, the comments passing by a dictionary of line numbers and comments are u
 
 </td>
 
-<td>
+<td width="50%">
 
-<p align="center"><a href="assets/6.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/6_Dark.svg"><img alt="typst-block" src="assets/6_Light.svg" /></picture></a></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/6_Dark.svg"><img alt="typst-block" src="assets/6_Light.svg" /></picture></p>
 
 </td>
 </tr>
@@ -310,7 +307,7 @@ Or you can use `header` and `footer` parameters to add a header or footer to the
 <table>
 <tbody>
 <tr>
-<td style="width: 48%">
+<td width="50%">
 
 ````typ
 #zebraw(
@@ -340,9 +337,9 @@ Or you can use `header` and `footer` parameters to add a header or footer to the
 
 </td>
 
-<td>
+<td width="50%">
 
-<p align="center"><a href="assets/7.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/7_Dark.svg"><img alt="typst-block" src="assets/7_Light.svg" /></picture></a></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/7_Dark.svg"><img alt="typst-block" src="assets/7_Light.svg" /></picture></p>
 
 </td>
 </tr>
@@ -356,7 +353,7 @@ If `lang` is set to `true`, then there will be a language tab on the top right c
 <table>
 <tbody>
 <tr>
-<td style="width: 48%">
+<td width="50%">
 
 ````typ
 #zebraw(
@@ -373,9 +370,9 @@ If `lang` is set to `true`, then there will be a language tab on the top right c
 
 </td>
 
-<td>
+<td width="50%">
 
-<p align="center"><a href="assets/8.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/8_Dark.svg"><img alt="typst-block" src="assets/8_Light.svg" /></picture></a></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/8_Dark.svg"><img alt="typst-block" src="assets/8_Light.svg" /></picture></p>
 
 </td>
 </tr>
@@ -387,7 +384,7 @@ Customize the language to display by pass a string or content to the `lang` para
 <table>
 <tbody>
 <tr>
-<td style="width: 48%">
+<td width="50%">
 
 ````typ
 #zebraw(
@@ -404,9 +401,9 @@ Customize the language to display by pass a string or content to the `lang` para
 
 </td>
 
-<td>
+<td width="50%">
 
-<p align="center"><a href="assets/9.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/9_Dark.svg"><img alt="typst-block" src="assets/9_Light.svg" /></picture></a></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/9_Dark.svg"><img alt="typst-block" src="assets/9_Light.svg" /></picture></p>
 
 </td>
 </tr>
@@ -417,7 +414,7 @@ Customize the language to display by pass a string or content to the `lang` para
 
 Line numbers will not be selected when selecting exported code in one page.
 
-<p align="center"><a href="assets/10.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/10_Dark.svg"><img alt="typst-block" src="assets/10_Light.svg" /></picture></a></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/10_Dark.svg"><img alt="typst-block" src="assets/10_Light.svg" /></picture></p>
 
 ### Theme
 
@@ -426,7 +423,7 @@ PRs are welcome!
 <table>
 <tbody>
 <tr>
-<td style="width: 48%">
+<td width="50%">
 
 ````typ
 #show: zebraw-init.with(..zebraw-themes.zebra, lang: false)
@@ -450,9 +447,9 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 
 </td>
 
-<td>
+<td width="50%">
 
-<p align="center"><a href="assets/11.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/11_Dark.svg"><img alt="typst-block" src="assets/11_Light.svg" /></picture></a></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/11_Dark.svg"><img alt="typst-block" src="assets/11_Light.svg" /></picture></p>
 
 </td>
 </tr>
@@ -462,7 +459,7 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 <table>
 <tbody>
 <tr>
-<td style="width: 48%">
+<td width="50%">
 
 ````typ
 #show: zebraw-init.with(..zebraw-themes.zebra-reverse, lang: false)
@@ -486,9 +483,9 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 
 </td>
 
-<td>
+<td width="50%">
 
-<p align="center"><a href="assets/12.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/12_Dark.svg"><img alt="typst-block" src="assets/12_Light.svg" /></picture></a></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/12_Dark.svg"><img alt="typst-block" src="assets/12_Light.svg" /></picture></p>
 
 </td>
 </tr>
@@ -510,7 +507,7 @@ Customize the inset of each line by passing a to the `inset` parameter:
 <table>
 <tbody>
 <tr>
-<td style="width: 48%">
+<td width="50%">
 
 ````typ
 #zebraw(
@@ -527,9 +524,9 @@ Customize the inset of each line by passing a to the `inset` parameter:
 
 </td>
 
-<td>
+<td width="50%">
 
-<p align="center"><a href="assets/13.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/13_Dark.svg"><img alt="typst-block" src="assets/13_Light.svg" /></picture></a></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/13_Dark.svg"><img alt="typst-block" src="assets/13_Light.svg" /></picture></p>
 
 </td>
 </tr>
@@ -543,7 +540,7 @@ Customize the background color by passing a or an of s to the `background-color`
 <table>
 <tbody>
 <tr>
-<td style="width: 48%">
+<td width="50%">
 
 ````typ
 #zebraw(
@@ -570,9 +567,9 @@ Customize the background color by passing a or an of s to the `background-color`
 
 </td>
 
-<td>
+<td width="50%">
 
-<p align="center"><a href="assets/14.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/14_Dark.svg"><img alt="typst-block" src="assets/14_Light.svg" /></picture></a></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/14_Dark.svg"><img alt="typst-block" src="assets/14_Light.svg" /></picture></p>
 
 </td>
 </tr>
@@ -584,7 +581,7 @@ Customize the highlight color by passing a to the `highlight-color` parameter:
 <table>
 <tbody>
 <tr>
-<td style="width: 48%">
+<td width="50%">
 
 ````typ
 #zebraw(
@@ -600,9 +597,9 @@ Customize the highlight color by passing a to the `highlight-color` parameter:
 
 </td>
 
-<td>
+<td width="50%">
 
-<p align="center"><a href="assets/15.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/15_Dark.svg"><img alt="typst-block" src="assets/15_Light.svg" /></picture></a></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/15_Dark.svg"><img alt="typst-block" src="assets/15_Light.svg" /></picture></p>
 
 </td>
 </tr>
@@ -614,7 +611,7 @@ Customize the comments' background color by passing a to the `comment-color` par
 <table>
 <tbody>
 <tr>
-<td style="width: 48%">
+<td width="50%">
 
 ````typ
 #zebraw(
@@ -634,9 +631,9 @@ Customize the comments' background color by passing a to the `comment-color` par
 
 </td>
 
-<td>
+<td width="50%">
 
-<p align="center"><a href="assets/16.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/16_Dark.svg"><img alt="typst-block" src="assets/16_Light.svg" /></picture></a></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/16_Dark.svg"><img alt="typst-block" src="assets/16_Light.svg" /></picture></p>
 
 </td>
 </tr>
@@ -648,7 +645,7 @@ Customize the language tab's background color by passing a to the `lang-color` p
 <table>
 <tbody>
 <tr>
-<td style="width: 48%">
+<td width="50%">
 
 ````typ
 #zebraw(
@@ -666,9 +663,9 @@ Customize the language tab's background color by passing a to the `lang-color` p
 
 </td>
 
-<td>
+<td width="50%">
 
-<p align="center"><a href="assets/17.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/17_Dark.svg"><img alt="typst-block" src="assets/17_Light.svg" /></picture></a></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/17_Dark.svg"><img alt="typst-block" src="assets/17_Light.svg" /></picture></p>
 
 </td>
 </tr>
@@ -684,7 +681,7 @@ Language tab will be rendered as comments if nothing is passed.
 <table>
 <tbody>
 <tr>
-<td style="width: 48%">
+<td width="50%">
 
 ````typ
 #zebraw(
@@ -709,9 +706,9 @@ Language tab will be rendered as comments if nothing is passed.
 
 </td>
 
-<td>
+<td width="50%">
 
-<p align="center"><a href="assets/18.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/18_Dark.svg"><img alt="typst-block" src="assets/18_Light.svg" /></picture></a></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/18_Dark.svg"><img alt="typst-block" src="assets/18_Light.svg" /></picture></p>
 
 </td>
 </tr>
@@ -721,7 +718,7 @@ Language tab will be rendered as comments if nothing is passed.
 <table>
 <tbody>
 <tr>
-<td style="width: 48%">
+<td width="50%">
 
 ````typ
 #zebraw(
@@ -751,9 +748,9 @@ Language tab will be rendered as comments if nothing is passed.
 
 </td>
 
-<td>
+<td width="50%">
 
-<p align="center"><a href="assets/19.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/19_Dark.svg"><img alt="typst-block" src="assets/19_Light.svg" /></picture></a></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/19_Dark.svg"><img alt="typst-block" src="assets/19_Light.svg" /></picture></p>
 
 </td>
 </tr>
@@ -767,7 +764,7 @@ Extend at vertical is enabled at default. When there's header or footer it will 
 <table>
 <tbody>
 <tr>
-<td style="width: 48%">
+<td width="50%">
 
 ````typ
 #zebraw(
@@ -784,9 +781,9 @@ Extend at vertical is enabled at default. When there's header or footer it will 
 
 </td>
 
-<td>
+<td width="50%">
 
-<p align="center"><a href="assets/20.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/20_Dark.svg"><img alt="typst-block" src="assets/20_Light.svg" /></picture></a></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/20_Dark.svg"><img alt="typst-block" src="assets/20_Light.svg" /></picture></p>
 
 </td>
 </tr>
@@ -797,11 +794,11 @@ Extend at vertical is enabled at default. When there's header or footer it will 
 
 The default value of most parameters are `none` for it will use the default value in `zebraw-init`.
 
-<p align="center"><a href="assets/21.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/21_Dark.svg"><img alt="typst-block" src="assets/21_Light.svg" /></picture></a></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/21_Dark.svg"><img alt="typst-block" src="assets/21_Light.svg" /></picture></p>
 
 ## Example
 
-<p align="center"><a href="assets/22.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/22_Dark.svg"><img alt="typst-block" src="assets/22_Light.svg" /></picture></a></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/22_Dark.svg"><img alt="typst-block" src="assets/22_Light.svg" /></picture></p>
 
 ## Performance
 
