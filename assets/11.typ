@@ -1,6 +1,13 @@
 #{
 // render_code
-context preview(````typ
+context {
+set page(width: auto, height: auto, margin: 1em)    
+block(
+    width: 20em,
+        stroke: gray,
+        radius: 0.25em,
+        inset: 0.5em,
+        eval(````typ
 #show: zebraw-init.with(..zebraw-themes.zebra, lang: false)
 #show: zebraw
 
@@ -17,5 +24,6 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
     }
 }
 ```
-````)
+````.text, mode: "markup", scope: (zebraw: zebraw, zebraw-init: zebraw-init, zebraw-themes: zebraw-themes)),
+    )}
 }

@@ -13,7 +13,49 @@ Zebraw is a lightweight and fast package for displaying code blocks with line nu
 
 Import `zebraw` package by `#import "@preview/zebraw:0.4.1": *` then follow with `#show: zebraw` to start using zebraw in the simplest way. To manually display some specific code blocks in zebraw, you can use `#zebraw()` function:
 
+<table>
+<tbody>
+<tr>
+<td style="width: 48%">
+
+````typ
+```typ
+#grid(
+  columns: (1fr, 1fr),
+  [Hello], [world!],
+)
+```
+
+#zebraw(
+  ```typ
+  #grid(
+    columns: (1fr, 1fr),
+    [Hello], [world!],
+  )
+  ```
+)
+
+#show: zebraw
+
+```typ
+#grid(
+  columns: (1fr, 1fr),
+  [Hello], [world!],
+)
+```
+
+````
+
+</td>
+
+<td>
+
 <p align="center"><a href="assets/1.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/1_Dark.svg"><img alt="typst-block" src="assets/1_Light.svg" /></picture></a></p>
+
+</td>
+</tr>
+</tbody>
+</table>
 
 ## Features
 
@@ -21,41 +63,355 @@ Import `zebraw` package by `#import "@preview/zebraw:0.4.1": *` then follow with
 
 You can highlight specific lines in the code block by passing the `highlight-lines` parameter to the `zebraw` function. The `highlight-lines` parameter can be a single line number or an array of line numbers.
 
+<table>
+<tbody>
+<tr>
+<td style="width: 48%">
+
+````typ
+#zebraw(
+  // Single line number:
+  highlight-lines: 2,
+  ```typ
+  #grid(
+    columns: (1fr, 1fr),
+    [Hello], [world!],
+  )
+  ```
+)
+
+#zebraw(
+  // Array of line numbers:
+  highlight-lines: (6, 7) + range(9, 15),
+  ```typ
+  = Fibonacci sequence
+  The Fibonacci sequence is defined through the
+  recurrence relation $F_n = F_(n-1) + F_(n-2)$.
+  It can also be expressed in _closed form:_
+
+  $ F_n = round(1 / sqrt(5) phi.alt^n), quad
+    phi.alt = (1 + sqrt(5)) / 2 $
+
+  #let count = 8
+  #let nums = range(1, count + 1)
+  #let fib(n) = (
+    if n <= 2 { 1 }
+    else { fib(n - 1) + fib(n - 2) }
+  )
+
+  The first #count numbers of the sequence are:
+
+  #align(center, table(
+    columns: count,
+    ..nums.map(n => $F_#n$),
+    ..nums.map(n => str(fib(n))),
+  ))
+  ```
+)
+
+````
+
+</td>
+
+<td>
+
 <p align="center"><a href="assets/2.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/2_Dark.svg"><img alt="typst-block" src="assets/2_Light.svg" /></picture></a></p>
+
+</td>
+</tr>
+</tbody>
+</table>
 
 ### Comment
 
 You can add comments to the highlighted lines by passing an array of line numbers and comments to the `highlight-lines` parameter.
 
+<table>
+<tbody>
+<tr>
+<td style="width: 48%">
+
+````typ
+#zebraw(
+  highlight-lines: (
+    (1, [The Fibonacci sequence is defined through the recurrence relation $F_n = F_(n-1) + F_(n-2)$\
+    It can also be expressed in _closed form:_ $ F_n = round(1 / sqrt(5) phi.alt^n), quad
+    phi.alt = (1 + sqrt(5)) / 2 $]),
+    // Passing a range of line numbers in the array should begin with `..`
+    ..range(9, 14),
+    (13, [The first \#count numbers of the sequence.]),
+  ),
+  ```typ
+  = Fibonacci sequence
+  #let count = 8
+  #let nums = range(1, count + 1)
+  #let fib(n) = (
+    if n <= 2 { 1 }
+    else { fib(n - 1) + fib(n - 2) }
+  )
+
+  #align(center, table(
+    columns: count,
+    ..nums.map(n => $F_#n$),
+    ..nums.map(n => str(fib(n))),
+  ))
+  ```
+)
+
+````
+
+</td>
+
+<td>
+
 <p align="center"><a href="assets/3.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/3_Dark.svg"><img alt="typst-block" src="assets/3_Light.svg" /></picture></a></p>
+
+</td>
+</tr>
+</tbody>
+</table>
 
 Comments can begin with a flag, which is `">"` by default. You can change the flag by passing the `comment-flag` parameter to the `zebraw` function:
 
+<table>
+<tbody>
+<tr>
+<td style="width: 48%">
+
+````typ
+#zebraw(
+  highlight-lines: (
+    // Comments can only be passed when highlight-lines is an array, so at the end of the single element array, a comma is needed.
+    (6, [The Fibonacci sequence is defined through the recurrence relation $F_n = F_(n-1) + F_(n-2)$]),
+  ),
+  comment-flag: "~~>",
+  ```typ
+  = Fibonacci sequence
+  #let count = 8
+  #let nums = range(1, count + 1)
+  #let fib(n) = (
+    if n <= 2 { 1 }
+    else { fib(n - 1) + fib(n - 2) }
+  )
+
+  #align(center, table(
+    columns: count,
+    ..nums.map(n => $F_#n$),
+    ..nums.map(n => str(fib(n))),
+  ))
+  ```
+)
+
+````
+
+</td>
+
+<td>
+
 <p align="center"><a href="assets/4.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/4_Dark.svg"><img alt="typst-block" src="assets/4_Light.svg" /></picture></a></p>
+
+</td>
+</tr>
+</tbody>
+</table>
 
 To disable the flag feature, pass `""` to the `comment-flag` parameter (the indentation of the comment will be disabled as well):
 
+<table>
+<tbody>
+<tr>
+<td style="width: 48%">
+
+````typ
+#zebraw(
+  highlight-lines: (
+    (6, [The Fibonacci sequence is defined through the recurrence relation $F_n = F_(n-1) + F_(n-2)$]),
+  ),
+  comment-flag: "",
+  ```typ
+  = Fibonacci sequence
+  #let count = 8
+  #let nums = range(1, count + 1)
+  #let fib(n) = (
+    if n <= 2 { 1 }
+    else { fib(n - 1) + fib(n - 2) }
+  )
+
+  #align(center, table(
+    columns: count,
+    ..nums.map(n => $F_#n$),
+    ..nums.map(n => str(fib(n))),
+  ))
+  ```
+)
+
+````
+
+</td>
+
+<td>
+
 <p align="center"><a href="assets/5.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/5_Dark.svg"><img alt="typst-block" src="assets/5_Light.svg" /></picture></a></p>
+
+</td>
+</tr>
+</tbody>
+</table>
 
 ### Header and Footer
 
 Usually, the comments passing by a dictionary of line numbers and comments are used to add a header or footer to the code block:
 
+<table>
+<tbody>
+<tr>
+<td style="width: 48%">
+
+````typ
+#zebraw(
+  highlight-lines: (
+    (header: [*Fibonacci sequence*]),
+    ..range(8, 13),
+    // Numbers can be passed as a string in the dictionary, but it's too ugly.
+    ("12": [The first \#count numbers of the sequence.]),
+    (footer: [The fibonacci sequence is defined through the recurrence relation $F_n = F_(n-1) + F_(n-2)$]),
+  ),
+  ```typ
+  #let count = 8
+  #let nums = range(1, count + 1)
+  #let fib(n) = (
+    if n <= 2 { 1 }
+    else { fib(n - 1) + fib(n - 2) }
+  )
+
+  #align(center, table(
+    columns: count,
+    ..nums.map(n => $F_#n$),
+    ..nums.map(n => str(fib(n))),
+  ))
+  ```
+)
+
+````
+
+</td>
+
+<td>
+
 <p align="center"><a href="assets/6.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/6_Dark.svg"><img alt="typst-block" src="assets/6_Light.svg" /></picture></a></p>
+
+</td>
+</tr>
+</tbody>
+</table>
 
 Or you can use `header` and `footer` parameters to add a header or footer to the code block:
 
+<table>
+<tbody>
+<tr>
+<td style="width: 48%">
+
+````typ
+#zebraw(
+  highlight-lines: (
+    ..range(8, 13),
+    (12, [The first \#count numbers of the sequence.]),
+  ),
+  header: [*Fibonacci sequence*],
+  ```typ
+  #let count = 8
+  #let nums = range(1, count + 1)
+  #let fib(n) = (
+    if n <= 2 { 1 }
+    else { fib(n - 1) + fib(n - 2) }
+  )
+
+  #align(center, table(
+    columns: count,
+    ..nums.map(n => $F_#n$),
+    ..nums.map(n => str(fib(n))),
+  ))
+  ```,
+  footer: [The fibonacci sequence is defined through the recurrence relation $F_n = F_(n-1) + F_(n-2)$],
+)
+
+````
+
+</td>
+
+<td>
+
 <p align="center"><a href="assets/7.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/7_Dark.svg"><img alt="typst-block" src="assets/7_Light.svg" /></picture></a></p>
+
+</td>
+</tr>
+</tbody>
+</table>
 
 ### Language Tab
 
 If `lang` is set to `true`, then there will be a language tab on the top right corner of the code block:
 
+<table>
+<tbody>
+<tr>
+<td style="width: 48%">
+
+````typ
+#zebraw(
+  lang: true,
+  ```typst
+  #grid(
+    columns: (1fr, 1fr),
+    [Hello], [world!],
+  )
+  ```
+)
+
+````
+
+</td>
+
+<td>
+
 <p align="center"><a href="assets/8.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/8_Dark.svg"><img alt="typst-block" src="assets/8_Light.svg" /></picture></a></p>
+
+</td>
+</tr>
+</tbody>
+</table>
 
 Customize the language to display by pass a string or content to the `lang` parameter.
 
+<table>
+<tbody>
+<tr>
+<td style="width: 48%">
+
+````typ
+#zebraw(
+  lang: strong[Typst],
+  ```typst
+  #grid(
+    columns: (1fr, 1fr),
+    [Hello], [world!],
+  )
+  ```
+)
+
+````
+
+</td>
+
+<td>
+
 <p align="center"><a href="assets/9.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/9_Dark.svg"><img alt="typst-block" src="assets/9_Light.svg" /></picture></a></p>
+
+</td>
+</tr>
+</tbody>
+</table>
 
 ### Copyable
 
@@ -67,9 +423,77 @@ Line numbers will not be selected when selecting exported code in one page.
 
 PRs are welcome!
 
+<table>
+<tbody>
+<tr>
+<td style="width: 48%">
+
+````typ
+#show: zebraw-init.with(..zebraw-themes.zebra, lang: false)
+#show: zebraw
+
+```rust
+pub fn fibonacci_reccursive(n: i32) -> u64 {
+    if n < 0 {
+        panic!("{} is negative!", n);
+    }
+    match n {
+        0 => panic!("zero is not a right argument to fibonacci_reccursive()!"),
+        1 | 2 => 1,
+        3 => 2,
+        _ => fibonacci_reccursive(n - 1) + fibonacci_reccursive(n - 2),
+    }
+}
+```
+
+````
+
+</td>
+
+<td>
+
 <p align="center"><a href="assets/11.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/11_Dark.svg"><img alt="typst-block" src="assets/11_Light.svg" /></picture></a></p>
 
+</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<tbody>
+<tr>
+<td style="width: 48%">
+
+````typ
+#show: zebraw-init.with(..zebraw-themes.zebra-reverse, lang: false)
+#show: zebraw
+
+```rust
+pub fn fibonacci_reccursive(n: i32) -> u64 {
+    if n < 0 {
+        panic!("{} is negative!", n);
+    }
+    match n {
+        0 => panic!("zero is not a right argument to fibonacci_reccursive()!"),
+        1 | 2 => 1,
+        3 => 2,
+        _ => fibonacci_reccursive(n - 1) + fibonacci_reccursive(n - 2),
+    }
+}
+```
+
+````
+
+</td>
+
+<td>
+
 <p align="center"><a href="assets/12.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/12_Dark.svg"><img alt="typst-block" src="assets/12_Light.svg" /></picture></a></p>
+
+</td>
+</tr>
+</tbody>
+</table>
 
 ## Customization
 
@@ -83,25 +507,173 @@ There are 3 ways to customize code blocks in your document:
 
 Customize the inset of each line by passing a to the `inset` parameter:
 
+<table>
+<tbody>
+<tr>
+<td style="width: 48%">
+
+````typ
+#zebraw(
+  inset: (top: 6pt, bottom: 6pt),
+  ```typ
+  #grid(
+    columns: (1fr, 1fr),
+    [Hello], [world!],
+  )
+  ```
+)
+
+````
+
+</td>
+
+<td>
+
 <p align="center"><a href="assets/13.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/13_Dark.svg"><img alt="typst-block" src="assets/13_Light.svg" /></picture></a></p>
+
+</td>
+</tr>
+</tbody>
+</table>
 
 ### Colors
 
 Customize the background color by passing a or an of s to the `background-color` parameter.
 
+<table>
+<tbody>
+<tr>
+<td style="width: 48%">
+
+````typ
+#zebraw(
+  background-color: luma(235),
+  ```typ
+  #grid(
+    columns: (1fr, 1fr),
+    [Hello], [world!],
+  )
+  ```,
+)
+
+#zebraw(
+  background-color: (luma(235), luma(245), luma(255), luma(245)),
+  ```typ
+  #grid(
+    columns: (1fr, 1fr),
+    [Hello], [world!],
+  )
+  ```,
+)
+
+````
+
+</td>
+
+<td>
+
 <p align="center"><a href="assets/14.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/14_Dark.svg"><img alt="typst-block" src="assets/14_Light.svg" /></picture></a></p>
+
+</td>
+</tr>
+</tbody>
+</table>
 
 Customize the highlight color by passing a to the `highlight-color` parameter:
 
+<table>
+<tbody>
+<tr>
+<td style="width: 48%">
+
+````typ
+#zebraw(
+  highlight-lines: 1,
+  highlight-color: blue.lighten(90%),
+  ```text
+  I'm so blue!
+              -- George III
+  ```,
+)
+
+````
+
+</td>
+
+<td>
+
 <p align="center"><a href="assets/15.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/15_Dark.svg"><img alt="typst-block" src="assets/15_Light.svg" /></picture></a></p>
+
+</td>
+</tr>
+</tbody>
+</table>
 
 Customize the comments' background color by passing a to the `comment-color` parameter:
 
+<table>
+<tbody>
+<tr>
+<td style="width: 48%">
+
+````typ
+#zebraw(
+  highlight-lines: (
+    (2, "auto indent!"),
+  ),
+  comment-color: yellow.lighten(90%),
+  ```text
+  I'm so blue!
+              -- George III
+  I'm not.
+              -- Hamilton
+  ```,
+)
+
+````
+
+</td>
+
+<td>
+
 <p align="center"><a href="assets/16.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/16_Dark.svg"><img alt="typst-block" src="assets/16_Light.svg" /></picture></a></p>
+
+</td>
+</tr>
+</tbody>
+</table>
 
 Customize the language tab's background color by passing a to the `lang-color` parameter.
 
+<table>
+<tbody>
+<tr>
+<td style="width: 48%">
+
+````typ
+#zebraw(
+  lang: true,
+  lang-color: teal,
+  ```typst
+  #grid(
+    columns: (1fr, 1fr),
+    [Hello], [world!],
+  )
+  ```
+)
+
+````
+
+</td>
+
+<td>
+
 <p align="center"><a href="assets/17.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/17_Dark.svg"><img alt="typst-block" src="assets/17_Light.svg" /></picture></a></p>
+
+</td>
+</tr>
+</tbody>
+</table>
 
 ### Font
 
@@ -109,15 +681,117 @@ To customize the arguments of comments' font and the language tab's font, pass a
 
 Language tab will be rendered as comments if nothing is passed.
 
+<table>
+<tbody>
+<tr>
+<td style="width: 48%">
+
+````typ
+#zebraw(
+  highlight-lines: (
+    (2, "columns..."),
+  ),
+  lang: true,
+  comment-color: white,
+  comment-font-args: (
+    font: "IBM Plex Sans",
+    style: "italic"
+  ),
+  ```typst
+  #grid(
+    columns: (1fr, 1fr),
+    [Hello], [world!],
+  )
+  ```
+)
+
+````
+
+</td>
+
+<td>
+
 <p align="center"><a href="assets/18.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/18_Dark.svg"><img alt="typst-block" src="assets/18_Light.svg" /></picture></a></p>
 
+</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<tbody>
+<tr>
+<td style="width: 48%">
+
+````typ
+#zebraw(
+  highlight-lines: (
+    (2, "columns..."),
+  ),
+  lang: true,
+  lang-color: eastern,
+  lang-font-args: (
+    font: "libertinus serif",
+    weight: "bold",
+    fill: white,
+  ),
+  comment-font-args: (
+    font: "IBM Plex Sans",
+    style: "italic"
+  ),
+  ```typst
+  #grid(
+    columns: (1fr, 1fr),
+    [Hello], [world!],
+  )
+  ```
+)
+
+````
+
+</td>
+
+<td>
+
 <p align="center"><a href="assets/19.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/19_Dark.svg"><img alt="typst-block" src="assets/19_Light.svg" /></picture></a></p>
+
+</td>
+</tr>
+</tbody>
+</table>
 
 ### Extend
 
 Extend at vertical is enabled at default. When there's header or footer it will be automatically disabled.
 
+<table>
+<tbody>
+<tr>
+<td style="width: 48%">
+
+````typ
+#zebraw(
+  extend: false,
+  ```typst
+  #grid(
+    columns: (1fr, 1fr),
+    [Hello], [world!],
+  )
+  ```
+)
+
+````
+
+</td>
+
+<td>
+
 <p align="center"><a href="assets/20.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/20_Dark.svg"><img alt="typst-block" src="assets/20_Light.svg" /></picture></a></p>
+
+</td>
+</tr>
+</tbody>
+</table>
 
 ## Documentation
 

@@ -1,6 +1,13 @@
 #{
 // render_code
-context preview(````typ
+context {
+set page(width: auto, height: auto, margin: 1em)    
+block(
+    width: 20em,
+        stroke: gray,
+        radius: 0.25em,
+        inset: 0.5em,
+        eval(````typ
 #zebraw(
   background-color: luma(235),
   ```typ
@@ -20,5 +27,6 @@ context preview(````typ
   )
   ```,
 )
-````)
+````.text, mode: "markup", scope: (zebraw: zebraw, zebraw-init: zebraw-init, zebraw-themes: zebraw-themes)),
+    )}
 }
