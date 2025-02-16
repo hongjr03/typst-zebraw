@@ -6,9 +6,6 @@
 
 Zebraw is a lightweight and fast package for displaying code blocks with line numbers in typst, supporting code line highlighting. The term _**Zebraw**_ is a combination of _**zebra**_ and _**raw**_, for the highlighted lines will be displayed in the code block like a zebra lines.
 
-> [!NOTE]
-> Click on the image example to jump to the corresponding Typst code!
-
 ## Starting
 
 Import `zebraw` package by `#import "@preview/zebraw:0.4.1": *` then follow with `#show: zebraw` to start using zebraw in the simplest way. To manually display some specific code blocks in zebraw, you can use `#zebraw()` function:
