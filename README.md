@@ -368,7 +368,7 @@ Customize the inset of each line by passing a dictionary to the `inset` paramete
 
 ### Colors
 
-Customize the background color by passing a  color or an array of colors to the `background-color` parameter.
+Customize the background color by passing a color or an array of colors to the `background-color` parameter.
 
 ````typ
 #zebraw(
@@ -395,7 +395,7 @@ Customize the background color by passing a  color or an array of colors to the 
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/14_Dark.svg"><img alt="typst-block" src="assets/14_Light.svg" /></picture></p>
 
-Customize the highlight color by passing a  color to the `highlight-color` parameter:
+Customize the highlight color by passing a color to the `highlight-color` parameter:
 
 ````typ
 #zebraw(
