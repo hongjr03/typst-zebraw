@@ -349,7 +349,7 @@ There are 3 ways to customize code blocks in your document:
 
 ### Inset
 
-Customize the inset of each line by passing a dictionary to the `inset` parameter:
+Customize the inset of each line by passing a  to the `inset` parameter:
 
 ````typ
 #zebraw(
@@ -368,7 +368,7 @@ Customize the inset of each line by passing a dictionary to the `inset` paramete
 
 ### Colors
 
-Customize the background color by passing a  color or an array of colors to the `background-color` parameter.
+Customize the background color by passing a  or an  of s to the `background-color` parameter.
 
 ````typ
 #zebraw(
@@ -395,7 +395,7 @@ Customize the background color by passing a  color or an array of colors to the 
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/14_Dark.svg"><img alt="typst-block" src="assets/14_Light.svg" /></picture></p>
 
-Customize the highlight color by passing a  color to the `highlight-color` parameter:
+Customize the highlight color by passing a  to the `highlight-color` parameter:
 
 ````typ
 #zebraw(
@@ -411,7 +411,7 @@ Customize the highlight color by passing a  color to the `highlight-color` param
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/15_Dark.svg"><img alt="typst-block" src="assets/15_Light.svg" /></picture></p>
 
-Customize the comments' background color by passing a color to the `comment-color` parameter:
+Customize the comments' background color by passing a  to the `comment-color` parameter:
 
 ````typ
 #zebraw(
@@ -431,7 +431,7 @@ Customize the comments' background color by passing a color to the `comment-colo
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/16_Dark.svg"><img alt="typst-block" src="assets/16_Light.svg" /></picture></p>
 
-Customize the language tab's background color by passing a color to the `lang-color` parameter.
+Customize the language tab's background color by passing a  to the `lang-color` parameter.
 
 ````typ
 #zebraw(
