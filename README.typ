@@ -1,4 +1,4 @@
-// #set page(paper: "a4", height: auto)
+#set page(paper: "a4")
 
 #import "src/lib.typ": *
 

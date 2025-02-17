@@ -40,6 +40,7 @@ Import `zebraw` package by `#import "@preview/zebraw:0.4.1": *` then follow with
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/1_Dark.svg"><img alt="typst-block" src="assets/1_Light.svg" /></picture></p>
 
+
 ## Features
 
 ### Line Highlighting
@@ -91,6 +92,7 @@ You can highlight specific lines in the code block by passing the `highlight-lin
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/2_Dark.svg"><img alt="typst-block" src="assets/2_Light.svg" /></picture></p>
 
+
 ### Comment
 
 You can add comments to the highlighted lines by passing an array of line numbers and comments to the `highlight-lines` parameter.
@@ -126,6 +128,7 @@ You can add comments to the highlighted lines by passing an array of line number
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/3_Dark.svg"><img alt="typst-block" src="assets/3_Light.svg" /></picture></p>
 
+
 Comments can begin with a flag, which is `">"` by default. You can change the flag by passing the `comment-flag` parameter to the `zebraw` function:
 
 ````typ
@@ -156,6 +159,7 @@ Comments can begin with a flag, which is `">"` by default. You can change the fl
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/4_Dark.svg"><img alt="typst-block" src="assets/4_Light.svg" /></picture></p>
 
+
 To disable the flag feature, pass `""` to the `comment-flag` parameter (the indentation of the comment will be disabled as well):
 
 ````typ
@@ -184,6 +188,7 @@ To disable the flag feature, pass `""` to the `comment-flag` parameter (the inde
 ````
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/5_Dark.svg"><img alt="typst-block" src="assets/5_Light.svg" /></picture></p>
+
 
 ### Header and Footer
 
@@ -218,6 +223,7 @@ Usually, the comments passing by a dictionary of line numbers and comments are u
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/6_Dark.svg"><img alt="typst-block" src="assets/6_Light.svg" /></picture></p>
 
+
 Or you can use `header` and `footer` parameters to add a header or footer to the code block:
 
 ````typ
@@ -248,6 +254,7 @@ Or you can use `header` and `footer` parameters to add a header or footer to the
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/7_Dark.svg"><img alt="typst-block" src="assets/7_Light.svg" /></picture></p>
 
+
 ### Language Tab
 
 If `lang` is set to `true`, then there will be a language tab on the top right corner of the code block:
@@ -267,6 +274,7 @@ If `lang` is set to `true`, then there will be a language tab on the top right c
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/8_Dark.svg"><img alt="typst-block" src="assets/8_Light.svg" /></picture></p>
 
+
 Customize the language to display by pass a string or content to the `lang` parameter.
 
 ````typ
@@ -283,6 +291,7 @@ Customize the language to display by pass a string or content to the `lang` para
 ````
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/9_Dark.svg"><img alt="typst-block" src="assets/9_Light.svg" /></picture></p>
+
 
 ### Copyable
 
@@ -316,6 +325,7 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/11_Dark.svg"><img alt="typst-block" src="assets/11_Light.svg" /></picture></p>
 
+
 ````typ
 #show: zebraw-init.with(..zebraw-themes.zebra-reverse, lang: false)
 #show: zebraw
@@ -337,6 +347,7 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 ````
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/12_Dark.svg"><img alt="typst-block" src="assets/12_Light.svg" /></picture></p>
+
 
 ## Customization
 
@@ -364,6 +375,7 @@ Customize the inset of each line by passing a to the `inset` parameter:
 ````
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/13_Dark.svg"><img alt="typst-block" src="assets/13_Light.svg" /></picture></p>
+
 
 ### Colors
 
@@ -394,6 +406,7 @@ Customize the background color by passing a or an of s to the `background-color`
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/14_Dark.svg"><img alt="typst-block" src="assets/14_Light.svg" /></picture></p>
 
+
 Customize the highlight color by passing a to the `highlight-color` parameter:
 
 ````typ
@@ -409,6 +422,7 @@ Customize the highlight color by passing a to the `highlight-color` parameter:
 ````
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/15_Dark.svg"><img alt="typst-block" src="assets/15_Light.svg" /></picture></p>
+
 
 Customize the comments' background color by passing a to the `comment-color` parameter:
 
@@ -430,6 +444,7 @@ Customize the comments' background color by passing a to the `comment-color` par
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/16_Dark.svg"><img alt="typst-block" src="assets/16_Light.svg" /></picture></p>
 
+
 Customize the language tab's background color by passing a to the `lang-color` parameter.
 
 ````typ
@@ -447,6 +462,7 @@ Customize the language tab's background color by passing a to the `lang-color` p
 ````
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/17_Dark.svg"><img alt="typst-block" src="assets/17_Light.svg" /></picture></p>
+
 
 ### Font
 
@@ -477,6 +493,7 @@ Language tab will be rendered as comments if nothing is passed.
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/18_Dark.svg"><img alt="typst-block" src="assets/18_Light.svg" /></picture></p>
 
+
 ````typ
 #zebraw(
   highlight-lines: (
@@ -505,6 +522,7 @@ Language tab will be rendered as comments if nothing is passed.
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/19_Dark.svg"><img alt="typst-block" src="assets/19_Light.svg" /></picture></p>
 
+
 ### Extend
 
 Extend at vertical is enabled at default. When there's header or footer it will be automatically disabled.
@@ -523,6 +541,7 @@ Extend at vertical is enabled at default. When there's header or footer it will 
 ````
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/20_Dark.svg"><img alt="typst-block" src="assets/20_Light.svg" /></picture></p>
+
 
 ## Documentation
 
