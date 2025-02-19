@@ -562,7 +562,10 @@ The default value of most parameters are `none` for it will use the default valu
 
 #import "@preview/tidy:0.4.1"
 #let docs = tidy.parse-module(read("src/mod.typ"), scope: (zebraw: zebraw))
-#context tidy.show-module(docs, style: tidy.styles.default, sort-functions: false)
+#context {
+  set page(paper: "a4")
+  tidy.show-module(docs, style: tidy.styles.default, sort-functions: false)
+}
 
 #show: zebraw-init.with(
   ..if sys.inputs.at("x-color-theme", default: none) == "dark" {

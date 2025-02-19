@@ -1185,7 +1185,7 @@
                         <path class="typst-shape" fill="#f5f5f5" fill-rule="nonzero" d="M 0 2.992 C 0 1.3395641 1.3395641 0 2.992 0 L 206.008 0 C 207.66043 0 209 1.3395641 209 2.992 L 209 278.7217 C 209 280.37415 207.66043 281.7137 206.008 281.7137 L 2.992 281.7137 C 1.3395641 281.7137 0 280.37415 0 278.7217 Z "/>
                     </g>
                     <g transform="translate(5.5 5.5)">
-                        <g class="typst-group" clip-path="url(#cCEED7500CDC57F796EE5C706A06DC77)">
+                        <g class="typst-group" clip-path="url(#cE0FC55878149014ABCC94E77A64DAA77)">
                             <g>
                                 <g transform="translate(0 0)">
                                     <g class="typst-group">
@@ -3090,7 +3090,7 @@
         </symbol>
     </defs>
     <defs id="clip-path">
-        <clipPath id="cCEED7500CDC57F796EE5C706A06DC77">
+        <clipPath id="cE0FC55878149014ABCC94E77A64DAA77">
             <path d="M 0 2.992 C 0 1.3395641 1.3395641 0 2.992 0 L 206.008 0 C 207.66043 0 209 1.3395641 209 2.992 L 209 278.7217 C 209 280.37415 207.66043 281.7137 206.008 281.7137 L 2.992 281.7137 C 1.3395641 281.7137 0 280.37415 0 278.7217 Z "/>
         </clipPath>
     </defs>
