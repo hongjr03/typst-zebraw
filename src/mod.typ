@@ -520,39 +520,15 @@
       clip: true,
       fill: curr-background-color(background-color, 0),
       context layout(code-block-size => {
-        let line-render(line, height: none, num: false) = block(
+        let line-render(line, num: false) = grid.cell(fill: line.fill,block(
           width: 100%,
           inset: inset,
           if num {
-            let lb = measure(
-              g(line-render((body: [#line.number], fill: none))),
-              width: code-block-size.width,
-            ).height
-            let cnt = calc.ceil(height / lb) - 1
-            let number = (
-              [#if line.keys().contains("comment") { text(fill: line.fill, [#line.number]) } else { line.number }]
-                + [\ #text(fill: line.fill, [#line.number])] * cnt
-            )
-            let rem = (
-              height - measure(g(line-render((body: number, fill: none))), width: code-block-size.width).height
-            )
-            (
-              if line.keys().contains("comment") {
-                set text(fill: line.fill)
-                number
-              } else {
-                number
-              }
-                + v(rem)
-            )
+            [#line.number]
           } else {
-            if line.body == [] { linebreak() } else { line.body }
+            line.body
           },
-          fill: line.fill,
-        )
-
-        let get-height(line) = measure(g([], line-render(line)), width: code-block-size.width).height
-
+        ))
 
         let lines = it
           .lines
@@ -572,7 +548,7 @@
               // Comments.
               if comments.keys().contains(str(line.number)) {
                 res.push((
-                  number: line.number,
+                  number: [],
                   comment: true,
                   body: {
                     if comment-flag != "" {
@@ -602,9 +578,7 @@
           })
           .flatten()
 
-        let heights = lines
-          .map(line => measure(g([], line-render(line)), width: code-block-size.width).height)
-          .map(height => if height < 1em.to-absolute() { 1em.to-absolute() } else { height })
+        let heights = lines.map(line => measure(g([], line-render(line)), width: code-block-size.width).height)
 
         g(
           // Header.
@@ -649,9 +623,9 @@
             )
           },
           // Line numbers.
-          stack(..lines.map(line => line-render(line, height: get-height(line), num: true))),
+          grid(rows: heights, ..lines.map(line => line-render(line, num: true))),
           // Code lines.
-          stack(..lines.map(line => line-render(line, height: get-height(line)))),
+          grid(rows: heights, ..lines.map(line => line-render(line))),
           // Footer.
           ..if footer != none or comments.keys().contains("footer") {
             (
