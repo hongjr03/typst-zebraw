@@ -129,8 +129,9 @@
               )
           )
         },
-      )
-        + if line.comment != none {
+      ),
+      ..if line.comment != none {
+        (
           html.elem(
             "div",
             attrs: (style: (comment-div-style(line.comment))),
@@ -140,8 +141,9 @@
                 box(width: 2.1em, inset: (right: inset.right), []) + line.comment.indent + line.comment.body,
               ),
             ),
-          )
-        } else { none }
+          ),
+        )
+      },
     )
 
 
