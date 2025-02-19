@@ -372,7 +372,7 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 
 See #link("example-html.typ")[example-html.typ] or #link("https://hongjr03.github.io/typst-zebraw/")[GitHub Pages] for more information.
 
-#context figure(image("assets/html-example.png", width: 86%))
+#context figure(image("assets/html-example.png", width: 76%))
 
 == Customization
 
