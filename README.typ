@@ -2,11 +2,12 @@
 
 #import "src/lib.typ": *
 
+#set raw(theme: "assets/tokyo-night.tmTheme") if sys.inputs.at("x-color-theme", default: none) == "dark"
 #show raw: set text(font: "Fira Code")
 #show raw.where(lang: "typlite"): none
 
 #let preview(..args, body) = grid(
-  ..if args.pos().len() == 0 { (columns: 2) },
+  columns: (20em, 20em),
   ..args,
   column-gutter: 0.5em,
   block(
@@ -55,14 +56,9 @@
 </a>
 ```
 
-Zebraw is a lightweight and fast package for displaying code blocks with line numbers in typst, supporting code line highlighting. The term _*Zebraw*_ is a combination of _*zebra*_ and _*raw*_, for the highlighted lines will be displayed in the code block like a zebra lines.
+Zebraw is a lightweight and fast package for displaying code blocks with line numbers in typst, supporting code line highlighting. The term _*zebraw*_ is a combination of _*zebra*_ and _*raw*_, for the highlighted lines will be displayed in the code block like a zebra lines.
 
-// #outline(depth: 3)
-
-```typlite
-> [!NOTE]
-> Click on the image example to jump to the corresponding Typst code!
-```
+// #outline(depth: 3, indent: 2em)
 
 == Starting
 
@@ -371,6 +367,12 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 }
 ```
 ````)
+
+=== (Experimental) HTML Variant
+
+See #link("example-html.typ")[example-html.typ] or #link("https://hongjr03.github.io/typst-zebraw/")[GitHub Pages] for more information.
+
+#context figure(image("assets/html-example.png", width: 86%))
 
 == Customization
 
