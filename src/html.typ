@@ -77,14 +77,14 @@
   }
 
   show raw.where(block: true): it => {
-    let preStyle = (
+    let pre-style = (
       "padding-top: " + repr(inset.top),
       "padding-bottom: " + repr(inset.bottom),
       "margin: 0",
       "width: " + repr(line-width),
     ).join("; ")
 
-    let textDivStyle(line) = (
+    let text-div-style(line) = (
       "background: " + line.fill.to-hex(),
       "text-align: left",
       "display: flex",
@@ -92,26 +92,35 @@
       "width: " + if wrap { repr(block-width) } else { repr(line-width) },
     ).join("; ")
 
-    let commentDivStyle(line) = (
-      textDivStyle(line).split("; ") + ("padding-top: " + repr(inset.top), "padding-bottom: " + repr(inset.bottom))
+    let comment-div-style(line) = (
+      text-div-style(line).split("; ")
+        + (
+          "padding-top: " + repr(inset.top),
+          "padding-bottom: " + repr(inset.bottom),
+        )
     ).join("; ")
 
-    let buildCodeLineElem(line) = (
+    let build-code-line-elem(line) = (
       html.elem(
         "div",
-        attrs: (style: textDivStyle(line)),
+        attrs: (style: (text-div-style(line))),
         {
           (
             html.frame(box(width: 2.1em, inset: (right: inset.right), align(right)[#line.number]))
               + html.elem(
                 "pre",
-                attrs: (style: preStyle),
+                attrs: (style: (pre-style)),
                 {
                   show text: it => context {
                     let c = text.fill
                     html.elem(
                       "span",
-                      attrs: (style: ("color: " + c.to-hex(), if wrap { "white-space: pre-wrap" }).join("; ")),
+                      attrs: (
+                        style: (
+                          "color: " + c.to-hex(),
+                          ..if wrap { ("white-space: pre-wrap",) } else { none },
+                        ).join("; "),
+                      ),
                       it,
                     )
                   }
@@ -124,7 +133,7 @@
         + if line.comment != none {
           html.elem(
             "div",
-            attrs: (style: commentDivStyle(line.comment)),
+            attrs: (style: (comment-div-style(line.comment))),
             html.frame(
               text(
                 ..comment-font-args,
@@ -135,41 +144,42 @@
         } else { none }
     )
 
-    let buildCell(isHeader, content) = table.cell(
+
+    let build-cell(is-header, content) = table.cell(
       colspan: 1,
       html.elem(
         "div",
         attrs: (
-          style: "background: "
-            + if content != none { comment-color.to-hex() } else {
-              curr-background-color(background-color, 0).to-hex()
-            }
-            + "; width: "
-            + if wrap { repr(block-width) } else { repr(line-width) }
-            + ";",
+          style: (
+            "background: "
+              + if content != none { comment-color.to-hex() } else {
+                curr-background-color(background-color, 0).to-hex()
+              },
+            "width: " + if wrap { repr(block-width) } else { repr(line-width) },
+          ).join("; "),
         ),
         html.elem(
           "div",
           attrs: (
-            style: "padding: " + repr(inset.right) + " " + repr(inset.left) + ";",
+            style: "padding: " + repr(inset.right) + " " + repr(inset.left),
           ),
           text(..comment-font-args, content),
         ),
       ),
     )
 
-    let headerCell = if header != none or comments.keys().contains("header") {
-      (buildCell(true, if header != none { header } else { comments.at("header") }),)
+    let header-cell = if header != none or comments.keys().contains("header") {
+      (build-cell(true, if header != none { header } else { comments.at("header") }),)
     } else if extend {
-      (buildCell(true, none),)
+      (build-cell(true, none),)
     } else {
       ()
     }
 
-    let footerCell = if footer != none or comments.keys().contains("footer") {
-      (buildCell(false, if footer != none { footer } else { comments.at("footer") }),)
+    let footer-cell = if footer != none or comments.keys().contains("footer") {
+      (build-cell(false, if footer != none { footer } else { comments.at("footer") }),)
     } else if extend {
-      (buildCell(false, none),)
+      (build-cell(false, none),)
     } else {
       ()
     }
@@ -250,9 +260,9 @@
             ).join("; "),
           ),
           (
-            ..headerCell,
-            lines.map(line => buildCodeLineElem(line)),
-            ..footerCell,
+            ..header-cell,
+            lines.map(line => build-code-line-elem(line)),
+            ..footer-cell,
           )
             .flatten()
             .join(),
