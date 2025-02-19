@@ -1,4 +1,4 @@
 #{
 // render_code
-context figure(image("assets/html-example.png", width: 86%))
+context figure(image("assets/html-example.png", width: 76%))
 }

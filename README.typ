@@ -563,7 +563,7 @@ The default value of most parameters are `none` for it will use the default valu
 #import "@preview/tidy:0.4.1"
 #let docs = tidy.parse-module(read("src/mod.typ"), scope: (zebraw: zebraw))
 #context {
-  set page(paper: "a4")
+  set page(paper: "a4", height: auto, margin: 1em)
   tidy.show-module(docs, style: tidy.styles.default, sort-functions: false)
 }
 
@@ -584,27 +584,30 @@ The default value of most parameters are `none` for it will use the default valu
 
 == Example
 
-#context zebraw(
-  highlight-lines: (
-    (3, [to avoid negative numbers]),
-    (9, "50 => 12586269025"),
-  ),
-  lang: true,
-  header: "Calculate Fibonacci number using reccursive function",
-  ```rust
-  pub fn fibonacci_reccursive(n: i32) -> u64 {
-      if n < 0 {
-          panic!("{} is negative!", n);
-      }
-      match n {
-          0 => panic!("zero is not a right argument to fibonacci_reccursive()!"),
-          1 | 2 => 1,
-          3 => 2,
-          _ => fibonacci_reccursive(n - 1) + fibonacci_reccursive(n - 2),
-      }
-  }
-  ```,
-)
+#context {
+  set page(paper: "a4", height: auto, margin: 1em)
+  zebraw(
+    highlight-lines: (
+      (3, [to avoid negative numbers]),
+      (9, "50 => 12586269025"),
+    ),
+    lang: true,
+    header: "Calculate Fibonacci number using reccursive function",
+    ```rust
+    pub fn fibonacci_reccursive(n: i32) -> u64 {
+        if n < 0 {
+            panic!("{} is negative!", n);
+        }
+        match n {
+            0 => panic!("zero is not a right argument to fibonacci_reccursive()!"),
+            1 | 2 => 1,
+            3 => 2,
+            _ => fibonacci_reccursive(n - 1) + fibonacci_reccursive(n - 2),
+        }
+    }
+    ```,
+  )
+}
 
 ```typlite
 ## Performance
