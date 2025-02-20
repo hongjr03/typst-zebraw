@@ -61,6 +61,7 @@
       "vertical-align: top",
       "padding-right: 0.34em",
       "user-select: none",
+      "flex-shrink: 0",
     ).join("; ")
 
     let pre-style = (
@@ -98,7 +99,7 @@
           )
           html.elem(
             "pre",
-            attrs: (style: (pre-style)),
+            attrs: (style: (pre-style), class: "zebraw-code-line"),
             {
               show text: it => context {
                 let c = text.fill
@@ -113,11 +114,7 @@
                   it,
                 )
               }
-              if line.body.func() == text {
-                linebreak()
-              } else {
-                line.body
-              }
+              line.body
             },
           )
         },
@@ -195,30 +192,33 @@
       attrs: (
         style: (
           "position: relative",
-          "width: " + repr-or-str(block-width), // 正则表达式匹配 repr-or-str(...) 的模式为：/repr\([^)]*\)/
+          "width: " + repr-or-str(block-width),
         ).join("; "),
+        class: "zebraw-code-block",
       ),
       {
-        if lang != none {
-          html.elem(
-            "div",
-            attrs: (
-              style: (
-                "position: absolute",
-                "top: 0",
-                "right: 0",
-                "padding: 0.25em",
-                "background: " + lang-color.to-hex(),
-                "font-size: 0.8em",
-                "border-radius: " + repr-or-str(inset.right),
-              ).join("; "),
-            ),
-            {
+        html.elem(
+          "div",
+          attrs: (
+            style: (
+              "position: absolute",
+              "top: 0",
+              "right: 0",
+              "padding: 0.25em",
+              "background: " + lang-color.to-hex(),
+              "font-size: 0.8em",
+              "border-radius: " + repr-or-str(inset.right),
+            ).join("; "),
+            class: "zebraw-code-lang",
+          ),
+          {
+            if lang != false {
               set text(..lang-font-args)
               if type(lang) == bool { it.lang } else { lang }
-            },
-          )
-        } else { none }
+            } else { none }
+          },
+        )
+
         html.elem(
           "div",
           attrs: (
@@ -235,6 +235,40 @@
           )
             .flatten()
             .join(),
+        )
+
+        html.elem(
+          "script",
+          ```javascript
+          var codeBlocks = document.querySelectorAll('.zebraw-code-block');
+          codeBlocks.forEach(function (codeBlock) {
+            var copyButton = codeBlock.querySelector('.zebraw-code-lang');
+            copyButton.style.cursor = 'pointer';
+
+            // 提示用户可以复制代码 “Copy code”
+            copyButton.title = 'Click to copy code';
+
+            copyButton.addEventListener('click', function () {
+              var lines = codeBlock.querySelectorAll('.zebraw-code-line');
+              var code = '';
+              lines.forEach(function (line) {
+                code += line.textContent + '\n';
+              });
+              var textarea = document.createElement('textarea');
+              textarea.value = code;
+              document.body.appendChild(textarea);
+              textarea.select();
+              document.execCommand('copy');
+              document.body.removeChild(textarea);
+
+              // 提示用户代码已复制 “Code copied”
+              copyButton.title = 'Code copied!';
+              setTimeout(function () {
+                copyButton.title = 'Click to copy code';
+              }, 2000);
+            });
+          });
+          ```.text,
         )
       },
     )
