@@ -54,6 +54,15 @@
   let (highlight-nums, comments) = tidy-highlight-lines(highlight-lines)
 
   show raw.where(block: true): it => {
+    let number-div-style = (
+      "margin: 0",
+      "width: 2.1em",
+      "text-align: right",
+      "vertical-align: top",
+      "padding-right: 0.34em",
+      "user-select: none",
+    ).join("; ")
+
     let pre-style = (
       "padding-top: " + repr-or-str(inset.top),
       "padding-bottom: " + repr-or-str(inset.bottom),
@@ -82,32 +91,34 @@
         "div",
         attrs: (style: (text-div-style(line))),
         {
-          (
-            html.frame(box(width: 2.1em, inset: (right: inset.right), align(right)[#line.number]))
-              + html.elem(
-                "pre",
-                attrs: (style: (pre-style)),
-                {
-                  show text: it => context {
-                    let c = text.fill
-                    html.elem(
-                      "span",
-                      attrs: (
-                        style: (
-                          "color: " + c.to-hex(),
-                          ..if wrap { ("white-space: pre-wrap",) } else { none },
-                        ).join("; "),
-                      ),
-                      it,
-                    )
-                  }
-                  if line.body.func() == text {
-                    linebreak()
-                  } else {
-                    line.body
-                  }
-                },
-              )
+          html.elem(
+            "pre",
+            attrs: (style: (number-div-style)),
+            [#line.number],
+          )
+          html.elem(
+            "pre",
+            attrs: (style: (pre-style)),
+            {
+              show text: it => context {
+                let c = text.fill
+                html.elem(
+                  "span",
+                  attrs: (
+                    style: (
+                      "color: " + c.to-hex(),
+                      ..if wrap { ("white-space: pre-wrap",) } else { none },
+                    ).join("; "),
+                  ),
+                  it,
+                )
+              }
+              if line.body.func() == text {
+                linebreak()
+              } else {
+                line.body
+              }
+            },
           )
         },
       ),
@@ -225,7 +236,6 @@
             .flatten()
             .join(),
         )
-        // linebreak()
       },
     )
   }
