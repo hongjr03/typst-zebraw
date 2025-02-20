@@ -1,15 +1,4 @@
-#let background-color-state = state("zebraw-background-color", luma(245))
-#let highlight-color-state = state("zebraw-highlight-color", rgb("#94e2d5").lighten(70%))
-#let inset-state = state("zebraw-inset", (top: 0.34em, right: 0.34em, bottom: 0.34em, left: 0.34em))
-#let comment-color-state = state("zebraw-comment-color", none)
-#let lang-color-state = state("zebraw-lang-color", none)
-#let comment-flag-state = state("zebraw-comment-flag", ">")
-#let comment-font-args-state = state("zebraw-comment-font-args", (:))
-#let lang-state = state("zebraw-lang", true)
-#let lang-font-args-state = state("zebraw-lang-font-args", (:))
-#let extend-state = state("zebraw-extend", true)
-#let block-args-state = state("zebraw-block-args", (:))
-#let grid-args-state = state("zebraw-grid-args", (:))
+#import "utils.typ": *
 
 /// Initialize the `zebraw` block in global.
 /// -> content
@@ -64,96 +53,6 @@
   extend-state.update(extend)
 
   body
-}
-
-#let parse-zebraw-args(
-  inset,
-  background-color,
-  highlight-color,
-  comment-color,
-  lang-color,
-  comment-flag,
-  lang,
-  comment-font-args,
-  lang-font-args,
-  extend,
-) = {
-  let inset = if inset == none {
-    inset-state.get()
-  } else {
-    inset-state.get() + inset
-  }
-
-  let background-color = if background-color == none {
-    background-color-state.get()
-  } else {
-    background-color
-  }
-
-  let highlight-color = if highlight-color == none {
-    highlight-color-state.get()
-  } else {
-    highlight-color
-  }
-
-  let comment-color = if comment-color == none {
-    if comment-color-state.get() == none {
-      highlight-color-state.get().lighten(50%)
-    } else {
-      comment-color-state.get()
-    }
-  } else {
-    comment-color
-  }
-
-  let lang-color = if lang-color == none {
-    if lang-color-state.get() == none { comment-color } else { lang-color-state.get() }
-  } else {
-    lang-color
-  }
-
-  let comment-flag = if comment-flag == none {
-    comment-flag-state.get()
-  } else {
-    comment-flag
-  }
-
-  let lang = if lang == none {
-    lang-state.get()
-  } else {
-    lang
-  }
-
-  let comment-font-args = if comment-font-args == none {
-    comment-font-args-state.get()
-  } else {
-    comment-font-args-state.get() + comment-font-args
-  }
-
-  let lang-font-args = if lang-font-args == none {
-    lang-font-args-state.get()
-  } else {
-    lang-font-args-state.get() + lang-font-args
-  }
-
-  let extend = if extend == none {
-    extend-state.get()
-  } else {
-    extend
-  }
-
-  (
-    inset: inset,
-    background-color: background-color,
-    highlight-color: highlight-color,
-    comment-color: comment-color,
-    lang-color: lang-color,
-    comment-flag: comment-flag,
-    lang: lang,
-    comment-font-args: comment-font-args,
-    lang-font-args: lang-font-args,
-    extend: extend,
-  )
 }
 
 /// Block of code with highlighted lines and comments.
@@ -448,38 +347,7 @@
   let lang-font-args = args.lang-font-args
   let extend = args.extend
 
-  let (highlight-nums, comments) = {
-    let nums = ()
-    let comments = (:)
-    let lines = if type(highlight-lines) == int {
-      (highlight-lines,)
-    } else if type(highlight-lines) == array {
-      highlight-lines
-    }
-    for line in lines {
-      if type(line) == int {
-        nums.push(line)
-      } else if type(line) == array {
-        nums.push(line.first())
-        comments.insert(str(line.at(0)), line.at(1))
-      } else if type(line) == dictionary {
-        if not (line.keys().contains("header") or line.keys().contains("footer")) {
-          nums.push(int(line.keys().first()))
-        }
-        comments += line
-      }
-    }
-    (nums, comments)
-  }
-
-  let curr-background-color(background-color, idx) = {
-    let res = if type(background-color) == color {
-      background-color
-    } else if type(background-color) == array {
-      background-color.at(calc.rem(idx, background-color.len()))
-    }
-    res
-  }
+  let (highlight-nums, comments) = tidy-highlight-lines(highlight-lines)
 
   // Define block and grid.
   let b(..args, body) = box(
@@ -520,64 +388,30 @@
       clip: true,
       fill: curr-background-color(background-color, 0),
       context layout(code-block-size => {
-        let line-render(line, num: false) = grid.cell(fill: line.fill,block(
-          width: 100%,
-          inset: inset,
-          if num {
-            [#line.number]
-          } else {
-            line.body
-          },
-        ))
-
-        let lines = it
-          .lines
-          .map(line => {
-            let res = ()
-            if (type(highlight-nums) == array and highlight-nums.contains(line.number)) {
-              // Highlight lines.
-              res.push((
-                number: line.number,
-                body: {
-                  set text(fill: highlight-color.negate().transparentize(12.5%))
-                  line
-                },
-                fill: highlight-color,
-              ))
-
-              // Comments.
-              if comments.keys().contains(str(line.number)) {
-                res.push((
-                  number: [],
-                  comment: true,
-                  body: {
-                    if comment-flag != "" {
-                      box(line.text.split(regex("\S")).first())
-                      {
-                        strong(text(ligatures: true, comment-flag))
-                        h(0.35em, weak: true)
-                      }
-                      text(..comment-font-args, comments.at(str(line.number)))
-                    } else {
-                      text(..comment-font-args, comments.at(str(line.number)))
-                    }
-                  },
-                  fill: comment-color,
-                ))
-              }
+        let line-render(line, num: false) = grid.cell(
+          fill: line.fill,
+          block(
+            width: 100%,
+            inset: inset,
+            if num {
+              [#line.number]
             } else {
-              // Default lines.
-              let fill-color = curr-background-color(background-color, line.number)
-              res.push((
-                number: line.number,
-                body: line.body,
-                fill: fill-color,
-              ))
-            }
-            res
-          })
-          .flatten()
+              line.body
+            },
+          ),
+        )
 
+        let lines = tidy-lines(
+          it.lines,
+          highlight-nums,
+          comments,
+          highlight-color,
+          background-color,
+          comment-color,
+          comment-flag,
+          comment-font-args,
+          is-html: false,
+        )
         let heights = lines.map(line => measure(g([], line-render(line)), width: code-block-size.width).height)
 
         g(
