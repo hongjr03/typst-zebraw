@@ -296,12 +296,12 @@
           attrs: (
             style: (
               "position: absolute",
-              "top: 0",
+              "top: -" + repr-or-str(inset.top + inset.bottom),
               "right: 0",
-              "padding: 0.18em",
+              "padding: 0.25em",
               "background: " + lang-color.to-hex(),
-              "font-size: 0.6em",
-              "border-radius: " + repr-or-str(inset.right),
+              "font-size: 0.8em",
+              "border-radius: " + repr-or-str(inset.left),
             ).join("; "),
             class: "zebraw-code-lang",
           ),
