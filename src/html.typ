@@ -1,4 +1,4 @@
-#import "mod.typ": parse-zebraw-args
+#import "utils.typ": *
 
 #let repr-or-str(x) = {
   if type(x) == str {
@@ -51,38 +51,7 @@
   let lang-font-args = args.lang-font-args
   let extend = args.extend
 
-  let (highlight-nums, comments) = {
-    let nums = ()
-    let comments = (:)
-    let lines = if type(highlight-lines) == int {
-      (highlight-lines,)
-    } else if type(highlight-lines) == array {
-      highlight-lines
-    }
-    for line in lines {
-      if type(line) == int {
-        nums.push(line)
-      } else if type(line) == array {
-        nums.push(line.first())
-        comments.insert(str(line.at(0)), line.at(1))
-      } else if type(line) == dictionary {
-        if not (line.keys().contains("header") or line.keys().contains("footer")) {
-          nums.push(int(line.keys().first()))
-        }
-        comments += line
-      }
-    }
-    (nums, comments)
-  }
-
-  let curr-background-color(background-color, idx) = {
-    let res = if type(background-color) == color {
-      background-color
-    } else if type(background-color) == array {
-      background-color.at(calc.rem(idx, background-color.len()))
-    }
-    res
-  }
+  let (highlight-nums, comments) = tidy-highlight-lines(highlight-lines)
 
   show raw.where(block: true): it => {
     let pre-style = (
@@ -198,43 +167,18 @@
       ()
     }
 
-    let lines = it
-      .lines
-      .map(line => {
-        let res = ()
-        if (type(highlight-nums) == array and highlight-nums.contains(line.number)) {
-          res.push((
-            number: line.number,
-            body: line.body,
-            fill: highlight-color,
-            comment: if comments.keys().contains(str(line.number)) {
-              (
-                indent: box(line.text.split(regex("\S")).first()),
-                body: if comment-flag != "" {
-                  {
-                    strong(text(ligatures: true, comment-flag))
-                    h(0.35em, weak: true)
-                  }
-                  text(..comment-font-args, comments.at(str(line.number)))
-                } else {
-                  text(..comment-font-args, comments.at(str(line.number)))
-                },
-                fill: comment-color,
-              )
-            } else { none },
-          ))
-        } else {
-          let fill-color = curr-background-color(background-color, line.number)
-          res.push((
-            number: line.number,
-            body: line.body,
-            fill: fill-color,
-            comment: none,
-          ))
-        }
-        res
-      })
-      .flatten()
+    let lines = tidy-lines(
+      it.lines,
+      highlight-nums,
+      comments,
+      highlight-color,
+      background-color,
+      comment-color,
+      comment-flag,
+      comment-font-args,
+      is-html: true,
+    )
+
     html.elem(
       "div",
       attrs: (
