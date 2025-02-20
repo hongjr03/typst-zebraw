@@ -137,6 +137,11 @@
   lines
     .map(line => {
       let res = ()
+      let body = if line.text == "" {
+        linebreak()
+      } else {
+        line.body
+      }
       if (type(highlight-nums) == array and highlight-nums.contains(line.number)) {
         let comment = if comments.keys().contains(str(line.number)) {
           (
@@ -155,7 +160,7 @@
         } else { none }
         res.push((
           number: line.number,
-          body: line.body,
+          body: body,
           fill: highlight-color,
           comment: if not is-html { none } else { comment },
         ))
@@ -172,7 +177,7 @@
         let fill-color = curr-background-color(background-color, line.number)
         res.push((
           number: line.number,
-          body: line.body,
+          body: body,
           fill: fill-color,
           comment: none,
         ))
