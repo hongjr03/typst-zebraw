@@ -1,5 +1,13 @@
 #import "mod.typ": parse-zebraw-args
 
+#let repr-or-str(x) = {
+  if type(x) == str {
+    x
+  } else {
+    repr(x)
+  }
+}
+
 /// HTML variant.
 #let zebraw-html(
   highlight-lines: (),
@@ -78,10 +86,10 @@
 
   show raw.where(block: true): it => {
     let pre-style = (
-      "padding-top: " + repr(inset.top),
-      "padding-bottom: " + repr(inset.bottom),
+      "padding-top: " + repr-or-str(inset.top),
+      "padding-bottom: " + repr-or-str(inset.bottom),
       "margin: 0",
-      "width: " + repr(line-width),
+      "width: " + repr-or-str(line-width),
     ).join("; ")
 
     let text-div-style(line) = (
@@ -89,14 +97,14 @@
       "text-align: left",
       "display: flex",
       "align-items: center",
-      "width: " + if wrap { repr(block-width) } else { repr(line-width) },
+      "width: " + if wrap { "100%" } else { repr-or-str(line-width) },
     ).join("; ")
 
     let comment-div-style(line) = (
       text-div-style(line).split("; ")
         + (
-          "padding-top: " + repr(inset.top),
-          "padding-bottom: " + repr(inset.bottom),
+          "padding-top: " + repr-or-str(inset.top),
+          "padding-bottom: " + repr-or-str(inset.bottom),
         )
     ).join("; ")
 
@@ -161,13 +169,13 @@
               + if content != none { comment-color.to-hex() } else {
                 curr-background-color(background-color, 0).to-hex()
               },
-            "width: " + if wrap { repr(block-width) } else { repr(line-width) },
+            "width: " + if wrap { "100%" } else { repr-or-str(line-width) },
           ).join("; "),
         ),
         html.elem(
           "div",
           attrs: (
-            style: "padding: " + repr(inset.right) + " " + repr(inset.left),
+            style: "padding: " + repr-or-str(inset.right) + " " + repr-or-str(inset.left),
           ),
           text(..comment-font-args, content),
         ),
@@ -232,7 +240,7 @@
       attrs: (
         style: (
           "position: relative",
-          "width: " + repr(block-width),
+          "width: " + repr-or-str(block-width), // 正则表达式匹配 repr-or-str(...) 的模式为：/repr\([^)]*\)/
         ).join("; "),
       ),
       {
@@ -247,7 +255,7 @@
                 "padding: 0.25em",
                 "background: " + lang-color.to-hex(),
                 "font-size: 0.8em",
-                "border-radius: " + repr(inset.right),
+                "border-radius: " + repr-or-str(inset.right),
               ).join("; "),
             ),
             {
@@ -262,7 +270,7 @@
             style: (
               "overflow-x: auto",
               "overflow-y: hidden",
-              "border-radius: " + repr(inset.left),
+              "border-radius: " + repr-or-str(inset.left),
             ).join("; "),
           ),
           (
@@ -273,6 +281,7 @@
             .flatten()
             .join(),
         )
+        // linebreak()
       },
     )
   }
