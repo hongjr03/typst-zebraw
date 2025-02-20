@@ -225,6 +225,17 @@
       },
     )
 
+    let lines = tidy-lines(
+      it.lines,
+      highlight-nums,
+      comments,
+      highlight-color,
+      background-color,
+      comment-color,
+      comment-flag,
+      comment-font-args,
+      is-html: true,
+    )
 
     let build-cell(is-header, content, is-background: false) = html.elem(
       "div",
@@ -234,7 +245,11 @@
             (
               "background: "
                 + if content != none { comment-color.to-hex() } else {
-                  curr-background-color(background-color, 0).to-hex()
+                  if is-header {
+                    curr-background-color(background-color, 0).to-hex()
+                  } else {
+                    curr-background-color(background-color, lines.len() + 1).to-hex()
+                  }
                 },
             )
           },
@@ -268,18 +283,6 @@
     } else {
       ()
     }
-
-    let lines = tidy-lines(
-      it.lines,
-      highlight-nums,
-      comments,
-      highlight-color,
-      background-color,
-      comment-color,
-      comment-flag,
-      comment-font-args,
-      is-html: true,
-    )
 
     html.elem(
       "div",
