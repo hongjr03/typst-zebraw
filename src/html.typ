@@ -62,44 +62,77 @@
       "padding-right: 0.34em",
       "user-select: none",
       "flex-shrink: 0",
-    ).join("; ")
+    )
 
     let pre-style = (
       "padding-top: " + repr-or-str(inset.top),
       "padding-bottom: " + repr-or-str(inset.bottom),
       "margin: 0",
-      "width: " + repr-or-str(line-width),
-    ).join("; ")
+      ..if wrap { ("white-space: pre-wrap",) },
+    )
 
-    let text-div-style(line) = (
-      "background: " + line.fill.to-hex(),
+    let text-div-style = (
       "text-align: left",
       "display: flex",
       "align-items: center",
-      "width: " + if wrap { "100%" } else { repr-or-str(line-width) },
-    ).join("; ")
+      "width: 100%",
+    )
 
-    let comment-div-style(line) = (
-      text-div-style(line).split("; ")
+    let comment-div-style = (
+      text-div-style
         + (
           "padding-top: " + repr-or-str(inset.top),
           "padding-bottom: " + repr-or-str(inset.bottom),
         )
-    ).join("; ")
+    )
 
-    let build-code-line-elem(line) = (
+
+    let background-text-style = (
+      "user-select: none",
+      "opacity: 0",
+      "color: transparent",
+    )
+
+    let build-code-line-elem(line, is-background: false) = (
       html.elem(
         "div",
-        attrs: (style: (text-div-style(line))),
+        attrs: (
+          style: (
+            {
+              let style = ()
+              style += text-div-style
+              if is-background {
+                style += (
+                  "background: " + line.fill.to-hex(),
+                )
+              }
+              style
+            }.join("; ")
+          ),
+        ),
         {
           html.elem(
             "pre",
-            attrs: (style: (number-div-style)),
+            attrs: (
+              style: (
+                {
+                  let style = ()
+                  style += number-div-style
+                  if is-background {
+                    style += background-text-style
+                  }
+                  style
+                }
+              ).join("; "),
+            ),
             [#line.number],
           )
           html.elem(
             "pre",
-            attrs: (style: (pre-style), class: "zebraw-code-line"),
+            attrs: (
+              style: (pre-style).join("; "),
+              class: "zebraw-code-line",
+            ),
             {
               show text: it => context {
                 let c = text.fill
@@ -107,8 +140,11 @@
                   "span",
                   attrs: (
                     style: (
-                      "color: " + c.to-hex(),
-                      ..if wrap { ("white-space: pre-wrap",) } else { none },
+                      ..if is-background {
+                        background-text-style
+                      } else {
+                        ("color: " + c.to-hex(),)
+                      },
                     ).join("; "),
                   ),
                   it,
@@ -119,58 +155,116 @@
           )
         },
       ),
+      // haven't decided how to handle comments yet
       ..if line.comment != none {
         (
           html.elem(
             "div",
-            attrs: (style: (comment-div-style(line.comment))),
-            html.frame(
-              text(
-                ..comment-font-args,
-                box(width: 2.1em, inset: (right: inset.right), []) + line.comment.indent + line.comment.body,
-              ),
+            attrs: (
+              style: {
+                let style = ()
+                style += comment-div-style
+                if is-background {
+                  style += background-text-style
+                }
+                if wrap { style += ("white-space: pre-wrap",) } else {
+                  style += ("white-space: pre",)
+                }
+                style
+              }.join("; "),
             ),
+            {
+              html.elem(
+                "div",
+                // line.comment.indent,
+                attrs: (
+                  style: (
+                    "width: 2.1em",
+                    "flex-shrink: 0",
+                  ).join("; "),
+                ),
+                "",
+              )
+              html.elem(
+                "p",
+                attrs: (
+                  style: (
+                    "margin: 0",
+                    "padding: 0",
+                    "width: 100%",
+                  ).join("; "),
+                ),
+                {
+                  html.elem(
+                    "span",
+                    attrs: (
+                      style: (
+                        "user-select: none",
+                      ).join("; "),
+                    ),
+                    {
+                      line.comment.indent.clusters().len() * " "
+                      strong(text(ligatures: true, line.comment.comment-flag))
+                      " "
+                    },
+                  )
+                  html.elem(
+                    "span",
+                    attrs: (
+                      style: (
+                        "font-size: 0.8em",
+                      ).join("; "),
+                    ),
+                    line.comment.body,
+                  )
+                },
+              )
+            },
           ),
         )
       },
     )
 
 
-    let build-cell(is-header, content) = table.cell(
-      colspan: 1,
+    let build-cell(is-header, content, is-background: false) = html.elem(
+      "div",
+      attrs: (
+        style: (
+          ..if is-background {
+            (
+              "background: "
+                + if content != none { comment-color.to-hex() } else {
+                  curr-background-color(background-color, 0).to-hex()
+                },
+            )
+          },
+          "width: 100%",
+        ).join("; "),
+      ),
       html.elem(
         "div",
         attrs: (
           style: (
-            "background: "
-              + if content != none { comment-color.to-hex() } else {
-                curr-background-color(background-color, 0).to-hex()
-              },
-            "width: " + if wrap { "100%" } else { repr-or-str(line-width) },
+            "padding: " + repr-or-str(inset.right) + " " + repr-or-str(inset.left),
+            ..if is-background { background-text-style } else { none },
           ).join("; "),
         ),
-        html.elem(
-          "div",
-          attrs: (
-            style: "padding: " + repr-or-str(inset.right) + " " + repr-or-str(inset.left),
-          ),
-          text(..comment-font-args, content),
-        ),
+        text(..comment-font-args, content),
       ),
     )
 
-    let header-cell = if header != none or comments.keys().contains("header") {
-      (build-cell(true, if header != none { header } else { comments.at("header") }),)
+    let header-cell(is-background: false) = if header != none or comments.keys().contains("header") {
+      (build-cell(true, if header != none { header } else { comments.at("header") }, is-background: is-background),)
     } else if extend {
-      (build-cell(true, none),)
+      (build-cell(true, none, is-background: is-background),)
     } else {
       ()
     }
 
-    let footer-cell = if footer != none or comments.keys().contains("footer") {
-      (build-cell(false, if footer != none { footer } else { comments.at("footer") }),)
+    let footer-cell(is-background: false) = if footer != none or comments.keys().contains("footer") {
+      (build-cell(false, if footer != none { footer } else { comments.at("footer") }, is-background: is-background),)
     } else if extend {
-      (build-cell(false, none),)
+      (build-cell(false, none, is-background: is-background),)
     } else {
       ()
     }
@@ -219,19 +313,44 @@
           },
         )
 
+        // Background layer with same content
+        html.elem(
+          "div",
+          attrs: (
+            style: (
+              "position: absolute",
+              "top: 0",
+              "left: 0",
+              "width: 100%",
+              "height: 100%",
+              "overflow: hidden",
+              "z-index: -1",
+              "pointer-events: none",
+              "border-radius: " + repr-or-str(inset.left),
+            ).join("; "),
+          ),
+          (
+            ..{ header-cell(is-background: true) },
+            lines.map(line => build-code-line-elem(line, is-background: true)),
+            ..{ footer-cell(is-background: true) },
+          )
+            .flatten()
+            .join(),
+        )
+
+        // Foreground content
         html.elem(
           "div",
           attrs: (
             style: (
               "overflow-x: auto",
               "overflow-y: hidden",
-              "border-radius: " + repr-or-str(inset.left),
             ).join("; "),
           ),
           (
-            ..header-cell,
+            ..{ header-cell() },
             lines.map(line => build-code-line-elem(line)),
-            ..footer-cell,
+            ..{ footer-cell() },
           )
             .flatten()
             .join(),
