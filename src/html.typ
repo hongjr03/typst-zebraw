@@ -56,18 +56,19 @@
   show raw.where(block: true): it => {
     let number-div-style = (
       "margin: 0",
-      "width: 2.1em",
       "text-align: right",
       "vertical-align: top",
       "padding-right: 0.34em",
       "user-select: none",
       "flex-shrink: 0",
+      "width: 2.1em",
     )
 
     let pre-style = (
       "padding-top: " + repr-or-str(inset.top),
       "padding-bottom: " + repr-or-str(inset.bottom),
       "margin: 0",
+      "padding-right: " + repr-or-str(inset.right),
       ..if wrap { ("white-space: pre-wrap",) },
     )
 
@@ -155,7 +156,6 @@
           )
         },
       ),
-      // haven't decided how to handle comments yet
       ..if line.comment != none {
         (
           html.elem(
@@ -298,9 +298,9 @@
               "position: absolute",
               "top: 0",
               "right: 0",
-              "padding: 0.25em",
+              "padding: 0.18em",
               "background: " + lang-color.to-hex(),
-              "font-size: 0.8em",
+              "font-size: 0.6em",
               "border-radius: " + repr-or-str(inset.right),
             ).join("; "),
             class: "zebraw-code-lang",
