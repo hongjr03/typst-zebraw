@@ -124,7 +124,11 @@
                       it,
                     )
                   }
-                  line.body
+                  if line.body.func() == text {
+                    linebreak()
+                  } else {
+                    line.body
+                  }
                 },
               )
           )
