@@ -145,16 +145,9 @@
       if (type(highlight-nums) == array and highlight-nums.contains(line.number)) {
         let comment = if comments.keys().contains(str(line.number)) {
           (
-            indent: if comment-flag != "" { box(line.text.split(regex("\S")).first()) } else { box() },
-            body: if comment-flag != "" {
-              {
-                strong(text(ligatures: true, comment-flag))
-                h(0.35em, weak: true)
-              }
-              text(..comment-font-args, comments.at(str(line.number)))
-            } else {
-              text(..comment-font-args, comments.at(str(line.number)))
-            },
+            indent: if comment-flag != "" { line.text.split(regex("\S")).first() } else { none },
+            comment-flag: comment-flag,
+            body: text(..comment-font-args, comments.at(str(line.number))),
             fill: comment-color,
           )
         } else { none }
@@ -168,7 +161,10 @@
           res.push((
             number: none,
             body: if comment != none {
-              comment.indent + comment.body
+              box(comment.indent)
+              strong(text(ligatures: true, comment.comment-flag))
+              h(0.35em, weak: true)
+              comment.body
             } else { "" }, 
             fill: comment-color,
           ))
