@@ -70,7 +70,7 @@
       "margin: 0",
       "padding-right: " + repr-or-str(inset.right),
       ..if wrap { ("white-space: pre-wrap",) },
-    )
+        )
 
     let text-div-style = (
       "text-align: left",
@@ -140,7 +140,10 @@
                         background-text-style
                       } else {
                         ("color: " + c.to-hex(),)
-                      },
+                      }
+                        + (
+                          "display: inline-block",
+                        ),
                     ).join("; "),
                   ),
                   it,

@@ -5,24 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
-    <h2>🦓 Zebraw but in HTML world</h2>
-    <h3>Example</h3>
-    <div style="display: flex; flex-direction: row; gap: 1em;">
-      <pre style="width: 50%; white-space: pre-wrap">#zebraw-html(
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <style>@media (width >= 64rem) {
+  .exp {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    gap: 0.5em;
+  }
+}
+
+@media (width &lt; 64rem) {
+  .exp {
+    display: block;
+  }
+}
+
+.frame {
+  shadow: 0 0 0.5em rgba(0, 0, 0, 0.1);
+  border-radius: 0.5em;
+  background: #fff;
+  padding: 0.5em;
+}</style>
+    <div class="container xl:max-w-5xl mx-auto p-4">
+      <h1 class="text-2xl font-bold underline">🦓 Zebraw but in HTML world</h1>
+      <h2 class="text-xl font-bold">Example</h2>
+      <div>
+        <div class="exp" style="margin: 1em 0em;">
+          <pre style="white-space: pre-wrap;">#zebraw-html(
   highlight-lines: (
     (3, [to avoid negative numbers]),
     (9, "50 => 12586269025"),
   ),
   lang: true,
-  block-width: 32em,
-  line-width: 80em,
+  block-width: 100%,
+  line-width: 100%,
   wrap: false,
   ```rust
   pub fn fibonacci_reccursive(n: i32) -> u64 {
       if n &lt; 0 {
           panic!("{} is negative!", n);
       }
-
       match n {
           0 => panic!("zero is not a right argument to fibonacci_reccursive()!"), 0 => panic!("zero is not a right argument to fibonacci_reccursive()!"),
           1 | 2 => 1,
@@ -32,237 +54,130 @@
   }
   ```,
 )</pre>
-      <div style="position: relative; width: 32em" class="zebraw-code-block">
-        <div style="position: absolute; top: 0; right: 0; padding: 0.25em; background: #effbf9; font-size: 0.8em; border-radius: 0.34em" class="zebraw-code-lang">rust</div>
-        <div style="overflow-x: auto; overflow-y: hidden; border-radius: 0.34em">
-          <div style="background: #f5f5f5; width: 80em">
-            <div style="padding: 0.34em 0.34em"></div>
-          </div>
-          <div style="background: #f5f5f5; text-align: left; display: flex; align-items: center; width: 80em">
-            <pre style="margin: 0; width: 2.1em; text-align: right; vertical-align: top; padding-right: 0.34em; user-select: none; flex-shrink: 0">1</pre>
-            <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; width: 80em" class="zebraw-code-line"><span style="color: #d73a49">pub</span><span style="color: #000000"> </span><span style="color: #d73a49">fn</span><span style="color: #000000"> </span><span style="color: #4b69c6">fibonacci_reccursive</span><span style="color: #000000">(</span><span style="color: #000000">n</span><span style="color: #000000">:</span><span style="color: #000000"> </span><span style="color: #d73a49">i32</span><span style="color: #000000">)</span><span style="color: #000000"> </span><span style="color: #000000">-></span><span style="color: #000000"> </span><span style="color: #d73a49">u64</span><span style="color: #000000"> </span><span style="color: #000000">{</span></pre>
-          </div>
-          <div style="background: #f5f5f5; text-align: left; display: flex; align-items: center; width: 80em">
-            <pre style="margin: 0; width: 2.1em; text-align: right; vertical-align: top; padding-right: 0.34em; user-select: none; flex-shrink: 0">2</pre>
-            <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; width: 80em" class="zebraw-code-line"><span style="color: #000000">    </span><span style="color: #d73a49">if</span><span style="color: #000000"> n </span><span style="color: #d73a49">&lt;</span><span style="color: #000000"> </span><span style="color: #b60157">0</span><span style="color: #000000"> </span><span style="color: #000000">{</span></pre>
-          </div>
-          <div style="background: #dff6f2; text-align: left; display: flex; align-items: center; width: 80em">
-            <pre style="margin: 0; width: 2.1em; text-align: right; vertical-align: top; padding-right: 0.34em; user-select: none; flex-shrink: 0">3</pre>
-            <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; width: 80em" class="zebraw-code-line"><span style="color: #000000">        </span><span style="color: #16718d">panic!</span><span style="color: #000000">(</span><span style="color: #298e0d">"</span><span style="color: #298e0d">{} is negative!</span><span style="color: #298e0d">"</span><span style="color: #000000">,</span><span style="color: #000000"> n</span><span style="color: #000000">)</span><span style="color: #000000">;</span></pre>
-          </div>
-          <div style="background: #effbf9; text-align: left; display: flex; align-items: center; width: 80em; padding-top: 0.34em; padding-bottom: 0.34em"><svg style="overflow: visible;" class="typst-doc" viewBox="0 0 201.69359375000002 6.685937500000001" width="201.69359375000002pt" height="6.685937500000001pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:h5="http://www.w3.org/1999/xhtml">
-    <g>
-        <g transform="translate(0 6.685937500000001)">
-            <g class="typst-group">
-                <g/>
-            </g>
-        </g>
-        <g transform="translate(18.480000000000004 0)">
-            <g class="typst-group">
-                <g>
-                    <g transform="translate(0 6.685937500000001)">
-                        <g class="typst-text" transform="scale(1, -1)"/>
-                    </g>
-                </g>
-            </g>
-        </g>
-        <g transform="translate(60.86437500000002 6.685937500000001)">
-            <g class="typst-text" transform="scale(1, -1)">
-                <use xlink:href="#gAE38D33B419166636E3C48407EAEBBFC" x="0" fill="#000000" fill-rule="nonzero"/>
-            </g>
-        </g>
-        <g transform="translate(69.24242187500002 6.685937500000001)">
-            <g class="typst-text" transform="scale(1, -1)">
-                <use xlink:href="#gE86513A956FF3D69432930257F1A8C4B" x="0" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g1FD565BCFE7BCA1A3C093875995D494" x="5.298046875000001" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#gD150070D84BF10BD734D1024AF9E49BD" x="15.894140625000002" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g8C35535356D98A1A0A19BC1C3B7D7406" x="21.192187500000003" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g1FD565BCFE7BCA1A3C093875995D494" x="26.490234375000004" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#gB164538801F8F1C62CA2E2E3EAE81C90" x="31.788281250000004" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g670123FC47DFD66863A25C31EE2D6657" x="37.08632812500001" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g520A982B04FB8392A8FC9E143CAB5A5C" x="47.682421875" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g5109FECFD623486D3D89CF4B6A005FB6" x="52.98046875" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#gEED052986263B4A6C348B661B874FF3B" x="58.278515625" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#gD150070D84BF10BD734D1024AF9E49BD" x="63.576562499999994" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#gE86513A956FF3D69432930257F1A8C4B" x="68.87460937499999" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#gB164538801F8F1C62CA2E2E3EAE81C90" x="74.17265624999999" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g8C35535356D98A1A0A19BC1C3B7D7406" x="79.47070312499999" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g5109FECFD623486D3D89CF4B6A005FB6" x="84.76874999999998" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g520A982B04FB8392A8FC9E143CAB5A5C" x="95.36484374999998" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#gF2AE1EAB6EBF7AF4CA17179C014F0EB8" x="100.66289062499997" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#gDF593CD2185712DBC56F3D92ABD66195" x="105.96093749999997" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g9F9F6E418E35731F9FC4CBC9B9BF4ED2" x="111.25898437499997" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g5109FECFD623486D3D89CF4B6A005FB6" x="116.55703124999997" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g3A261C5A6F32275791EA61570E3C3BC0" x="121.85507812499996" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g3D2FCE36989071A4E4BFA307175887EE" x="127.15312499999996" fill="#000000" fill-rule="nonzero"/>
-            </g>
-        </g>
-    </g>
-    <defs id="glyph">
-        <symbol id="gAE38D33B419166636E3C48407EAEBBFC" overflow="visible">
-            <path d="M 0.378125 3.9789064 L 0.378125 5.053125 L 4.919922 3.265625 L 4.919922 2.2515626 L 0.378125 0.46835938 L 0.378125 1.5382813 L 3.7941408 2.754297 L 0.378125 3.9789064 Z "/>
-        </symbol>
-        <symbol id="gE86513A956FF3D69432930257F1A8C4B" overflow="visible">
-            <path d="M 2.6382813 6.1789064 L 2.6382813 4.8125 L 4.4343753 4.8125 L 4.4343753 4.198047 L 2.6382813 4.198047 L 2.6382813 1.5855469 Q 2.6382813 1.0527344 2.8402345 0.8421875 Q 3.0421875 0.6316406 3.5449219 0.6316406 L 4.4343753 0.6316406 L 4.4343753 0 L 3.4675782 0 Q 2.578125 0 2.2128906 0.35664064 Q 1.8476563 0.7132813 1.8476563 1.5855469 L 1.8476563 4.198047 L 0.56289065 4.198047 L 0.56289065 4.8125 L 1.8476563 4.8125 L 1.8476563 6.1789064 L 2.6382813 6.1789064 Z "/>
-        </symbol>
-        <symbol id="g1FD565BCFE7BCA1A3C093875995D494" overflow="visible">
-            <path d="M 2.6468751 4.258203 Q 2.0453126 4.258203 1.7359376 3.7898438 Q 1.4265625 3.3214846 1.4265625 2.4019532 Q 1.4265625 1.4867188 1.7359376 1.0162109 Q 2.0453126 0.5457031 2.6468751 0.5457031 Q 3.2527344 0.5457031 3.5621095 1.0162109 Q 3.8714845 1.4867188 3.8714845 2.4019532 Q 3.8714845 3.3214846 3.5621095 3.7898438 Q 3.2527344 4.258203 2.6468751 4.258203 Z M 2.6468751 4.928516 Q 3.648047 4.928516 4.178711 4.2796874 Q 4.709375 3.6308594 4.709375 2.4019532 Q 4.709375 1.16875 4.1808596 0.52207035 Q 3.6523438 -0.12460938 2.6468751 -0.12460938 Q 1.6457032 -0.12460938 1.1171875 0.52207035 Q 0.58867186 1.16875 0.58867186 2.4019532 Q 0.58867186 3.6308594 1.1171875 4.2796874 Q 1.6457032 4.928516 2.6468751 4.928516 Z "/>
-        </symbol>
-        <symbol id="gD150070D84BF10BD734D1024AF9E49BD" overflow="visible">
-            <path d="M 3.0164063 2.4191406 L 2.754297 2.4191406 Q 2.0625 2.4191406 1.7123047 2.1763673 Q 1.3621094 1.9335938 1.3621094 1.4523438 Q 1.3621094 1.0183594 1.6242188 0.7777344 Q 1.8863282 0.5371094 2.3503907 0.5371094 Q 3.0035157 0.5371094 3.377344 0.9904297 Q 3.751172 1.44375 3.7554688 2.2429688 L 3.7554688 2.4191406 L 3.0164063 2.4191406 Z M 4.5503907 2.7457032 L 4.5503907 0 L 3.7554688 0 L 3.7554688 0.7132813 Q 3.5019531 0.28359374 3.1173828 0.07949219 Q 2.7328126 -0.12460938 2.1828125 -0.12460938 Q 1.4480469 -0.12460938 1.0097656 0.29003906 Q 0.5714844 0.70468754 0.5714844 1.4007813 Q 0.5714844 2.2042968 1.1107422 2.6210938 Q 1.6500001 3.0378907 2.6941407 3.0378907 L 3.7554688 3.0378907 L 3.7554688 3.1625001 Q 3.751172 3.7382813 3.4632814 3.9982424 Q 3.1753907 4.258203 2.54375 4.258203 Q 2.1398437 4.258203 1.7273438 4.1421876 Q 1.3148438 4.026172 0.9238281 3.8027344 L 0.9238281 4.5933595 Q 1.3621094 4.7609377 1.7638673 4.8447266 Q 2.165625 4.928516 2.54375 4.928516 Q 3.1410158 4.928516 3.5642579 4.7523437 Q 3.9875002 4.576172 4.2496095 4.2238283 Q 4.412891 4.0089846 4.481641 3.693164 Q 4.5503907 3.377344 4.5503907 2.7457032 Z "/>
-        </symbol>
-        <symbol id="g8C35535356D98A1A0A19BC1C3B7D7406" overflow="visible">
-            <path d="M 0.4296875 4.8125 L 1.2503906 4.8125 L 2.6468751 0.7734375 L 4.0476565 4.8125 L 4.8683596 4.8125 L 3.1582031 0 L 2.1398437 0 L 0.4296875 4.8125 Z "/>
-        </symbol>
-        <symbol id="gB164538801F8F1C62CA2E2E3EAE81C90" overflow="visible">
-            <path d="M 1.1 4.8125 L 3.1238282 4.8125 L 3.1238282 0.61445314 L 4.692188 0.61445314 L 4.692188 0 L 0.76484376 0 L 0.76484376 0.61445314 L 2.333203 0.61445314 L 2.333203 4.198047 L 1.1 4.198047 L 1.1 4.8125 Z M 2.333203 6.685938 L 3.1238282 6.685938 L 3.1238282 5.684766 L 2.333203 5.684766 L 2.333203 6.685938 Z "/>
-        </symbol>
-        <symbol id="g670123FC47DFD66863A25C31EE2D6657" overflow="visible">
-            <path d="M 3.686719 4.198047 L 3.686719 6.685938 L 4.477344 6.685938 L 4.477344 0 L 3.686719 0 L 3.686719 0.6058594 Q 3.4890625 0.24921876 3.1603515 0.06230469 Q 2.8316407 -0.12460938 2.4019532 -0.12460938 Q 1.5296875 -0.12460938 1.0291016 0.55214846 Q 0.52851564 1.2289063 0.52851564 2.4191406 Q 0.52851564 3.5921876 1.03125 4.2603517 Q 1.5339844 4.928516 2.4019532 4.928516 Q 2.8359375 4.928516 3.166797 4.7416015 Q 3.4976563 4.5546875 3.686719 4.198047 Z M 1.3621094 2.4019532 Q 1.3621094 1.4824219 1.6542969 1.0140625 Q 1.9464844 0.5457031 2.517969 0.5457031 Q 3.0894532 0.5457031 3.388086 1.0183594 Q 3.686719 1.4910157 3.686719 2.4019532 Q 3.686719 3.3171875 3.388086 3.7876954 Q 3.0894532 4.258203 2.517969 4.258203 Q 1.9464844 4.258203 1.6542969 3.7898438 Q 1.3621094 3.3214846 1.3621094 2.4019532 Z "/>
-        </symbol>
-        <symbol id="g520A982B04FB8392A8FC9E143CAB5A5C" overflow="visible">
-            <path d="M 4.5160155 2.9820313 L 4.5160155 0 L 3.721094 0 L 3.721094 2.9820313 Q 3.721094 3.6308594 3.4933596 3.9359376 Q 3.265625 4.241016 2.7800782 4.241016 Q 2.2257812 4.241016 1.9271485 3.8478518 Q 1.6285156 3.4546876 1.6285156 2.7199218 L 1.6285156 0 L 0.8378906 0 L 0.8378906 4.8125 L 1.6285156 4.8125 L 1.6285156 4.0906253 Q 1.8390626 4.503125 2.2 4.7158203 Q 2.5609376 4.928516 3.0550783 4.928516 Q 3.7898438 4.928516 4.15293 4.4451175 Q 4.5160155 3.9617188 4.5160155 2.9820313 Z "/>
-        </symbol>
-        <symbol id="g5109FECFD623486D3D89CF4B6A005FB6" overflow="visible">
-            <path d="M 4.7781253 2.6039064 L 4.7781253 2.2171876 L 1.3535156 2.2171876 L 1.3535156 2.1914063 Q 1.3535156 1.4050782 1.7638673 0.9753907 Q 2.174219 0.5457031 2.921875 0.5457031 Q 3.3000002 0.5457031 3.7125 0.6660156 Q 4.125 0.78632814 4.5933595 1.03125 L 4.5933595 0.24492188 Q 4.1421876 0.060156252 3.7232423 -0.032226563 Q 3.304297 -0.12460938 2.9132812 -0.12460938 Q 1.7917969 -0.12460938 1.1601563 0.54785156 Q 0.52851564 1.2203125 0.52851564 2.4019532 Q 0.52851564 3.5535157 1.1472657 4.241016 Q 1.7660156 4.928516 2.7972658 4.928516 Q 3.7167969 4.928516 4.247461 4.305469 Q 4.7781253 3.682422 4.7781253 2.6039064 Z M 3.9875002 2.8359375 Q 3.9703126 3.5320313 3.6587892 3.8951173 Q 3.3472657 4.258203 2.7628906 4.258203 Q 2.1914063 4.258203 1.8218751 3.8800783 Q 1.4523438 3.5019531 1.3835938 2.8316407 L 3.9875002 2.8359375 Z "/>
-        </symbol>
-        <symbol id="gEED052986263B4A6C348B661B874FF3B" overflow="visible">
-            <path d="M 3.686719 2.444922 Q 3.686719 3.3343751 3.3966799 3.7962892 Q 3.1066406 4.258203 2.5523438 4.258203 Q 1.9722657 4.258203 1.6671876 3.7962892 Q 1.3621094 3.3343751 1.3621094 2.444922 Q 1.3621094 1.5554688 1.669336 1.0892578 Q 1.9765625 0.6230469 2.5609376 0.6230469 Q 3.1066406 0.6230469 3.3966799 1.0914062 Q 3.686719 1.5597657 3.686719 2.444922 Z M 4.477344 0.30937502 Q 4.477344 -0.7734375 3.9660158 -1.3320313 Q 3.4546876 -1.890625 2.4621093 -1.890625 Q 2.135547 -1.890625 1.7789063 -1.8304688 Q 1.4222656 -1.7703125 1.0656251 -1.6542969 L 1.0656251 -0.87226564 Q 1.4867188 -1.0699219 1.8304688 -1.1644531 Q 2.174219 -1.2589844 2.4621093 -1.2589844 Q 3.1023438 -1.2589844 3.3945313 -0.91093755 Q 3.686719 -0.56289065 3.686719 0.19335938 L 3.686719 0.22773439 L 3.686719 0.76484376 Q 3.4976563 0.3609375 3.1710937 0.16328125 Q 2.8445313 -0.034375 2.3761718 -0.034375 Q 1.5339844 -0.034375 1.03125 0.6402344 Q 0.52851564 1.3148438 0.52851564 2.444922 Q 0.52851564 3.579297 1.03125 4.2539063 Q 1.5339844 4.928516 2.3761718 4.928516 Q 2.8402345 4.928516 3.1625001 4.74375 Q 3.4847658 4.5589843 3.686719 4.1722655 L 3.686719 4.7953124 L 4.477344 4.7953124 L 4.477344 0.30937502 Z "/>
-        </symbol>
-        <symbol id="gF2AE1EAB6EBF7AF4CA17179C014F0EB8" overflow="visible">
-            <path d="M 0.8378906 1.8218751 L 0.8378906 4.8039064 L 1.6285156 4.8039064 L 1.6285156 1.8218751 Q 1.6285156 1.173047 1.8583984 0.8679688 Q 2.0882814 0.56289065 2.5695312 0.56289065 Q 3.128125 0.56289065 3.4246094 0.9560547 Q 3.721094 1.3492187 3.721094 2.0839844 L 3.721094 4.8039064 L 4.5160155 4.8039064 L 4.5160155 0 L 3.721094 0 L 3.721094 0.721875 Q 3.510547 0.30507812 3.147461 0.09023438 Q 2.784375 -0.12460938 2.2988281 -0.12460938 Q 1.5597657 -0.12460938 1.1988281 0.35878906 Q 0.8378906 0.8421875 0.8378906 1.8218751 Z "/>
-        </symbol>
-        <symbol id="gDF593CD2185712DBC56F3D92ABD66195" overflow="visible">
-            <path d="M 2.9046876 4.322656 Q 3.0507813 4.6320314 3.2763672 4.7802734 Q 3.5019531 4.928516 3.819922 4.928516 Q 4.4 4.928516 4.638477 4.479492 Q 4.876953 4.030469 4.876953 2.788672 L 4.876953 0 L 4.1550784 0 L 4.1550784 2.754297 Q 4.1550784 3.7726564 4.041211 4.0197268 Q 3.9273438 4.266797 3.6265626 4.266797 Q 3.2828126 4.266797 3.1560547 4.002539 Q 3.0292969 3.7382813 3.0292969 2.754297 L 3.0292969 0 L 2.307422 0 L 2.307422 2.754297 Q 2.307422 3.785547 2.184961 4.026172 Q 2.0625 4.266797 1.7445313 4.266797 Q 1.4308594 4.266797 1.3083985 4.002539 Q 1.1859375 3.7382813 1.1859375 2.754297 L 1.1859375 0 L 0.46835938 0 L 0.46835938 4.8125 L 1.1859375 4.8125 L 1.1859375 4.4 Q 1.3277344 4.6578126 1.5404297 4.7931643 Q 1.7531251 4.928516 2.0238283 4.928516 Q 2.3503907 4.928516 2.5673828 4.7781253 Q 2.784375 4.6277347 2.9046876 4.322656 Z "/>
-        </symbol>
-        <symbol id="g9F9F6E418E35731F9FC4CBC9B9BF4ED2" overflow="visible">
-            <path d="M 3.9445314 2.4019532 Q 3.9445314 3.3214846 3.6523438 3.7898438 Q 3.3601563 4.258203 2.788672 4.258203 Q 2.2128906 4.258203 1.9164063 3.7876954 Q 1.6199219 3.3171875 1.6199219 2.4019532 Q 1.6199219 1.4910157 1.9164063 1.0183594 Q 2.2128906 0.5457031 2.788672 0.5457031 Q 3.3601563 0.5457031 3.6523438 1.0140625 Q 3.9445314 1.4824219 3.9445314 2.4019532 Z M 1.6199219 4.198047 Q 1.8089844 4.5503907 2.1419923 4.7394533 Q 2.4750001 4.928516 2.9132812 4.928516 Q 3.78125 4.928516 4.2796874 4.2603517 Q 4.7781253 3.5921876 4.7781253 2.4191406 Q 4.7781253 1.2289063 4.2775393 0.55214846 Q 3.7769532 -0.12460938 2.9046876 -0.12460938 Q 2.4750001 -0.12460938 2.146289 0.06230469 Q 1.8175782 0.24921876 1.6199219 0.6058594 L 1.6199219 0 L 0.8292969 0 L 0.8292969 6.685938 L 1.6199219 6.685938 L 1.6199219 4.198047 Z "/>
-        </symbol>
-        <symbol id="g3A261C5A6F32275791EA61570E3C3BC0" overflow="visible">
-            <path d="M 4.9628906 3.819922 Q 4.709375 4.017578 4.4472656 4.1078124 Q 4.1851563 4.198047 3.8714845 4.198047 Q 3.132422 4.198047 2.7414062 3.7339845 Q 2.3503907 3.269922 2.3503907 2.3933594 L 2.3503907 0 L 1.5554688 0 L 1.5554688 4.8125 L 2.3503907 4.8125 L 2.3503907 3.8714845 Q 2.5480468 4.3828125 2.9583986 4.655664 Q 3.36875 4.928516 3.9316406 4.928516 Q 4.2238283 4.928516 4.477344 4.8554688 Q 4.7308593 4.782422 4.9628906 4.6277347 L 4.9628906 3.819922 Z "/>
-        </symbol>
-        <symbol id="g3D2FCE36989071A4E4BFA307175887EE" overflow="visible">
-            <path d="M 4.1808596 4.644922 L 4.1808596 3.8714845 Q 3.8414063 4.069141 3.4976563 4.1679688 Q 3.1539063 4.266797 2.7972658 4.266797 Q 2.2601564 4.266797 1.9958985 4.0927734 Q 1.7316407 3.91875 1.7316407 3.5621095 Q 1.7316407 3.2398438 1.929297 3.0808594 Q 2.1269531 2.921875 2.9132812 2.7714844 L 3.23125 2.7113283 Q 3.819922 2.5996094 4.122852 2.2644532 Q 4.4257813 1.929297 4.4257813 1.3921875 Q 4.4257813 0.67890626 3.91875 0.27714846 Q 3.4117188 -0.12460938 2.509375 -0.12460938 Q 2.1527345 -0.12460938 1.7617188 -0.049414065 Q 1.3707031 0.025781251 0.9152344 0.17617188 L 0.9152344 0.99257815 Q 1.3578125 0.76484376 1.7617188 0.6509766 Q 2.165625 0.5371094 2.5265625 0.5371094 Q 3.0507813 0.5371094 3.338672 0.7498047 Q 3.6265626 0.96250004 3.6265626 1.344922 Q 3.6265626 1.8949219 2.5738282 2.1054688 L 2.5394533 2.1140625 L 2.2429688 2.174219 Q 1.5597657 2.307422 1.2460938 2.6232421 Q 0.9324219 2.9390626 0.9324219 3.4847658 Q 0.9324219 4.176563 1.4007813 4.5525393 Q 1.8691406 4.928516 2.7371094 4.928516 Q 3.1238282 4.928516 3.4804688 4.8576174 Q 3.8371096 4.786719 4.1808596 4.644922 Z "/>
-        </symbol>
-    </defs>
-</svg>
-</div>
-          <div style="background: #f5f5f5; text-align: left; display: flex; align-items: center; width: 80em">
-            <pre style="margin: 0; width: 2.1em; text-align: right; vertical-align: top; padding-right: 0.34em; user-select: none; flex-shrink: 0">4</pre>
-            <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; width: 80em" class="zebraw-code-line"><span style="color: #000000">    </span><span style="color: #000000">}</span></pre>
-          </div>
-          <div style="background: #f5f5f5; text-align: left; display: flex; align-items: center; width: 80em">
-            <pre style="margin: 0; width: 2.1em; text-align: right; vertical-align: top; padding-right: 0.34em; user-select: none; flex-shrink: 0">5</pre>
-            <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; width: 80em" class="zebraw-code-line"><br></pre>
-          </div>
-          <div style="background: #f5f5f5; text-align: left; display: flex; align-items: center; width: 80em">
-            <pre style="margin: 0; width: 2.1em; text-align: right; vertical-align: top; padding-right: 0.34em; user-select: none; flex-shrink: 0">6</pre>
-            <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; width: 80em" class="zebraw-code-line"><span style="color: #000000">    </span><span style="color: #d73a49">match</span><span style="color: #000000"> n </span><span style="color: #000000">{</span></pre>
-          </div>
-          <div style="background: #f5f5f5; text-align: left; display: flex; align-items: center; width: 80em">
-            <pre style="margin: 0; width: 2.1em; text-align: right; vertical-align: top; padding-right: 0.34em; user-select: none; flex-shrink: 0">7</pre>
-            <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; width: 80em" class="zebraw-code-line"><span style="color: #000000">        </span><span style="color: #b60157">0</span><span style="color: #000000"> </span><span style="color: #d73a49">=></span><span style="color: #000000"> </span><span style="color: #16718d">panic!</span><span style="color: #000000">(</span><span style="color: #298e0d">"</span><span style="color: #298e0d">zero is not a right argument to fibonacci_reccursive()!</span><span style="color: #298e0d">"</span><span style="color: #000000">)</span><span style="color: #000000">,</span><span style="color: #000000"> </span><span style="color: #b60157">0</span><span style="color: #000000"> </span><span style="color: #d73a49">=></span><span style="color: #000000"> </span><span style="color: #16718d">panic!</span><span style="color: #000000">(</span><span style="color: #298e0d">"</span><span style="color: #298e0d">zero is not a right argument to fibonacci_reccursive()!</span><span style="color: #298e0d">"</span><span style="color: #000000">)</span><span style="color: #000000">,</span></pre>
-          </div>
-          <div style="background: #f5f5f5; text-align: left; display: flex; align-items: center; width: 80em">
-            <pre style="margin: 0; width: 2.1em; text-align: right; vertical-align: top; padding-right: 0.34em; user-select: none; flex-shrink: 0">8</pre>
-            <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; width: 80em" class="zebraw-code-line"><span style="color: #000000">        </span><span style="color: #b60157">1</span><span style="color: #000000"> </span><span style="color: #d73a49">|</span><span style="color: #000000"> </span><span style="color: #b60157">2</span><span style="color: #000000"> </span><span style="color: #d73a49">=></span><span style="color: #000000"> </span><span style="color: #b60157">1</span><span style="color: #000000">,</span></pre>
-          </div>
-          <div style="background: #dff6f2; text-align: left; display: flex; align-items: center; width: 80em">
-            <pre style="margin: 0; width: 2.1em; text-align: right; vertical-align: top; padding-right: 0.34em; user-select: none; flex-shrink: 0">9</pre>
-            <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; width: 80em" class="zebraw-code-line"><span style="color: #000000">        </span><span style="color: #b60157">3</span><span style="color: #000000"> </span><span style="color: #d73a49">=></span><span style="color: #000000"> </span><span style="color: #b60157">2</span><span style="color: #000000">,</span></pre>
-          </div>
-          <div style="background: #effbf9; text-align: left; display: flex; align-items: center; width: 80em; padding-top: 0.34em; padding-bottom: 0.34em"><svg style="overflow: visible;" class="typst-doc" viewBox="0 0 159.30921875 6.685937500000001" width="159.30921875pt" height="6.685937500000001pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:h5="http://www.w3.org/1999/xhtml">
-    <g>
-        <g transform="translate(0 6.685937500000001)">
-            <g class="typst-group">
-                <g/>
-            </g>
-        </g>
-        <g transform="translate(18.480000000000004 0)">
-            <g class="typst-group">
-                <g>
-                    <g transform="translate(0 6.685937500000001)">
-                        <g class="typst-text" transform="scale(1, -1)"/>
-                    </g>
-                </g>
-            </g>
-        </g>
-        <g transform="translate(60.86437500000002 6.685937500000001)">
-            <g class="typst-text" transform="scale(1, -1)">
-                <use xlink:href="#gAE38D33B419166636E3C48407EAEBBFC" x="0" fill="#000000" fill-rule="nonzero"/>
-            </g>
-        </g>
-        <g transform="translate(69.24242187500002 6.685937500000001)">
-            <g class="typst-text" transform="scale(1, -1)">
-                <use xlink:href="#g78AC06B83257E3C7D339649F1C157B7F" x="0" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g92790375876D4AEB51A01EA2C65F3FE9" x="5.298046875000001" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#gE8D3A2530873CAF429A5930918242AC7" x="15.894140625000002" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g45631E4D98DCCAEE87CC11B4C66175D2" x="21.192187500000003" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g3E70346B2313400E116E3DB0F4319425" x="31.788281250000004" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g5CF1D596CBFD78698163B3E376F88112" x="37.08632812500001" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g78AC06B83257E3C7D339649F1C157B7F" x="42.384375000000006" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#gC78A5F1EAED0BCB20F5083A9BD24D7DF" x="47.682421875" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g2F18C4F05C1B555958466C1A25D84A17" x="52.98046875" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g5CF1D596CBFD78698163B3E376F88112" x="58.278515625" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g2F18C4F05C1B555958466C1A25D84A17" x="63.576562499999994" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g1F607B046DCEFA87F623BCCE20F7BF66" x="68.87460937499999" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g92790375876D4AEB51A01EA2C65F3FE9" x="74.17265624999999" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g5CF1D596CBFD78698163B3E376F88112" x="79.47070312499999" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g78AC06B83257E3C7D339649F1C157B7F" x="84.76874999999998" fill="#000000" fill-rule="nonzero"/>
-            </g>
-        </g>
-    </g>
-    <defs id="glyph">
-        <symbol id="gAE38D33B419166636E3C48407EAEBBFC" overflow="visible">
-            <path d="M 0.378125 3.9789064 L 0.378125 5.053125 L 4.919922 3.265625 L 4.919922 2.2515626 L 0.378125 0.46835938 L 0.378125 1.5382813 L 3.7941408 2.754297 L 0.378125 3.9789064 Z "/>
-        </symbol>
-        <symbol id="g78AC06B83257E3C7D339649F1C157B7F" overflow="visible">
-            <path d="M 0.8894532 6.4152346 L 4.137891 6.4152346 L 4.137891 5.684766 L 1.6800781 5.684766 L 1.6800781 4.1078124 Q 1.8648438 4.176563 2.0517578 4.2087893 Q 2.238672 4.241016 2.4277344 4.241016 Q 3.4246094 4.241016 4.0089846 3.6523438 Q 4.5933595 3.0636718 4.5933595 2.0582032 Q 4.5933595 1.0441407 3.9810548 0.45976564 Q 3.36875 -0.12460938 2.307422 -0.12460938 Q 1.7960938 -0.12460938 1.3728516 -0.055859376 Q 0.9496094 0.012890626 0.61445314 0.15039063 L 0.61445314 1.03125 Q 1.0097656 0.81640625 1.4093751 0.7111328 Q 1.8089844 0.6058594 2.2257812 0.6058594 Q 2.9433594 0.6058594 3.3322268 0.9839844 Q 3.721094 1.3621094 3.721094 2.0582032 Q 3.721094 2.7457032 3.319336 3.128125 Q 2.9175782 3.510547 2.2 3.510547 Q 1.8519531 3.510547 1.5210937 3.4310548 Q 1.1902344 3.3515625 0.8894532 3.192578 L 0.8894532 6.4152346 Z "/>
-        </symbol>
-        <symbol id="g92790375876D4AEB51A01EA2C65F3FE9" overflow="visible">
-            <path d="M 2.0753906 3.2226563 Q 2.0753906 3.4589844 2.2408204 3.6308594 Q 2.40625 3.8027344 2.6382813 3.8027344 Q 2.8789063 3.8027344 3.0507813 3.6308594 Q 3.2226563 3.4589844 3.2226563 3.2226563 Q 3.2226563 2.9820313 3.0529296 2.8144531 Q 2.8832033 2.6468751 2.6382813 2.6468751 Q 2.3976562 2.6468751 2.2365234 2.8101563 Q 2.0753906 2.9734375 2.0753906 3.2226563 Z M 2.6468751 5.84375 Q 2.0410156 5.84375 1.7423829 5.190625 Q 1.44375 4.5375 1.44375 3.2011719 Q 1.44375 1.8691406 1.7423829 1.2160157 Q 2.0410156 0.56289065 2.6468751 0.56289065 Q 3.2570312 0.56289065 3.555664 1.2160157 Q 3.854297 1.8691406 3.854297 3.2011719 Q 3.854297 4.5375 3.555664 5.190625 Q 3.2570312 5.84375 2.6468751 5.84375 Z M 2.6468751 6.53125 Q 3.6738281 6.53125 4.2001953 5.6890626 Q 4.7265625 4.846875 4.7265625 3.2011719 Q 4.7265625 1.5597657 4.2001953 0.7175781 Q 3.6738281 -0.12460938 2.6468751 -0.12460938 Q 1.6199219 -0.12460938 1.0957031 0.7175781 Q 0.5714844 1.5597657 0.5714844 3.2011719 Q 0.5714844 4.846875 1.0957031 5.6890626 Q 1.6199219 6.53125 2.6468751 6.53125 Z "/>
-        </symbol>
-        <symbol id="gE8D3A2530873CAF429A5930918242AC7" overflow="visible">
-            <path d="M 0.378125 2.2515626 L 4.919922 2.2515626 L 4.919922 1.5125 L 0.378125 1.5125 L 0.378125 2.2515626 Z M 0.378125 3.9960938 L 4.919922 3.9960938 L 4.919922 3.265625 L 0.378125 3.265625 L 0.378125 3.9960938 Z "/>
-        </symbol>
-        <symbol id="g45631E4D98DCCAEE87CC11B4C66175D2" overflow="visible">
-            <path d="M 0.378125 4.129297 L 0.378125 4.9113283 L 4.919922 3.1152344 L 4.919922 2.4019532 L 0.378125 0.6058594 L 0.378125 1.3921875 L 4.030469 2.754297 L 0.378125 4.129297 Z "/>
-        </symbol>
-        <symbol id="g3E70346B2313400E116E3DB0F4319425" overflow="visible">
-            <path d="M 1.1601563 0.73046875 L 2.509375 0.73046875 L 2.509375 5.633203 L 1.0570313 5.3066406 L 1.0570313 6.0972657 L 2.5007813 6.4152346 L 3.36875 6.4152346 L 3.36875 0.73046875 L 4.7007813 0.73046875 L 4.7007813 0 L 1.1601563 0 L 1.1601563 0.73046875 Z "/>
-        </symbol>
-        <symbol id="g5CF1D596CBFD78698163B3E376F88112" overflow="visible">
-            <path d="M 1.6027344 0.73046875 L 4.5503907 0.73046875 L 4.5503907 0 L 0.653125 0 L 0.653125 0.73046875 Q 1.4566406 1.5769532 2.0582032 2.2257812 Q 2.6597657 2.8746095 2.8875 3.1410158 Q 3.3171875 3.6652346 3.4675782 3.9896486 Q 3.6179688 4.3140626 3.6179688 4.653516 Q 3.6179688 5.190625 3.3021486 5.495703 Q 2.9863281 5.8007813 2.4363282 5.8007813 Q 2.0453126 5.8007813 1.615625 5.6589847 Q 1.1859375 5.5171876 0.70468754 5.229297 L 0.70468754 6.1058593 Q 1.1472657 6.3164063 1.5748047 6.423828 Q 2.002344 6.53125 2.4191406 6.53125 Q 3.3601563 6.53125 3.9337893 6.030664 Q 4.507422 5.5300784 4.507422 4.717969 Q 4.507422 4.305469 4.316211 3.892969 Q 4.125 3.4804688 3.6953125 2.9820313 Q 3.4546876 2.7027345 2.9970703 2.2085938 Q 2.5394533 1.7144532 1.6027344 0.73046875 Z "/>
-        </symbol>
-        <symbol id="gC78A5F1EAED0BCB20F5083A9BD24D7DF" overflow="visible">
-            <path d="M 2.6468751 3.0464845 Q 2.066797 3.0464845 1.7509766 2.7220705 Q 1.4351562 2.3976562 1.4351562 1.8046875 Q 1.4351562 1.2117188 1.7552735 0.8830078 Q 2.0753906 0.5542969 2.6468751 0.5542969 Q 3.23125 0.5542969 3.5470705 0.878711 Q 3.8628907 1.203125 3.8628907 1.8046875 Q 3.8628907 2.3933594 3.5427735 2.7199218 Q 3.2226563 3.0464845 2.6468751 3.0464845 Z M 1.890625 3.407422 Q 1.3363281 3.549219 1.0248047 3.9359376 Q 0.7132813 4.322656 0.7132813 4.8683596 Q 0.7132813 5.633203 1.2332032 6.0822268 Q 1.7531251 6.53125 2.6468751 6.53125 Q 3.5449219 6.53125 4.0648437 6.0822268 Q 4.584766 5.633203 4.584766 4.8683596 Q 4.584766 4.322656 4.2732425 3.9359376 Q 3.9617188 3.549219 3.407422 3.407422 Q 4.0519533 3.265625 4.3935547 2.8359375 Q 4.7351565 2.40625 4.7351565 1.7230469 Q 4.7351565 0.85507816 4.1808596 0.36523438 Q 3.6265626 -0.12460938 2.6468751 -0.12460938 Q 1.6671876 -0.12460938 1.1150391 0.36308596 Q 0.56289065 0.85078126 0.56289065 1.7144532 Q 0.56289065 2.4019532 0.9044922 2.833789 Q 1.2460938 3.265625 1.890625 3.407422 Z M 1.5769532 4.786719 Q 1.5769532 4.271094 1.8519531 4.0003905 Q 2.1269531 3.7296877 2.6468751 3.7296877 Q 3.1710937 3.7296877 3.4460938 4.0003905 Q 3.721094 4.271094 3.721094 4.786719 Q 3.721094 5.3109374 3.4482422 5.5859375 Q 3.1753907 5.8609376 2.6468751 5.8609376 Q 2.1269531 5.8609376 1.8519531 5.5837893 Q 1.5769532 5.3066406 1.5769532 4.786719 Z "/>
-        </symbol>
-        <symbol id="g2F18C4F05C1B555958466C1A25D84A17" overflow="visible">
-            <path d="M 4.258203 6.2734375 L 4.258203 5.474219 Q 3.9875002 5.633203 3.682422 5.7169924 Q 3.377344 5.8007813 3.0464845 5.8007813 Q 2.2214844 5.8007813 1.7960938 5.179883 Q 1.3707031 4.5589843 1.3707031 3.3515625 Q 1.5769532 3.78125 1.9421875 4.0111327 Q 2.307422 4.241016 2.7800782 4.241016 Q 3.7082033 4.241016 4.217383 3.6716797 Q 4.7265625 3.1023438 4.7265625 2.0582032 Q 4.7265625 1.0183594 4.202344 0.446875 Q 3.6781251 -0.12460938 2.7285156 -0.12460938 Q 1.6113281 -0.12460938 1.0914062 0.6767578 Q 0.5714844 1.478125 0.5714844 3.2011719 Q 0.5714844 4.825391 1.1966797 5.6783204 Q 1.8218751 6.53125 3.0078125 6.53125 Q 3.3257813 6.53125 3.6437502 6.4646487 Q 3.9617188 6.398047 4.258203 6.2734375 Z M 2.7113283 3.5621095 Q 2.1570313 3.5621095 1.8390626 3.1625001 Q 1.5210937 2.7628906 1.5210937 2.0582032 Q 1.5210937 1.3535156 1.8390626 0.9539063 Q 2.1570313 0.5542969 2.7113283 0.5542969 Q 3.2871094 0.5542969 3.579297 0.9345703 Q 3.8714845 1.3148438 3.8714845 2.0582032 Q 3.8714845 2.8058593 3.579297 3.1839845 Q 3.2871094 3.5621095 2.7113283 3.5621095 Z "/>
-        </symbol>
-        <symbol id="g1F607B046DCEFA87F623BCCE20F7BF66" overflow="visible">
-            <path d="M 2.5609376 2.8445313 Q 3.1152344 2.8445313 3.4310548 3.2441406 Q 3.746875 3.6437502 3.746875 4.348438 Q 3.746875 5.053125 3.4310548 5.4527345 Q 3.1152344 5.852344 2.5609376 5.852344 Q 1.9851563 5.852344 1.6929688 5.47207 Q 1.4007813 5.091797 1.4007813 4.348438 Q 1.4007813 3.6007814 1.6908203 3.2226563 Q 1.9808594 2.8445313 2.5609376 2.8445313 Z M 1.0140625 0.13320313 L 1.0140625 0.9324219 Q 1.2847656 0.7734375 1.5898438 0.68964845 Q 1.8949219 0.6058594 2.2257812 0.6058594 Q 3.0507813 0.6058594 3.4740236 1.2267579 Q 3.8972657 1.8476563 3.8972657 3.0550783 Q 3.6953125 2.6253908 3.3300781 2.3955078 Q 2.9648438 2.165625 2.4921875 2.165625 Q 1.5640625 2.165625 1.0548829 2.7371094 Q 0.5457031 3.3085938 0.5457031 4.3570313 Q 0.5457031 5.392578 1.0677735 5.961914 Q 1.5898438 6.53125 2.54375 6.53125 Q 3.6609375 6.53125 4.1808596 5.7277346 Q 4.7007813 4.9242187 4.7007813 3.2011719 Q 4.7007813 1.5812501 4.075586 0.7283203 Q 3.4503908 -0.12460938 2.2601564 -0.12460938 Q 1.9464844 -0.12460938 1.6285156 -0.058007814 Q 1.3105469 0.00859375 1.0140625 0.13320313 Z "/>
-        </symbol>
-    </defs>
-</svg>
-</div>
-          <div style="background: #f5f5f5; text-align: left; display: flex; align-items: center; width: 80em">
-            <pre style="margin: 0; width: 2.1em; text-align: right; vertical-align: top; padding-right: 0.34em; user-select: none; flex-shrink: 0">10</pre>
-            <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; width: 80em" class="zebraw-code-line"><span style="color: #000000">        </span><span style="color: #d73a49">_</span><span style="color: #000000"> </span><span style="color: #d73a49">=></span><span style="color: #000000"> </span><span style="color: #4b69c6">fibonacci_reccursive</span><span style="color: #000000">(</span><span style="color: #000000">n </span><span style="color: #d73a49">-</span><span style="color: #000000"> </span><span style="color: #b60157">1</span><span style="color: #000000">)</span><span style="color: #000000"> </span><span style="color: #d73a49">+</span><span style="color: #000000"> </span><span style="color: #4b69c6">fibonacci_reccursive</span><span style="color: #000000">(</span><span style="color: #000000">n </span><span style="color: #d73a49">-</span><span style="color: #000000"> </span><span style="color: #b60157">2</span><span style="color: #000000">)</span><span style="color: #000000">,</span></pre>
-          </div>
-          <div style="background: #f5f5f5; text-align: left; display: flex; align-items: center; width: 80em">
-            <pre style="margin: 0; width: 2.1em; text-align: right; vertical-align: top; padding-right: 0.34em; user-select: none; flex-shrink: 0">11</pre>
-            <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; width: 80em" class="zebraw-code-line"><span style="color: #000000">    </span><span style="color: #000000">}</span></pre>
-          </div>
-          <div style="background: #f5f5f5; text-align: left; display: flex; align-items: center; width: 80em">
-            <pre style="margin: 0; width: 2.1em; text-align: right; vertical-align: top; padding-right: 0.34em; user-select: none; flex-shrink: 0">12</pre>
-            <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; width: 80em" class="zebraw-code-line"><span style="color: #000000">}</span></pre>
-          </div>
-          <div style="background: #f5f5f5; width: 80em">
-            <div style="padding: 0.34em 0.34em"></div>
-          </div>
-        </div>
-        <script>var codeBlocks = document.querySelectorAll('.zebraw-code-block');
+          <div style="padding: 1em; font-size: 0.9em;">
+            <div style="position: relative; width: 100%" class="zebraw-code-block">
+              <div style="position: absolute; top: -0.68em; right: 0; padding: 0.25em; background: #effbf9; font-size: 0.8em; border-radius: 0.34em" class="zebraw-code-lang">rust</div>
+              <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; pointer-events: none; border-radius: 0.34em">
+                <div style="background: #f5f5f5; width: 100%">
+                  <div style="padding: 0.34em 0.34em; user-select: none; opacity: 0; color: transparent"></div>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: 1.5em; background: #f5f5f5">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; user-select: none; opacity: 0; color: transparent">1</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em" class="zebraw-code-line"><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">pub</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">fn</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">fibonacci_reccursive</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">(</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">n</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">:</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">i32</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">)</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">-></span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">u64</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">{</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: 1.5em; background: #f5f5f5">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; user-select: none; opacity: 0; color: transparent">2</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em" class="zebraw-code-line"><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">    </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">if</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> n </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">&lt;</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">0</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">{</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: 1.5em; background: #dff6f2">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; user-select: none; opacity: 0; color: transparent">3</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em" class="zebraw-code-line"><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">        </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">panic!</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">(</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">"</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">{} is negative!</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">"</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">,</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> n</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">)</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">;</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #effbf9; white-space: pre">
+                  <div style="width: 2.1em; flex-shrink: 0"></div>
+                  <p style="margin: 0; padding: 0; width: 100%"><span style="user-select: none; user-select: none; opacity: 0; color: transparent">        <strong>></strong> </span><span style="font-size: 0.8em; user-select: none; opacity: 0; color: transparent">to avoid negative numbers</span></p>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: 1.5em; background: #f5f5f5">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; user-select: none; opacity: 0; color: transparent">4</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em" class="zebraw-code-line"><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">    </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">}</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: 1.5em; background: #f5f5f5">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; user-select: none; opacity: 0; color: transparent">5</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em" class="zebraw-code-line"><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">    </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">match</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> n </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">{</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: 1.5em; background: #f5f5f5">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; user-select: none; opacity: 0; color: transparent">6</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em" class="zebraw-code-line"><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">        </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">0</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">=></span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">panic!</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">(</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">"</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">zero is not a right argument to fibonacci_reccursive()!</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">"</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">)</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">,</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">0</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">=></span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">panic!</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">(</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">"</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">zero is not a right argument to fibonacci_reccursive()!</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">"</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">)</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">,</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: 1.5em; background: #f5f5f5">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; user-select: none; opacity: 0; color: transparent">7</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em" class="zebraw-code-line"><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">        </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">1</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">|</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">2</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">=></span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">1</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">,</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: 1.5em; background: #f5f5f5">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; user-select: none; opacity: 0; color: transparent">8</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em" class="zebraw-code-line"><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">        </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">3</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">=></span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">2</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">,</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: 1.5em; background: #dff6f2">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; user-select: none; opacity: 0; color: transparent">9</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em" class="zebraw-code-line"><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">        </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">_</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">=></span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">fibonacci_reccursive</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">(</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">n </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">-</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">1</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">)</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">+</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">fibonacci_reccursive</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">(</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">n </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">-</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">2</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">)</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">,</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #effbf9; white-space: pre">
+                  <div style="width: 2.1em; flex-shrink: 0"></div>
+                  <p style="margin: 0; padding: 0; width: 100%"><span style="user-select: none; user-select: none; opacity: 0; color: transparent">        <strong>></strong> </span><span style="font-size: 0.8em; user-select: none; opacity: 0; color: transparent">50 => 12586269025</span></p>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: 1.5em; background: #f5f5f5">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; user-select: none; opacity: 0; color: transparent">10</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em" class="zebraw-code-line"><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">    </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">}</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: 1.5em; background: #f5f5f5">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; user-select: none; opacity: 0; color: transparent">11</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em" class="zebraw-code-line"><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">}</span></pre>
+                </div>
+                <div style="background: #f5f5f5; width: 100%">
+                  <div style="padding: 0.34em 0.34em; user-select: none; opacity: 0; color: transparent"></div>
+                </div>
+              </div>
+              <div style="overflow-x: auto; overflow-y: hidden">
+                <div style="width: 100%">
+                  <div style="padding: 0.34em 0.34em"></div>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: 1.5em">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; opacity: 0.7">1</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em" class="zebraw-code-line"><span style="color: #d73a49; display: inline-block">pub</span><span style="color: #000000; display: inline-block"> </span><span style="color: #d73a49; display: inline-block">fn</span><span style="color: #000000; display: inline-block"> </span><span style="color: #4b69c6; display: inline-block">fibonacci_reccursive</span><span style="color: #000000; display: inline-block">(</span><span style="color: #000000; display: inline-block">n</span><span style="color: #000000; display: inline-block">:</span><span style="color: #000000; display: inline-block"> </span><span style="color: #d73a49; display: inline-block">i32</span><span style="color: #000000; display: inline-block">)</span><span style="color: #000000; display: inline-block"> </span><span style="color: #000000; display: inline-block">-></span><span style="color: #000000; display: inline-block"> </span><span style="color: #d73a49; display: inline-block">u64</span><span style="color: #000000; display: inline-block"> </span><span style="color: #000000; display: inline-block">{</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: 1.5em">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; opacity: 0.7">2</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em" class="zebraw-code-line"><span style="color: #000000; display: inline-block">    </span><span style="color: #d73a49; display: inline-block">if</span><span style="color: #000000; display: inline-block"> n </span><span style="color: #d73a49; display: inline-block">&lt;</span><span style="color: #000000; display: inline-block"> </span><span style="color: #b60157; display: inline-block">0</span><span style="color: #000000; display: inline-block"> </span><span style="color: #000000; display: inline-block">{</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: 1.5em">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; opacity: 0.7">3</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em" class="zebraw-code-line"><span style="color: #000000; display: inline-block">        </span><span style="color: #16718d; display: inline-block">panic!</span><span style="color: #000000; display: inline-block">(</span><span style="color: #298e0d; display: inline-block">"</span><span style="color: #298e0d; display: inline-block">{} is negative!</span><span style="color: #298e0d; display: inline-block">"</span><span style="color: #000000; display: inline-block">,</span><span style="color: #000000; display: inline-block"> n</span><span style="color: #000000; display: inline-block">)</span><span style="color: #000000; display: inline-block">;</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; white-space: pre">
+                  <div style="width: 2.1em; flex-shrink: 0"></div>
+                  <p style="margin: 0; padding: 0; width: 100%"><span style="user-select: none">        <strong>></strong> </span><span style="font-size: 0.8em">to avoid negative numbers</span></p>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: 1.5em">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; opacity: 0.7">4</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em" class="zebraw-code-line"><span style="color: #000000; display: inline-block">    </span><span style="color: #000000; display: inline-block">}</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: 1.5em">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; opacity: 0.7">5</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em" class="zebraw-code-line"><span style="color: #000000; display: inline-block">    </span><span style="color: #d73a49; display: inline-block">match</span><span style="color: #000000; display: inline-block"> n </span><span style="color: #000000; display: inline-block">{</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: 1.5em">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; opacity: 0.7">6</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em" class="zebraw-code-line"><span style="color: #000000; display: inline-block">        </span><span style="color: #b60157; display: inline-block">0</span><span style="color: #000000; display: inline-block"> </span><span style="color: #d73a49; display: inline-block">=></span><span style="color: #000000; display: inline-block"> </span><span style="color: #16718d; display: inline-block">panic!</span><span style="color: #000000; display: inline-block">(</span><span style="color: #298e0d; display: inline-block">"</span><span style="color: #298e0d; display: inline-block">zero is not a right argument to fibonacci_reccursive()!</span><span style="color: #298e0d; display: inline-block">"</span><span style="color: #000000; display: inline-block">)</span><span style="color: #000000; display: inline-block">,</span><span style="color: #000000; display: inline-block"> </span><span style="color: #b60157; display: inline-block">0</span><span style="color: #000000; display: inline-block"> </span><span style="color: #d73a49; display: inline-block">=></span><span style="color: #000000; display: inline-block"> </span><span style="color: #16718d; display: inline-block">panic!</span><span style="color: #000000; display: inline-block">(</span><span style="color: #298e0d; display: inline-block">"</span><span style="color: #298e0d; display: inline-block">zero is not a right argument to fibonacci_reccursive()!</span><span style="color: #298e0d; display: inline-block">"</span><span style="color: #000000; display: inline-block">)</span><span style="color: #000000; display: inline-block">,</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: 1.5em">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; opacity: 0.7">7</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em" class="zebraw-code-line"><span style="color: #000000; display: inline-block">        </span><span style="color: #b60157; display: inline-block">1</span><span style="color: #000000; display: inline-block"> </span><span style="color: #d73a49; display: inline-block">|</span><span style="color: #000000; display: inline-block"> </span><span style="color: #b60157; display: inline-block">2</span><span style="color: #000000; display: inline-block"> </span><span style="color: #d73a49; display: inline-block">=></span><span style="color: #000000; display: inline-block"> </span><span style="color: #b60157; display: inline-block">1</span><span style="color: #000000; display: inline-block">,</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: 1.5em">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; opacity: 0.7">8</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em" class="zebraw-code-line"><span style="color: #000000; display: inline-block">        </span><span style="color: #b60157; display: inline-block">3</span><span style="color: #000000; display: inline-block"> </span><span style="color: #d73a49; display: inline-block">=></span><span style="color: #000000; display: inline-block"> </span><span style="color: #b60157; display: inline-block">2</span><span style="color: #000000; display: inline-block">,</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: 1.5em">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; opacity: 0.7">9</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em" class="zebraw-code-line"><span style="color: #000000; display: inline-block">        </span><span style="color: #d73a49; display: inline-block">_</span><span style="color: #000000; display: inline-block"> </span><span style="color: #d73a49; display: inline-block">=></span><span style="color: #000000; display: inline-block"> </span><span style="color: #4b69c6; display: inline-block">fibonacci_reccursive</span><span style="color: #000000; display: inline-block">(</span><span style="color: #000000; display: inline-block">n </span><span style="color: #d73a49; display: inline-block">-</span><span style="color: #000000; display: inline-block"> </span><span style="color: #b60157; display: inline-block">1</span><span style="color: #000000; display: inline-block">)</span><span style="color: #000000; display: inline-block"> </span><span style="color: #d73a49; display: inline-block">+</span><span style="color: #000000; display: inline-block"> </span><span style="color: #4b69c6; display: inline-block">fibonacci_reccursive</span><span style="color: #000000; display: inline-block">(</span><span style="color: #000000; display: inline-block">n </span><span style="color: #d73a49; display: inline-block">-</span><span style="color: #000000; display: inline-block"> </span><span style="color: #b60157; display: inline-block">2</span><span style="color: #000000; display: inline-block">)</span><span style="color: #000000; display: inline-block">,</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; white-space: pre">
+                  <div style="width: 2.1em; flex-shrink: 0"></div>
+                  <p style="margin: 0; padding: 0; width: 100%"><span style="user-select: none">        <strong>></strong> </span><span style="font-size: 0.8em">50 => 12586269025</span></p>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: 1.5em">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; opacity: 0.7">10</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em" class="zebraw-code-line"><span style="color: #000000; display: inline-block">    </span><span style="color: #000000; display: inline-block">}</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: 1.5em">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; opacity: 0.7">11</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em" class="zebraw-code-line"><span style="color: #000000; display: inline-block">}</span></pre>
+                </div>
+                <div style="width: 100%">
+                  <div style="padding: 0.34em 0.34em"></div>
+                </div>
+              </div>
+              <script>var codeBlocks = document.querySelectorAll('.zebraw-code-block');
 codeBlocks.forEach(function (codeBlock) {
   var copyButton = codeBlock.querySelector('.zebraw-code-lang');
   copyButton.style.cursor = 'pointer';
@@ -290,17 +205,20 @@ codeBlocks.forEach(function (codeBlock) {
     }, 2000);
   });
 });</script>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-    <div style="display: flex; flex-direction: row; gap: 1em;">
-      <pre style="width: 50%; white-space: pre-wrap">#zebraw-html(
+      <div>
+        <div class="exp" style="margin: 1em 0em;">
+          <pre style="white-space: pre-wrap;">#zebraw-html(
   highlight-lines: (
     (3, [to avoid negative numbers]),
     (9, "50 => 12586269025"),
   ),
   lang: true,
-  block-width: 32em,
-  line-width: 80em,
+  block-width: 100%,
+  line-width: 100%,
   wrap: true,
   ```rust
   pub fn fibonacci_reccursive(n: i32) -> u64 {
@@ -308,7 +226,7 @@ codeBlocks.forEach(function (codeBlock) {
           panic!("{} is negative!", n);
       }
       match n {
-          0 => panic!("zero is not a right argument to fibonacci_reccursive()!"), 0 => panic!("zero is not a right argument to fibonacci_reccursive()!"),
+          0 => panic!("zero is not a right argument to fibonacci_reccursive()!"),
           1 | 2 => 1,
           3 => 2,
           _ => fibonacci_reccursive(n - 1) + fibonacci_reccursive(n - 2),
@@ -316,233 +234,130 @@ codeBlocks.forEach(function (codeBlock) {
   }
   ```,
 )</pre>
-      <div style="position: relative; width: 32em" class="zebraw-code-block">
-        <div style="position: absolute; top: 0; right: 0; padding: 0.25em; background: #effbf9; font-size: 0.8em; border-radius: 0.34em" class="zebraw-code-lang">rust</div>
-        <div style="overflow-x: auto; overflow-y: hidden; border-radius: 0.34em">
-          <div style="background: #f5f5f5; width: 100%">
-            <div style="padding: 0.34em 0.34em"></div>
-          </div>
-          <div style="background: #f5f5f5; text-align: left; display: flex; align-items: center; width: 100%">
-            <pre style="margin: 0; width: 2.1em; text-align: right; vertical-align: top; padding-right: 0.34em; user-select: none; flex-shrink: 0">1</pre>
-            <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; width: 80em" class="zebraw-code-line"><span style="color: #d73a49; white-space: pre-wrap">pub</span><span style="color: #000000; white-space: pre-wrap"> </span><span style="color: #d73a49; white-space: pre-wrap">fn</span><span style="color: #000000; white-space: pre-wrap"> </span><span style="color: #4b69c6; white-space: pre-wrap">fibonacci_reccursive</span><span style="color: #000000; white-space: pre-wrap">(</span><span style="color: #000000; white-space: pre-wrap">n</span><span style="color: #000000; white-space: pre-wrap">:</span><span style="color: #000000; white-space: pre-wrap"> </span><span style="color: #d73a49; white-space: pre-wrap">i32</span><span style="color: #000000; white-space: pre-wrap">)</span><span style="color: #000000; white-space: pre-wrap"> </span><span style="color: #000000; white-space: pre-wrap">-></span><span style="color: #000000; white-space: pre-wrap"> </span><span style="color: #d73a49; white-space: pre-wrap">u64</span><span style="color: #000000; white-space: pre-wrap"> </span><span style="color: #000000; white-space: pre-wrap">{</span></pre>
-          </div>
-          <div style="background: #f5f5f5; text-align: left; display: flex; align-items: center; width: 100%">
-            <pre style="margin: 0; width: 2.1em; text-align: right; vertical-align: top; padding-right: 0.34em; user-select: none; flex-shrink: 0">2</pre>
-            <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; width: 80em" class="zebraw-code-line"><span style="color: #000000; white-space: pre-wrap">    </span><span style="color: #d73a49; white-space: pre-wrap">if</span><span style="color: #000000; white-space: pre-wrap"> n </span><span style="color: #d73a49; white-space: pre-wrap">&lt;</span><span style="color: #000000; white-space: pre-wrap"> </span><span style="color: #b60157; white-space: pre-wrap">0</span><span style="color: #000000; white-space: pre-wrap"> </span><span style="color: #000000; white-space: pre-wrap">{</span></pre>
-          </div>
-          <div style="background: #dff6f2; text-align: left; display: flex; align-items: center; width: 100%">
-            <pre style="margin: 0; width: 2.1em; text-align: right; vertical-align: top; padding-right: 0.34em; user-select: none; flex-shrink: 0">3</pre>
-            <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; width: 80em" class="zebraw-code-line"><span style="color: #000000; white-space: pre-wrap">        </span><span style="color: #16718d; white-space: pre-wrap">panic!</span><span style="color: #000000; white-space: pre-wrap">(</span><span style="color: #298e0d; white-space: pre-wrap">"</span><span style="color: #298e0d; white-space: pre-wrap">{} is negative!</span><span style="color: #298e0d; white-space: pre-wrap">"</span><span style="color: #000000; white-space: pre-wrap">,</span><span style="color: #000000; white-space: pre-wrap"> n</span><span style="color: #000000; white-space: pre-wrap">)</span><span style="color: #000000; white-space: pre-wrap">;</span></pre>
-          </div>
-          <div style="background: #effbf9; text-align: left; display: flex; align-items: center; width: 100%; padding-top: 0.34em; padding-bottom: 0.34em"><svg style="overflow: visible;" class="typst-doc" viewBox="0 0 201.69359375000002 6.685937500000001" width="201.69359375000002pt" height="6.685937500000001pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:h5="http://www.w3.org/1999/xhtml">
-    <g>
-        <g transform="translate(0 6.685937500000001)">
-            <g class="typst-group">
-                <g/>
-            </g>
-        </g>
-        <g transform="translate(18.480000000000004 0)">
-            <g class="typst-group">
-                <g>
-                    <g transform="translate(0 6.685937500000001)">
-                        <g class="typst-text" transform="scale(1, -1)"/>
-                    </g>
-                </g>
-            </g>
-        </g>
-        <g transform="translate(60.86437500000002 6.685937500000001)">
-            <g class="typst-text" transform="scale(1, -1)">
-                <use xlink:href="#gAE38D33B419166636E3C48407EAEBBFC" x="0" fill="#000000" fill-rule="nonzero"/>
-            </g>
-        </g>
-        <g transform="translate(69.24242187500002 6.685937500000001)">
-            <g class="typst-text" transform="scale(1, -1)">
-                <use xlink:href="#gE86513A956FF3D69432930257F1A8C4B" x="0" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g1FD565BCFE7BCA1A3C093875995D494" x="5.298046875000001" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#gD150070D84BF10BD734D1024AF9E49BD" x="15.894140625000002" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g8C35535356D98A1A0A19BC1C3B7D7406" x="21.192187500000003" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g1FD565BCFE7BCA1A3C093875995D494" x="26.490234375000004" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#gB164538801F8F1C62CA2E2E3EAE81C90" x="31.788281250000004" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g670123FC47DFD66863A25C31EE2D6657" x="37.08632812500001" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g520A982B04FB8392A8FC9E143CAB5A5C" x="47.682421875" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g5109FECFD623486D3D89CF4B6A005FB6" x="52.98046875" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#gEED052986263B4A6C348B661B874FF3B" x="58.278515625" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#gD150070D84BF10BD734D1024AF9E49BD" x="63.576562499999994" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#gE86513A956FF3D69432930257F1A8C4B" x="68.87460937499999" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#gB164538801F8F1C62CA2E2E3EAE81C90" x="74.17265624999999" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g8C35535356D98A1A0A19BC1C3B7D7406" x="79.47070312499999" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g5109FECFD623486D3D89CF4B6A005FB6" x="84.76874999999998" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g520A982B04FB8392A8FC9E143CAB5A5C" x="95.36484374999998" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#gF2AE1EAB6EBF7AF4CA17179C014F0EB8" x="100.66289062499997" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#gDF593CD2185712DBC56F3D92ABD66195" x="105.96093749999997" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g9F9F6E418E35731F9FC4CBC9B9BF4ED2" x="111.25898437499997" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g5109FECFD623486D3D89CF4B6A005FB6" x="116.55703124999997" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g3A261C5A6F32275791EA61570E3C3BC0" x="121.85507812499996" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g3D2FCE36989071A4E4BFA307175887EE" x="127.15312499999996" fill="#000000" fill-rule="nonzero"/>
-            </g>
-        </g>
-    </g>
-    <defs id="glyph">
-        <symbol id="gAE38D33B419166636E3C48407EAEBBFC" overflow="visible">
-            <path d="M 0.378125 3.9789064 L 0.378125 5.053125 L 4.919922 3.265625 L 4.919922 2.2515626 L 0.378125 0.46835938 L 0.378125 1.5382813 L 3.7941408 2.754297 L 0.378125 3.9789064 Z "/>
-        </symbol>
-        <symbol id="gE86513A956FF3D69432930257F1A8C4B" overflow="visible">
-            <path d="M 2.6382813 6.1789064 L 2.6382813 4.8125 L 4.4343753 4.8125 L 4.4343753 4.198047 L 2.6382813 4.198047 L 2.6382813 1.5855469 Q 2.6382813 1.0527344 2.8402345 0.8421875 Q 3.0421875 0.6316406 3.5449219 0.6316406 L 4.4343753 0.6316406 L 4.4343753 0 L 3.4675782 0 Q 2.578125 0 2.2128906 0.35664064 Q 1.8476563 0.7132813 1.8476563 1.5855469 L 1.8476563 4.198047 L 0.56289065 4.198047 L 0.56289065 4.8125 L 1.8476563 4.8125 L 1.8476563 6.1789064 L 2.6382813 6.1789064 Z "/>
-        </symbol>
-        <symbol id="g1FD565BCFE7BCA1A3C093875995D494" overflow="visible">
-            <path d="M 2.6468751 4.258203 Q 2.0453126 4.258203 1.7359376 3.7898438 Q 1.4265625 3.3214846 1.4265625 2.4019532 Q 1.4265625 1.4867188 1.7359376 1.0162109 Q 2.0453126 0.5457031 2.6468751 0.5457031 Q 3.2527344 0.5457031 3.5621095 1.0162109 Q 3.8714845 1.4867188 3.8714845 2.4019532 Q 3.8714845 3.3214846 3.5621095 3.7898438 Q 3.2527344 4.258203 2.6468751 4.258203 Z M 2.6468751 4.928516 Q 3.648047 4.928516 4.178711 4.2796874 Q 4.709375 3.6308594 4.709375 2.4019532 Q 4.709375 1.16875 4.1808596 0.52207035 Q 3.6523438 -0.12460938 2.6468751 -0.12460938 Q 1.6457032 -0.12460938 1.1171875 0.52207035 Q 0.58867186 1.16875 0.58867186 2.4019532 Q 0.58867186 3.6308594 1.1171875 4.2796874 Q 1.6457032 4.928516 2.6468751 4.928516 Z "/>
-        </symbol>
-        <symbol id="gD150070D84BF10BD734D1024AF9E49BD" overflow="visible">
-            <path d="M 3.0164063 2.4191406 L 2.754297 2.4191406 Q 2.0625 2.4191406 1.7123047 2.1763673 Q 1.3621094 1.9335938 1.3621094 1.4523438 Q 1.3621094 1.0183594 1.6242188 0.7777344 Q 1.8863282 0.5371094 2.3503907 0.5371094 Q 3.0035157 0.5371094 3.377344 0.9904297 Q 3.751172 1.44375 3.7554688 2.2429688 L 3.7554688 2.4191406 L 3.0164063 2.4191406 Z M 4.5503907 2.7457032 L 4.5503907 0 L 3.7554688 0 L 3.7554688 0.7132813 Q 3.5019531 0.28359374 3.1173828 0.07949219 Q 2.7328126 -0.12460938 2.1828125 -0.12460938 Q 1.4480469 -0.12460938 1.0097656 0.29003906 Q 0.5714844 0.70468754 0.5714844 1.4007813 Q 0.5714844 2.2042968 1.1107422 2.6210938 Q 1.6500001 3.0378907 2.6941407 3.0378907 L 3.7554688 3.0378907 L 3.7554688 3.1625001 Q 3.751172 3.7382813 3.4632814 3.9982424 Q 3.1753907 4.258203 2.54375 4.258203 Q 2.1398437 4.258203 1.7273438 4.1421876 Q 1.3148438 4.026172 0.9238281 3.8027344 L 0.9238281 4.5933595 Q 1.3621094 4.7609377 1.7638673 4.8447266 Q 2.165625 4.928516 2.54375 4.928516 Q 3.1410158 4.928516 3.5642579 4.7523437 Q 3.9875002 4.576172 4.2496095 4.2238283 Q 4.412891 4.0089846 4.481641 3.693164 Q 4.5503907 3.377344 4.5503907 2.7457032 Z "/>
-        </symbol>
-        <symbol id="g8C35535356D98A1A0A19BC1C3B7D7406" overflow="visible">
-            <path d="M 0.4296875 4.8125 L 1.2503906 4.8125 L 2.6468751 0.7734375 L 4.0476565 4.8125 L 4.8683596 4.8125 L 3.1582031 0 L 2.1398437 0 L 0.4296875 4.8125 Z "/>
-        </symbol>
-        <symbol id="gB164538801F8F1C62CA2E2E3EAE81C90" overflow="visible">
-            <path d="M 1.1 4.8125 L 3.1238282 4.8125 L 3.1238282 0.61445314 L 4.692188 0.61445314 L 4.692188 0 L 0.76484376 0 L 0.76484376 0.61445314 L 2.333203 0.61445314 L 2.333203 4.198047 L 1.1 4.198047 L 1.1 4.8125 Z M 2.333203 6.685938 L 3.1238282 6.685938 L 3.1238282 5.684766 L 2.333203 5.684766 L 2.333203 6.685938 Z "/>
-        </symbol>
-        <symbol id="g670123FC47DFD66863A25C31EE2D6657" overflow="visible">
-            <path d="M 3.686719 4.198047 L 3.686719 6.685938 L 4.477344 6.685938 L 4.477344 0 L 3.686719 0 L 3.686719 0.6058594 Q 3.4890625 0.24921876 3.1603515 0.06230469 Q 2.8316407 -0.12460938 2.4019532 -0.12460938 Q 1.5296875 -0.12460938 1.0291016 0.55214846 Q 0.52851564 1.2289063 0.52851564 2.4191406 Q 0.52851564 3.5921876 1.03125 4.2603517 Q 1.5339844 4.928516 2.4019532 4.928516 Q 2.8359375 4.928516 3.166797 4.7416015 Q 3.4976563 4.5546875 3.686719 4.198047 Z M 1.3621094 2.4019532 Q 1.3621094 1.4824219 1.6542969 1.0140625 Q 1.9464844 0.5457031 2.517969 0.5457031 Q 3.0894532 0.5457031 3.388086 1.0183594 Q 3.686719 1.4910157 3.686719 2.4019532 Q 3.686719 3.3171875 3.388086 3.7876954 Q 3.0894532 4.258203 2.517969 4.258203 Q 1.9464844 4.258203 1.6542969 3.7898438 Q 1.3621094 3.3214846 1.3621094 2.4019532 Z "/>
-        </symbol>
-        <symbol id="g520A982B04FB8392A8FC9E143CAB5A5C" overflow="visible">
-            <path d="M 4.5160155 2.9820313 L 4.5160155 0 L 3.721094 0 L 3.721094 2.9820313 Q 3.721094 3.6308594 3.4933596 3.9359376 Q 3.265625 4.241016 2.7800782 4.241016 Q 2.2257812 4.241016 1.9271485 3.8478518 Q 1.6285156 3.4546876 1.6285156 2.7199218 L 1.6285156 0 L 0.8378906 0 L 0.8378906 4.8125 L 1.6285156 4.8125 L 1.6285156 4.0906253 Q 1.8390626 4.503125 2.2 4.7158203 Q 2.5609376 4.928516 3.0550783 4.928516 Q 3.7898438 4.928516 4.15293 4.4451175 Q 4.5160155 3.9617188 4.5160155 2.9820313 Z "/>
-        </symbol>
-        <symbol id="g5109FECFD623486D3D89CF4B6A005FB6" overflow="visible">
-            <path d="M 4.7781253 2.6039064 L 4.7781253 2.2171876 L 1.3535156 2.2171876 L 1.3535156 2.1914063 Q 1.3535156 1.4050782 1.7638673 0.9753907 Q 2.174219 0.5457031 2.921875 0.5457031 Q 3.3000002 0.5457031 3.7125 0.6660156 Q 4.125 0.78632814 4.5933595 1.03125 L 4.5933595 0.24492188 Q 4.1421876 0.060156252 3.7232423 -0.032226563 Q 3.304297 -0.12460938 2.9132812 -0.12460938 Q 1.7917969 -0.12460938 1.1601563 0.54785156 Q 0.52851564 1.2203125 0.52851564 2.4019532 Q 0.52851564 3.5535157 1.1472657 4.241016 Q 1.7660156 4.928516 2.7972658 4.928516 Q 3.7167969 4.928516 4.247461 4.305469 Q 4.7781253 3.682422 4.7781253 2.6039064 Z M 3.9875002 2.8359375 Q 3.9703126 3.5320313 3.6587892 3.8951173 Q 3.3472657 4.258203 2.7628906 4.258203 Q 2.1914063 4.258203 1.8218751 3.8800783 Q 1.4523438 3.5019531 1.3835938 2.8316407 L 3.9875002 2.8359375 Z "/>
-        </symbol>
-        <symbol id="gEED052986263B4A6C348B661B874FF3B" overflow="visible">
-            <path d="M 3.686719 2.444922 Q 3.686719 3.3343751 3.3966799 3.7962892 Q 3.1066406 4.258203 2.5523438 4.258203 Q 1.9722657 4.258203 1.6671876 3.7962892 Q 1.3621094 3.3343751 1.3621094 2.444922 Q 1.3621094 1.5554688 1.669336 1.0892578 Q 1.9765625 0.6230469 2.5609376 0.6230469 Q 3.1066406 0.6230469 3.3966799 1.0914062 Q 3.686719 1.5597657 3.686719 2.444922 Z M 4.477344 0.30937502 Q 4.477344 -0.7734375 3.9660158 -1.3320313 Q 3.4546876 -1.890625 2.4621093 -1.890625 Q 2.135547 -1.890625 1.7789063 -1.8304688 Q 1.4222656 -1.7703125 1.0656251 -1.6542969 L 1.0656251 -0.87226564 Q 1.4867188 -1.0699219 1.8304688 -1.1644531 Q 2.174219 -1.2589844 2.4621093 -1.2589844 Q 3.1023438 -1.2589844 3.3945313 -0.91093755 Q 3.686719 -0.56289065 3.686719 0.19335938 L 3.686719 0.22773439 L 3.686719 0.76484376 Q 3.4976563 0.3609375 3.1710937 0.16328125 Q 2.8445313 -0.034375 2.3761718 -0.034375 Q 1.5339844 -0.034375 1.03125 0.6402344 Q 0.52851564 1.3148438 0.52851564 2.444922 Q 0.52851564 3.579297 1.03125 4.2539063 Q 1.5339844 4.928516 2.3761718 4.928516 Q 2.8402345 4.928516 3.1625001 4.74375 Q 3.4847658 4.5589843 3.686719 4.1722655 L 3.686719 4.7953124 L 4.477344 4.7953124 L 4.477344 0.30937502 Z "/>
-        </symbol>
-        <symbol id="gF2AE1EAB6EBF7AF4CA17179C014F0EB8" overflow="visible">
-            <path d="M 0.8378906 1.8218751 L 0.8378906 4.8039064 L 1.6285156 4.8039064 L 1.6285156 1.8218751 Q 1.6285156 1.173047 1.8583984 0.8679688 Q 2.0882814 0.56289065 2.5695312 0.56289065 Q 3.128125 0.56289065 3.4246094 0.9560547 Q 3.721094 1.3492187 3.721094 2.0839844 L 3.721094 4.8039064 L 4.5160155 4.8039064 L 4.5160155 0 L 3.721094 0 L 3.721094 0.721875 Q 3.510547 0.30507812 3.147461 0.09023438 Q 2.784375 -0.12460938 2.2988281 -0.12460938 Q 1.5597657 -0.12460938 1.1988281 0.35878906 Q 0.8378906 0.8421875 0.8378906 1.8218751 Z "/>
-        </symbol>
-        <symbol id="gDF593CD2185712DBC56F3D92ABD66195" overflow="visible">
-            <path d="M 2.9046876 4.322656 Q 3.0507813 4.6320314 3.2763672 4.7802734 Q 3.5019531 4.928516 3.819922 4.928516 Q 4.4 4.928516 4.638477 4.479492 Q 4.876953 4.030469 4.876953 2.788672 L 4.876953 0 L 4.1550784 0 L 4.1550784 2.754297 Q 4.1550784 3.7726564 4.041211 4.0197268 Q 3.9273438 4.266797 3.6265626 4.266797 Q 3.2828126 4.266797 3.1560547 4.002539 Q 3.0292969 3.7382813 3.0292969 2.754297 L 3.0292969 0 L 2.307422 0 L 2.307422 2.754297 Q 2.307422 3.785547 2.184961 4.026172 Q 2.0625 4.266797 1.7445313 4.266797 Q 1.4308594 4.266797 1.3083985 4.002539 Q 1.1859375 3.7382813 1.1859375 2.754297 L 1.1859375 0 L 0.46835938 0 L 0.46835938 4.8125 L 1.1859375 4.8125 L 1.1859375 4.4 Q 1.3277344 4.6578126 1.5404297 4.7931643 Q 1.7531251 4.928516 2.0238283 4.928516 Q 2.3503907 4.928516 2.5673828 4.7781253 Q 2.784375 4.6277347 2.9046876 4.322656 Z "/>
-        </symbol>
-        <symbol id="g9F9F6E418E35731F9FC4CBC9B9BF4ED2" overflow="visible">
-            <path d="M 3.9445314 2.4019532 Q 3.9445314 3.3214846 3.6523438 3.7898438 Q 3.3601563 4.258203 2.788672 4.258203 Q 2.2128906 4.258203 1.9164063 3.7876954 Q 1.6199219 3.3171875 1.6199219 2.4019532 Q 1.6199219 1.4910157 1.9164063 1.0183594 Q 2.2128906 0.5457031 2.788672 0.5457031 Q 3.3601563 0.5457031 3.6523438 1.0140625 Q 3.9445314 1.4824219 3.9445314 2.4019532 Z M 1.6199219 4.198047 Q 1.8089844 4.5503907 2.1419923 4.7394533 Q 2.4750001 4.928516 2.9132812 4.928516 Q 3.78125 4.928516 4.2796874 4.2603517 Q 4.7781253 3.5921876 4.7781253 2.4191406 Q 4.7781253 1.2289063 4.2775393 0.55214846 Q 3.7769532 -0.12460938 2.9046876 -0.12460938 Q 2.4750001 -0.12460938 2.146289 0.06230469 Q 1.8175782 0.24921876 1.6199219 0.6058594 L 1.6199219 0 L 0.8292969 0 L 0.8292969 6.685938 L 1.6199219 6.685938 L 1.6199219 4.198047 Z "/>
-        </symbol>
-        <symbol id="g3A261C5A6F32275791EA61570E3C3BC0" overflow="visible">
-            <path d="M 4.9628906 3.819922 Q 4.709375 4.017578 4.4472656 4.1078124 Q 4.1851563 4.198047 3.8714845 4.198047 Q 3.132422 4.198047 2.7414062 3.7339845 Q 2.3503907 3.269922 2.3503907 2.3933594 L 2.3503907 0 L 1.5554688 0 L 1.5554688 4.8125 L 2.3503907 4.8125 L 2.3503907 3.8714845 Q 2.5480468 4.3828125 2.9583986 4.655664 Q 3.36875 4.928516 3.9316406 4.928516 Q 4.2238283 4.928516 4.477344 4.8554688 Q 4.7308593 4.782422 4.9628906 4.6277347 L 4.9628906 3.819922 Z "/>
-        </symbol>
-        <symbol id="g3D2FCE36989071A4E4BFA307175887EE" overflow="visible">
-            <path d="M 4.1808596 4.644922 L 4.1808596 3.8714845 Q 3.8414063 4.069141 3.4976563 4.1679688 Q 3.1539063 4.266797 2.7972658 4.266797 Q 2.2601564 4.266797 1.9958985 4.0927734 Q 1.7316407 3.91875 1.7316407 3.5621095 Q 1.7316407 3.2398438 1.929297 3.0808594 Q 2.1269531 2.921875 2.9132812 2.7714844 L 3.23125 2.7113283 Q 3.819922 2.5996094 4.122852 2.2644532 Q 4.4257813 1.929297 4.4257813 1.3921875 Q 4.4257813 0.67890626 3.91875 0.27714846 Q 3.4117188 -0.12460938 2.509375 -0.12460938 Q 2.1527345 -0.12460938 1.7617188 -0.049414065 Q 1.3707031 0.025781251 0.9152344 0.17617188 L 0.9152344 0.99257815 Q 1.3578125 0.76484376 1.7617188 0.6509766 Q 2.165625 0.5371094 2.5265625 0.5371094 Q 3.0507813 0.5371094 3.338672 0.7498047 Q 3.6265626 0.96250004 3.6265626 1.344922 Q 3.6265626 1.8949219 2.5738282 2.1054688 L 2.5394533 2.1140625 L 2.2429688 2.174219 Q 1.5597657 2.307422 1.2460938 2.6232421 Q 0.9324219 2.9390626 0.9324219 3.4847658 Q 0.9324219 4.176563 1.4007813 4.5525393 Q 1.8691406 4.928516 2.7371094 4.928516 Q 3.1238282 4.928516 3.4804688 4.8576174 Q 3.8371096 4.786719 4.1808596 4.644922 Z "/>
-        </symbol>
-    </defs>
-</svg>
-</div>
-          <div style="background: #f5f5f5; text-align: left; display: flex; align-items: center; width: 100%">
-            <pre style="margin: 0; width: 2.1em; text-align: right; vertical-align: top; padding-right: 0.34em; user-select: none; flex-shrink: 0">4</pre>
-            <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; width: 80em" class="zebraw-code-line"><span style="color: #000000; white-space: pre-wrap">    </span><span style="color: #000000; white-space: pre-wrap">}</span></pre>
-          </div>
-          <div style="background: #f5f5f5; text-align: left; display: flex; align-items: center; width: 100%">
-            <pre style="margin: 0; width: 2.1em; text-align: right; vertical-align: top; padding-right: 0.34em; user-select: none; flex-shrink: 0">5</pre>
-            <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; width: 80em" class="zebraw-code-line"><span style="color: #000000; white-space: pre-wrap">    </span><span style="color: #d73a49; white-space: pre-wrap">match</span><span style="color: #000000; white-space: pre-wrap"> n </span><span style="color: #000000; white-space: pre-wrap">{</span></pre>
-          </div>
-          <div style="background: #f5f5f5; text-align: left; display: flex; align-items: center; width: 100%">
-            <pre style="margin: 0; width: 2.1em; text-align: right; vertical-align: top; padding-right: 0.34em; user-select: none; flex-shrink: 0">6</pre>
-            <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; width: 80em" class="zebraw-code-line"><span style="color: #000000; white-space: pre-wrap">        </span><span style="color: #b60157; white-space: pre-wrap">0</span><span style="color: #000000; white-space: pre-wrap"> </span><span style="color: #d73a49; white-space: pre-wrap">=></span><span style="color: #000000; white-space: pre-wrap"> </span><span style="color: #16718d; white-space: pre-wrap">panic!</span><span style="color: #000000; white-space: pre-wrap">(</span><span style="color: #298e0d; white-space: pre-wrap">"</span><span style="color: #298e0d; white-space: pre-wrap">zero is not a right argument to fibonacci_reccursive()!</span><span style="color: #298e0d; white-space: pre-wrap">"</span><span style="color: #000000; white-space: pre-wrap">)</span><span style="color: #000000; white-space: pre-wrap">,</span><span style="color: #000000; white-space: pre-wrap"> </span><span style="color: #b60157; white-space: pre-wrap">0</span><span style="color: #000000; white-space: pre-wrap"> </span><span style="color: #d73a49; white-space: pre-wrap">=></span><span style="color: #000000; white-space: pre-wrap"> </span><span style="color: #16718d; white-space: pre-wrap">panic!</span><span style="color: #000000; white-space: pre-wrap">(</span><span style="color: #298e0d; white-space: pre-wrap">"</span><span style="color: #298e0d; white-space: pre-wrap">zero is not a right argument to fibonacci_reccursive()!</span><span style="color: #298e0d; white-space: pre-wrap">"</span><span style="color: #000000; white-space: pre-wrap">)</span><span style="color: #000000; white-space: pre-wrap">,</span></pre>
-          </div>
-          <div style="background: #f5f5f5; text-align: left; display: flex; align-items: center; width: 100%">
-            <pre style="margin: 0; width: 2.1em; text-align: right; vertical-align: top; padding-right: 0.34em; user-select: none; flex-shrink: 0">7</pre>
-            <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; width: 80em" class="zebraw-code-line"><span style="color: #000000; white-space: pre-wrap">        </span><span style="color: #b60157; white-space: pre-wrap">1</span><span style="color: #000000; white-space: pre-wrap"> </span><span style="color: #d73a49; white-space: pre-wrap">|</span><span style="color: #000000; white-space: pre-wrap"> </span><span style="color: #b60157; white-space: pre-wrap">2</span><span style="color: #000000; white-space: pre-wrap"> </span><span style="color: #d73a49; white-space: pre-wrap">=></span><span style="color: #000000; white-space: pre-wrap"> </span><span style="color: #b60157; white-space: pre-wrap">1</span><span style="color: #000000; white-space: pre-wrap">,</span></pre>
-          </div>
-          <div style="background: #f5f5f5; text-align: left; display: flex; align-items: center; width: 100%">
-            <pre style="margin: 0; width: 2.1em; text-align: right; vertical-align: top; padding-right: 0.34em; user-select: none; flex-shrink: 0">8</pre>
-            <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; width: 80em" class="zebraw-code-line"><span style="color: #000000; white-space: pre-wrap">        </span><span style="color: #b60157; white-space: pre-wrap">3</span><span style="color: #000000; white-space: pre-wrap"> </span><span style="color: #d73a49; white-space: pre-wrap">=></span><span style="color: #000000; white-space: pre-wrap"> </span><span style="color: #b60157; white-space: pre-wrap">2</span><span style="color: #000000; white-space: pre-wrap">,</span></pre>
-          </div>
-          <div style="background: #dff6f2; text-align: left; display: flex; align-items: center; width: 100%">
-            <pre style="margin: 0; width: 2.1em; text-align: right; vertical-align: top; padding-right: 0.34em; user-select: none; flex-shrink: 0">9</pre>
-            <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; width: 80em" class="zebraw-code-line"><span style="color: #000000; white-space: pre-wrap">        </span><span style="color: #d73a49; white-space: pre-wrap">_</span><span style="color: #000000; white-space: pre-wrap"> </span><span style="color: #d73a49; white-space: pre-wrap">=></span><span style="color: #000000; white-space: pre-wrap"> </span><span style="color: #4b69c6; white-space: pre-wrap">fibonacci_reccursive</span><span style="color: #000000; white-space: pre-wrap">(</span><span style="color: #000000; white-space: pre-wrap">n </span><span style="color: #d73a49; white-space: pre-wrap">-</span><span style="color: #000000; white-space: pre-wrap"> </span><span style="color: #b60157; white-space: pre-wrap">1</span><span style="color: #000000; white-space: pre-wrap">)</span><span style="color: #000000; white-space: pre-wrap"> </span><span style="color: #d73a49; white-space: pre-wrap">+</span><span style="color: #000000; white-space: pre-wrap"> </span><span style="color: #4b69c6; white-space: pre-wrap">fibonacci_reccursive</span><span style="color: #000000; white-space: pre-wrap">(</span><span style="color: #000000; white-space: pre-wrap">n </span><span style="color: #d73a49; white-space: pre-wrap">-</span><span style="color: #000000; white-space: pre-wrap"> </span><span style="color: #b60157; white-space: pre-wrap">2</span><span style="color: #000000; white-space: pre-wrap">)</span><span style="color: #000000; white-space: pre-wrap">,</span></pre>
-          </div>
-          <div style="background: #effbf9; text-align: left; display: flex; align-items: center; width: 100%; padding-top: 0.34em; padding-bottom: 0.34em"><svg style="overflow: visible;" class="typst-doc" viewBox="0 0 159.30921875 6.685937500000001" width="159.30921875pt" height="6.685937500000001pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:h5="http://www.w3.org/1999/xhtml">
-    <g>
-        <g transform="translate(0 6.685937500000001)">
-            <g class="typst-group">
-                <g/>
-            </g>
-        </g>
-        <g transform="translate(18.480000000000004 0)">
-            <g class="typst-group">
-                <g>
-                    <g transform="translate(0 6.685937500000001)">
-                        <g class="typst-text" transform="scale(1, -1)"/>
-                    </g>
-                </g>
-            </g>
-        </g>
-        <g transform="translate(60.86437500000002 6.685937500000001)">
-            <g class="typst-text" transform="scale(1, -1)">
-                <use xlink:href="#gAE38D33B419166636E3C48407EAEBBFC" x="0" fill="#000000" fill-rule="nonzero"/>
-            </g>
-        </g>
-        <g transform="translate(69.24242187500002 6.685937500000001)">
-            <g class="typst-text" transform="scale(1, -1)">
-                <use xlink:href="#g78AC06B83257E3C7D339649F1C157B7F" x="0" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g92790375876D4AEB51A01EA2C65F3FE9" x="5.298046875000001" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#gE8D3A2530873CAF429A5930918242AC7" x="15.894140625000002" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g45631E4D98DCCAEE87CC11B4C66175D2" x="21.192187500000003" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g3E70346B2313400E116E3DB0F4319425" x="31.788281250000004" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g5CF1D596CBFD78698163B3E376F88112" x="37.08632812500001" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g78AC06B83257E3C7D339649F1C157B7F" x="42.384375000000006" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#gC78A5F1EAED0BCB20F5083A9BD24D7DF" x="47.682421875" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g2F18C4F05C1B555958466C1A25D84A17" x="52.98046875" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g5CF1D596CBFD78698163B3E376F88112" x="58.278515625" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g2F18C4F05C1B555958466C1A25D84A17" x="63.576562499999994" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g1F607B046DCEFA87F623BCCE20F7BF66" x="68.87460937499999" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g92790375876D4AEB51A01EA2C65F3FE9" x="74.17265624999999" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g5CF1D596CBFD78698163B3E376F88112" x="79.47070312499999" fill="#000000" fill-rule="nonzero"/>
-                <use xlink:href="#g78AC06B83257E3C7D339649F1C157B7F" x="84.76874999999998" fill="#000000" fill-rule="nonzero"/>
-            </g>
-        </g>
-    </g>
-    <defs id="glyph">
-        <symbol id="gAE38D33B419166636E3C48407EAEBBFC" overflow="visible">
-            <path d="M 0.378125 3.9789064 L 0.378125 5.053125 L 4.919922 3.265625 L 4.919922 2.2515626 L 0.378125 0.46835938 L 0.378125 1.5382813 L 3.7941408 2.754297 L 0.378125 3.9789064 Z "/>
-        </symbol>
-        <symbol id="g78AC06B83257E3C7D339649F1C157B7F" overflow="visible">
-            <path d="M 0.8894532 6.4152346 L 4.137891 6.4152346 L 4.137891 5.684766 L 1.6800781 5.684766 L 1.6800781 4.1078124 Q 1.8648438 4.176563 2.0517578 4.2087893 Q 2.238672 4.241016 2.4277344 4.241016 Q 3.4246094 4.241016 4.0089846 3.6523438 Q 4.5933595 3.0636718 4.5933595 2.0582032 Q 4.5933595 1.0441407 3.9810548 0.45976564 Q 3.36875 -0.12460938 2.307422 -0.12460938 Q 1.7960938 -0.12460938 1.3728516 -0.055859376 Q 0.9496094 0.012890626 0.61445314 0.15039063 L 0.61445314 1.03125 Q 1.0097656 0.81640625 1.4093751 0.7111328 Q 1.8089844 0.6058594 2.2257812 0.6058594 Q 2.9433594 0.6058594 3.3322268 0.9839844 Q 3.721094 1.3621094 3.721094 2.0582032 Q 3.721094 2.7457032 3.319336 3.128125 Q 2.9175782 3.510547 2.2 3.510547 Q 1.8519531 3.510547 1.5210937 3.4310548 Q 1.1902344 3.3515625 0.8894532 3.192578 L 0.8894532 6.4152346 Z "/>
-        </symbol>
-        <symbol id="g92790375876D4AEB51A01EA2C65F3FE9" overflow="visible">
-            <path d="M 2.0753906 3.2226563 Q 2.0753906 3.4589844 2.2408204 3.6308594 Q 2.40625 3.8027344 2.6382813 3.8027344 Q 2.8789063 3.8027344 3.0507813 3.6308594 Q 3.2226563 3.4589844 3.2226563 3.2226563 Q 3.2226563 2.9820313 3.0529296 2.8144531 Q 2.8832033 2.6468751 2.6382813 2.6468751 Q 2.3976562 2.6468751 2.2365234 2.8101563 Q 2.0753906 2.9734375 2.0753906 3.2226563 Z M 2.6468751 5.84375 Q 2.0410156 5.84375 1.7423829 5.190625 Q 1.44375 4.5375 1.44375 3.2011719 Q 1.44375 1.8691406 1.7423829 1.2160157 Q 2.0410156 0.56289065 2.6468751 0.56289065 Q 3.2570312 0.56289065 3.555664 1.2160157 Q 3.854297 1.8691406 3.854297 3.2011719 Q 3.854297 4.5375 3.555664 5.190625 Q 3.2570312 5.84375 2.6468751 5.84375 Z M 2.6468751 6.53125 Q 3.6738281 6.53125 4.2001953 5.6890626 Q 4.7265625 4.846875 4.7265625 3.2011719 Q 4.7265625 1.5597657 4.2001953 0.7175781 Q 3.6738281 -0.12460938 2.6468751 -0.12460938 Q 1.6199219 -0.12460938 1.0957031 0.7175781 Q 0.5714844 1.5597657 0.5714844 3.2011719 Q 0.5714844 4.846875 1.0957031 5.6890626 Q 1.6199219 6.53125 2.6468751 6.53125 Z "/>
-        </symbol>
-        <symbol id="gE8D3A2530873CAF429A5930918242AC7" overflow="visible">
-            <path d="M 0.378125 2.2515626 L 4.919922 2.2515626 L 4.919922 1.5125 L 0.378125 1.5125 L 0.378125 2.2515626 Z M 0.378125 3.9960938 L 4.919922 3.9960938 L 4.919922 3.265625 L 0.378125 3.265625 L 0.378125 3.9960938 Z "/>
-        </symbol>
-        <symbol id="g45631E4D98DCCAEE87CC11B4C66175D2" overflow="visible">
-            <path d="M 0.378125 4.129297 L 0.378125 4.9113283 L 4.919922 3.1152344 L 4.919922 2.4019532 L 0.378125 0.6058594 L 0.378125 1.3921875 L 4.030469 2.754297 L 0.378125 4.129297 Z "/>
-        </symbol>
-        <symbol id="g3E70346B2313400E116E3DB0F4319425" overflow="visible">
-            <path d="M 1.1601563 0.73046875 L 2.509375 0.73046875 L 2.509375 5.633203 L 1.0570313 5.3066406 L 1.0570313 6.0972657 L 2.5007813 6.4152346 L 3.36875 6.4152346 L 3.36875 0.73046875 L 4.7007813 0.73046875 L 4.7007813 0 L 1.1601563 0 L 1.1601563 0.73046875 Z "/>
-        </symbol>
-        <symbol id="g5CF1D596CBFD78698163B3E376F88112" overflow="visible">
-            <path d="M 1.6027344 0.73046875 L 4.5503907 0.73046875 L 4.5503907 0 L 0.653125 0 L 0.653125 0.73046875 Q 1.4566406 1.5769532 2.0582032 2.2257812 Q 2.6597657 2.8746095 2.8875 3.1410158 Q 3.3171875 3.6652346 3.4675782 3.9896486 Q 3.6179688 4.3140626 3.6179688 4.653516 Q 3.6179688 5.190625 3.3021486 5.495703 Q 2.9863281 5.8007813 2.4363282 5.8007813 Q 2.0453126 5.8007813 1.615625 5.6589847 Q 1.1859375 5.5171876 0.70468754 5.229297 L 0.70468754 6.1058593 Q 1.1472657 6.3164063 1.5748047 6.423828 Q 2.002344 6.53125 2.4191406 6.53125 Q 3.3601563 6.53125 3.9337893 6.030664 Q 4.507422 5.5300784 4.507422 4.717969 Q 4.507422 4.305469 4.316211 3.892969 Q 4.125 3.4804688 3.6953125 2.9820313 Q 3.4546876 2.7027345 2.9970703 2.2085938 Q 2.5394533 1.7144532 1.6027344 0.73046875 Z "/>
-        </symbol>
-        <symbol id="gC78A5F1EAED0BCB20F5083A9BD24D7DF" overflow="visible">
-            <path d="M 2.6468751 3.0464845 Q 2.066797 3.0464845 1.7509766 2.7220705 Q 1.4351562 2.3976562 1.4351562 1.8046875 Q 1.4351562 1.2117188 1.7552735 0.8830078 Q 2.0753906 0.5542969 2.6468751 0.5542969 Q 3.23125 0.5542969 3.5470705 0.878711 Q 3.8628907 1.203125 3.8628907 1.8046875 Q 3.8628907 2.3933594 3.5427735 2.7199218 Q 3.2226563 3.0464845 2.6468751 3.0464845 Z M 1.890625 3.407422 Q 1.3363281 3.549219 1.0248047 3.9359376 Q 0.7132813 4.322656 0.7132813 4.8683596 Q 0.7132813 5.633203 1.2332032 6.0822268 Q 1.7531251 6.53125 2.6468751 6.53125 Q 3.5449219 6.53125 4.0648437 6.0822268 Q 4.584766 5.633203 4.584766 4.8683596 Q 4.584766 4.322656 4.2732425 3.9359376 Q 3.9617188 3.549219 3.407422 3.407422 Q 4.0519533 3.265625 4.3935547 2.8359375 Q 4.7351565 2.40625 4.7351565 1.7230469 Q 4.7351565 0.85507816 4.1808596 0.36523438 Q 3.6265626 -0.12460938 2.6468751 -0.12460938 Q 1.6671876 -0.12460938 1.1150391 0.36308596 Q 0.56289065 0.85078126 0.56289065 1.7144532 Q 0.56289065 2.4019532 0.9044922 2.833789 Q 1.2460938 3.265625 1.890625 3.407422 Z M 1.5769532 4.786719 Q 1.5769532 4.271094 1.8519531 4.0003905 Q 2.1269531 3.7296877 2.6468751 3.7296877 Q 3.1710937 3.7296877 3.4460938 4.0003905 Q 3.721094 4.271094 3.721094 4.786719 Q 3.721094 5.3109374 3.4482422 5.5859375 Q 3.1753907 5.8609376 2.6468751 5.8609376 Q 2.1269531 5.8609376 1.8519531 5.5837893 Q 1.5769532 5.3066406 1.5769532 4.786719 Z "/>
-        </symbol>
-        <symbol id="g2F18C4F05C1B555958466C1A25D84A17" overflow="visible">
-            <path d="M 4.258203 6.2734375 L 4.258203 5.474219 Q 3.9875002 5.633203 3.682422 5.7169924 Q 3.377344 5.8007813 3.0464845 5.8007813 Q 2.2214844 5.8007813 1.7960938 5.179883 Q 1.3707031 4.5589843 1.3707031 3.3515625 Q 1.5769532 3.78125 1.9421875 4.0111327 Q 2.307422 4.241016 2.7800782 4.241016 Q 3.7082033 4.241016 4.217383 3.6716797 Q 4.7265625 3.1023438 4.7265625 2.0582032 Q 4.7265625 1.0183594 4.202344 0.446875 Q 3.6781251 -0.12460938 2.7285156 -0.12460938 Q 1.6113281 -0.12460938 1.0914062 0.6767578 Q 0.5714844 1.478125 0.5714844 3.2011719 Q 0.5714844 4.825391 1.1966797 5.6783204 Q 1.8218751 6.53125 3.0078125 6.53125 Q 3.3257813 6.53125 3.6437502 6.4646487 Q 3.9617188 6.398047 4.258203 6.2734375 Z M 2.7113283 3.5621095 Q 2.1570313 3.5621095 1.8390626 3.1625001 Q 1.5210937 2.7628906 1.5210937 2.0582032 Q 1.5210937 1.3535156 1.8390626 0.9539063 Q 2.1570313 0.5542969 2.7113283 0.5542969 Q 3.2871094 0.5542969 3.579297 0.9345703 Q 3.8714845 1.3148438 3.8714845 2.0582032 Q 3.8714845 2.8058593 3.579297 3.1839845 Q 3.2871094 3.5621095 2.7113283 3.5621095 Z "/>
-        </symbol>
-        <symbol id="g1F607B046DCEFA87F623BCCE20F7BF66" overflow="visible">
-            <path d="M 2.5609376 2.8445313 Q 3.1152344 2.8445313 3.4310548 3.2441406 Q 3.746875 3.6437502 3.746875 4.348438 Q 3.746875 5.053125 3.4310548 5.4527345 Q 3.1152344 5.852344 2.5609376 5.852344 Q 1.9851563 5.852344 1.6929688 5.47207 Q 1.4007813 5.091797 1.4007813 4.348438 Q 1.4007813 3.6007814 1.6908203 3.2226563 Q 1.9808594 2.8445313 2.5609376 2.8445313 Z M 1.0140625 0.13320313 L 1.0140625 0.9324219 Q 1.2847656 0.7734375 1.5898438 0.68964845 Q 1.8949219 0.6058594 2.2257812 0.6058594 Q 3.0507813 0.6058594 3.4740236 1.2267579 Q 3.8972657 1.8476563 3.8972657 3.0550783 Q 3.6953125 2.6253908 3.3300781 2.3955078 Q 2.9648438 2.165625 2.4921875 2.165625 Q 1.5640625 2.165625 1.0548829 2.7371094 Q 0.5457031 3.3085938 0.5457031 4.3570313 Q 0.5457031 5.392578 1.0677735 5.961914 Q 1.5898438 6.53125 2.54375 6.53125 Q 3.6609375 6.53125 4.1808596 5.7277346 Q 4.7007813 4.9242187 4.7007813 3.2011719 Q 4.7007813 1.5812501 4.075586 0.7283203 Q 3.4503908 -0.12460938 2.2601564 -0.12460938 Q 1.9464844 -0.12460938 1.6285156 -0.058007814 Q 1.3105469 0.00859375 1.0140625 0.13320313 Z "/>
-        </symbol>
-    </defs>
-</svg>
-</div>
-          <div style="background: #f5f5f5; text-align: left; display: flex; align-items: center; width: 100%">
-            <pre style="margin: 0; width: 2.1em; text-align: right; vertical-align: top; padding-right: 0.34em; user-select: none; flex-shrink: 0">10</pre>
-            <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; width: 80em" class="zebraw-code-line"><span style="color: #000000; white-space: pre-wrap">    </span><span style="color: #000000; white-space: pre-wrap">}</span></pre>
-          </div>
-          <div style="background: #f5f5f5; text-align: left; display: flex; align-items: center; width: 100%">
-            <pre style="margin: 0; width: 2.1em; text-align: right; vertical-align: top; padding-right: 0.34em; user-select: none; flex-shrink: 0">11</pre>
-            <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; width: 80em" class="zebraw-code-line"><span style="color: #000000; white-space: pre-wrap">}</span></pre>
-          </div>
-          <div style="background: #f5f5f5; width: 100%">
-            <div style="padding: 0.34em 0.34em"></div>
-          </div>
-        </div>
-        <script>var codeBlocks = document.querySelectorAll('.zebraw-code-block');
+          <div style="padding: 1em; font-size: 0.9em;">
+            <div style="position: relative; width: 100%" class="zebraw-code-block">
+              <div style="position: absolute; top: -0.68em; right: 0; padding: 0.25em; background: #effbf9; font-size: 0.8em; border-radius: 0.34em" class="zebraw-code-lang">rust</div>
+              <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; pointer-events: none; border-radius: 0.34em">
+                <div style="background: #f5f5f5; width: 100%">
+                  <div style="padding: 0.34em 0.34em; user-select: none; opacity: 0; color: transparent"></div>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: auto; background: #f5f5f5">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; user-select: none; opacity: 0; color: transparent">1</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em; white-space: pre-wrap" class="zebraw-code-line"><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">pub</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">fn</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">fibonacci_reccursive</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">(</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">n</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">:</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">i32</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">)</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">-></span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">u64</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">{</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: auto; background: #f5f5f5">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; user-select: none; opacity: 0; color: transparent">2</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em; white-space: pre-wrap" class="zebraw-code-line"><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">    </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">if</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> n </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">&lt;</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">0</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">{</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: auto; background: #dff6f2">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; user-select: none; opacity: 0; color: transparent">3</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em; white-space: pre-wrap" class="zebraw-code-line"><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">        </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">panic!</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">(</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">"</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">{} is negative!</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">"</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">,</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> n</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">)</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">;</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #effbf9; white-space: pre-wrap">
+                  <div style="width: 2.1em; flex-shrink: 0"></div>
+                  <p style="margin: 0; padding: 0; width: 100%"><span style="user-select: none; user-select: none; opacity: 0; color: transparent">        <strong>></strong> </span><span style="font-size: 0.8em; user-select: none; opacity: 0; color: transparent">to avoid negative numbers</span></p>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: auto; background: #f5f5f5">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; user-select: none; opacity: 0; color: transparent">4</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em; white-space: pre-wrap" class="zebraw-code-line"><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">    </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">}</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: auto; background: #f5f5f5">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; user-select: none; opacity: 0; color: transparent">5</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em; white-space: pre-wrap" class="zebraw-code-line"><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">    </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">match</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> n </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">{</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: auto; background: #f5f5f5">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; user-select: none; opacity: 0; color: transparent">6</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em; white-space: pre-wrap" class="zebraw-code-line"><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">        </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">0</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">=></span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">panic!</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">(</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">"</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">zero is not a right argument to fibonacci_reccursive()!</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">"</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">)</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">,</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: auto; background: #f5f5f5">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; user-select: none; opacity: 0; color: transparent">7</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em; white-space: pre-wrap" class="zebraw-code-line"><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">        </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">1</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">|</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">2</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">=></span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">1</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">,</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: auto; background: #f5f5f5">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; user-select: none; opacity: 0; color: transparent">8</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em; white-space: pre-wrap" class="zebraw-code-line"><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">        </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">3</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">=></span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">2</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">,</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: auto; background: #dff6f2">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; user-select: none; opacity: 0; color: transparent">9</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em; white-space: pre-wrap" class="zebraw-code-line"><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">        </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">_</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">=></span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">fibonacci_reccursive</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">(</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">n </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">-</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">1</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">)</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">+</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">fibonacci_reccursive</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">(</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">n </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">-</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block"> </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">2</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">)</span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">,</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #effbf9; white-space: pre-wrap">
+                  <div style="width: 2.1em; flex-shrink: 0"></div>
+                  <p style="margin: 0; padding: 0; width: 100%"><span style="user-select: none; user-select: none; opacity: 0; color: transparent">        <strong>></strong> </span><span style="font-size: 0.8em; user-select: none; opacity: 0; color: transparent">50 => 12586269025</span></p>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: auto; background: #f5f5f5">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; user-select: none; opacity: 0; color: transparent">10</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em; white-space: pre-wrap" class="zebraw-code-line"><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">    </span><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">}</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: auto; background: #f5f5f5">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; user-select: none; opacity: 0; color: transparent">11</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em; white-space: pre-wrap" class="zebraw-code-line"><span style="user-select: none; opacity: 0; color: transparent; display: inline-block">}</span></pre>
+                </div>
+                <div style="background: #f5f5f5; width: 100%">
+                  <div style="padding: 0.34em 0.34em; user-select: none; opacity: 0; color: transparent"></div>
+                </div>
+              </div>
+              <div style="overflow-x: auto; overflow-y: hidden">
+                <div style="width: 100%">
+                  <div style="padding: 0.34em 0.34em"></div>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: auto">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; opacity: 0.7">1</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em; white-space: pre-wrap" class="zebraw-code-line"><span style="color: #d73a49; display: inline-block">pub</span><span style="color: #000000; display: inline-block"> </span><span style="color: #d73a49; display: inline-block">fn</span><span style="color: #000000; display: inline-block"> </span><span style="color: #4b69c6; display: inline-block">fibonacci_reccursive</span><span style="color: #000000; display: inline-block">(</span><span style="color: #000000; display: inline-block">n</span><span style="color: #000000; display: inline-block">:</span><span style="color: #000000; display: inline-block"> </span><span style="color: #d73a49; display: inline-block">i32</span><span style="color: #000000; display: inline-block">)</span><span style="color: #000000; display: inline-block"> </span><span style="color: #000000; display: inline-block">-></span><span style="color: #000000; display: inline-block"> </span><span style="color: #d73a49; display: inline-block">u64</span><span style="color: #000000; display: inline-block"> </span><span style="color: #000000; display: inline-block">{</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: auto">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; opacity: 0.7">2</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em; white-space: pre-wrap" class="zebraw-code-line"><span style="color: #000000; display: inline-block">    </span><span style="color: #d73a49; display: inline-block">if</span><span style="color: #000000; display: inline-block"> n </span><span style="color: #d73a49; display: inline-block">&lt;</span><span style="color: #000000; display: inline-block"> </span><span style="color: #b60157; display: inline-block">0</span><span style="color: #000000; display: inline-block"> </span><span style="color: #000000; display: inline-block">{</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: auto">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; opacity: 0.7">3</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em; white-space: pre-wrap" class="zebraw-code-line"><span style="color: #000000; display: inline-block">        </span><span style="color: #16718d; display: inline-block">panic!</span><span style="color: #000000; display: inline-block">(</span><span style="color: #298e0d; display: inline-block">"</span><span style="color: #298e0d; display: inline-block">{} is negative!</span><span style="color: #298e0d; display: inline-block">"</span><span style="color: #000000; display: inline-block">,</span><span style="color: #000000; display: inline-block"> n</span><span style="color: #000000; display: inline-block">)</span><span style="color: #000000; display: inline-block">;</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; white-space: pre-wrap">
+                  <div style="width: 2.1em; flex-shrink: 0"></div>
+                  <p style="margin: 0; padding: 0; width: 100%"><span style="user-select: none">        <strong>></strong> </span><span style="font-size: 0.8em">to avoid negative numbers</span></p>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: auto">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; opacity: 0.7">4</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em; white-space: pre-wrap" class="zebraw-code-line"><span style="color: #000000; display: inline-block">    </span><span style="color: #000000; display: inline-block">}</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: auto">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; opacity: 0.7">5</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em; white-space: pre-wrap" class="zebraw-code-line"><span style="color: #000000; display: inline-block">    </span><span style="color: #d73a49; display: inline-block">match</span><span style="color: #000000; display: inline-block"> n </span><span style="color: #000000; display: inline-block">{</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: auto">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; opacity: 0.7">6</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em; white-space: pre-wrap" class="zebraw-code-line"><span style="color: #000000; display: inline-block">        </span><span style="color: #b60157; display: inline-block">0</span><span style="color: #000000; display: inline-block"> </span><span style="color: #d73a49; display: inline-block">=></span><span style="color: #000000; display: inline-block"> </span><span style="color: #16718d; display: inline-block">panic!</span><span style="color: #000000; display: inline-block">(</span><span style="color: #298e0d; display: inline-block">"</span><span style="color: #298e0d; display: inline-block">zero is not a right argument to fibonacci_reccursive()!</span><span style="color: #298e0d; display: inline-block">"</span><span style="color: #000000; display: inline-block">)</span><span style="color: #000000; display: inline-block">,</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: auto">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; opacity: 0.7">7</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em; white-space: pre-wrap" class="zebraw-code-line"><span style="color: #000000; display: inline-block">        </span><span style="color: #b60157; display: inline-block">1</span><span style="color: #000000; display: inline-block"> </span><span style="color: #d73a49; display: inline-block">|</span><span style="color: #000000; display: inline-block"> </span><span style="color: #b60157; display: inline-block">2</span><span style="color: #000000; display: inline-block"> </span><span style="color: #d73a49; display: inline-block">=></span><span style="color: #000000; display: inline-block"> </span><span style="color: #b60157; display: inline-block">1</span><span style="color: #000000; display: inline-block">,</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: auto">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; opacity: 0.7">8</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em; white-space: pre-wrap" class="zebraw-code-line"><span style="color: #000000; display: inline-block">        </span><span style="color: #b60157; display: inline-block">3</span><span style="color: #000000; display: inline-block"> </span><span style="color: #d73a49; display: inline-block">=></span><span style="color: #000000; display: inline-block"> </span><span style="color: #b60157; display: inline-block">2</span><span style="color: #000000; display: inline-block">,</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: auto">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; opacity: 0.7">9</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em; white-space: pre-wrap" class="zebraw-code-line"><span style="color: #000000; display: inline-block">        </span><span style="color: #d73a49; display: inline-block">_</span><span style="color: #000000; display: inline-block"> </span><span style="color: #d73a49; display: inline-block">=></span><span style="color: #000000; display: inline-block"> </span><span style="color: #4b69c6; display: inline-block">fibonacci_reccursive</span><span style="color: #000000; display: inline-block">(</span><span style="color: #000000; display: inline-block">n </span><span style="color: #d73a49; display: inline-block">-</span><span style="color: #000000; display: inline-block"> </span><span style="color: #b60157; display: inline-block">1</span><span style="color: #000000; display: inline-block">)</span><span style="color: #000000; display: inline-block"> </span><span style="color: #d73a49; display: inline-block">+</span><span style="color: #000000; display: inline-block"> </span><span style="color: #4b69c6; display: inline-block">fibonacci_reccursive</span><span style="color: #000000; display: inline-block">(</span><span style="color: #000000; display: inline-block">n </span><span style="color: #d73a49; display: inline-block">-</span><span style="color: #000000; display: inline-block"> </span><span style="color: #b60157; display: inline-block">2</span><span style="color: #000000; display: inline-block">)</span><span style="color: #000000; display: inline-block">,</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; white-space: pre-wrap">
+                  <div style="width: 2.1em; flex-shrink: 0"></div>
+                  <p style="margin: 0; padding: 0; width: 100%"><span style="user-select: none">        <strong>></strong> </span><span style="font-size: 0.8em">50 => 12586269025</span></p>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: auto">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; opacity: 0.7">10</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em; white-space: pre-wrap" class="zebraw-code-line"><span style="color: #000000; display: inline-block">    </span><span style="color: #000000; display: inline-block">}</span></pre>
+                </div>
+                <div style="text-align: left; display: flex; align-items: center; width: 100%; height: auto">
+                  <pre style="margin: 0; text-align: right; vertical-align: top; padding-right: 0.65em; user-select: none; flex-shrink: 0; width: 2.1em; opacity: 0.7">11</pre>
+                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-right: 0.34em; white-space: pre-wrap" class="zebraw-code-line"><span style="color: #000000; display: inline-block">}</span></pre>
+                </div>
+                <div style="width: 100%">
+                  <div style="padding: 0.34em 0.34em"></div>
+                </div>
+              </div>
+              <script>var codeBlocks = document.querySelectorAll('.zebraw-code-block');
 codeBlocks.forEach(function (codeBlock) {
   var copyButton = codeBlock.querySelector('.zebraw-code-lang');
   copyButton.style.cursor = 'pointer';
@@ -570,6 +385,9 @@ codeBlocks.forEach(function (codeBlock) {
     }, 2000);
   });
 });</script>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </body>
