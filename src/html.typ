@@ -70,7 +70,7 @@
       "margin: 0",
       "padding-right: " + repr-or-str(inset.right),
       ..if wrap { ("white-space: pre-wrap",) },
-        )
+    )
 
     let text-div-style = (
       "text-align: left",
@@ -127,7 +127,7 @@
             "pre",
             attrs: (
               style: (pre-style).join("; "),
-              class: "zebraw-code-line",
+              ..if not is-background { (class: "zebraw-code-line") },
             ),
             {
               show text: it => context {
