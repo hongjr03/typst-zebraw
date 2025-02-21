@@ -58,7 +58,7 @@
       "margin: 0",
       "text-align: right",
       "vertical-align: top",
-      "padding-right: 0.34em",
+      "padding-right: 0.65em",
       "user-select: none",
       "flex-shrink: 0",
       "width: 2.1em",
@@ -94,6 +94,7 @@
             {
               let style = ()
               style += text-div-style
+              if wrap { style += ("height: auto",) } else { style += ("height: 1.5em",) }
               if is-background {
                 style += (
                   "background: " + line.fill.to-hex(),
@@ -113,6 +114,8 @@
                   style += number-div-style
                   if is-background {
                     style += background-text-style
+                  } else {
+                    style += ("opacity: 0.7",)
                   }
                   style
                 }
