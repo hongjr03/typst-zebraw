@@ -79,14 +79,6 @@
       "width: 100%",
     )
 
-    let comment-div-style = (
-      text-div-style
-        + (
-          "padding-top: " + repr-or-str(inset.top),
-          "padding-bottom: " + repr-or-str(inset.bottom),
-        )
-    )
-
 
     let background-text-style = (
       "user-select: none",
@@ -163,9 +155,11 @@
             attrs: (
               style: {
                 let style = ()
-                style += comment-div-style
+                style += text-div-style
                 if is-background {
-                  style += background-text-style
+                  style += (
+                    "background: " + line.comment.fill.to-hex(),
+                  )
                 }
                 if wrap { style += ("white-space: pre-wrap",) } else {
                   style += ("white-space: pre",)
@@ -198,9 +192,16 @@
                   html.elem(
                     "span",
                     attrs: (
-                      style: (
-                        "user-select: none",
-                      ).join("; "),
+                      style: {
+                        let style = ()
+                        style += (
+                          "user-select: none",
+                        )
+                        if is-background {
+                          style += background-text-style
+                        }
+                        style
+                      }.join("; "),
                     ),
                     {
                       line.comment.indent.clusters().len() * " "
@@ -211,9 +212,16 @@
                   html.elem(
                     "span",
                     attrs: (
-                      style: (
-                        "font-size: 0.8em",
-                      ).join("; "),
+                      style: {
+                        let style = ()
+                        style += (
+                          "font-size: 0.8em",
+                        )
+                        if is-background {
+                          style += background-text-style
+                        }
+                        style
+                      }.join("; "),
                     ),
                     line.comment.body,
                   )
