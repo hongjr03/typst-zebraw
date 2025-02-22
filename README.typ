@@ -62,7 +62,7 @@ Zebraw is a lightweight and fast package for displaying code blocks with line nu
 
 == Starting
 
-Import `zebraw` package by ```typ #import "@preview/zebraw:0.4.1": *``` then follow with ```typ #show: zebraw``` to start using zebraw in the simplest way. To manually display some specific code blocks in zebraw, you can use ```typ #zebraw()``` function:
+Import `zebraw` package by ```typ #import "@preview/zebraw:0.4.3": *``` then follow with ```typ #show: zebraw``` to start using zebraw in the simplest way. To manually display some specific code blocks in zebraw, you can use ```typ #zebraw()``` function:
 
 #context preview(````typ
 ```typ
@@ -563,7 +563,7 @@ The default value of most parameters are `none` for it will use the default valu
 #import "@preview/tidy:0.4.1"
 #let docs = tidy.parse-module(read("src/mod.typ"), scope: (zebraw: zebraw))
 #context {
-  set page(paper: "a4", height: auto, margin: 1em)
+  // set page(paper: "a4", height: auto, margin: 1em)
   tidy.show-module(docs, style: tidy.styles.default, sort-functions: false)
 }
 
@@ -585,7 +585,7 @@ The default value of most parameters are `none` for it will use the default valu
 == Example
 
 #context {
-  set page(paper: "a4", height: auto, margin: 1em)
+  // set page(paper: "a4", height: auto, margin: 1em)
   zebraw(
     highlight-lines: (
       (3, [to avoid negative numbers]),
@@ -610,7 +610,7 @@ The default value of most parameters are `none` for it will use the default valu
 }
 
 ```typlite
-## Performance
+== Performance
 
 See [bench.sh](./bench.sh) and [bench](./bench).
 
