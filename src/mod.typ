@@ -364,8 +364,10 @@
 
 
   show raw.where(block: true): it => {
+    let has-lang = (type(lang) == bool and lang and it.lang != none) or type(lang) != bool
     // Language tab.
-    if lang != false {
+    if has-lang {
+      // (lang == true and it.lang != none) or (lang == string | content)
       v(-.34em)
       align(
         right,
@@ -375,7 +377,15 @@
           outset: (bottom: inset.left),
           radius: (top: inset.left),
           fill: lang-color,
-          text(bottom-edge: "bounds", ..lang-font-args, if type(lang) == bool { it.lang } else { lang }),
+          text(
+            bottom-edge: "bounds",
+            ..lang-font-args,
+            if type(lang) == bool {
+              it.lang
+            } else {
+              lang
+            },
+          ),
         ),
       )
       v(0em, weak: true)
@@ -426,7 +436,7 @@
                   b(
                     inset: inset.pairs().map(((key, value)) => (key, value * 2)).to-dict(),
                     radius: {
-                      if not lang {
+                      if not has-lang {
                         (top: inset.left)
                       } else {
                         (top-left: inset.left)
