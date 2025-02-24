@@ -95,6 +95,23 @@ Import `zebraw` package by ```typ #import "@preview/zebraw:0.4.3": *``` then fol
 
 == Features
 
+=== Line Numbering
+
+Line numbers will be displayed on the left side of the code block. By passing an integer to the `numbering-offset` parameter, you can change the starting line number. The default value is `0`.
+
+#context preview(````typ
+#zebraw(
+  // The first line number will be 2.
+  numbering-offset: 1,
+  ```typ
+  #grid(
+    columns: (1fr, 1fr),
+    [Hello], [world!],
+  )
+  ```
+)
+````)
+
 === Line Highlighting
 
 You can highlight specific lines in the code block by passing the `highlight-lines` parameter to the `zebraw` function. The `highlight-lines` parameter can be a single line number or an array of line numbers.
@@ -563,7 +580,7 @@ The default value of most parameters are `none` for it will use the default valu
 #import "@preview/tidy:0.4.1"
 #let docs = tidy.parse-module(read("src/mod.typ"), scope: (zebraw: zebraw))
 #context {
-  // set page(paper: "a4", height: auto, margin: 1em)
+  set page(paper: "a4", height: auto, margin: 1em)
   tidy.show-module(docs, style: tidy.styles.default, sort-functions: false)
 }
 
@@ -585,7 +602,7 @@ The default value of most parameters are `none` for it will use the default valu
 == Example
 
 #context {
-  // set page(paper: "a4", height: auto, margin: 1em)
+  set page(paper: "a4", height: auto, margin: 1em)
   zebraw(
     highlight-lines: (
       (3, [to avoid negative numbers]),
