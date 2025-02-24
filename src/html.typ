@@ -11,6 +11,7 @@
 /// HTML variant.
 #let zebraw-html(
   highlight-lines: (),
+  numbering-offset: 0,
   header: none,
   footer: none,
   inset: none,
@@ -121,7 +122,7 @@
                 }
               ).join("; "),
             ),
-            [#line.number],
+            [#(line.number + numbering-offset)],
           )
           html.elem(
             "pre",
