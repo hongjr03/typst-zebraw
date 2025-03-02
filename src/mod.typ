@@ -352,7 +352,6 @@
   let extend = args.extend
 
   let (highlight-nums, comments) = tidy-highlight-lines(highlight-lines)
-
   // Define block and grid.
   let b(..args, body) = box(
     width: 100%,
@@ -361,12 +360,10 @@
     body,
   )
   let g(..args) = grid(
-    columns: (2.1em, 1fr),
+    columns: (auto, 1fr),
     align: (right + top, left),
     ..args,
   )
-
-
   show raw.where(block: true): it => {
     let has-lang = (type(lang) == bool and lang and it.lang != none) or type(lang) != bool
     // Language tab.
@@ -405,10 +402,10 @@
         let line-render(line, num: false) = grid.cell(
           fill: line.fill,
           block(
-            width: 100%,
+            width: if num { auto } else { 100% },
             inset: inset,
             if num {
-              [#(line.number + numbering-offset)]
+              [#(line.number)]
             } else {
               line.body
             },
@@ -424,9 +421,12 @@
           comment-color,
           comment-flag,
           comment-font-args,
+          numbering-offset,
           is-html: false,
         )
-        let heights = lines.map(line => measure(g([], line-render(line)), width: code-block-size.width).height)
+        let heights = lines.map(line => (
+          measure(g([#line.number], line-render(line)), width: code-block-size.width).height
+        ))
 
         g(
           // Header.
