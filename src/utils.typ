@@ -132,6 +132,7 @@
   comment-color,
   comment-flag,
   comment-font-args,
+  numbering-offset,
   is-html: false,
 ) = {
   lines
@@ -152,11 +153,13 @@
           )
         } else { none }
         res.push((
-          number: line.number,
+          number: line.number + numbering-offset,
           body: body,
           fill: highlight-color,
+          // if it's html, the comment will be saved in this field
           comment: if not is-html { none } else { comment },
         ))
+        // otherwise, we need to push the comment as a separate line
         if not is-html and comment != none {
           res.push((
             number: none,
@@ -172,7 +175,7 @@
       } else {
         let fill-color = curr-background-color(background-color, line.number)
         res.push((
-          number: line.number,
+          number: line.number + numbering-offset,
           body: body,
           fill: fill-color,
           comment: none,
