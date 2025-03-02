@@ -398,7 +398,7 @@
       radius: inset.left,
       clip: true,
       fill: curr-background-color(background-color, 0),
-      context layout(code-block-size => {
+      {
         let line-render(line, num: false) = grid.cell(
           fill: line.fill,
           block(
@@ -411,7 +411,6 @@
             },
           ),
         )
-
         let lines = tidy-lines(
           it.lines,
           highlight-nums,
@@ -424,91 +423,93 @@
           numbering-offset,
           is-html: false,
         )
-        let heights = lines.map(line => (
-          measure(g([#line.number], line-render(line)), width: code-block-size.width).height
-        ))
-
-        g(
-          // Header.
-          ..if header != none or comments.keys().contains("header") {
-            (
-              grid.header(
-                repeat: false,
-                grid.cell(
-                  align: left + top,
-                  colspan: 2,
-                  b(
-                    inset: inset.pairs().map(((key, value)) => (key, value * 2)).to-dict(),
-                    radius: {
-                      if not has-lang {
-                        (top: inset.left)
-                      } else {
-                        (top-left: inset.left)
-                      }
-                    },
-                    fill: comment-color,
-                    {
-                      text(..comment-font-args, if header != none { header } else { comments.at("header") })
-                    },
+        context layout(code-block-size => {
+          let last-line = if lines.last().number == none { lines.at(-2) } else { lines.last() }
+          let heights = lines.map(line => (
+            measure(g(line-render(last-line, num: true), line-render(line)), width: code-block-size.width).height
+          ))
+          g(
+            // Header.
+            ..if header != none or comments.keys().contains("header") {
+              (
+                grid.header(
+                  repeat: false,
+                  grid.cell(
+                    align: left + top,
+                    colspan: 2,
+                    b(
+                      inset: inset.pairs().map(((key, value)) => (key, value * 2)).to-dict(),
+                      radius: {
+                        if not has-lang {
+                          (top: inset.left)
+                        } else {
+                          (top-left: inset.left)
+                        }
+                      },
+                      fill: comment-color,
+                      {
+                        text(..comment-font-args, if header != none { header } else { comments.at("header") })
+                      },
+                    ),
                   ),
                 ),
-              ),
-            )
-          } else if extend {
-            (
-              grid.header(
-                repeat: true,
-                grid.cell(
-                  colspan: 2,
-                  b(
-                    fill: curr-background-color(background-color, 0),
-                    inset: (:) + (top: inset.top),
-                    radius: (top: inset.left),
-                    [],
+              )
+            } else if extend {
+              (
+                grid.header(
+                  repeat: true,
+                  grid.cell(
+                    colspan: 2,
+                    b(
+                      fill: curr-background-color(background-color, 0),
+                      inset: (:) + (top: inset.top),
+                      radius: (top: inset.left),
+                      [],
+                    ),
                   ),
                 ),
-              ),
-            )
-          },
-          // Line numbers.
-          grid(rows: heights, ..lines.map(line => line-render(line, num: true))),
-          // Code lines.
-          grid(rows: heights, ..lines.map(line => line-render(line))),
-          // Footer.
-          ..if footer != none or comments.keys().contains("footer") {
-            (
-              grid.footer(
-                repeat: false,
-                grid.cell(
-                  align: left + top,
-                  colspan: 2,
-                  b(
-                    inset: inset.pairs().map(((key, value)) => (key, value * 2)).to-dict(),
-                    radius: (bottom: inset.left),
-                    fill: comment-color,
-                    text(..comment-font-args, if footer != none { footer } else { comments.at("footer") }),
+              )
+            },
+            // Line numbers.
+            grid(rows: heights, ..lines.map(line => line-render(line, num: true))),
+            // Code lines.
+            grid(rows: heights, ..lines.map(line => line-render(line))),
+            // Footer.
+            ..if footer != none or comments.keys().contains("footer") {
+              (
+                grid.footer(
+                  repeat: false,
+                  grid.cell(
+                    align: left + top,
+                    colspan: 2,
+                    b(
+                      inset: inset.pairs().map(((key, value)) => (key, value * 2)).to-dict(),
+                      radius: (bottom: inset.left),
+                      fill: comment-color,
+                      text(..comment-font-args, if footer != none { footer } else { comments.at("footer") }),
+                    ),
                   ),
                 ),
-              ),
-            )
-          } else if extend {
-            (
-              grid.footer(
-                repeat: true,
-                grid.cell(
-                  colspan: 2,
-                  b(
-                    fill: curr-background-color(background-color, lines.len() + 1),
-                    inset: (:) + (bottom: inset.bottom),
-                    radius: (bottom: inset.left),
-                    [],
+              )
+            } else if extend {
+              (
+                grid.footer(
+                  repeat: true,
+                  grid.cell(
+                    colspan: 2,
+                    b(
+                      fill: curr-background-color(background-color, lines.len() + 1),
+                      inset: (:) + (bottom: inset.bottom),
+                      radius: (bottom: inset.left),
+                      [],
+                    ),
                   ),
                 ),
-              ),
-            )
-          },
-        )
-      }),
+              )
+            },
+          )
+        })
+      },
     )
   }
 
