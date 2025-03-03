@@ -28,7 +28,7 @@
     "padding-right: 0.65em",
     "user-select: none",
     "flex-shrink: 0",
-    "width: 2.1em",
+    "width: " + repr-or-str(calc.ceil(calc.log(it.lines.len() + numbering-offset)) * 1em + 0.1em),
   )
 
   let pre-style = (
@@ -88,7 +88,7 @@
               }
             ).join("; "),
           ),
-          [#(line.number + numbering-offset)],
+          [#line.number],
         )
         html.elem(
           "pre",
@@ -276,27 +276,30 @@
       class: "zebraw-code-block",
     ),
     {
-      html.elem(
-        "div",
-        attrs: (
-          style: (
-            "position: absolute",
-            "top: -" + repr-or-str(inset.top + inset.bottom),
-            "right: 0",
-            "padding: 0.25em",
-            "background: " + lang-color.to-hex(),
-            "font-size: 0.8em",
-            "border-radius: " + repr-or-str(inset.left),
-          ).join("; "),
-          class: "zebraw-code-lang",
-        ),
-        {
-          if lang != false {
-            set text(..lang-font-args)
-            if type(lang) == bool { it.lang } else { lang }
-          } else { none }
-        },
-      )
+      let has-lang = (type(lang) == bool and lang and it.lang != none) or type(lang) != bool
+      if has-lang {
+        html.elem(
+          "div",
+          attrs: (
+            style: (
+              "position: absolute",
+              "top: -" + repr-or-str(inset.top + inset.bottom),
+              "right: 0",
+              "padding: 0.25em",
+              "background: " + lang-color.to-hex(),
+              "font-size: 0.8em",
+              "border-radius: " + repr-or-str(inset.left),
+            ).join("; "),
+            class: "zebraw-code-lang",
+          ),
+
+          if type(lang) == bool {
+            it.lang
+          } else {
+            lang
+          },
+        )
+      }
 
       // Background layer with same content
       html.elem(
