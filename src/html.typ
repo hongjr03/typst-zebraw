@@ -21,6 +21,8 @@
   let extend = args.extend
   let (highlight-nums, comments) = tidy-highlight-lines(highlight-lines)
 
+
+  let numbering-width = calc.max(calc.ceil(calc.log(it.lines.len() + numbering-offset)), 8/3) * .75em + 0.1em
   let number-div-style = (
     "margin: 0",
     "text-align: right",
@@ -28,7 +30,7 @@
     "padding-right: 0.65em",
     "user-select: none",
     "flex-shrink: 0",
-    "width: " + repr-or-str(calc.ceil(calc.log(it.lines.len() + numbering-offset)) * 1em + 0.1em),
+    "width: " + repr-or-str(numbering-width),
   )
 
   let pre-style = (
@@ -61,7 +63,6 @@
           {
             let style = ()
             style += text-div-style
-            if wrap { style += ("height: auto",) } else { style += ("height: 1.5em",) }
             if is-background {
               style += (
                 "background: " + line.fill.to-hex(),
@@ -99,6 +100,7 @@
           {
             show text: it => context {
               let c = text.fill
+              let b = text.weight
               html.elem(
                 "span",
                 attrs: (
@@ -106,11 +108,11 @@
                     ..if is-background {
                       background-text-style
                     } else {
-                      ("color: " + c.to-hex(),)
-                    }
-                      + (
-                        "display: inline-block",
-                      ),
+                      (
+                        "color: " + c.to-hex(),
+                        "font-weight: " + b,
+                      )
+                    },
                   ).join("; "),
                 ),
                 it,
@@ -146,7 +148,7 @@
               // line.comment.indent,
               attrs: (
                 style: (
-                  "width: 2.1em",
+                  "width: " + repr-or-str(numbering-width),
                   "flex-shrink: 0",
                 ).join("; "),
               ),

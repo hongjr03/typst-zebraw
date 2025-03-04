@@ -351,20 +351,22 @@
   let lang-font-args = args.lang-font-args
   let extend = args.extend
 
-  let (highlight-nums, comments) = tidy-highlight-lines(highlight-lines)
-  // Define block and grid.
-  let b(..args, body) = box(
-    width: 100%,
-    inset: inset,
-    ..args,
-    body,
-  )
-  let g(..args) = grid(
-    columns: (auto, 1fr),
-    align: (right + top, left),
-    ..args,
-  )
+
   show raw.where(block: true): it => {
+    let numbering-width = calc.max(calc.ceil(calc.log(it.lines.len() + numbering-offset)), 8 / 3) * .75em + 0.1em
+    let (highlight-nums, comments) = tidy-highlight-lines(highlight-lines)
+    // Define block and grid.
+    let b(..args, body) = box(
+      width: 100%,
+      inset: inset,
+      ..args,
+      body,
+    )
+    let g(..args) = grid(
+      columns: (numbering-width, 1fr),
+      align: (right + top, left),
+      ..args,
+    )
     let has-lang = (type(lang) == bool and lang and it.lang != none) or type(lang) != bool
     // Language tab.
     if has-lang {
@@ -402,7 +404,7 @@
         let line-render(line, num: false) = grid.cell(
           fill: line.fill,
           block(
-            width: if num { auto } else { 100% },
+            width: 100%,
             inset: inset,
             if num {
               [#(line.number)]
