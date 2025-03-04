@@ -248,7 +248,7 @@
                                     <path class="typst-shape" fill="#f5f5f5" fill-rule="nonzero" d="M 0 2.992 C 0 1.3395641 1.3395641 0 2.992 0 L 206.008 0 C 207.66043 0 209 1.3395641 209 2.992 L 209 27.388308 C 209 29.040743 207.66043 30.380308 206.008 30.380308 L 2.992 30.380308 C 1.3395641 30.380308 0 29.040743 0 27.388308 Z "/>
                                 </g>
                                 <g transform="translate(5.5 5.5)">
-                                    <g class="typst-group" clip-path="url(#c5750DA0AFE46D848A9679CBAFB6419D7)">
+                                    <g class="typst-group" clip-path="url(#c6F40BF24CBBBF983B4A0F3A56084588C)">
                                         <g>
                                             <g transform="translate(0 0)">
                                                 <g class="typst-group">
@@ -263,15 +263,15 @@
                                                 <g class="typst-group">
                                                     <g>
                                                         <g transform="translate(0 0)">
-                                                            <path class="typst-shape" fill="#e6f1fb" fill-rule="nonzero" d="M 0 0 L 0 12.1981535 L 11.3993845 12.1981535 L 11.3993845 0 Z "/>
+                                                            <path class="typst-shape" fill="#e6f1fb" fill-rule="nonzero" d="M 0 0 L 0 12.1981535 L 18.48 12.1981535 L 18.48 0 Z "/>
                                                         </g>
                                                         <g transform="translate(0 12.198153846153849)">
-                                                            <path class="typst-shape" fill="#f5f5f5" fill-rule="nonzero" d="M 0 0 L 0 12.1981535 L 11.3993845 12.1981535 L 11.3993845 0 Z "/>
+                                                            <path class="typst-shape" fill="#f5f5f5" fill-rule="nonzero" d="M 0 0 L 0 12.1981535 L 18.48 12.1981535 L 18.48 0 Z "/>
                                                         </g>
                                                         <g transform="translate(0 0)">
                                                             <g class="typst-group">
                                                                 <g>
-                                                                    <g transform="translate(2.992 9.206153846153848)">
+                                                                    <g transform="translate(10.072615384615386 9.206153846153848)">
                                                                         <g class="typst-text" transform="scale(1, -1)">
                                                                             <use xlink:href="#g9950E4A611B02C3E426A0E6E72A322F9" x="0" fill="#000000" fill-rule="nonzero"/>
                                                                         </g>
@@ -282,7 +282,7 @@
                                                         <g transform="translate(0 12.198153846153849)">
                                                             <g class="typst-group">
                                                                 <g>
-                                                                    <g transform="translate(2.992 9.206153846153848)">
+                                                                    <g transform="translate(10.072615384615386 9.206153846153848)">
                                                                         <g class="typst-text" transform="scale(1, -1)">
                                                                             <use xlink:href="#g61062FD8BC33B80821A38E8B2BFDA2DB" x="0" fill="#000000" fill-rule="nonzero"/>
                                                                         </g>
@@ -290,13 +290,13 @@
                                                                 </g>
                                                             </g>
                                                         </g>
-                                                        <g transform="translate(11.399384615384617 0)">
-                                                            <path class="typst-shape" fill="#e6f1fb" fill-rule="nonzero" d="M 0 0 L 0 12.1981535 L 197.60062 12.1981535 L 197.60062 0 Z "/>
+                                                        <g transform="translate(18.480000000000004 0)">
+                                                            <path class="typst-shape" fill="#e6f1fb" fill-rule="nonzero" d="M 0 0 L 0 12.1981535 L 190.52 12.1981535 L 190.52 0 Z "/>
                                                         </g>
-                                                        <g transform="translate(11.399384615384617 12.198153846153849)">
-                                                            <path class="typst-shape" fill="#f5f5f5" fill-rule="nonzero" d="M 0 0 L 0 12.1981535 L 197.60062 12.1981535 L 197.60062 0 Z "/>
+                                                        <g transform="translate(18.480000000000004 12.198153846153849)">
+                                                            <path class="typst-shape" fill="#f5f5f5" fill-rule="nonzero" d="M 0 0 L 0 12.1981535 L 190.52 12.1981535 L 190.52 0 Z "/>
                                                         </g>
-                                                        <g transform="translate(11.399384615384617 0)">
+                                                        <g transform="translate(18.480000000000004 0)">
                                                             <g class="typst-group">
                                                                 <g>
                                                                     <g transform="translate(2.992000000000001 9.206153846153848)">
@@ -316,7 +316,7 @@
                                                                 </g>
                                                             </g>
                                                         </g>
-                                                        <g transform="translate(11.399384615384617 12.198153846153849)">
+                                                        <g transform="translate(18.480000000000004 12.198153846153849)">
                                                             <g class="typst-group">
                                                                 <g>
                                                                     <g transform="translate(2.992000000000001 9.206153846153848)">
@@ -514,7 +514,7 @@
         </symbol>
     </defs>
     <defs id="clip-path">
-        <clipPath id="c5750DA0AFE46D848A9679CBAFB6419D7">
+        <clipPath id="c6F40BF24CBBBF983B4A0F3A56084588C">
             <path d="M 0 2.992 C 0 1.3395641 1.3395641 0 2.992 0 L 206.008 0 C 207.66043 0 209 1.3395641 209 2.992 L 209 27.388308 C 209 29.040743 207.66043 30.380308 206.008 30.380308 L 2.992 30.380308 C 1.3395641 30.380308 0 29.040743 0 27.388308 Z "/>
         </clipPath>
     </defs>

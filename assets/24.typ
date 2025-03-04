@@ -1,7 +1,7 @@
 #{
 // render_code
 context {
-  set page(paper: "a4", height: auto, margin: 1em)
+  // set page(paper: "a4", height: auto, margin: 1em)
   zebraw(
     highlight-lines: (
       (3, [to avoid negative numbers]),
