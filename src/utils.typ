@@ -139,7 +139,7 @@
     .map(line => {
       let res = ()
       let body = if line.text == "" {
-        linebreak()
+        "\n"
       } else {
         line.body
       }
