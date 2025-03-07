@@ -62,7 +62,7 @@ Zebraw is a lightweight and fast package for displaying code blocks with line nu
 
 == Starting
 
-Import `zebraw` package by ```typ #import "@preview/zebraw:0.4.5": *``` then follow with ```typ #show: zebraw``` to start using zebraw in the simplest way. To manually display some specific code blocks in zebraw, you can use ```typ #zebraw()``` function:
+Import `zebraw` package by ```typ #import "@preview/zebraw:0.4.6": *``` then follow with ```typ #show: zebraw``` to start using zebraw in the simplest way. To manually display some specific code blocks in zebraw, you can use ```typ #zebraw()``` function:
 
 #context preview(````typ
 ```typ
@@ -508,7 +508,7 @@ Customize the language tab's background color by passing a #color to the `lang-c
 
 === Font
 
-To customize the arguments of comments' font and the language tab's font, pass a dictionary to `comment-font-args` parameter and `lang-font-args` parameter.
+To customize the arguments of comments' font, the language tab's font or the numberings' font, pass a dictionary to `comment-font-args` parameter, `lang-font-args` parameter or `numbering-font-args` parameter.
 
 Language tab will be rendered as comments if nothing is passed.
 

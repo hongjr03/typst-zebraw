@@ -267,7 +267,7 @@
   /// ````,
   /// scale-preview: 100%)
   ///
-  /// -> boolean | string
+  /// -> boolean | string | content
   lang: none,
   /// The arguments passed to comments' font.
   ///
