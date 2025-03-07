@@ -57,3 +57,21 @@
   ```,
 )
 ````)
+
+#exp(````typ
+#zebraw-html(
+  highlight-lines: (
+    (3, [to avoid negative numbers]),
+    (9, "50 => 12586269025"),
+  ),
+  lang: true,
+  block-width: 100%,
+  line-width: 100%,
+  wrap: true,
+  ```typst
+  = Fibonacci Reccursive Function
+  
+  This function calculates the Fibonacci number at the given index using a recursive approach.
+  ```,
+)
+````)
