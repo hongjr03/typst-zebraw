@@ -10,6 +10,7 @@
   lang,
   comment-font-args,
   lang-font-args,
+  numbering-font-args,
   extend,
 ) = {
   let inset = if inset == none {
@@ -70,6 +71,12 @@
     lang-font-args-state.get() + lang-font-args
   }
 
+  let numbering-font-args = if numbering-font-args == none {
+    numbering-font-args-state.get()
+  } else {
+    numbering-font-args-state.get() + numbering-font-args
+  }
+
   let extend = if extend == none {
     extend-state.get()
   } else {
@@ -86,6 +93,7 @@
     lang: lang,
     comment-font-args: comment-font-args,
     lang-font-args: lang-font-args,
+    numbering-font-args: numbering-font-args,
     extend: extend,
   )
 }
@@ -139,7 +147,7 @@
     .map(line => {
       let res = ()
       let body = if line.text == "" {
-        "\n"
+        [#"\n"]
       } else {
         line.body
       }
@@ -168,7 +176,7 @@
               strong(text(ligatures: true, comment.comment-flag))
               h(0.35em, weak: true)
               comment.body
-            } else { "" }, 
+            } else { "" },
             fill: comment-color,
           ))
         }

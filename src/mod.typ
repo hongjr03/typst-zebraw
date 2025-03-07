@@ -306,6 +306,32 @@
   ///
   /// -> dictionary
   lang-font-args: none,
+  /// The arguments passed to the line numbers' font.
+  ///
+  /// #example(````typ
+  /// #zebraw(
+  ///   numbering-font-args: (fill: blue),
+  ///   ```typ
+  ///   = Fibonacci sequence
+  ///   #let count = 8
+  ///   #let nums = range(1, count + 1)
+  ///   #let fib(n) = (
+  ///     if n <= 2 { 1 }
+  ///     else { fib(n - 1) + fib(n - 2) }
+  ///   )
+  ///
+  ///   #align(center, table(
+  ///     columns: count,
+  ///     ..nums.map(n => $F_#n$),
+  ///     ..nums.map(n => str(fib(n))),
+  ///   ))
+  ///   ```
+  /// )
+  /// ````,
+  /// scale-preview: 100%)
+  ///
+  /// -> dictionary
+  numbering-font-args: none,
   /// Whether to extend the vertical spacing.
   ///
   /// #example(````typ
@@ -337,6 +363,7 @@
     lang,
     comment-font-args,
     lang-font-args,
+    numbering-font-args,
     extend,
   )
   // Continue with remaining zebraw-specific logic:
@@ -407,6 +434,7 @@
             width: 100%,
             inset: inset,
             if num {
+              set text(..numbering-font-args)
               [#(line.number)]
             } else {
               line.body

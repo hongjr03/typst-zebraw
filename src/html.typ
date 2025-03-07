@@ -18,11 +18,12 @@
   let lang = args.lang
   let comment-font-args = args.comment-font-args
   let lang-font-args = args.lang-font-args
+  let numbering-font-args = args.numbering-font-args
   let extend = args.extend
   let (highlight-nums, comments) = tidy-highlight-lines(highlight-lines)
 
 
-  let numbering-width = calc.max(calc.ceil(calc.log(it.lines.len() + numbering-offset)), 8/3) * .75em + 0.1em
+  let numbering-width = calc.max(calc.ceil(calc.log(it.lines.len() + numbering-offset)), 8 / 3) * .75em + 0.1em
   let number-div-style = (
     "margin: 0",
     "text-align: right",
@@ -73,6 +74,8 @@
         ),
       ),
       {
+        // may not work in HTML...
+        set text(..numbering-font-args)
         html.elem(
           "pre",
           attrs: (
@@ -98,9 +101,17 @@
             ..if not is-background { (class: "zebraw-code-line") },
           ),
           {
+            show underline: it => html.elem(
+              "span",
+              attrs: (
+                style: "text-decoration: underline",
+              ),
+              it,
+            )
             show text: it => context {
               let c = text.fill
               let b = text.weight
+              
               html.elem(
                 "span",
                 attrs: (
@@ -110,6 +121,7 @@
                     } else {
                       (
                         "color: " + c.to-hex(),
+                        // even though some won't be correct in HTML, it's fine
                         "font-weight: " + b,
                       )
                     },
@@ -354,7 +366,6 @@
           var copyButton = codeBlock.querySelector('.zebraw-code-lang');
           copyButton.style.cursor = 'pointer';
 
-          // 提示用户可以复制代码 “Copy code”
           copyButton.title = 'Click to copy code';
 
           copyButton.addEventListener('click', function () {
@@ -370,7 +381,6 @@
             document.execCommand('copy');
             document.body.removeChild(textarea);
 
-            // 提示用户代码已复制 “Code copied”
             copyButton.title = 'Code copied!';
             setTimeout(function () {
               copyButton.title = 'Click to copy code';
@@ -398,6 +408,7 @@
   lang: none,
   comment-font-args: none,
   lang-font-args: none,
+  numbering-font-args: none,
   extend: none,
   block-width: 42em,
   line-width: 100%,
@@ -414,6 +425,7 @@
     lang,
     comment-font-args,
     lang-font-args,
+    numbering-font-args,
     extend,
   )
   show raw.where(block: true): zebraw-html-show.with(
