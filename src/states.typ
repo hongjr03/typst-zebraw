@@ -5,6 +5,7 @@
 
 #let inset-state = state("zebraw-inset", (top: 0.34em, right: 0.34em, bottom: 0.34em, left: 0.34em))
 #let comment-flag-state = state("zebraw-comment-flag", ">")
+#let numbering-state = state("zebraw-numbering", true)
 #let lang-state = state("zebraw-lang", true)
 #let extend-state = state("zebraw-extend", true)
 

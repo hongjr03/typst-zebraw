@@ -9,6 +9,7 @@
 }
 
 #let zebraw-html-show(args, highlight-lines, numbering-offset, header, footer, wrap, block-width, it) = {
+  let numbering = args.numbering
   let inset = args.inset
   let background-color = args.background-color
   let highlight-color = args.highlight-color
@@ -23,7 +24,9 @@
   let (highlight-nums, comments) = tidy-highlight-lines(highlight-lines)
 
 
-  let numbering-width = calc.max(calc.ceil(calc.log(it.lines.len() + numbering-offset)), 8 / 3) * .75em + 0.1em
+  let numbering-width = if numbering {
+    calc.max(calc.ceil(calc.log(it.lines.len() + numbering-offset)), 8 / 3) * .75em + 0.1em
+  } else { 0 }
   let number-div-style = (
     "margin: 0",
     "text-align: right",
@@ -111,7 +114,7 @@
             show text: it => context {
               let c = text.fill
               let b = text.weight
-              
+
               html.elem(
                 "span",
                 attrs: (
@@ -221,6 +224,7 @@
   )
 
   let lines = tidy-lines(
+    numbering,
     it.lines,
     highlight-nums,
     comments,
@@ -412,10 +416,12 @@
   extend: none,
   block-width: 42em,
   line-width: 100%,
+  numbering: true,
   wrap: true,
   body,
 ) = context {
   let args = parse-zebraw-args(
+    numbering,
     inset,
     background-color,
     highlight-color,

@@ -3,6 +3,9 @@
 /// Initialize the `zebraw` block in global.
 /// -> content
 #let zebraw-init(
+  /// Whether to show the line numbers.
+  /// -> boolean
+  numbering: true,
   /// The inset of each line.
   /// -> dictionary
   inset: (top: 0.34em, right: 0.34em, bottom: 0.34em, left: 0.34em),
@@ -30,6 +33,9 @@
   /// The arguments passed to the language tab's font.
   /// -> dictionary
   lang-font-args: (:),
+  /// The arguments passed to the line numbers' font.
+  /// -> dictionary
+  numbering-font-args: (:),
   /// Whether to extend the vertical spacing.
   /// -> boolean
   extend: true,
@@ -37,6 +43,7 @@
   /// -> content
   body,
 ) = context {
+  numbering-state.update(numbering)
   inset-state.update(inset)
 
   background-color-state.update(background-color)
@@ -49,6 +56,7 @@
 
   comment-font-args-state.update(comment-font-args)
   lang-font-args-state.update(lang-font-args)
+  numbering-font-args-state.update(numbering-font-args)
 
   extend-state.update(extend)
 
@@ -59,6 +67,24 @@
 ///
 /// -> content
 #let zebraw(
+  /// Whether to show the line numbers.
+  ///
+  /// #example(
+  /// ````typ
+  /// #zebraw(
+  ///   numbering: false,
+  ///   ```typ
+  ///   #grid(
+  ///     columns: (1fr, 1fr),
+  ///     [Hello,], [world!],
+  ///    )
+  ///   ```
+  ///  )
+  /// ````,
+  /// scale-preview: 100%,
+  /// )
+  /// -> boolean
+  numbering: true,
   /// Lines to highlight or comments to show.
   ///
   /// #example(
@@ -354,6 +380,7 @@
   body,
 ) = context {
   let args = parse-zebraw-args(
+    numbering,
     inset,
     background-color,
     highlight-color,
@@ -367,6 +394,7 @@
     extend,
   )
   // Continue with remaining zebraw-specific logic:
+  let numbering = args.numbering
   let inset = args.inset
   let background-color = args.background-color
   let highlight-color = args.highlight-color
@@ -376,11 +404,14 @@
   let lang = args.lang
   let comment-font-args = args.comment-font-args
   let lang-font-args = args.lang-font-args
+  let numbering-font-args = args.numbering-font-args
   let extend = args.extend
 
 
   show raw.where(block: true): it => {
-    let numbering-width = calc.max(calc.ceil(calc.log(it.lines.len() + numbering-offset)), 8 / 3) * .75em + 0.1em
+    let numbering-width = if numbering {
+      calc.max(calc.ceil(calc.log(it.lines.len() + numbering-offset)), 8 / 3) * .75em + 0.1em
+    } else { 0pt }
     let (highlight-nums, comments) = tidy-highlight-lines(highlight-lines)
     // Define block and grid.
     let b(..args, body) = box(
@@ -442,6 +473,7 @@
           ),
         )
         let lines = tidy-lines(
+          numbering,
           it.lines,
           highlight-nums,
           comments,

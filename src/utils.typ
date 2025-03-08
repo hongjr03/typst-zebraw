@@ -1,6 +1,7 @@
 #import "states.typ": *
 
 #let parse-zebraw-args(
+  numbering,
   inset,
   background-color,
   highlight-color,
@@ -13,6 +14,11 @@
   numbering-font-args,
   extend,
 ) = {
+  let numbering = if numbering == none {
+    numbering-state.get()
+  } else {
+    numbering
+  }
   let inset = if inset == none {
     inset-state.get()
   } else {
@@ -84,6 +90,7 @@
   }
 
   (
+    numbering: numbering,
     inset: inset,
     background-color: background-color,
     highlight-color: highlight-color,
@@ -132,6 +139,7 @@
 }
 
 #let tidy-lines(
+  numbering,
   lines,
   highlight-nums,
   comments,
@@ -161,7 +169,7 @@
           )
         } else { none }
         res.push((
-          number: line.number + numbering-offset,
+          number: if numbering { line.number + numbering-offset } else { none },
           body: body,
           fill: highlight-color,
           // if it's html, the comment will be saved in this field
@@ -183,7 +191,7 @@
       } else {
         let fill-color = curr-background-color(background-color, line.number)
         res.push((
-          number: line.number + numbering-offset,
+          number: if numbering { line.number + numbering-offset } else { none },
           body: body,
           fill: fill-color,
           comment: none,
