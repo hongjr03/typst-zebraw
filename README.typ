@@ -62,7 +62,7 @@ Zebraw is a lightweight and fast package for displaying code blocks with line nu
 
 == Starting
 
-Import `zebraw` package by ```typ #import "@preview/zebraw:0.4.6": *``` then follow with ```typ #show: zebraw``` to start using zebraw in the simplest way. To manually display some specific code blocks in zebraw, you can use ```typ #zebraw()``` function:
+Import `zebraw` package by ```typ #import "@preview/zebraw:0.4.7": *``` then follow with ```typ #show: zebraw``` to start using zebraw in the simplest way. To manually display some specific code blocks in zebraw, you can use ```typ #zebraw()``` function:
 
 #context preview(````typ
 ```typ
@@ -103,6 +103,20 @@ Line numbers will be displayed on the left side of the code block. By passing an
 #zebraw(
   // The first line number will be 2.
   numbering-offset: 1,
+  ```typ
+  #grid(
+    columns: (1fr, 1fr),
+    [Hello], [world!],
+  )
+  ```
+)
+````)
+
+To disable line numbering, pass `false` to the `numbering` parameter:
+
+#context preview(````typ
+#zebraw(
+  numbering: false,
   ```typ
   #grid(
     columns: (1fr, 1fr),
@@ -385,7 +399,7 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 ```
 ````)
 
-=== (Experimental) HTML Variant
+=== (Experimental) HTML Export
 
 See #link("example-html.typ")[example-html.typ] or #link("https://hongjr03.github.io/typst-zebraw/")[GitHub Pages] for more information.
 
@@ -627,10 +641,6 @@ The default value of most parameters are `none` for it will use the default valu
 }
 
 ```typlite
-## Performance
-
-See [bench.sh](./bench.sh) and [bench](./bench).
-
 ## License
 
 Zebraw is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.

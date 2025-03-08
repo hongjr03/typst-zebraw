@@ -64,6 +64,7 @@
     (3, [to avoid negative numbers]),
     (9, "50 => 12586269025"),
   ),
+  numbering: false,
   lang: true,
   block-width: 100%,
   line-width: 100%,
