@@ -57,66 +57,56 @@
         [#(line.number)]
       } else {
         let line-height = measure("|").height
-
-        // Code line rendering with indentation handling
-        if (
-          repr(line.body.func()) == "sequence" and height != none and line.body.children.first().func() == text
-        ) {
+        if line.keys().contains("indentation") and height != none {
           let indentation-spaces = {
             if indentation > 0 {
               show indentation * " ": box({
-                place(
-                  std.line(
-                    start: (0em, -inset.top),
-                    end: (0em, if hanging-indent { height - inset.top } else { line-height + inset.bottom }),
-                    stroke: .05em + gray.transparentize(50%),
-                  ),
-                  left + top,
-                )
-                " " * indentation
+                // TODO: fast preview
+                if sys.inputs.keys().contains("fast-preview") {
+                  set text(fill: gray.transparentize(50%))
+                  "|" + " " * (indentation - 1)
+                } else {
+                  place(
+                    std.line(
+                      start: (0em, -inset.top),
+                      end: (0em, if hanging-indent { height - inset.top } else { line-height + inset.bottom }),
+                      stroke: .05em + gray.transparentize(50%),
+                    ),
+                    left + top,
+                  )
+                  " " * indentation
+                }
               })
-
               line.indentation
             } else {
               line.indentation
             }
           }
-          if hanging-indent {
-            par(
-              hanging-indent: measure(indentation-spaces).width,
-              {
-                indentation-spaces
-                line.body.children.slice(1).join()
-              },
-            )
-          } else {
+
+          // Code line rendering with indentation handling
+          if (
+            repr(line.body.func()) == "sequence" and line.body.children.first().func() == text
+          ) {
+            if hanging-indent {
+              par(
+                hanging-indent: measure(indentation-spaces).width,
+                {
+                  indentation-spaces
+                  line.body.children.slice(1).join()
+                },
+              )
+            } else {
+              indentation-spaces
+              line.body.children.slice(1).join()
+            }
+          } else if (
+            repr(line.body.func()) == "text"
+          ) {
             indentation-spaces
-            line.body.children.slice(1).join()
+            line.body.text.trim()
+          } else {
+            line.body
           }
-        } else if (
-          repr(line.body.func()) == "text" and height != none
-        ) {
-          let indentation-spaces = {
-            if indentation > 0 {
-              show indentation * " ": box({
-                place(
-                  std.line(
-                    start: (0em, -inset.top),
-                    end: (0em, if hanging-indent { height - inset.top } else { line-height + inset.bottom }),
-                    stroke: .05em + gray.transparentize(50%),
-                  ),
-                  left + top,
-                )
-                " " * indentation
-              })
-
-              line.indentation
-            } else {
-              line.indentation
-            }
-          }
-          indentation-spaces
-          line.body.text.trim()
         } else {
           line.body
         }
