@@ -1,110 +1,5 @@
 #import "states.typ": *
 
-#let parse-zebraw-args(
-  numbering,
-  inset,
-  background-color,
-  highlight-color,
-  comment-color,
-  lang-color,
-  comment-flag,
-  lang,
-  comment-font-args,
-  lang-font-args,
-  numbering-font-args,
-  extend,
-) = {
-  let numbering = if numbering == none {
-    numbering-state.get()
-  } else {
-    numbering
-  }
-  let inset = if inset == none {
-    inset-state.get()
-  } else {
-    inset-state.get() + inset
-  }
-
-  let background-color = if background-color == none {
-    background-color-state.get()
-  } else {
-    background-color
-  }
-
-  let highlight-color = if highlight-color == none {
-    highlight-color-state.get()
-  } else {
-    highlight-color
-  }
-
-  let comment-color = if comment-color == none {
-    if comment-color-state.get() == none {
-      highlight-color-state.get().lighten(50%)
-    } else {
-      comment-color-state.get()
-    }
-  } else {
-    comment-color
-  }
-
-  let lang-color = if lang-color == none {
-    if lang-color-state.get() == none { comment-color } else { lang-color-state.get() }
-  } else {
-    lang-color
-  }
-
-  let comment-flag = if comment-flag == none {
-    comment-flag-state.get()
-  } else {
-    comment-flag
-  }
-
-  let lang = if lang == none {
-    lang-state.get()
-  } else {
-    lang
-  }
-
-  let comment-font-args = if comment-font-args == none {
-    comment-font-args-state.get()
-  } else {
-    comment-font-args-state.get() + comment-font-args
-  }
-
-  let lang-font-args = if lang-font-args == none {
-    lang-font-args-state.get()
-  } else {
-    lang-font-args-state.get() + lang-font-args
-  }
-
-  let numbering-font-args = if numbering-font-args == none {
-    numbering-font-args-state.get()
-  } else {
-    numbering-font-args-state.get() + numbering-font-args
-  }
-
-  let extend = if extend == none {
-    extend-state.get()
-  } else {
-    extend
-  }
-
-  (
-    numbering: numbering,
-    inset: inset,
-    background-color: background-color,
-    highlight-color: highlight-color,
-    comment-color: comment-color,
-    lang-color: lang-color,
-    comment-flag: comment-flag,
-    lang: lang,
-    comment-font-args: comment-font-args,
-    lang-font-args: lang-font-args,
-    numbering-font-args: numbering-font-args,
-    extend: extend,
-  )
-}
-
 #let tidy-highlight-lines(highlight-lines) = {
   let nums = ()
   let comments = (:)
@@ -149,55 +44,74 @@
   comment-flag,
   comment-font-args,
   numbering-offset,
+  inset,
+  indentation: 0,
   is-html: false,
 ) = {
-  lines
-    .map(line => {
-      let res = ()
-      let body = if line.text == "" {
-        [#"\n"]
+  let lines-result = ()
+  for (x, line) in lines.enumerate() {
+    let res = ()
+    let body = if line.text.trim() == "" {
+      if x > 0 {
+        [#lines-result.at(x - 1).indentation\ ]
       } else {
-        line.body
+        [\ ]
       }
-      if (type(highlight-nums) == array and highlight-nums.contains(line.number)) {
-        let comment = if comments.keys().contains(str(line.number)) {
-          (
-            indent: if comment-flag != "" { line.text.split(regex("\S")).first() } else { none },
-            comment-flag: comment-flag,
-            body: text(..comment-font-args, comments.at(str(line.number))),
-            fill: comment-color,
-          )
-        } else { none }
+    } else {
+      line.body
+    }
+    let indent = if line.text.trim() == "" {
+      lines-result.at(x - 1).indentation
+    } else {
+      line.text.split(regex("\S")).first()
+    }
+
+    if (type(highlight-nums) == array and highlight-nums.contains(line.number)) {
+      let comment = if comments.keys().contains(str(line.number)) {
+        (
+          indent: if comment-flag != "" { line.text.split(regex("\S")).first() } else { none },
+          comment-flag: comment-flag,
+          body: text(..comment-font-args, comments.at(str(line.number))),
+          fill: comment-color,
+        )
+      } else { none }
+
+      res.push((
+        indentation: indent,
+        number: if numbering { line.number + numbering-offset } else { none },
+        body: body,
+        fill: highlight-color,
+        // if it's html, the comment will be saved in this field
+        comment: if not is-html { none } else { comment },
+      ))
+
+      // otherwise, we need to push the comment as a separate line
+      if not is-html and comment != none {
         res.push((
-          number: if numbering { line.number + numbering-offset } else { none },
-          body: body,
-          fill: highlight-color,
-          // if it's html, the comment will be saved in this field
-          comment: if not is-html { none } else { comment },
-        ))
-        // otherwise, we need to push the comment as a separate line
-        if not is-html and comment != none {
-          res.push((
-            number: none,
-            body: if comment != none {
-              box(comment.indent)
-              strong(text(ligatures: true, comment.comment-flag))
-              h(0.35em, weak: true)
-              comment.body
-            } else { "" },
-            fill: comment-color,
-          ))
-        }
-      } else {
-        let fill-color = curr-background-color(background-color, line.number)
-        res.push((
-          number: if numbering { line.number + numbering-offset } else { none },
-          body: body,
-          fill: fill-color,
-          comment: none,
+          number: none,
+          body: if comment != none {
+            box(comment.indent)
+            strong(text(ligatures: true, comment.comment-flag))
+            h(0.35em, weak: true)
+            comment.body
+          } else { "" },
+          fill: comment-color,
         ))
       }
-      res
-    })
-    .flatten()
+    } else {
+      let fill-color = curr-background-color(background-color, line.number)
+      res.push((
+        indentation: indent,
+        number: if numbering { line.number + numbering-offset } else { none },
+        body: body,
+        fill: fill-color,
+        comment: none,
+      ))
+    }
+
+    for item in res {
+      lines-result.push(item)
+    }
+  }
+  lines-result
 }
