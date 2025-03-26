@@ -52,10 +52,10 @@
   for (x, line) in lines.enumerate() {
     let res = ()
     let indent = if line.text.trim() == "" {
-      if x > 0 and lines-result.at(x - 1).keys().contains("indentation") {
+      if x > 0 and lines-result.last().keys().contains("indentation") {
+        lines-result.last().indentation
+      } else if x > 1 and lines-result.at(x - 1).keys().contains("indentation") {
         lines-result.at(x - 1).indentation
-      } else if x > 1 and lines-result.at(x - 2).keys().contains("indentation") {
-        lines-result.at(x - 2).indentation
       }
     } else {
       line.text.split(regex("\S")).first()
