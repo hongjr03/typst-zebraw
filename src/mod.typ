@@ -1,66 +1,234 @@
 #import "utils.typ": *
+#import "html.typ": zebraw-html-show
 
-/// Initialize the `zebraw` block in global.
-/// -> content
-#let zebraw-init(
-  /// Whether to show the line numbers.
-  /// -> boolean
-  numbering: true,
-  /// The inset of each line.
-  /// -> dictionary
-  inset: (top: 0.34em, right: 0.34em, bottom: 0.34em, left: 0.34em),
-  /// The background color of the block and normal lines.
-  /// -> color | array
-  background-color: luma(245),
-  /// The background color of the highlighted lines.
-  /// -> color
-  highlight-color: rgb("#94e2d5").lighten(70%),
-  /// The background color of the comments. When it's set to `none`, it will be rendered in a lightened `highlight-color`.
-  /// -> color
-  comment-color: none,
-  /// The background color of the language tab. The color is set to `none` at default and it will be rendered in comments’ color.
-  /// -> color
-  lang-color: none,
-  /// The flag at the beginning of comments.
-  /// -> string | content
-  comment-flag: ">",
-  /// Whether to show the language tab, or a string or content of custom language name to display.
-  /// -> boolean | string | content
-  lang: true,
-  /// The arguments passed to comments' font.
-  /// -> dictionary
-  comment-font-args: (:),
-  /// The arguments passed to the language tab's font.
-  /// -> dictionary
-  lang-font-args: (:),
-  /// The arguments passed to the line numbers' font.
-  /// -> dictionary
-  numbering-font-args: (:),
-  /// Whether to extend the vertical spacing.
-  /// -> boolean
-  extend: true,
-  /// The body
-  /// -> content
-  body,
-) = context {
-  numbering-state.update(numbering)
-  inset-state.update(inset)
+#let zebraw-show(
+  args: (:),
+  highlight-lines: (),
+  numbering-offset: 0,
+  header: none,
+  footer: none,
+  it,
+) = {
+  // Extract all necessary parameters from args dictionary
+  let numbering = args.numbering
+  let inset = args.inset
+  let background-color = args.background-color
+  let highlight-color = args.highlight-color
+  let comment-color = args.comment-color
+  let lang-color = args.lang-color
+  let comment-flag = args.comment-flag
+  let lang = args.lang
+  let comment-font-args = args.comment-font-args
+  let lang-font-args = args.lang-font-args
+  let numbering-font-args = args.numbering-font-args
+  let extend = args.extend
+  let hanging-indent = args.hanging-indent
+  let indentation = args.indentation
 
-  background-color-state.update(background-color)
-  highlight-color-state.update(highlight-color)
-  comment-color-state.update(comment-color)
-  lang-color-state.update(lang-color)
+  // Calculate width for line numbering
+  let numbering-width = if numbering {
+    if (it.lines.len() + numbering-offset < 100) { 2.1em } else { auto }
+  } else { 0pt }
 
-  comment-flag-state.update(comment-flag)
-  lang-state.update(lang)
+  // Process highlight lines and comments
+  let (highlight-nums, comments) = tidy-highlight-lines(highlight-lines)
 
-  comment-font-args-state.update(comment-font-args)
-  lang-font-args-state.update(lang-font-args)
-  numbering-font-args-state.update(numbering-font-args)
+  // Setup helper functions for layout
+  let b(..args, body) = box(width: 100%, inset: inset, ..args, body)
 
-  extend-state.update(extend)
+  let g(..args) = grid(
+    columns: (numbering-width, 1fr),
+    align: (right + top, left),
+    ..args,
+  )
 
-  body
+  // Determine if we should show a language tab
+  let has-lang = (type(lang) == bool and lang and it.lang != none) or type(lang) != bool
+
+  // Helper function to render a line (either code or line number)
+  let line-render(line, num: false, height: none) = grid.cell(
+    fill: line.fill,
+    block(
+      width: if not num { 100% } else { numbering-width },
+      inset: inset,
+      if num {
+        // Line number rendering
+        set text(..numbering-font-args)
+        [#(line.number)]
+      } else {
+        // Code line rendering with indentation handling
+        context if (
+          repr(line.body.func()) == "sequence" and height != none and line.body.children.first().func() == text
+        ) {
+          let line-height = measure("|").height
+
+          let indentation-spaces = {
+            if indentation > 0 {
+              show indentation * " ": box({
+                place(
+                  std.line(
+                    start: (0em, -inset.top),
+                    end: (0em, if hanging-indent { height - inset.top } else { line-height + inset.bottom }),
+                    stroke: .05em + gray.transparentize(50%),
+                  ),
+                  left + top,
+                )
+                " " * indentation
+              })
+
+              line.body.children.first().text
+            } else {
+              line.body.children.first().text
+            }
+          }
+          if hanging-indent {
+            par(
+              hanging-indent: measure(indentation-spaces).width,
+              {
+                indentation-spaces
+                line.body.children.slice(1).join()
+              },
+            )
+          } else {
+            indentation-spaces
+            line.body.children.slice(1).join()
+          }
+        } else {
+          line.body
+        }
+      },
+    ),
+  )
+
+  // Process lines with highlighting, numbers, and comments
+  let lines = tidy-lines(
+    numbering,
+    it.lines,
+    highlight-nums,
+    comments,
+    highlight-color,
+    background-color,
+    comment-color,
+    comment-flag,
+    comment-font-args,
+    numbering-offset,
+    inset,
+    indentation: indentation,
+    is-html: false,
+  )
+
+  // Helper function to create header or footer section
+  let create-section(position, content-param, comment-key) = {
+    let content = if content-param != none {
+      content-param
+    } else if comments.keys().contains(comment-key) {
+      comments.at(comment-key)
+    } else {
+      none
+    }
+
+    if content != none {
+      // Custom header or footer content
+      grid.cell(
+        align: left + top,
+        colspan: 2,
+        b(
+          inset: inset.pairs().map(((key, value)) => (key, value * 2)).to-dict(),
+          radius: if position == "header" {
+            if not has-lang { (top: inset.left) } else { (top-left: inset.left) }
+          } else {
+            (bottom: inset.left)
+          },
+          fill: comment-color,
+          text(..comment-font-args, content),
+        ),
+      )
+    } else if extend {
+      // Empty header or footer with background for extension
+      grid.cell(
+        colspan: 2,
+        b(
+          fill: curr-background-color(background-color, if position == "header" { 0 } else { lines.len() + 1 }),
+          inset: (:) + (if position == "header" { (top: inset.top) } else { (bottom: inset.bottom) }),
+          radius: if position == "header" { (top: inset.left) } else { (bottom: inset.left) },
+          [],
+        ),
+      )
+    } else {
+      none
+    }
+  }
+
+  // Render language tab if needed
+  if has-lang {
+    v(-.34em)
+    align(
+      right,
+      block(
+        sticky: true,
+        inset: 0.34em,
+        outset: (bottom: inset.left),
+        radius: (top: inset.left),
+        fill: lang-color,
+        text(
+          bottom-edge: "bounds",
+          ..lang-font-args,
+          if type(lang) == bool { it.lang } else { lang },
+        ),
+      ),
+    )
+    v(0em, weak: true)
+  }
+
+  // Render the code block
+  block(
+    breakable: true,
+    radius: inset.left,
+    clip: true,
+    fill: curr-background-color(background-color, 0),
+    {
+      context layout(code-block-size => {
+        // Calculate line heights for consistent rendering
+        let last-line = if lines.last().number == none { lines.at(-2) } else { lines.last() }
+
+        // Create line objects with their heights pre-computed
+        let lines-with-height = lines.map(line => {
+          let height = measure(
+            g(line-render(last-line, num: true), line-render(line)),
+            width: code-block-size.width,
+          ).height
+          (line: line, height: height)
+        })
+
+        // Create the main grid structure with header, content and footer
+        g(
+          // 1. Header section
+          ..{
+            let header-cell = create-section("header", header, "header")
+            if header-cell != none { (grid.header(repeat: false, header-cell),) } else { () }
+          },
+
+          // 2. Line numbers column
+          grid(
+            rows: lines-with-height.map(item => item.height),
+            ..lines-with-height.map(item => line-render(item.line, num: true))
+          ),
+
+          // 3. Code lines column
+          grid(
+            rows: lines-with-height.map(item => item.height),
+            ..lines-with-height.map(item => line-render(item.line, height: item.height))
+          ),
+
+          // 4. Footer section
+          ..{
+            let footer-cell = create-section("footer", footer, "footer")
+            if footer-cell != none { (grid.footer(repeat: false, footer-cell),) } else { () }
+          },
+        )
+      })
+    },
+  )
 }
 
 /// Block of code with highlighted lines and comments.
@@ -375,6 +543,18 @@
   ///
   /// -> boolean
   extend: none,
+  /// Whether to show the hanging indent.
+  /// -> boolean
+  hanging-indent: none,
+  /// The amount of indentation, used to draw indentation lines.
+  /// -> int
+  indentation: none,
+  /// (Only for HTML) The width of the code block.
+  /// -> length | percentage
+  block-width: 42em,
+  /// (Only for HTML) Whether to wrap the code lines.
+  /// -> boolean
+  wrap: true,
   /// The body.
   /// -> content
   body,
@@ -392,189 +572,28 @@
     lang-font-args,
     numbering-font-args,
     extend,
+    hanging-indent,
+    indentation,
   )
-  // Continue with remaining zebraw-specific logic:
-  let numbering = args.numbering
-  let inset = args.inset
-  let background-color = args.background-color
-  let highlight-color = args.highlight-color
-  let comment-color = args.comment-color
-  let lang-color = args.lang-color
-  let comment-flag = args.comment-flag
-  let lang = args.lang
-  let comment-font-args = args.comment-font-args
-  let lang-font-args = args.lang-font-args
-  let numbering-font-args = args.numbering-font-args
-  let extend = args.extend
 
-
-  show raw.where(block: true): it => {
-    let numbering-width = if numbering {
-      calc.max(calc.ceil(calc.log(it.lines.len() + numbering-offset)), 8 / 3) * .75em + 0.1em
-    } else { 0pt }
-    let (highlight-nums, comments) = tidy-highlight-lines(highlight-lines)
-    // Define block and grid.
-    let b(..args, body) = box(
-      width: 100%,
-      inset: inset,
-      ..args,
-      body,
+  show raw.where(block: true): if dictionary(std).keys().contains("html") and target() == "html" {
+    zebraw-html-show.with(
+      args: args,
+      highlight-lines: highlight-lines,
+      numbering-offset: numbering-offset,
+      header: header,
+      footer: footer,
+      wrap: wrap,
+      block-width: block-width,
     )
-    let g(..args) = grid(
-      columns: (numbering-width, 1fr),
-      align: (right + top, left),
-      ..args,
-    )
-    let has-lang = (type(lang) == bool and lang and it.lang != none) or type(lang) != bool
-    // Language tab.
-    if has-lang {
-      // (lang == true and it.lang != none) or (lang == string | content)
-      v(-.34em)
-      align(
-        right,
-        block(
-          sticky: true,
-          inset: 0.34em,
-          outset: (bottom: inset.left),
-          radius: (top: inset.left),
-          fill: lang-color,
-          text(
-            bottom-edge: "bounds",
-            ..lang-font-args,
-            if type(lang) == bool {
-              it.lang
-            } else {
-              lang
-            },
-          ),
-        ),
-      )
-      v(0em, weak: true)
-    }
-
-    // The code block.
-    block(
-      breakable: true,
-      radius: inset.left,
-      clip: true,
-      fill: curr-background-color(background-color, 0),
-      {
-        let line-render(line, num: false) = grid.cell(
-          fill: line.fill,
-          block(
-            width: 100%,
-            inset: inset,
-            if num {
-              set text(..numbering-font-args)
-              [#(line.number)]
-            } else {
-              line.body
-            },
-          ),
-        )
-        let lines = tidy-lines(
-          numbering,
-          it.lines,
-          highlight-nums,
-          comments,
-          highlight-color,
-          background-color,
-          comment-color,
-          comment-flag,
-          comment-font-args,
-          numbering-offset,
-          is-html: false,
-        )
-        context layout(code-block-size => {
-          let last-line = if lines.last().number == none { lines.at(-2) } else { lines.last() }
-          let heights = lines.map(line => (
-            measure(g(line-render(last-line, num: true), line-render(line)), width: code-block-size.width).height
-          ))
-          g(
-            // Header.
-            ..if header != none or comments.keys().contains("header") {
-              (
-                grid.header(
-                  repeat: false,
-                  grid.cell(
-                    align: left + top,
-                    colspan: 2,
-                    b(
-                      inset: inset.pairs().map(((key, value)) => (key, value * 2)).to-dict(),
-                      radius: {
-                        if not has-lang {
-                          (top: inset.left)
-                        } else {
-                          (top-left: inset.left)
-                        }
-                      },
-                      fill: comment-color,
-                      {
-                        text(..comment-font-args, if header != none { header } else { comments.at("header") })
-                      },
-                    ),
-                  ),
-                ),
-              )
-            } else if extend {
-              (
-                grid.header(
-                  repeat: true,
-                  grid.cell(
-                    colspan: 2,
-                    b(
-                      fill: curr-background-color(background-color, 0),
-                      inset: (:) + (top: inset.top),
-                      radius: (top: inset.left),
-                      [],
-                    ),
-                  ),
-                ),
-              )
-            },
-            // Line numbers.
-            grid(rows: heights, ..lines.map(line => line-render(line, num: true))),
-            // Code lines.
-            grid(rows: heights, ..lines.map(line => line-render(line))),
-            // Footer.
-            ..if footer != none or comments.keys().contains("footer") {
-              (
-                grid.footer(
-                  repeat: false,
-                  grid.cell(
-                    align: left + top,
-                    colspan: 2,
-                    b(
-                      inset: inset.pairs().map(((key, value)) => (key, value * 2)).to-dict(),
-                      radius: (bottom: inset.left),
-                      fill: comment-color,
-                      text(..comment-font-args, if footer != none { footer } else { comments.at("footer") }),
-                    ),
-                  ),
-                ),
-              )
-            } else if extend {
-              (
-                grid.footer(
-                  repeat: true,
-                  grid.cell(
-                    colspan: 2,
-                    b(
-                      fill: curr-background-color(background-color, lines.len() + 1),
-                      inset: (:) + (bottom: inset.bottom),
-                      radius: (bottom: inset.left),
-                      [],
-                    ),
-                  ),
-                ),
-              )
-            },
-          )
-        })
-      },
+  } else {
+    zebraw-show.with(
+      args: args,
+      highlight-lines: highlight-lines,
+      numbering-offset: numbering-offset,
+      header: header,
+      footer: footer,
     )
   }
-
-
   body
 }
