@@ -51,25 +51,26 @@
   let lines-result = ()
   for (x, line) in lines.enumerate() {
     let res = ()
-    let body = if line.text.trim() == "" {
-      if x > 0 {
-        [#lines-result.at(x - 1).indentation\ ]
-      } else {
-        [\ ]
-      }
-    } else {
-      line.body
-    }
     let indent = if line.text.trim() == "" {
-      lines-result.at(x - 1).indentation
+      if x > 0 and lines-result.at(x - 1).keys().contains("indentation") {
+        lines-result.at(x - 1).indentation
+      } else if x > 1 and lines-result.at(x - 2).keys().contains("indentation") {
+        lines-result.at(x - 2).indentation
+      }
     } else {
       line.text.split(regex("\S")).first()
     }
+    let body = if line.text.trim() == "" {
+      [#indent\ ]
+    } else {
+      line.body
+    }
+
 
     if (type(highlight-nums) == array and highlight-nums.contains(line.number)) {
       let comment = if comments.keys().contains(str(line.number)) {
         (
-          indent: if comment-flag != "" { line.text.split(regex("\S")).first() } else { none },
+          indent: line.text.split(regex("\S")).first(),
           comment-flag: comment-flag,
           body: text(..comment-font-args, comments.at(str(line.number))),
           fill: comment-color,
@@ -90,9 +91,11 @@
         res.push((
           number: none,
           body: if comment != none {
-            box(comment.indent)
-            strong(text(ligatures: true, comment.comment-flag))
-            h(0.35em, weak: true)
+            if comment-flag != "" {
+              box(comment.indent)
+              strong(text(ligatures: true, comment.comment-flag))
+              h(0.35em, weak: true)
+            }
             comment.body
           } else { "" },
           fill: comment-color,

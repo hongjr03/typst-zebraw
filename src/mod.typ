@@ -51,17 +51,17 @@
     block(
       width: if not num { 100% } else { numbering-width },
       inset: inset,
-      if num {
+      context if num {
         // Line number rendering
         set text(..numbering-font-args)
         [#(line.number)]
       } else {
+        let line-height = measure("|").height
+
         // Code line rendering with indentation handling
-        context if (
+        if (
           repr(line.body.func()) == "sequence" and height != none and line.body.children.first().func() == text
         ) {
-          let line-height = measure("|").height
-
           let indentation-spaces = {
             if indentation > 0 {
               show indentation * " ": box({
@@ -76,9 +76,9 @@
                 " " * indentation
               })
 
-              line.body.children.first().text
+              line.indentation
             } else {
-              line.body.children.first().text
+              line.indentation
             }
           }
           if hanging-indent {
@@ -93,6 +93,30 @@
             indentation-spaces
             line.body.children.slice(1).join()
           }
+        } else if (
+          repr(line.body.func()) == "text" and height != none
+        ) {
+          let indentation-spaces = {
+            if indentation > 0 {
+              show indentation * " ": box({
+                place(
+                  std.line(
+                    start: (0em, -inset.top),
+                    end: (0em, if hanging-indent { height - inset.top } else { line-height + inset.bottom }),
+                    stroke: .05em + gray.transparentize(50%),
+                  ),
+                  left + top,
+                )
+                " " * indentation
+              })
+
+              line.indentation
+            } else {
+              line.indentation
+            }
+          }
+          indentation-spaces
+          line.body.text.trim()
         } else {
           line.body
         }
@@ -550,7 +574,7 @@
   /// -> int
   indentation: none,
   /// (Only for HTML) The width of the code block.
-  /// -> length | percentage
+  /// -> length | relative
   block-width: 42em,
   /// (Only for HTML) Whether to wrap the code lines.
   /// -> boolean
