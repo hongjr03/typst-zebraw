@@ -8,7 +8,19 @@
   }
 }
 
-#let zebraw-html-show(args, highlight-lines, numbering-offset, header, footer, wrap, block-width, it) = {
+#let create-style(..styles) = styles.pos().filter(s => s != none).flatten().join("; ")
+
+#let zebraw-html-show(
+  args: (:),
+  highlight-lines: (),
+  numbering-offset: 0,
+  header: none,
+  footer: none,
+  wrap: true,
+  block-width: 42em,
+  it,
+) = {
+  // Extract args
   let numbering = args.numbering
   let inset = args.inset
   let background-color = args.background-color
@@ -21,12 +33,15 @@
   let lang-font-args = args.lang-font-args
   let numbering-font-args = args.numbering-font-args
   let extend = args.extend
+
+  // Process highlight lines
   let (highlight-nums, comments) = tidy-highlight-lines(highlight-lines)
 
-
+  // Common styles
   let numbering-width = if numbering {
     calc.max(calc.ceil(calc.log(it.lines.len() + numbering-offset)), 8 / 3) * .75em + 0.1em
   } else { 0 }
+
   let number-div-style = (
     "margin: 0",
     "text-align: right",
@@ -52,83 +67,60 @@
     "width: 100%",
   )
 
-
   let background-text-style = (
     "user-select: none",
     "opacity: 0",
     "color: transparent",
   )
 
-  let build-code-line-elem(line, is-background: false) = (
-    html.elem(
+  // Helper for creating code line elements
+  let build-code-line-elem(line, is-background: false) = {
+    // Create main line element
+    let line-elem = html.elem(
       "div",
       attrs: (
-        style: (
-          {
-            let style = ()
-            style += text-div-style
-            if is-background {
-              style += (
-                "background: " + line.fill.to-hex(),
-              )
-            }
-            style
-          }.join("; ")
+        style: create-style(
+          text-div-style,
+          if is-background { ("background: " + line.fill.to-hex(),) },
         ),
       ),
       {
-        // may not work in HTML...
+        // Line number
         set text(..numbering-font-args)
         html.elem(
           "pre",
           attrs: (
-            style: (
-              {
-                let style = ()
-                style += number-div-style
-                if is-background {
-                  style += background-text-style
-                } else {
-                  style += ("opacity: 0.7",)
-                }
-                style
-              }
-            ).join("; "),
+            style: create-style(
+              number-div-style,
+              if is-background { background-text-style } else { ("opacity: 0.7",) },
+            ),
           ),
           [#line.number],
         )
+
+        // Code content
         html.elem(
           "pre",
           attrs: (
-            style: (pre-style).join("; "),
+            style: create-style(pre-style),
             ..if not is-background { (class: "zebraw-code-line") },
           ),
           {
             show underline: it => html.elem(
               "span",
-              attrs: (
-                style: "text-decoration: underline",
-              ),
+              attrs: (style: "text-decoration: underline"),
               it,
             )
+
             show text: it => context {
               let c = text.fill
               let b = text.weight
-
               html.elem(
                 "span",
                 attrs: (
-                  style: (
-                    ..if is-background {
-                      background-text-style
-                    } else {
-                      (
-                        "color: " + c.to-hex(),
-                        // even though some won't be correct in HTML, it's fine
-                        "font-weight: " + b,
-                      )
-                    },
-                  ).join("; "),
+                  style: create-style(if is-background { background-text-style } else {
+                    ("color: " + c.to-hex(), "font-weight: " + b)
+                  }),
                 ),
                 it,
               )
@@ -137,92 +129,85 @@
           },
         )
       },
-    ),
-    ..if line.comment != none {
-      (
-        html.elem(
-          "div",
-          attrs: (
-            style: {
-              let style = ()
-              style += text-div-style
-              if is-background {
-                style += (
-                  "background: " + line.comment.fill.to-hex(),
-                )
-              }
-              if wrap { style += ("white-space: pre-wrap",) } else {
-                style += ("white-space: pre",)
-              }
-              style
-            }.join("; "),
-          ),
-          {
-            html.elem(
-              "div",
-              // line.comment.indent,
-              attrs: (
-                style: (
-                  "width: " + repr-or-str(numbering-width),
-                  "flex-shrink: 0",
-                ).join("; "),
-              ),
-              "",
-            )
-            html.elem(
-              "p",
-              attrs: (
-                style: (
-                  "margin: 0",
-                  "padding: 0",
-                  "width: 100%",
-                ).join("; "),
-              ),
-              {
-                html.elem(
-                  "span",
-                  attrs: (
-                    style: {
-                      let style = ()
-                      style += (
-                        "user-select: none",
-                      )
-                      if is-background {
-                        style += background-text-style
-                      }
-                      style
-                    }.join("; "),
-                  ),
-                  {
-                    line.comment.indent.clusters().len() * " "
-                    strong(text(ligatures: true, line.comment.comment-flag))
-                    " "
-                  },
-                )
-                html.elem(
-                  "span",
-                  attrs: (
-                    style: {
-                      let style = ()
-                      style += (
-                        "font-size: 0.8em",
-                      )
-                      if is-background {
-                        style += background-text-style
-                      }
-                      style
-                    }.join("; "),
-                  ),
-                  line.comment.body,
-                )
-              },
-            )
-          },
-        ),
-      )
-    },
-  )
+    )
 
+    // Create comment element if needed
+    let comment-elem = if line.comment != none {
+      html.elem(
+        "div",
+        attrs: (
+          style: create-style(
+            text-div-style,
+            if is-background { ("background: " + line.comment.fill.to-hex(),) },
+            if wrap { ("white-space: pre-wrap",) } else { ("white-space: pre",) },
+          ),
+        ),
+        {
+          // Empty space for indentation
+          html.elem(
+            "div",
+            attrs: (
+              style: create-style(
+                "width: " + repr-or-str(numbering-width),
+                "flex-shrink: 0",
+              ),
+            ),
+            "",
+          )
+
+          // Comment content
+          html.elem(
+            "p",
+            attrs: (
+              style: create-style(
+                "margin: 0",
+                "padding: 0",
+                "width: 100%",
+              ),
+            ),
+            {
+              // Comment flag
+              html.elem(
+                "span",
+                attrs: (
+                  style: create-style(
+                    ("user-select: none",),
+                    if is-background { background-text-style },
+                  ),
+                ),
+                {
+                  line.comment.indent.clusters().len() * " "
+                  strong(text(ligatures: true, line.comment.comment-flag))
+                  " "
+                },
+              )
+
+              // Comment text
+              html.elem(
+                "span",
+                attrs: (
+                  style: create-style(
+                    ("font-size: 0.8em",),
+                    if is-background { background-text-style },
+                  ),
+                ),
+                line.comment.body,
+              )
+            },
+          )
+        },
+      )
+    }
+
+    // Return both elements
+    if comment-elem != none {
+      (line-elem, comment-elem)
+    } else {
+      (line-elem,)
+    }
+  }
+
+  // Process lines
   let lines = tidy-lines(
     numbering,
     it.lines,
@@ -234,17 +219,21 @@
     comment-flag,
     comment-font-args,
     numbering-offset,
+    inset,
     is-html: true,
   )
 
+  // Helper for creating header/footer cells
   let build-cell(is-header, content, is-background: false) = html.elem(
     "div",
     attrs: (
-      style: (
-        ..if is-background {
+      style: create-style(
+        if is-background {
           (
             "background: "
-              + if content != none { comment-color.to-hex() } else {
+              + if content != none {
+                comment-color.to-hex()
+              } else {
                 if is-header {
                   curr-background-color(background-color, 0).to-hex()
                 } else {
@@ -254,52 +243,51 @@
           )
         },
         "width: 100%",
-      ).join("; "),
+      ),
     ),
     html.elem(
       "div",
       attrs: (
-        style: (
+        style: create-style(
           "padding: " + repr-or-str(inset.right) + " " + repr-or-str(inset.left),
-          ..if is-background { background-text-style } else { none },
-        ).join("; "),
+          if is-background { background-text-style },
+        ),
       ),
       text(..comment-font-args, content),
     ),
   )
 
-  let header-cell(is-background: false) = if header != none or comments.keys().contains("header") {
-    (build-cell(true, if header != none { header } else { comments.at("header") }, is-background: is-background),)
-  } else if extend {
-    (build-cell(true, none, is-background: is-background),)
-  } else {
-    ()
+  // Helper functions for header/footer
+  let create-header-footer(is_header, content, comments, extend, is_background: false) = {
+    let key = if is_header { "header" } else { "footer" }
+
+    if content != none or comments.keys().contains(key) {
+      (build-cell(is_header, if content != none { content } else { comments.at(key) }, is-background: is_background),)
+    } else if extend {
+      (build-cell(is_header, none, is-background: is_background),)
+    } else {
+      ()
+    }
   }
 
-  let footer-cell(is-background: false) = if footer != none or comments.keys().contains("footer") {
-    (build-cell(false, if footer != none { footer } else { comments.at("footer") }, is-background: is-background),)
-  } else if extend {
-    (build-cell(false, none, is-background: is-background),)
-  } else {
-    ()
-  }
-
+  // Main code block container
   html.elem(
     "div",
     attrs: (
-      style: (
+      style: create-style(
         "position: relative",
         "width: " + repr-or-str(block-width),
-      ).join("; "),
+      ),
       class: "zebraw-code-block",
     ),
     {
+      // Language label
       let has-lang = (type(lang) == bool and lang and it.lang != none) or type(lang) != bool
       if has-lang {
         html.elem(
           "div",
           attrs: (
-            style: (
+            style: create-style(
               "position: absolute",
               "top: -" + repr-or-str(inset.top + inset.bottom),
               "right: 0",
@@ -307,23 +295,18 @@
               "background: " + lang-color.to-hex(),
               "font-size: 0.8em",
               "border-radius: " + repr-or-str(inset.left),
-            ).join("; "),
+            ),
             class: "zebraw-code-lang",
           ),
-
-          if type(lang) == bool {
-            it.lang
-          } else {
-            lang
-          },
+          if type(lang) == bool { it.lang } else { lang },
         )
       }
 
-      // Background layer with same content
+      // Background layer
       html.elem(
         "div",
         attrs: (
-          style: (
+          style: create-style(
             "position: absolute",
             "top: 0",
             "left: 0",
@@ -333,43 +316,41 @@
             "z-index: -1",
             "pointer-events: none",
             "border-radius: " + repr-or-str(inset.left),
-          ).join("; "),
+          ),
         ),
         (
-          ..{ header-cell(is-background: true) },
-          lines.map(line => build-code-line-elem(line, is-background: true)),
-          ..{ footer-cell(is-background: true) },
-        )
-          .flatten()
-          .join(),
+          ..create-header-footer(true, header, comments, extend, is_background: true),
+          ..lines.map(line => build-code-line-elem(line, is-background: true)).flatten(),
+          ..create-header-footer(false, footer, comments, extend, is_background: true),
+        ).join(),
       )
 
       // Foreground content
       html.elem(
         "div",
         attrs: (
-          style: (
+          style: create-style(
             "overflow-x: auto",
             "overflow-y: hidden",
-          ).join("; "),
+          ),
         ),
         (
-          ..{ header-cell() },
-          lines.map(line => build-code-line-elem(line)),
-          ..{ footer-cell() },
-        )
-          .flatten()
-          .join(),
+          ..create-header-footer(true, header, comments, extend),
+          ..lines.map(line => build-code-line-elem(line)).flatten(),
+          ..create-header-footer(false, footer, comments, extend),
+        ).join(),
       )
 
+      // JavaScript for copy functionality
       html.elem(
         "script",
         ```javascript
         var codeBlocks = document.querySelectorAll('.zebraw-code-block');
         codeBlocks.forEach(function (codeBlock) {
           var copyButton = codeBlock.querySelector('.zebraw-code-lang');
-          copyButton.style.cursor = 'pointer';
+          if (!copyButton) return;
 
+          copyButton.style.cursor = 'pointer';
           copyButton.title = 'Click to copy code';
 
           copyButton.addEventListener('click', function () {
@@ -378,12 +359,15 @@
             lines.forEach(function (line) {
               code += line.textContent + '\n';
             });
-            var textarea = document.createElement('textarea');
-            textarea.value = code;
-            document.body.appendChild(textarea);
-            textarea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textarea);
+            navigator.clipboard.writeText(code).catch(function() {
+              // Fallback for older browsers
+              var textarea = document.createElement('textarea');
+              textarea.value = code;
+              document.body.appendChild(textarea);
+              textarea.select();
+              document.execCommand('copy');
+              document.body.removeChild(textarea);
+            });
 
             copyButton.title = 'Code copied!';
             setTimeout(function () {
@@ -435,15 +419,13 @@
     extend,
   )
   show raw.where(block: true): zebraw-html-show.with(
-    args,
-    highlight-lines,
-    numbering-offset,
-    header,
-    footer,
-    wrap,
-    block-width,
+    args: args,
+    highlight-lines: highlight-lines,
+    numbering-offset: numbering-offset,
+    header: header,
+    footer: footer,
+    wrap: wrap,
+    block-width: block-width,
   )
   body
 }
-
-
