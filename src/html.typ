@@ -16,6 +16,7 @@
   numbering-offset: 0,
   header: none,
   footer: none,
+  line-range: (0, -1),
   wrap: true,
   block-width: 42em,
   it,
@@ -221,6 +222,7 @@
     numbering-offset,
     inset,
     is-html: true,
+    line-range: line-range,
   )
 
   // Helper for creating header/footer cells

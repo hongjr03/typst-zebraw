@@ -47,8 +47,17 @@
   inset,
   indentation: 0,
   is-html: false,
+  line-range: (0, -1),
 ) = {
   let lines-result = ()
+  let (start, end, keep-offset) = if type(line-range) == array {
+    (line-range.at(0), line-range.at(1), true)
+  } else if type(line-range) == dictionary {
+    (line-range.amount.at(0), line-range.amount.at(1), line-range.keep-offset)
+  } else {
+    (0, -1, true)
+  }
+  let lines = lines.slice(start, end)
   for (x, line) in lines.enumerate() {
     let res = ()
     let indent = if line.text.trim() == "" {
@@ -79,7 +88,13 @@
 
       res.push((
         indentation: indent,
-        number: if numbering { line.number + numbering-offset } else { none },
+        number: if numbering {
+          if keep-offset {
+            line.number + numbering-offset
+          } else {
+            line.number + numbering-offset - start
+          }
+        } else { none },
         body: body,
         fill: highlight-color,
         // if it's html, the comment will be saved in this field
@@ -105,7 +120,13 @@
       let fill-color = curr-background-color(background-color, line.number)
       res.push((
         indentation: indent,
-        number: if numbering { line.number + numbering-offset } else { none },
+        number: if numbering {
+          if keep-offset {
+            line.number + numbering-offset
+          } else {
+            line.number + numbering-offset - start
+          }
+        } else { none },
         body: body,
         fill: fill-color,
         comment: none,

@@ -5,6 +5,7 @@
   args: (:),
   highlight-lines: (),
   numbering-offset: 0,
+  line-range: (0, -1),
   header: none,
   footer: none,
   it,
@@ -131,6 +132,7 @@
     inset,
     indentation: indentation,
     is-html: false,
+    line-range: line-range,
   )
 
   // Helper function to create header or footer section
@@ -565,6 +567,9 @@
   /// The amount of indentation, used to draw indentation lines.
   /// -> int
   indentation: none,
+  /// Line range to show. Accepts an array of 2 integers [a, b) or a single integer a representing [a, -1). Defaults to [0, -1). (-1 is the last line)
+  /// -> array
+  line-range: (0, -1),
   /// (Only for HTML) The width of the code block.
   /// -> length | relative
   block-width: 42em,
@@ -597,6 +602,7 @@
       numbering-offset: numbering-offset,
       header: header,
       footer: footer,
+      line-range: line-range,
       wrap: wrap,
       block-width: block-width,
     )
@@ -620,6 +626,7 @@
       ),
       highlight-lines: highlight-lines,
       numbering-offset: numbering-offset,
+      line-range: line-range,
       header: header,
       footer: footer,
     )
