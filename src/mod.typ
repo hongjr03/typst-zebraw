@@ -85,7 +85,9 @@
 
           // Code line rendering with indentation handling
           if (
-            repr(line.body.func()) == "sequence" and line.body.children.first().func() == text
+            repr(line.body.func()) == "sequence"
+              and line.body.children.first().func() == text
+              and line.body.children.first().text.trim() == ""
           ) {
             if hanging-indent {
               par(
