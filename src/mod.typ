@@ -1,4 +1,4 @@
-#import "utils.typ": *
+#import "util.typ": *
 #import "html.typ": zebraw-html-show
 
 #let zebraw-show(
@@ -62,7 +62,7 @@
             if indentation > 0 {
               show indentation * " ": box({
                 // TODO: fast preview
-                if sys.inputs.keys().contains("fast-preview") {
+                if sys.inputs.keys().contains("x-preview") {
                   set text(fill: gray.transparentize(50%))
                   "|" + " " * (indentation - 1)
                 } else {
@@ -573,26 +573,24 @@
   /// -> content
   body,
 ) = context {
-  let args = parse-zebraw-args(
-    numbering,
-    inset,
-    background-color,
-    highlight-color,
-    comment-color,
-    lang-color,
-    comment-flag,
-    lang,
-    comment-font-args,
-    lang-font-args,
-    numbering-font-args,
-    extend,
-    hanging-indent,
-    indentation,
-  )
-
   show raw.where(block: true): if dictionary(std).keys().contains("html") and target() == "html" {
     zebraw-html-show.with(
-      args: args,
+      args: parse-zebraw-args(
+        numbering: numbering,
+        inset: inset,
+        background-color: background-color,
+        highlight-color: highlight-color,
+        comment-color: comment-color,
+        lang-color: lang-color,
+        comment-flag: comment-flag,
+        lang: lang,
+        comment-font-args: comment-font-args,
+        lang-font-args: lang-font-args,
+        numbering-font-args: numbering-font-args,
+        extend: extend,
+        hanging-indent: hanging-indent,
+        indentation: indentation,
+      ),
       highlight-lines: highlight-lines,
       numbering-offset: numbering-offset,
       header: header,
@@ -602,7 +600,22 @@
     )
   } else {
     zebraw-show.with(
-      args: args,
+      args: parse-zebraw-args(
+        numbering: numbering,
+        inset: inset,
+        background-color: background-color,
+        highlight-color: highlight-color,
+        comment-color: comment-color,
+        lang-color: lang-color,
+        comment-flag: comment-flag,
+        lang: lang,
+        comment-font-args: comment-font-args,
+        lang-font-args: lang-font-args,
+        numbering-font-args: numbering-font-args,
+        extend: extend,
+        hanging-indent: hanging-indent,
+        indentation: indentation,
+      ),
       highlight-lines: highlight-lines,
       numbering-offset: numbering-offset,
       header: header,

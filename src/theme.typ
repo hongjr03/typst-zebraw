@@ -1,5 +1,3 @@
-#import "mod.typ": zebraw, zebraw-init
-
 #let zebra = (
   background-color: (luma(240), luma(250)),
   highlight-color: blue.lighten(90%),

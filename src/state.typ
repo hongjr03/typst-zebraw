@@ -88,20 +88,20 @@
 }
 
 #let parse-zebraw-args(
-  numbering,
-  inset,
-  background-color,
-  highlight-color,
-  comment-color,
-  lang-color,
-  comment-flag,
-  lang,
-  comment-font-args,
-  lang-font-args,
-  numbering-font-args,
-  extend,
-  hanging-indent,
-  indentation,
+  numbering: none,
+  inset: none,
+  background-color: none,
+  highlight-color: none,
+  comment-color: none,
+  lang-color: none,
+  comment-flag: none,
+  lang: none,
+  comment-font-args: none,
+  lang-font-args: none,
+  numbering-font-args: none,
+  extend: none,
+  hanging-indent: none,
+  indentation: none,
 ) = {
   let numbering = if numbering == none {
     numbering-state.get()
