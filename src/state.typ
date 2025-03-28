@@ -15,6 +15,7 @@
 
 #let hanging-indent-state = state("zebraw-hanging-indent", false)
 #let indentation-state = state("zebraw-indentation", 0)
+#let fast-preview-state = state("zebraw-fast-preview", false)
 
 /// Initialize the `zebraw` block in global.
 /// -> content
@@ -61,6 +62,9 @@
   /// The amount of indentation. Default is 0, when it's set to a positive integer, the indentation line will be shown.
   /// -> integer
   indentation: 0,
+  /// Whether to enable the fast preview mode.
+  /// -> boolean
+  fast-preview: false,
   /// The body
   /// -> content
   body,
@@ -81,8 +85,10 @@
   numbering-font-args-state.update(numbering-font-args)
 
   extend-state.update(extend)
+
   hanging-indent-state.update(hanging-indent)
   indentation-state.update(indentation)
+  fast-preview-state.update(fast-preview)
 
   body
 }
@@ -190,6 +196,8 @@
     indentation
   }
 
+  let fast-preview = fast-preview-state.get() or sys.inputs.at("zebraw-fast-preview", default: false)
+
   (
     numbering: numbering,
     inset: inset,
@@ -205,5 +213,6 @@
     extend: extend,
     hanging-indent: hanging-indent,
     indentation: indentation,
+    fast-preview: fast-preview,
   )
 }

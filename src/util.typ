@@ -47,13 +47,26 @@
   inset,
   indentation: 0,
   is-html: false,
-  line-range: (0, none),
+  line-range: (1, none),
+  hanging-indent: false,
 ) = {
   let lines-result = ()
   let (start, end, keep-offset) = if type(line-range) == array {
-    (line-range.at(0), line-range.at(1), true)
+    (
+      line-range.at(0) - 1,
+      if line-range.at(1) != none {
+        line-range.at(1) - 1
+      } else { none },
+      true,
+    )
   } else if type(line-range) == dictionary {
-    (line-range.amount.at(0), line-range.amount.at(1), line-range.keep-offset)
+    (
+      line-range.range.at(0) - 1,
+      if line-range.range.at(1) != none {
+        line-range.range.at(1) - 1
+      } else { none },
+      line-range.keep-offset,
+    )
   } else {
     (0, none, true)
   }

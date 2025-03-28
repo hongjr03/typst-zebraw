@@ -54,6 +54,7 @@
   let extend = args.extend
   let hanging-indent = args.hanging-indent
   let indentation = args.indentation
+  let fast-preview = args.fast-preview
 
   // Calculate width for line numbering
   let numbering-width = if numbering {
@@ -87,12 +88,12 @@
         [#(line.number)]
       } else {
         let line-height = measure("|").height
-        if line.keys().contains("indentation") and height != none {
+        if line.keys().contains("indentation") {
           let indentation-spaces = {
             if indentation > 0 {
               show indentation * " ": box({
                 // TODO: fast preview
-                if sys.inputs.keys().contains("x-preview") {
+                if fast-preview {
                   set text(fill: gray.transparentize(50%))
                   "|" + " " * (indentation - 1)
                 } else {
@@ -120,12 +121,9 @@
               and line.body.children.first().text.trim() == ""
           ) {
             if hanging-indent {
-              par(
-                hanging-indent: measure(indentation-spaces).width,
-                {
-                  indentation-spaces
-                  line.body.children.slice(1).join()
-                },
+              grid(
+                columns: 2,
+                indentation-spaces, line.body.children.slice(1).join(),
               )
             } else {
               indentation-spaces
@@ -229,12 +227,22 @@
   block(
     breakable: true,
     radius: inset.left,
-    clip: true,
+    clip: false,
     fill: curr-background-color(background-color, 0),
     {
       context layout(code-block-size => {
         // Calculate line heights for consistent rendering
-        let last-line = if lines.last().number == none { lines.at(-2) } else { lines.last() }
+        let last-line = if lines.len() > 2 {
+          if lines.last().number == none { lines.at(-2) } else { lines.last() }
+        } else {
+          (
+            indentation: "",
+            number: 2,
+            body: [\ ],
+            fill: white,
+            comment: none,
+          )
+        }
 
         // Create line objects with their heights pre-computed
         let lines-with-height = lines.map(line => {
@@ -589,14 +597,67 @@
   /// -> boolean
   extend: none,
   /// Whether to show the hanging indent.
+  ///
+  /// #example(````typ
+  /// #zebraw(
+  ///   hanging-indent: true,
+  ///   ```typ
+  ///   This is a short line.
+  ///     Do a deer, a female deer. Ray, a drop of golden sun. Me, a name I call myself. Far, a long, long way to run. Sew, a needle pulling thread. La, a note to follow sew. Tea, a drink with jam and bread. That will bring us back to do, oh, oh, oh.
+  ///   ```
+  /// )
+  /// ````,
+  /// scale-preview: 100%)
+  ///
   /// -> boolean
   hanging-indent: none,
   /// The amount of indentation, used to draw indentation lines.
+  ///
+  /// #example(````typ
+  /// #zebraw(
+  ///   indentation: 2,
+  ///   ```typ
+  ///   #grid(
+  ///     columns: (1fr, 1fr),
+  ///     [Hello,], [world!],
+  ///   )
+  ///   ```
+  /// )
+  /// ````,
+  /// scale-preview: 100%)
+  ///
   /// -> int
   indentation: none,
-  /// Line range to show. Accepts an array of 2 integers [a, b) or a single integer a representing [a, none). Defaults to [0, none). (none means the last line)
-  /// -> array
-  line-range: (0, none),
+  /// Line range to show. Accepts an array of 2 integers [a, b) or a dictionary with keys named `range` and `keep-offset`. Defaults to [1, none). (none means the last line). Noticed that the line numbers are 1-based.
+  ///
+  /// #example(````typ
+  /// #zebraw(
+  ///   line-range: (2, 4),
+  ///   ```typ
+  ///   #grid(
+  ///     columns: (1fr, 1fr),
+  ///     [Hello,], [world!],
+  ///   )
+  ///   ```
+  /// )
+  /// ````,
+  /// scale-preview: 100%)
+  ///
+  /// #example(````typ
+  /// #zebraw(
+  ///   line-range: (range: (2, 4), keep-offset: false),
+  ///   ```typ
+  ///   #grid(
+  ///     columns: (1fr, 1fr),
+  ///     [Hello,], [world!],
+  ///   )
+  ///   ```
+  /// )
+  /// ````,
+  /// scale-preview: 100%)
+  ///
+  /// -> array | dictionary
+  line-range: (1, none),
   /// (Only for HTML) The width of the code block.
   /// -> length | relative
   block-width: 42em,
