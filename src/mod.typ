@@ -2,14 +2,43 @@
 #import "html.typ": zebraw-html-show
 
 #let zebraw-show(
-  args: (:),
+  numbering: none,
+  inset: none,
+  background-color: none,
+  highlight-color: none,
+  comment-color: none,
+  lang-color: none,
+  comment-flag: none,
+  lang: none,
+  comment-font-args: none,
+  lang-font-args: none,
+  numbering-font-args: none,
+  extend: none,
+  hanging-indent: none,
+  indentation: none,
   highlight-lines: (),
   numbering-offset: 0,
   line-range: (0, -1),
   header: none,
   footer: none,
   it,
-) = {
+) = context {
+  let args = parse-zebraw-args(
+    numbering: numbering,
+    inset: inset,
+    background-color: background-color,
+    highlight-color: highlight-color,
+    comment-color: comment-color,
+    lang-color: lang-color,
+    comment-flag: comment-flag,
+    lang: lang,
+    comment-font-args: comment-font-args,
+    lang-font-args: lang-font-args,
+    numbering-font-args: numbering-font-args,
+    extend: extend,
+    hanging-indent: hanging-indent,
+    indentation: indentation,
+  )
   // Extract all necessary parameters from args dictionary
   let numbering = args.numbering
   let inset = args.inset
@@ -579,25 +608,23 @@
   /// The body.
   /// -> content
   body,
-) = context {
+) = {
   show raw.where(block: true): if dictionary(std).keys().contains("html") and target() == "html" {
     zebraw-html-show.with(
-      args: parse-zebraw-args(
-        numbering: numbering,
-        inset: inset,
-        background-color: background-color,
-        highlight-color: highlight-color,
-        comment-color: comment-color,
-        lang-color: lang-color,
-        comment-flag: comment-flag,
-        lang: lang,
-        comment-font-args: comment-font-args,
-        lang-font-args: lang-font-args,
-        numbering-font-args: numbering-font-args,
-        extend: extend,
-        hanging-indent: hanging-indent,
-        indentation: indentation,
-      ),
+      numbering: numbering,
+      inset: inset,
+      background-color: background-color,
+      highlight-color: highlight-color,
+      comment-color: comment-color,
+      lang-color: lang-color,
+      comment-flag: comment-flag,
+      lang: lang,
+      comment-font-args: comment-font-args,
+      lang-font-args: lang-font-args,
+      numbering-font-args: numbering-font-args,
+      extend: extend,
+      hanging-indent: hanging-indent,
+      indentation: indentation,
       highlight-lines: highlight-lines,
       numbering-offset: numbering-offset,
       header: header,
@@ -608,22 +635,20 @@
     )
   } else {
     zebraw-show.with(
-      args: parse-zebraw-args(
-        numbering: numbering,
-        inset: inset,
-        background-color: background-color,
-        highlight-color: highlight-color,
-        comment-color: comment-color,
-        lang-color: lang-color,
-        comment-flag: comment-flag,
-        lang: lang,
-        comment-font-args: comment-font-args,
-        lang-font-args: lang-font-args,
-        numbering-font-args: numbering-font-args,
-        extend: extend,
-        hanging-indent: hanging-indent,
-        indentation: indentation,
-      ),
+      numbering: numbering,
+      inset: inset,
+      background-color: background-color,
+      highlight-color: highlight-color,
+      comment-color: comment-color,
+      lang-color: lang-color,
+      comment-flag: comment-flag,
+      lang: lang,
+      comment-font-args: comment-font-args,
+      lang-font-args: lang-font-args,
+      numbering-font-args: numbering-font-args,
+      extend: extend,
+      hanging-indent: hanging-indent,
+      indentation: indentation,
       highlight-lines: highlight-lines,
       numbering-offset: numbering-offset,
       line-range: line-range,

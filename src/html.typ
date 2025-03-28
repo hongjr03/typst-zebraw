@@ -11,7 +11,20 @@
 #let create-style(..styles) = styles.pos().filter(s => s != none).flatten().join("; ")
 
 #let zebraw-html-show(
-  args: (:),
+  numbering: none,
+  inset: none,
+  background-color: none,
+  highlight-color: none,
+  comment-color: none,
+  lang-color: none,
+  comment-flag: none,
+  lang: none,
+  comment-font-args: none,
+  lang-font-args: none,
+  numbering-font-args: none,
+  extend: none,
+  hanging-indent: none,
+  indentation: none,
   highlight-lines: (),
   numbering-offset: 0,
   header: none,
@@ -20,7 +33,24 @@
   wrap: true,
   block-width: 42em,
   it,
-) = {
+) = context {
+  let args = parse-zebraw-args(
+    numbering,
+    inset,
+    background-color,
+    highlight-color,
+    comment-color,
+    lang-color,
+    comment-flag,
+    lang,
+    comment-font-args,
+    lang-font-args,
+    numbering-font-args,
+    extend,
+    hanging-indent,
+    indentation,
+  )
+
   // Extract args
   let numbering = args.numbering
   let inset = args.inset
