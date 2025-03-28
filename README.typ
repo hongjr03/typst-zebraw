@@ -62,9 +62,22 @@ Zebraw is a lightweight and fast package for displaying code blocks with line nu
 
 == Quick Start
 
-Import `zebraw` package by ```typ #import "@preview/zebraw:0.4.8": *``` then follow with ```typ #show: zebraw``` to start using zebraw in the simplest way.
+#context preview(````typ
+#import "@preview/zebraw:0.4.8": *
+#show: zebraw
 
-To manually display some specific code blocks in zebraw, you can use ```typ #zebraw()``` function:
+```typ
+#grid(
+  columns: (1fr, 1fr),
+  [Hello], [world!],
+)
+```
+
+````)
+
+== Starting
+
+Import `zebraw` package by ```typ #import "@preview/zebraw:0.4.8": *``` then follow with ```typ #show: zebraw``` to start using zebraw in the simplest way. To manually display some specific code blocks in zebraw, you can use ```typ #zebraw()``` function:
 
 #context preview(````typ
 ```typ
@@ -82,15 +95,6 @@ To manually display some specific code blocks in zebraw, you can use ```typ #zeb
   )
   ```
 )
-
-#show: zebraw
-
-```typ
-#grid(
-  columns: (1fr, 1fr),
-  [Hello], [world!],
-)
-```
 ````)
 
 // #show heading.where(level: 2): it => pagebreak() + it
