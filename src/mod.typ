@@ -229,7 +229,7 @@
   block(
     breakable: true,
     radius: inset.left,
-    clip: false,
+    clip: true,
     fill: curr-background-color(background-color, 0),
     {
       context layout(code-block-size => {
