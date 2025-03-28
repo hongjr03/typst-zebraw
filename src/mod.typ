@@ -208,20 +208,17 @@
 
   // Render language tab if needed
   if has-lang {
-    v(-.34em)
-    align(
-      right,
-      block(
-        sticky: true,
-        inset: 0.34em,
-        outset: (bottom: inset.left),
-        radius: (top: inset.left),
-        fill: lang-color,
-        text(
-          bottom-edge: "bounds",
-          ..lang-font-args,
-          if type(lang) == bool { it.lang } else { lang },
-        ),
+    v(-.14em, weak: true)
+    h(1fr)
+    box(
+      inset: 0.34em,
+      outset: (bottom: inset.left),
+      radius: (top: inset.left),
+      fill: lang-color,
+      text(
+        bottom-edge: "bounds",
+        ..lang-font-args,
+        if type(lang) == bool { it.lang } else { lang },
       ),
     )
     v(0em, weak: true)
