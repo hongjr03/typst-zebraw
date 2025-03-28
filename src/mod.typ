@@ -96,7 +96,7 @@
                 if fast-preview {
                   set text(fill: gray.transparentize(50%))
                   "|" + " " * (indentation - 1)
-                } else {
+                } else if height != none {
                   place(
                     std.line(
                       start: (0em, -inset.top),
@@ -106,6 +106,8 @@
                     left + top,
                   )
                   " " * indentation
+                } else {
+                  indentation * " "
                 }
               })
               line.indentation
