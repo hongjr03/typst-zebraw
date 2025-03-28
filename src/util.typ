@@ -47,7 +47,7 @@
   inset,
   indentation: 0,
   is-html: false,
-  line-range: (0, -1),
+  line-range: (0, none),
 ) = {
   let lines-result = ()
   let (start, end, keep-offset) = if type(line-range) == array {
@@ -55,7 +55,7 @@
   } else if type(line-range) == dictionary {
     (line-range.amount.at(0), line-range.amount.at(1), line-range.keep-offset)
   } else {
-    (0, -1, true)
+    (0, none, true)
   }
   let lines = lines.slice(start, end)
   for (x, line) in lines.enumerate() {

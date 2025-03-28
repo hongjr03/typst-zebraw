@@ -18,7 +18,7 @@
   indentation: none,
   highlight-lines: (),
   numbering-offset: 0,
-  line-range: (0, -1),
+  line-range: (0, none),
   header: none,
   footer: none,
   it,
@@ -594,9 +594,9 @@
   /// The amount of indentation, used to draw indentation lines.
   /// -> int
   indentation: none,
-  /// Line range to show. Accepts an array of 2 integers [a, b) or a single integer a representing [a, -1). Defaults to [0, -1). (-1 is the last line)
+  /// Line range to show. Accepts an array of 2 integers [a, b) or a single integer a representing [a, none). Defaults to [0, none). (none means the last line)
   /// -> array
-  line-range: (0, -1),
+  line-range: (0, none),
   /// (Only for HTML) The width of the code block.
   /// -> length | relative
   block-width: 42em,
