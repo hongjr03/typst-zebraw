@@ -207,10 +207,8 @@
   }
 
   // Render language tab if needed
-  if has-lang {
-    v(-.14em, weak: true)
-    h(1fr)
-    box(
+  context if has-lang {
+    let lang-tab = box(
       inset: 0.34em,
       outset: (bottom: inset.left),
       radius: (top: inset.left),
@@ -221,6 +219,9 @@
         if type(lang) == bool { it.lang } else { lang },
       ),
     )
+    v(-measure(lang-tab).height)
+    h(1fr)
+    lang-tab
     v(0em, weak: true)
   }
 
