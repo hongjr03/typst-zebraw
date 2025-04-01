@@ -6,26 +6,33 @@
 #show raw: set text(font: "Fira Code")
 #show raw.where(lang: "typlite"): none
 
-#let preview(..args, body) = v(0.5em) + grid(
-  columns: (20em, 20em),
-  ..args,
-  column-gutter: 0.5em,
-  block(
-    stroke: gray,
-    radius: 0.25em,
-    width: 100%,
-    inset: 0.5em,
-    {
-      set text(size: 0.95em)
-      body
-    },
-  ),
-  block(
-    stroke: gray,
-    radius: 0.25em,
-    inset: 0.5em,
-    eval(body.text, mode: "markup", scope: (zebraw: zebraw, zebraw-init: zebraw-init, zebraw-themes: zebraw-themes)),
-  ),
+#let preview(..args, body) = (
+  v(0.5em)
+    + grid(
+      columns: (20em, 20em),
+      ..args,
+      column-gutter: 0.5em,
+      block(
+        stroke: gray,
+        radius: 0.25em,
+        width: 100%,
+        inset: 0.5em,
+        {
+          set text(size: 0.95em)
+          body
+        },
+      ),
+      block(
+        stroke: gray,
+        radius: 0.25em,
+        inset: 0.5em,
+        eval(
+          body.text,
+          mode: "markup",
+          scope: (zebraw: zebraw, zebraw-init: zebraw-init, zebraw-themes: zebraw-themes),
+        ),
+      ),
+    )
 )
 
 #show: zebraw-init.with(
@@ -94,6 +101,22 @@ To manually render specific code blocks with zebraw, use the ```typ #zebraw()```
 // #show heading.where(level: 2): it => pagebreak() + it
 
 == Features
+
+The `zebraw` function provides a variety of parameters to customize the appearance and behavior of code blocks. The following sections describe these parameters in detail:
+
+- *Core Features*
+  - Line numbering, with customizable offset and range slicing
+  - Line highlighting and explanatory comments for code
+  - Headers and footers
+  - Language identifier tabs
+  - The indentation line and hanging indentation (and fast preview mode for better performance)
+- *Customization Options*
+  - Custom colors for background, highlights, and comments
+  - Custom fonts for different elements
+  - Customizable insets
+  - Custom themes
+- *Export Options*
+  - Experimental HTML export
 
 === Line Numbering
 
