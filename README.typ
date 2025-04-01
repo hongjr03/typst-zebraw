@@ -6,7 +6,7 @@
 #show raw: set text(font: "Fira Code")
 #show raw.where(lang: "typlite"): none
 
-#let preview(..args, body) = grid(
+#let preview(..args, body) = v(0.5em) + grid(
   columns: (20em, 20em),
   ..args,
   column-gutter: 0.5em,
@@ -46,6 +46,7 @@
     },
   ),
   lang: false,
+  indentation: 2,
 )
 
 = 🦓 Zebraw
@@ -56,14 +57,16 @@
 </a>
 ```
 
-Zebraw is a lightweight and fast package for displaying code blocks with line numbers in typst, supporting code line highlighting. The term _*zebraw*_ is a combination of _*zebra*_ and _*raw*_, for the highlighted lines will be displayed in the code block like a zebra lines.
+Zebraw is a lightweight and fast package for displaying code blocks with line numbers in Typst, supporting code line highlighting. The term _*zebraw*_ is a combination of _*zebra*_ and _*raw*_, as the highlighted lines display in the code block with a zebra-striped pattern.
 
 // #outline(depth: 3, indent: 2em)
 
 == Quick Start
 
+Import the `zebraw` package with ```typ #import "@preview/zebraw:0.5.0": *``` then add ```typ #show: zebraw``` to start using zebraw in the simplest way.
+
 #context preview(````typ
-#import "@preview/zebraw:0.4.8": *
+#import "@preview/zebraw:0.5.0": *
 #show: zebraw
 
 ```typ
@@ -75,18 +78,9 @@ Zebraw is a lightweight and fast package for displaying code blocks with line nu
 
 ````)
 
-== Starting
-
-Import `zebraw` package by ```typ #import "@preview/zebraw:0.4.8": *``` then follow with ```typ #show: zebraw``` to start using zebraw in the simplest way. To manually display some specific code blocks in zebraw, you can use ```typ #zebraw()``` function:
+To manually render specific code blocks with zebraw, use the ```typ #zebraw()``` function:
 
 #context preview(````typ
-```typ
-#grid(
-  columns: (1fr, 1fr),
-  [Hello], [world!],
-)
-```
-
 #zebraw(
   ```typ
   #grid(
@@ -103,7 +97,7 @@ Import `zebraw` package by ```typ #import "@preview/zebraw:0.4.8": *``` then fol
 
 === Line Numbering
 
-Line numbers will be displayed on the left side of the code block. By passing an integer to the `numbering-offset` parameter, you can change the starting line number. The default value is `0`.
+Line numbers appear on the left side of the code block. Change the starting line number by passing an integer to the `numbering-offset` parameter. The default value is `0`.
 
 #context preview(````typ
 #zebraw(
@@ -132,9 +126,64 @@ To disable line numbering, pass `false` to the `numbering` parameter:
 )
 ````)
 
+=== Numbering Separator
+
+You can add a separator line between line numbers and code content by setting the `numbering-separator` parameter to `true`:
+
+#context preview(````typ
+#zebraw(
+  numbering-separator: true,
+  ```typ
+  #grid(
+    columns: (1fr, 1fr),
+    [Hello], [world!],
+  )
+  ```
+)
+````)
+
+=== Line Slicing
+
+Slice code blocks by passing the `line-range` parameter to the `zebraw` function. The `line-range` parameter can be either:
+- An array of 2 integers representing the range $[a, b)$ ($b$ can be `none` as this feature is based on Typst array slicing)
+- A dictionary with `range` and `keep-offset` keys
+
+When `keep-offset` is set to `true`, line numbers maintain their original values. Otherwise, they reset to start from 1. By default, `keep-offset` is set to `true`.
+
+#context preview(````typ
+#let code = ```typ
+#grid(
+  columns: (1fr, 1fr),
+  [Hello],
+  [world!],
+)
+```
+
+#zebraw(code)
+
+#zebraw(line-range: (2, 4), code)
+
+#zebraw(
+  line-range: (range: (2, 4), keep-offset: false),
+  code
+)
+
+#zebraw(
+  numbering-offset: 30,
+  line-range: (range: (2, 4), keep-offset: false),
+  code
+)
+
+#zebraw(
+  numbering-offset: 30,
+  line-range: (range: (2, 4), keep-offset: true),
+  code
+)
+````)
+
 === Line Highlighting
 
-You can highlight specific lines in the code block by passing the `highlight-lines` parameter to the `zebraw` function. The `highlight-lines` parameter can be a single line number or an array of line numbers.
+Highlight specific lines in the code block by passing the `highlight-lines` parameter to the `zebraw` function. The `highlight-lines` parameter accepts either a single line number or an array of line numbers.
 
 #context preview(````typ
 #zebraw(
@@ -178,9 +227,9 @@ You can highlight specific lines in the code block by passing the `highlight-lin
 )
 ````)
 
-=== Comment
+=== Comments
 
-You can add comments to the highlighted lines by passing an array of line numbers and comments to the `highlight-lines` parameter.
+Add explanatory comments to highlighted lines by passing an array of line numbers and comments to the `highlight-lines` parameter.
 
 #context preview(````typ
 #zebraw(
@@ -210,12 +259,12 @@ You can add comments to the highlighted lines by passing an array of line number
 )
 ````)
 
-Comments can begin with a flag, which is `">"` by default. You can change the flag by passing the `comment-flag` parameter to the `zebraw` function:
+Comments begin with a flag character, which is `">"` by default. Change this flag by setting the `comment-flag` parameter:
 
 #context preview(````typ
 #zebraw(
   highlight-lines: (
-    // Comments can only be passed when highlight-lines is an array, so at the end of the single element array, a comma is needed.
+    // Comments can only be passed when highlight-lines is an array, so a comma is needed at the end of a single-element array
     (6, [The Fibonacci sequence is defined through the recurrence relation $F_n = F_(n-1) + F_(n-2)$]),
   ),
   comment-flag: "~~>",
@@ -237,7 +286,7 @@ Comments can begin with a flag, which is `">"` by default. You can change the fl
 )
 ````)
 
-To disable the flag feature, pass `""` to the `comment-flag` parameter (the indentation of the comment will be disabled as well):
+To disable the flag feature entirely, pass an empty string `""` to the `comment-flag` parameter (this also disables comment indentation):
 
 #context preview(````typ
 #zebraw(
@@ -263,16 +312,16 @@ To disable the flag feature, pass `""` to the `comment-flag` parameter (the inde
 )
 ````)
 
-=== Header and Footer
+=== Headers and Footers
 
-Usually, the comments passing by a dictionary of line numbers and comments are used to add a header or footer to the code block:
+You can add headers and footers to code blocks. One approach is to use special keys in the `highlight-lines` parameter:
 
 #context preview(````typ
 #zebraw(
   highlight-lines: (
     (header: [*Fibonacci sequence*]),
     ..range(8, 13),
-    // Numbers can be passed as a string in the dictionary, but it's too ugly.
+    // Numbers can be passed as strings in the dictionary, though this approach is less elegant
     ("12": [The first \#count numbers of the sequence.]),
     (footer: [The fibonacci sequence is defined through the recurrence relation $F_n = F_(n-1) + F_(n-2)$]),
   ),
@@ -293,7 +342,7 @@ Usually, the comments passing by a dictionary of line numbers and comments are u
 )
 ````)
 
-Or you can use `header` and `footer` parameters to add a header or footer to the code block:
+Alternatively, use the dedicated `header` and `footer` parameters for cleaner code:
 
 #context preview(````typ
 #zebraw(
@@ -322,7 +371,7 @@ Or you can use `header` and `footer` parameters to add a header or footer to the
 
 === Language Tab
 
-If `lang` is set to `true`, then there will be a language tab on the top right corner of the code block:
+Display a floating language identifier tab in the top-right corner of the code block by setting `lang` to `true`:
 
 #context preview(````typ
 #zebraw(
@@ -336,7 +385,7 @@ If `lang` is set to `true`, then there will be a language tab on the top right c
 )
 ````)
 
-Customize the language to display by pass a string or content to the `lang` parameter.
+Customize the language display by passing a string or content to the `lang` parameter:
 
 #context preview(````typ
 #zebraw(
@@ -350,26 +399,125 @@ Customize the language to display by pass a string or content to the `lang` para
 )
 ````)
 
-=== Copyable
+=== Indentation Lines, Hanging Indentation and Fast Preview
 
-Line numbers will not be selected when selecting exported code in one page.
-
-#context grid(
-  columns: 2,
-  align: center,
-  row-gutter: .5em,
-  column-gutter: .5em,
-  grid.header([`copyable: false`], [`copyable: true`]),
-  image("assets/copyable-false.png"), image("assets/copyable-true.png"),
-)
-
-=== Theme
-
-PRs are welcome!
+Display indentation guides by passing a positive integer to the `indentation` parameter, representing the number of spaces per indentation level:
 
 #context preview(````typ
-#show: zebraw-init.with(..zebraw-themes.zebra, lang: false)
-#show: zebraw
+#zebraw(
+  indentation: 2,
+  ```typ
+  #let forecast(day) = block[
+    #box(square(
+      width: 2cm,
+      inset: 8pt,
+      fill: if day.weather == "sunny" {
+        yellow
+      } else {
+        aqua
+      },
+      align(
+        bottom + right,
+        strong(day.weather),
+      ),
+    ))
+    #h(6pt)
+    #set text(22pt, baseline: -8pt)
+    #day.temperature °#day.unit
+  ]
+  ```
+)
+````)
+
+Enable hanging indentation by setting `hanging-indent` to `true`:
+
+#context preview(````typ
+#zebraw(
+  hanging-indent: true,
+  ```typ
+  #let forecast(day) = block[
+    #box(square(
+      width: 2cm,
+      inset: 8pt,
+      fill: if day.weather == "sunny" {
+        yellow
+      } else {
+        aqua
+      },
+      align(
+        bottom + right,
+        strong(day.weather),
+      ),
+    ))
+    #h(6pt)
+    #set text(22pt, baseline: -8pt)
+    #day.temperature °#day.unit
+  ]
+  ```
+)
+````)
+
+Indentation lines can slow down preview performance. For faster previews, enable fast preview mode by passing `true` to the `fast-preview` parameter in `zebraw-init` or by using `zebraw-fast-preview` in the CLI. This renders indentation lines as simple `|` characters:
+
+#context zebraw-init(
+  fast-preview: true,
+  indentation: 2,
+  [
+    #context preview(````typ
+    #zebraw(
+      hanging-indent: true,
+      ```typ
+      #let forecast(day) = block[
+        #box(square(
+          width: 2cm,
+          inset: 8pt,
+          fill: if day.weather == "sunny" {
+            yellow
+          } else {
+            aqua
+          },
+          align(
+            bottom + right,
+            strong(day.weather),
+          ),
+        ))
+        #h(6pt)
+        #set text(22pt, baseline: -8pt)
+        #day.temperature °#day.unit
+      ]
+      ```
+    )
+    ````)
+  ],
+)
+
+#show: zebraw-init.with(
+  ..if sys.inputs.at("x-color-theme", default: none) == "dark" {
+    (
+      background-color: luma(55),
+      highlight-color: blue.darken(60%),
+      comment-color: blue.darken(80%),
+    )
+  },
+  comment-font-args: (
+    font: "Fira Code",
+    ligatures: true,
+    ..if sys.inputs.at("x-color-theme", default: none) == "dark" {
+      (
+        fill: blue.lighten(90%),
+      )
+    },
+  ),
+  lang: false,
+  indentation: 2,
+)
+
+=== Themes
+
+Zebraw includes built-in themes. PRs for additional themes are welcome!
+
+#context preview(````typ
+#show: zebraw.with(..zebraw-themes.zebra)
 
 ```rust
 pub fn fibonacci_reccursive(n: i32) -> u64 {
@@ -387,8 +535,7 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 ````)
 
 #context preview(````typ
-#show: zebraw-init.with(..zebraw-themes.zebra-reverse, lang: false)
-#show: zebraw
+#show: zebraw.with(..zebraw-themes.zebra-reverse)
 
 ```rust
 pub fn fibonacci_reccursive(n: i32) -> u64 {
@@ -409,39 +556,17 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 
 See #link("example-html.typ")[example-html.typ] or #link("https://hongjr03.github.io/typst-zebraw/")[GitHub Pages] for more information.
 
-#context figure(image("assets/html-example.png", width: 76%))
-
 == Customization
 
-There are 3 ways to customize code blocks in your document:
+There are three ways to customize code blocks in your document:
 
-- Manually render some specific blocks by ```typ #zebraw()``` function and passing parameters to it.
-- By passing parameters to ```typ #show: zebraw.with()``` will affect every raw block after the ```typ #show``` rule, *except* blocks created manually by ```typ #zebraw()``` function.
-- By passing parameters to ```typ #show: zebraw-init.with()``` will affect every raw block after the ```typ #show``` rule, *including* blocks created manually by ```typ #zebraw()``` function. By using `zebraw-init` without any parameters, the values will be reset to default.
-
-#show: zebraw-init.with(
-  ..if sys.inputs.at("x-color-theme", default: none) == "dark" {
-    (
-      background-color: luma(55),
-      highlight-color: blue.darken(60%),
-      comment-color: blue.darken(80%),
-    )
-  },
-  comment-font-args: (
-    font: "Fira Code",
-    ligatures: true,
-    ..if sys.inputs.at("x-color-theme", default: none) == "dark" {
-      (
-        fill: blue.lighten(90%),
-      )
-    },
-  ),
-  lang: false,
-)
+1. *Per-block customization*: Manually style specific blocks using the ```typ #zebraw()``` function with parameters.
+2. *Local customization*: Apply styling to all subsequent raw blocks with ```typ #show: zebraw.with()```. This affects all raw blocks after the ```typ #show``` rule, *except* those created manually with ```typ #zebraw()```.
+3. *Global customization*: Use ```typ #show: zebraw-init.with()``` to affect *all* raw blocks after the rule, *including* those created manually with ```typ #zebraw()```. Reset to defaults by using `zebraw-init` without parameters.
 
 === Inset
 
-Customize the inset of each line by passing a #dictionary to the `inset` parameter:
+Customize the padding around each code line(numberings are not affected) by passing a dictionary to the `inset` parameter:
 
 #context preview(````typ
 #zebraw(
@@ -457,11 +582,11 @@ Customize the inset of each line by passing a #dictionary to the `inset` paramet
 
 === Colors
 
-Customize the background color by passing a #color or an #array of #color#[s] to the `background-color` parameter.
+Customize the background color with a single color or an array of alternating colors:
 
 #context preview(````typ
 #zebraw(
-  background-color: luma(235),
+  background-color: luma(250),
   ```typ
   #grid(
     columns: (1fr, 1fr),
@@ -481,7 +606,7 @@ Customize the background color by passing a #color or an #array of #color#[s] to
 )
 ````)
 
-Customize the highlight color by passing a #color to the `highlight-color` parameter:
+Set the highlight color for marked lines with the `highlight-color` parameter:
 
 #context preview(````typ
 #zebraw(
@@ -494,7 +619,7 @@ Customize the highlight color by passing a #color to the `highlight-color` param
 )
 ````)
 
-Customize the comments' background color by passing a #color to the `comment-color` parameter:
+Change the comment background color with the `comment-color` parameter:
 
 #context preview(````typ
 #zebraw(
@@ -511,7 +636,7 @@ Customize the comments' background color by passing a #color to the `comment-col
 )
 ````)
 
-Customize the language tab's background color by passing a #color to the `lang-color` parameter.
+Set the language tab background color with the `lang-color` parameter:
 
 #context preview(````typ
 #zebraw(
@@ -528,9 +653,9 @@ Customize the language tab's background color by passing a #color to the `lang-c
 
 === Font
 
-To customize the arguments of comments' font, the language tab's font or the numberings' font, pass a dictionary to `comment-font-args` parameter, `lang-font-args` parameter or `numbering-font-args` parameter.
+Customize font properties for comments, language tabs, and line numbers by passing a dictionary to the `comment-font-args`, `lang-font-args`, or `numbering-font-args` parameters respectively.
 
-Language tab will be rendered as comments if nothing is passed.
+If no custom `lang-font-args` are provided, language tabs inherit the comment font styling:
 
 #context preview(````typ
 #zebraw(
@@ -552,6 +677,8 @@ Language tab will be rendered as comments if nothing is passed.
 )
 ````)
 
+Example with custom language tab styling:
+
 #context preview(````typ
 #zebraw(
   highlight-lines: (
@@ -560,7 +687,7 @@ Language tab will be rendered as comments if nothing is passed.
   lang: true,
   lang-color: eastern,
   lang-font-args: (
-    font: "libertinus serif",
+    font: "Buenard",
     weight: "bold",
     fill: white,
   ),
@@ -593,36 +720,10 @@ Extend at vertical is enabled at default. When there's header or footer it will 
 )
 ````)
 
-== Documentation
-
-The default value of most parameters are `none` for it will use the default value in `zebraw-init`.
-
-#import "@preview/tidy:0.4.1"
-#let docs = tidy.parse-module(read("src/mod.typ"), scope: (zebraw: zebraw))
-#context {
-  // set page(paper: "a4", height: auto, margin: 1em)
-  tidy.show-module(docs, style: tidy.styles.default, sort-functions: false)
-}
-
-#show: zebraw-init.with(
-  ..if sys.inputs.at("x-color-theme", default: none) == "dark" {
-    (
-      background-color: luma(55),
-      highlight-color: blue.darken(60%),
-      comment-color: blue.darken(80%),
-    )
-  },
-  comment-font-args: if sys.inputs.at("x-color-theme", default: none) == "dark" {
-    (
-      fill: blue.lighten(90%),
-    )
-  },
-)
-
 == Example
 
 #context {
-  // set page(paper: "a4", height: auto, margin: 1em)
+  // set page(paper: "a4", height: auto, margin: 2.5em)
   zebraw(
     highlight-lines: (
       (3, [to avoid negative numbers]),
@@ -630,6 +731,7 @@ The default value of most parameters are `none` for it will use the default valu
     ),
     lang: true,
     header: "Calculate Fibonacci number using reccursive function",
+    indentation: 4,
     ```rust
     pub fn fibonacci_reccursive(n: i32) -> u64 {
         if n < 0 {

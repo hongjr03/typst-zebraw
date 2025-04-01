@@ -1,11 +1,26 @@
 #{
 // render_code
-context grid(
-  columns: 2,
-  align: center,
-  row-gutter: .5em,
-  column-gutter: .5em,
-  grid.header([`copyable: false`], [`copyable: true`]),
-  image("assets/copyable-false.png"), image("assets/copyable-true.png"),
+context preview(````typ
+#zebraw(
+  highlight-lines: (
+    (6, [The Fibonacci sequence is defined through the recurrence relation $F_n = F_(n-1) + F_(n-2)$]),
+  ),
+  comment-flag: "",
+  ```typ
+  = Fibonacci sequence
+  #let count = 8
+  #let nums = range(1, count + 1)
+  #let fib(n) = (
+    if n <= 2 { 1 }
+    else { fib(n - 1) + fib(n - 2) }
+  )
+
+  #align(center, table(
+    columns: count,
+    ..nums.map(n => $F_#n$),
+    ..nums.map(n => str(fib(n))),
+  ))
+  ```
 )
+````)
 }

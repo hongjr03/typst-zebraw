@@ -1,22 +1,20 @@
 #{
 // render_code
 context preview(````typ
-#zebraw(
-  highlight-lines: (
-    (2, "columns..."),
-  ),
-  lang: true,
-  comment-color: white,
-  comment-font-args: (
-    font: "IBM Plex Sans",
-    style: "italic"
-  ),
-  ```typst
-  #grid(
-    columns: (1fr, 1fr),
-    [Hello], [world!],
-  )
-  ```
-)
+#show: zebraw.with(..zebraw-themes.zebra-reverse)
+
+```rust
+pub fn fibonacci_reccursive(n: i32) -> u64 {
+    if n < 0 {
+        panic!("{} is negative!", n);
+    }
+    match n {
+        0 => panic!("zero is not a right argument to fibonacci_reccursive()!"),
+        1 | 2 => 1,
+        3 => 2,
+        _ => fibonacci_reccursive(n - 1) + fibonacci_reccursive(n - 2),
+    }
+}
+```
 ````)
 }

@@ -2,23 +2,27 @@
 // render_code
 context preview(````typ
 #zebraw(
-  background-color: luma(235),
+  indentation: 2,
   ```typ
-  #grid(
-    columns: (1fr, 1fr),
-    [Hello], [world!],
-  )
-  ```,
-)
-
-#zebraw(
-  background-color: (luma(235), luma(245), luma(255), luma(245)),
-  ```typ
-  #grid(
-    columns: (1fr, 1fr),
-    [Hello], [world!],
-  )
-  ```,
+  #let forecast(day) = block[
+    #box(square(
+      width: 2cm,
+      inset: 8pt,
+      fill: if day.weather == "sunny" {
+        yellow
+      } else {
+        aqua
+      },
+      align(
+        bottom + right,
+        strong(day.weather),
+      ),
+    ))
+    #h(6pt)
+    #set text(22pt, baseline: -8pt)
+    #day.temperature °#day.unit
+  ]
+  ```
 )
 ````)
 }

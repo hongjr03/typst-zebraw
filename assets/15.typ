@@ -1,4 +1,14 @@
 #{
 // render_code
-context figure(image("assets/html-example.png", width: 76%))
+context preview(````typ
+#zebraw(
+  lang: true,
+  ```typst
+  #grid(
+    columns: (1fr, 1fr),
+    [Hello], [world!],
+  )
+  ```
+)
+````)
 }

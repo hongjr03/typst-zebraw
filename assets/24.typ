@@ -1,7 +1,13 @@
 #{
 // render_code
-context {
-  set page(paper: "a4", height: auto, margin: 1em)
-  tidy.show-module(docs, style: tidy.styles.default, sort-functions: false)
-}
+context preview(````typ
+#zebraw(
+  highlight-lines: 1,
+  highlight-color: blue.lighten(90%),
+  ```text
+  I'm so blue!
+              -- George III
+  ```,
+)
+````)
 }
