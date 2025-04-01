@@ -23,6 +23,7 @@
   footer: none,
   it,
 ) = context {
+  set par(first-line-indent: 0em)
   let args = parse-zebraw-args(
     numbering: numbering,
     inset: inset,
@@ -82,65 +83,104 @@
     block(
       width: if not num { 100% } else { numbering-width },
       inset: inset,
-      context if num {
-        // Line number rendering
-        set text(..numbering-font-args)
-        [#(line.number)]
-      } else {
-        let line-height = measure("|").height
-        if line.keys().contains("indentation") {
-          let indentation-spaces = {
-            if indentation > 0 {
-              show indentation * " ": box({
-                // TODO: fast preview
-                if fast-preview {
-                  set text(fill: gray.transparentize(50%))
-                  "|" + " " * (indentation - 1)
-                } else if height != none {
-                  place(
-                    std.line(
-                      start: (0em, -inset.top),
-                      end: (0em, if hanging-indent { height - inset.top } else { line-height + inset.bottom }),
-                      stroke: .05em + gray.transparentize(50%),
-                    ),
-                    left + top,
-                  )
-                  " " * indentation
-                } else {
-                  indentation * " "
-                }
-              })
-              line.indentation
-            } else {
-              line.indentation
-            }
-          }
+      {
+        if num {
+          // Line number rendering
+          set text(..numbering-font-args)
+          [#(line.number)]
+        } else {
+          // Code line rendering
+          let line-height = measure("|").height
 
-          // Code line rendering with indentation handling
-          if (
-            repr(line.body.func()) == "sequence"
-              and line.body.children.first().func() == text
-              and line.body.children.first().text.trim() == ""
-          ) {
-            if hanging-indent {
-              grid(
-                columns: 2,
-                indentation-spaces, line.body.children.slice(1).join(),
-              )
-            } else {
-              indentation-spaces
-              line.body.children.slice(1).join()
+          // Only process indentation if available
+          if line.keys().contains("indentation") {
+            let render-indentation-marker(height-val) = {
+              if indentation <= 0 { return " " }
+
+              if fast-preview {
+                set text(fill: gray.transparentize(50%))
+                "|"
+              } else if height-val != none {
+                let line-end-y = if hanging-indent {
+                  height-val - inset.top
+                } else {
+                  line-height + inset.bottom
+                }
+
+                place(
+                  std.line(
+                    start: (0em, -inset.top),
+                    end: (0em, line-end-y),
+                    stroke: .05em + gray.transparentize(50%),
+                  ),
+                  left + top,
+                )
+                " "
+              } else {
+                " "
+              }
             }
-          } else if (
-            repr(line.body.func()) == "text"
-          ) {
-            indentation-spaces
-            line.body.text.trim()
+
+            // Apply indentation styling
+            let indentation-spaces(idt) = {
+              if indentation > 0 {
+                // Process each leading space in indentation string
+                let leading-spaces = idt
+                let processed = ""
+                let len = leading-spaces.len()
+
+                let breakpoint = -1
+                for i in range(len) {
+                  // Add vertical line for each position that's a multiple of indentation
+                  if calc.rem(i, indentation) == 0 and idt.at(i) == " " {
+                    processed += box(render-indentation-marker(height))
+                  } else if idt.at(i) != " " {
+                    breakpoint = i
+                    break
+                  } else {
+                    processed += idt.at(i)
+                  }
+                }
+                // Add remaining spaces
+                if breakpoint != -1 {
+                  for i in range(breakpoint, len) {
+                    processed += idt.at(i)
+                  }
+                }
+                processed
+              } else {
+                idt
+              }
+            }
+
+
+            // Handle different content types
+            if repr(line.body.func()) == "sequence" and line.body.children.first().func() == text {
+              if line.body.children.first().text.trim() == "" {
+                // Empty first text node
+                if hanging-indent {
+                  grid(
+                    columns: 2,
+                    indentation-spaces(line.indentation), line.body.children.slice(1).join(),
+                  )
+                } else {
+                  indentation-spaces(line.indentation)
+                  line.body.children.slice(1).join()
+                }
+              } else {
+                indentation-spaces(line.body.children.first().text)
+                line.body.children.slice(1).join()
+              }
+            } else if repr(line.body.func()) == "text" {
+              indentation-spaces(line.indentation)
+              line.body.text.trim()
+            } else {
+              line.body
+            }
           } else {
+            // No indentation processing needed
             line.body
           }
-        } else {
-          line.body
         }
       },
     ),
