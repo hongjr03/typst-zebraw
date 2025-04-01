@@ -73,17 +73,19 @@
   let lines = lines.slice(start, end)
   for (x, line) in lines.enumerate() {
     let res = ()
-    let indent = if line.text.trim() == "" {
-      if x > 0 and lines-result.last().keys().contains("indentation") {
+    let indentation = if line.text.trim() == "" {
+      if x > 0 and lines-result.last().keys().contains("indentation") and lines-result.last().type != "comment" {
         lines-result.last().indentation
-      } else if x > 1 and lines-result.at(x - 1).keys().contains("indentation") {
-        lines-result.at(x - 1).indentation
+      } else if (
+        lines-result.at(-2).keys().contains("indentation") and lines-result.at(-2).type != "comment"
+      ) {
+        lines-result.at(-2).indentation
       }
     } else {
       line.text.split(regex("\S")).first()
     }
     let body = if line.text.trim() == "" {
-      [#indent\ ]
+      [#indentation\ ]
     } else {
       line.body
     }
@@ -92,7 +94,8 @@
     if (type(highlight-nums) == array and highlight-nums.contains(line.number)) {
       let comment = if comments.keys().contains(str(line.number)) {
         (
-          indent: line.text.split(regex("\S")).first(),
+          type: "comment",
+          indentation: line.text.split(regex("\S")).first(),
           comment-flag: comment-flag,
           body: text(..comment-font-args, comments.at(str(line.number))),
           fill: comment-color,
@@ -100,7 +103,8 @@
       } else { none }
 
       res.push((
-        indentation: indent,
+        type: "highlight",
+        indentation: indentation,
         number: if numbering {
           if keep-offset {
             line.number + numbering-offset
@@ -117,10 +121,11 @@
       // otherwise, we need to push the comment as a separate line
       if not is-html and comment != none {
         res.push((
+          type: "comment",
           number: none,
           body: if comment != none {
             if comment-flag != "" {
-              box(comment.indent)
+              indentation
               strong(text(ligatures: true, comment.comment-flag))
               h(0.35em, weak: true)
             }
@@ -132,7 +137,8 @@
     } else {
       let fill-color = curr-background-color(background-color, line.number)
       res.push((
-        indentation: indent,
+        type: "normal",
+        indentation: indentation,
         number: if numbering {
           if keep-offset {
             line.number + numbering-offset
