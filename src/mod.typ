@@ -14,6 +14,7 @@
   lang-font-args: none,
   numbering-font-args: none,
   extend: none,
+  numbering-separator: none,
   hanging-indent: none,
   indentation: none,
   highlight-lines: (),
@@ -39,6 +40,7 @@
     extend: extend,
     hanging-indent: hanging-indent,
     indentation: indentation,
+    numbering-separator: numbering-separator,
   )
   // Extract all necessary parameters from args dictionary
   let numbering = args.numbering
@@ -56,6 +58,7 @@
   let hanging-indent = args.hanging-indent
   let indentation = args.indentation
   let fast-preview = args.fast-preview
+  let numbering-separator = args.numbering-separator
 
   // Calculate width for line numbering
   let numbering-width = if numbering {
@@ -305,6 +308,7 @@
 
           // 2. Line numbers column
           grid(
+            ..if numbering-separator { (stroke: (right: gray.transparentize(34%))) },
             rows: lines-with-height.map(item => item.height),
             ..lines-with-height.map(item => line-render(item.line, num: true))
           ),
@@ -347,7 +351,7 @@
   /// scale-preview: 100%,
   /// )
   /// -> boolean
-  numbering: true,
+  numbering: none,
   /// Lines to highlight or comments to show.
   ///
   /// #example(
@@ -638,6 +642,23 @@
   ///
   /// -> boolean
   extend: none,
+  /// Whether to show the numbering separator line.
+  ///
+  /// #example(````typ
+  /// #zebraw(
+  ///   numbering-separator: true,
+  ///   ```typ
+  ///   #grid(
+  ///      columns: (1fr, 1fr),
+  ///      [Hello,], [world!],
+  ///   )
+  ///   ```
+  /// )
+  /// ````,
+  /// scale-preview: 100%)
+  ///
+  /// -> boolean
+  numbering-separator: none,
   /// Whether to show the hanging indent.
   ///
   /// #example(````typ
@@ -755,6 +776,7 @@
       line-range: line-range,
       header: header,
       footer: footer,
+      numbering-separator: numbering-separator,
     )
   }
   body

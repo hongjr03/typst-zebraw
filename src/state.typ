@@ -8,6 +8,7 @@
 #let numbering-state = state("zebraw-numbering", true)
 #let lang-state = state("zebraw-lang", true)
 #let extend-state = state("zebraw-extend", true)
+#let numbering-separator-state = state("zebraw-numbering-separator", false)
 
 #let numbering-font-args-state = state("zebraw-numbering-font-args", (:))
 #let comment-font-args-state = state("zebraw-comment-font-args", (:))
@@ -56,6 +57,9 @@
   /// Whether to extend the vertical spacing.
   /// -> boolean
   extend: true,
+  /// Whether to show the numbering separator line.
+  /// -> boolean
+  numbering-separator: false,
   /// Whether to show the hanging indent.
   /// -> boolean
   hanging-indent: false,
@@ -85,6 +89,7 @@
   numbering-font-args-state.update(numbering-font-args)
 
   extend-state.update(extend)
+  numbering-separator-state.update(numbering-separator)
 
   hanging-indent-state.update(hanging-indent)
   indentation-state.update(indentation)
@@ -108,6 +113,8 @@
   extend: none,
   hanging-indent: none,
   indentation: none,
+  fast-preview: none,
+  numbering-separator: none,
 ) = {
   let numbering = if numbering == none {
     numbering-state.get()
@@ -198,6 +205,13 @@
 
   let fast-preview = fast-preview-state.get() or sys.inputs.at("zebraw-fast-preview", default: false)
 
+  let numbering-separator = if numbering-separator == none {
+    numbering-separator-state.get()
+  } else {
+    numbering-separator
+  }
+
+
   (
     numbering: numbering,
     inset: inset,
@@ -211,6 +225,7 @@
     lang-font-args: lang-font-args,
     numbering-font-args: numbering-font-args,
     extend: extend,
+    numbering-separator: numbering-separator,
     hanging-indent: hanging-indent,
     indentation: indentation,
     fast-preview: fast-preview,
