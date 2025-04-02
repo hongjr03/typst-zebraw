@@ -29,26 +29,28 @@
   numbering-offset: 0,
   header: none,
   footer: none,
+  numbering-separator: none,
   line-range: (0, -1),
   wrap: true,
   block-width: 42em,
   it,
 ) = context {
   let args = parse-zebraw-args(
-    numbering,
-    inset,
-    background-color,
-    highlight-color,
-    comment-color,
-    lang-color,
-    comment-flag,
-    lang,
-    comment-font-args,
-    lang-font-args,
-    numbering-font-args,
-    extend,
-    hanging-indent,
-    indentation,
+    numbering: numbering,
+    inset: inset,
+    background-color: background-color,
+    highlight-color: highlight-color,
+    comment-color: comment-color,
+    lang-color: lang-color,
+    comment-flag: comment-flag,
+    lang: lang,
+    comment-font-args: comment-font-args,
+    lang-font-args: lang-font-args,
+    numbering-font-args: numbering-font-args,
+    extend: extend,
+    hanging-indent: hanging-indent,
+    indentation: indentation,
+    numbering-separator: numbering-separator,
   )
 
   // Extract args
@@ -64,29 +66,40 @@
   let lang-font-args = args.lang-font-args
   let numbering-font-args = args.numbering-font-args
   let extend = args.extend
+  let hanging-indent = args.hanging-indent
+  let indentation = args.indentation
+  let numbering-separator = args.numbering-separator
+  let fast-preview = args.fast-preview
 
   // Process highlight lines
   let (highlight-nums, comments) = tidy-highlight-lines(highlight-lines)
 
   // Common styles
   let numbering-width = if numbering {
-    calc.max(calc.ceil(calc.log(it.lines.len() + numbering-offset)), 8 / 3) * .75em + 0.1em
+    if it.lines.len() + numbering-offset < 100 {
+      2.1em
+    } else {
+      auto
+    }
   } else { 0 }
 
   let number-div-style = (
     "margin: 0",
     "text-align: right",
     "vertical-align: top",
-    "padding-right: 0.65em",
+    // "padding-right: 0.65em",
     "user-select: none",
     "flex-shrink: 0",
     "width: " + repr-or-str(numbering-width),
+    "padding: " + repr-or-str(inset.top) + " 0.65em " + repr-or-str(inset.bottom) + " 0.35em",
+    "height: 100%",
   )
 
   let pre-style = (
     "padding-top: " + repr-or-str(inset.top),
     "padding-bottom: " + repr-or-str(inset.bottom),
     "margin: 0",
+    "padding-left: " + repr-or-str(inset.left),
     "padding-right: " + repr-or-str(inset.right),
     ..if wrap { ("white-space: pre-wrap",) },
   )
@@ -114,6 +127,7 @@
           text-div-style,
           if is-background { ("background: " + line.fill.to-hex(),) },
         ),
+        ..if not is-background { (class: "zebraw-code-line-container") },
       ),
       {
         // Line number
@@ -133,7 +147,13 @@
         html.elem(
           "pre",
           attrs: (
-            style: create-style(pre-style),
+            style: create-style(
+              pre-style,
+              "position: relative", // Add relative positioning
+              if numbering-separator == true and not is-background {
+                ("border-left: 1px solid #ccc",)
+              },
+            ),
             ..if not is-background { (class: "zebraw-code-line") },
           ),
           {
@@ -176,11 +196,11 @@
         {
           // Empty space for indentation
           html.elem(
-            "div",
+            "pre",
             attrs: (
               style: create-style(
-                "width: " + repr-or-str(numbering-width),
-                "flex-shrink: 0",
+                number-div-style,
+                if is-background { background-text-style } else { ("opacity: 0.7",) },
               ),
             ),
             "",
@@ -207,7 +227,7 @@
                   ),
                 ),
                 {
-                  line.comment.indent.clusters().len() * " "
+                  line.comment.indentation.clusters().len() * " "
                   strong(text(ligatures: true, line.comment.comment-flag))
                   " "
                 },
@@ -309,6 +329,7 @@
       style: create-style(
         "position: relative",
         "width: " + repr-or-str(block-width),
+        "font-size: 0.8em",
       ),
       class: "zebraw-code-block",
     ),
@@ -377,34 +398,32 @@
       html.elem(
         "script",
         ```javascript
-        var codeBlocks = document.querySelectorAll('.zebraw-code-block');
-        codeBlocks.forEach(function (codeBlock) {
-          var copyButton = codeBlock.querySelector('.zebraw-code-lang');
+        document.querySelectorAll('.zebraw-code-block').forEach(codeBlock => {
+          const copyButton = codeBlock.querySelector('.zebraw-code-lang');
           if (!copyButton) return;
 
           copyButton.style.cursor = 'pointer';
           copyButton.title = 'Click to copy code';
 
-          copyButton.addEventListener('click', function () {
-            var lines = codeBlock.querySelectorAll('.zebraw-code-line');
-            var code = '';
-            lines.forEach(function (line) {
-              code += line.textContent + '\n';
-            });
-            navigator.clipboard.writeText(code).catch(function() {
-              // Fallback for older browsers
-              var textarea = document.createElement('textarea');
-              textarea.value = code;
-              document.body.appendChild(textarea);
-              textarea.select();
-              document.execCommand('copy');
-              document.body.removeChild(textarea);
-            });
+          copyButton.addEventListener('click', () => {
+            const code = Array.from(codeBlock.querySelectorAll('.zebraw-code-line'))
+              .map(line => line.textContent)
+              .join('\n');
 
+            navigator.clipboard.writeText(code)
+              .catch(() => {
+                // Fallback for older browsers
+                const textarea = document.createElement('textarea');
+                textarea.value = code;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+              });
+
+            const originalTitle = copyButton.title;
             copyButton.title = 'Code copied!';
-            setTimeout(function () {
-              copyButton.title = 'Click to copy code';
-            }, 2000);
+            setTimeout(() => copyButton.title = originalTitle, 2000);
           });
         });
         ```.text,

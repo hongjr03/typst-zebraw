@@ -731,7 +731,7 @@
   /// -> content
   body,
 ) = {
-  show raw.where(block: true): if dictionary(std).keys().contains("html") and target() == "html" {
+  show raw.where(block: true): if dictionary(std).keys().contains("html") {
     zebraw-html-show.with(
       numbering: numbering,
       inset: inset,
@@ -754,6 +754,7 @@
       line-range: line-range,
       wrap: wrap,
       block-width: block-width,
+      numbering-separator: numbering-separator,
     )
   } else {
     zebraw-show.with(
