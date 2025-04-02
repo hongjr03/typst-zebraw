@@ -2,3 +2,7 @@ bench*
 tests
 docs
 example-*
+README.typ
+README.pdf
+README_zh.typ
+README_zh.pdf
