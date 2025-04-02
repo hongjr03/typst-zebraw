@@ -125,7 +125,7 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 
 === 行号显示
 
-代码块的左侧会显示行号。通过向 `numbering-offset` 参数传递一个整数来更改起始行号。默认值为 `0`。
+代码块的左侧会显示行号。通过向 `numbering-offset` 参数传递一个整数来更改行号偏移量。默认值为 `0`。
 
 #context preview(````typ
 #zebraw(

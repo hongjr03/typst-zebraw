@@ -1,28 +1,11 @@
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # 🦓 Zebraw
 
 <a href="https://typst.app/universe/package/zebraw">
 <img src="https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Ftypst.app%2Funiverse%2Fpackage%2Fzebraw&query=%2Fhtml%2Fbody%2Fdiv%2Fmain%2Fdiv%5B2%5D%2Faside%2Fsection%5B2%5D%2Fdl%2Fdd%5B3%5D&logo=typst&label=Universe&color=%2339cccc" />
 </a>
 
-
 Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代码块，支持代码行高亮。**_zebraw_** 一词是 **_zebra_**（斑马）和 **_raw_**（原始）的组合，因为高亮显示的代码行在代码块中就像斑马纹一样。
-
-
 
 ## 快速开始
 
@@ -33,8 +16,6 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 要手动使用 zebraw 渲染特定代码块，请使用 `#zebraw()` 函数：
 
 <p align="center"><a href="assets/2.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/2_Dark.svg"><img alt="typst-block" src="assets/2_Light.svg" /></picture></a></p>
-
-
 
 ## 功能
 
@@ -55,10 +36,9 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 - **导出功能**
   - 实验性 HTML 导出
 
-
 ### 行号显示
 
-代码块的左侧会显示行号。通过向 `numbering-offset` 参数传递一个整数来更改起始行号。默认值为 `0`。
+代码块的左侧会显示行号。通过向 `numbering-offset` 参数传递一个整数来更改行号偏移量。默认值为 `0`。
 
 <p align="center"><a href="assets/3.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/3_Dark.svg"><img alt="typst-block" src="assets/3_Light.svg" /></picture></a></p>
 
@@ -75,10 +55,11 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 ### 代码行切片
 
 使用 `line-range` 参数可以显示代码块的特定行范围。该参数支持两种格式：
-- 包含2个整数的数组，表示范围 <a href="assets/6.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/6_Dark.svg"><img style="vertical-align: -0.35em" alt="typst-block" src="assets/6_Light.svg" /></picture></a>（<a href="assets/7.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/7_Dark.svg"><img style="vertical-align: -0.35em" alt="typst-block" src="assets/7_Light.svg" /></picture></a> 可以是 `none`，此功能基于 Typst 数组切片）
+
+- 包含 2 个整数的数组，表示范围 <a href="assets/6.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/6_Dark.svg"><img style="vertical-align: -0.35em" alt="typst-block" src="assets/6_Light.svg" /></picture></a>（<a href="assets/7.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/7_Dark.svg"><img style="vertical-align: -0.35em" alt="typst-block" src="assets/7_Light.svg" /></picture></a> 可以是 `none`，此功能基于 Typst 数组切片）
 - 包含 `range` 和 `keep-offset` 键的字典
 
-当 `keep-offset` 为 `true` 时，行号保留原始值；为 `false` 时，行号从1开始重新计数。默认值为 `true`。
+当 `keep-offset` 为 `true` 时，行号保留原始值；为 `false` 时，行号从 1 开始重新计数。默认值为 `true`。
 
 <p align="center"><a href="assets/8.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/8_Dark.svg"><img alt="typst-block" src="assets/8_Light.svg" /></picture></a></p>
 
@@ -136,20 +117,17 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 
 <p align="center"><a href="assets/19.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/19_Dark.svg"><img alt="typst-block" src="assets/19_Light.svg" /></picture></a></p>
 
-
-
 ### 主题
 
-Zebraw 包含内置主题。欢迎提交PR添加更多主题！
+Zebraw 包含内置主题。欢迎提交 PR 添加更多主题！
 
 <p align="center"><a href="assets/20.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/20_Dark.svg"><img alt="typst-block" src="assets/20_Light.svg" /></picture></a></p>
 
 <p align="center"><a href="assets/21.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/21_Dark.svg"><img alt="typst-block" src="assets/21_Light.svg" /></picture></a></p>
 
-### （实验性） HTML 导出
+### （实验性）HTML 导出
 
 查看 [example-html.typ](example-html.typ) 或 [GitHub Pages](https://hongjr03.github.io/typst-zebraw/) 获取更多信息。
-
 
 ## 自定义
 
@@ -208,4 +186,3 @@ Zebraw 包含内置主题。欢迎提交PR添加更多主题！
 ## 许可证
 
 Zebraw 使用 MIT 许可证授权。更多信息请查看 [LICENSE](LICENSE) 文件。
-
