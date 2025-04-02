@@ -1,4 +1,4 @@
-#import "/src/lib.typ": zebraw-html
+#import "/src/lib.typ": zebraw
 
 #let _exp(left, right) = {
   block(
@@ -17,7 +17,7 @@
   _exp(
     html.elem("pre", code.text, attrs: (style: "white-space: pre-wrap;")),
     {
-      let body = eval(code.text, mode: "markup", scope: (zebraw-html: zebraw-html))
+      let body = eval(code.text, mode: "markup", scope: (zebraw: zebraw))
       if frame {
         html.elem("div", html.frame(body), attrs: (class: "frame"))
       } else {

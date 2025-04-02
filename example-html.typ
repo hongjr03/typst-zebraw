@@ -7,14 +7,14 @@
 
 
 #exp(````typ
-#zebraw-html(
+#zebraw(
   highlight-lines: (
     (3, [to avoid negative numbers]),
     (9, "50 => 12586269025"),
   ),
   lang: true,
   block-width: 100%,
-  line-width: 100%,
+  numbering-separator: true,
   wrap: false,
   ```rust
   pub fn fibonacci_reccursive(n: i32) -> u64 {
@@ -33,15 +33,15 @@
 ````)
 
 #exp(````typ
-#zebraw-html(
+#zebraw(
   highlight-lines: (
     (3, [to avoid negative numbers]),
     (9, "50 => 12586269025"),
   ),
   lang: true,
   block-width: 100%,
-  line-width: 100%,
   wrap: true,
+  numbering-offset: 300,
   ```rust
   pub fn fibonacci_reccursive(n: i32) -> u64 {
       if n < 0 {
@@ -59,16 +59,16 @@
 ````)
 
 #exp(````typ
-#zebraw-html(
+#zebraw(
   highlight-lines: (
     (3, [to avoid negative numbers]),
     (9, "50 => 12586269025"),
   ),
-  numbering: false,
+  // numbering: false,
   lang: true,
   block-width: 100%,
-  line-width: 100%,
   wrap: true,
+  numbering-separator: true,
   ```typst
   = Fibonacci Reccursive Function
   
