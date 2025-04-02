@@ -528,7 +528,7 @@
                                     <path class="typst-shape" fill="#fafafa" fill-rule="nonzero" d="M 0 2.992 C 0 1.3395641 1.3395641 0 2.992 0 L 206.008 0 C 207.66043 0 209 1.3395641 209 2.992 L 209 51.784615 C 209 53.43705 207.66043 54.776615 206.008 54.776615 L 2.992 54.776615 C 1.3395641 54.776615 0 53.43705 0 51.784615 Z "/>
                                 </g>
                                 <g transform="translate(5.5 5.5)">
-                                    <g class="typst-group" clip-path="url(#cCBD9DCEFF79031C906BDF41A5390A821)">
+                                    <g class="typst-group" clip-path="url(#cC26C7D82D592DF715110F3C2B78BD087)">
                                         <g>
                                             <g transform="translate(0 0)">
                                                 <g class="typst-group">
@@ -820,7 +820,7 @@
                                     <path class="typst-shape" fill="#ebebeb" fill-rule="nonzero" d="M 0 2.992 C 0 1.3395641 1.3395641 0 2.992 0 L 206.008 0 C 207.66043 0 209 1.3395641 209 2.992 L 209 51.784615 C 209 53.43705 207.66043 54.776615 206.008 54.776615 L 2.992 54.776615 C 1.3395641 54.776615 0 53.43705 0 51.784615 Z "/>
                                 </g>
                                 <g transform="translate(5.5 70.8366153846154)">
-                                    <g class="typst-group" clip-path="url(#c6249410CC91ABD16F48C2750C5CAE528)">
+                                    <g class="typst-group" clip-path="url(#c306D3147C864DF87A8BA56EC6C58A525)">
                                         <g>
                                             <g transform="translate(0 0)">
                                                 <g class="typst-group">
@@ -1313,10 +1313,10 @@
         </symbol>
     </defs>
     <defs id="clip-path">
-        <clipPath id="cCBD9DCEFF79031C906BDF41A5390A821">
+        <clipPath id="cC26C7D82D592DF715110F3C2B78BD087">
             <path d="M 0 2.992 C 0 1.3395641 1.3395641 0 2.992 0 L 206.008 0 C 207.66043 0 209 1.3395641 209 2.992 L 209 51.784615 C 209 53.43705 207.66043 54.776615 206.008 54.776615 L 2.992 54.776615 C 1.3395641 54.776615 0 53.43705 0 51.784615 Z "/>
         </clipPath>
-        <clipPath id="c6249410CC91ABD16F48C2750C5CAE528">
+        <clipPath id="c306D3147C864DF87A8BA56EC6C58A525">
             <path d="M 0 2.992 C 0 1.3395641 1.3395641 0 2.992 0 L 206.008 0 C 207.66043 0 209 1.3395641 209 2.992 L 209 51.784615 C 209 53.43705 207.66043 54.776615 206.008 54.776615 L 2.992 54.776615 C 1.3395641 54.776615 0 53.43705 0 51.784615 Z "/>
         </clipPath>
     </defs>
