@@ -1,6 +1,9 @@
 
 # 🦓 Zebraw
 
+<a href="README_zh.md">
+<img src="https://img.shields.io/badge/🇨🇳中文README-blue" alt="中文README" />
+</a>
 <a href="https://typst.app/universe/package/zebraw">
 <img src="https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Ftypst.app%2Funiverse%2Fpackage%2Fzebraw&query=%2Fhtml%2Fbody%2Fdiv%2Fmain%2Fdiv%5B2%5D%2Faside%2Fsection%5B2%5D%2Fdl%2Fdd%5B3%5D&logo=typst&label=Universe&color=%2339cccc" />
 </a>
