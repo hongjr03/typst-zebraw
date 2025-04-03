@@ -1,0 +1,91 @@
+name: Tinymist Coverage Analysis
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y bc
+      
+      - name: Install Tinymist
+        env:
+            TINYMIST_VERSION: v0.13.10
+        run: curl --proto '=https' --tlsv1.2 -LsSf https://github.com/Myriad-Dreamin/tinymist/releases/download/${TINYMIST_VERSION}/tinymist-installer.sh | sh
+
+      - name: Run file coverage (Typst)
+        run: tinymist cov README.typ
+      
+      - name: Analyze coverage
+        run: python3 coverage/analyze_coverage.py
+      
+      - name: Update coverage badge in README
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          # 读取覆盖率值
+          COVERAGE_VALUE=$(cat coverage/output/coverage_value.txt)
+          echo "覆盖率: $COVERAGE_VALUE%"
+          
+          # 设置徽章颜色
+          if (( $(echo "$COVERAGE_VALUE >= 90" | bc -l) )); then
+            COLOR="brightgreen"
+          elif (( $(echo "$COVERAGE_VALUE >= 80" | bc -l) )); then
+            COLOR="green"
+          elif (( $(echo "$COVERAGE_VALUE >= 70" | bc -l) )); then
+            COLOR="yellowgreen"
+          elif (( $(echo "$COVERAGE_VALUE >= 60" | bc -l) )); then
+            COLOR="yellow"
+          elif (( $(echo "$COVERAGE_VALUE >= 50" | bc -l) )); then
+            COLOR="orange"
+          else
+            COLOR="red"
+          fi
+          
+          # 创建徽章 URL
+          BADGE_URL="https://img.shields.io/badge/coverage-${COVERAGE_VALUE}%25-${COLOR}"
+            
+          # Create coverage section content
+          COV_SECTION="[![Coverage](${BADGE_URL})](coverage/output/coverage_report.md)"
+            
+          # Update README
+          if grep -q "\[\!\[Coverage\]" README.md; then
+            # Replace line starting with [![Coverage]
+            sed -i 's|\[\!\[Coverage\].*|'"${COV_SECTION}"'|' README.md
+          fi
+      
+      - name: Commit and push changes
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add README.md coverage/output/coverage_report.md
+          git commit -m "Update coverage report [auto]" || echo "No changes to commit"
+          git push || echo "No changes to push"
+      
+      - name: Upload coverage results
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-results
+          path: |
+            target/coverage.json
+            coverage/output/coverage_report.md
+            coverage/output/coverage_value.txt
+            refs
