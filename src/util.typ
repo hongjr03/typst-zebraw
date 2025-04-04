@@ -77,7 +77,9 @@
       if x > 0 and lines-result.last().keys().contains("indentation") and lines-result.last().type != "comment" {
         lines-result.last().indentation
       } else if (
-        lines-result.at(-2).keys().contains("indentation") and lines-result.at(-2).type != "comment"
+        lines-result.len() > 1
+          and lines-result.at(-2).keys().contains("indentation")
+          and lines-result.at(-2).type != "comment"
       ) {
         lines-result.at(-2).indentation
       }
