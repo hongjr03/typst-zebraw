@@ -1,20 +1,37 @@
+
+
+
+
+
+
+
+
+
+
+
+
 # 🦓 Zebraw
 
 [![🇨🇳中文 README](https://img.shields.io/badge/🇨🇳中文README-blue)](README_zh.md)
 [![Typst Universe](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Ftypst.app%2Funiverse%2Fpackage%2Fzebraw&query=%2Fhtml%2Fbody%2Fdiv%2Fmain%2Fdiv%5B2%5D%2Faside%2Fsection%5B2%5D%2Fdl%2Fdd%5B3%5D&logo=typst&label=Universe&color=%2339cccc)](https://typst.app/universe/package/zebraw)
-[![Coverage](https://img.shields.io/badge/coverage-67.30%25-yellow)](coverage/output/coverage_report.md)
+[![Coverage](https://img.shields.io/badge/coverage-67.30%25-yellow)](coverage_report.md)
+
 
 Zebraw is a lightweight and fast package for displaying code blocks with line numbers in Typst, supporting code line highlighting. The term _**zebraw**_ is a combination of _**zebra**_ and _**raw**_, as the highlighted lines display in the code block with a zebra-striped pattern.
 
+
+
 ## Quick Start
 
-Import the `zebraw` package with `#import "@preview/zebraw:0.5.0": *` then add `#show: zebraw` to start using zebraw in the simplest way.
+Import the `zebraw` package with `#import "@preview/zebraw:0.5.1": *` then add `#show: zebraw` to start using zebraw in the simplest way.
 
 <p align="center"><a href="assets/1.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/1_Dark.svg"><img alt="typst-block" src="assets/1_Light.svg" /></picture></a></p>
 
 To manually render specific code blocks with zebraw, use the `#zebraw()` function:
 
 <p align="center"><a href="assets/2.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/2_Dark.svg"><img alt="typst-block" src="assets/2_Light.svg" /></picture></a></p>
+
+
 
 ## Features
 
@@ -53,7 +70,6 @@ You can add a separator line between line numbers and code content by setting th
 ### Line Slicing
 
 Slice code blocks by passing the `line-range` parameter to the `zebraw` function. The `line-range` parameter can be either:
-
 - An array of 2 integers representing the range <a href="assets/6.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/6_Dark.svg"><img style="vertical-align: -0.35em" alt="typst-block" src="assets/6_Light.svg" /></picture></a> (<a href="assets/7.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/7_Dark.svg"><img style="vertical-align: -0.35em" alt="typst-block" src="assets/7_Light.svg" /></picture></a> can be `none` as this feature is based on Typst array slicing)
 - A dictionary with `range` and `keep-offset` keys
 
@@ -114,6 +130,8 @@ Enable hanging indentation by setting `hanging-indent` to `true`:
 Indentation lines can slow down preview performance. For faster previews, enable fast preview mode by passing `true` to the `fast-preview` parameter in `zebraw-init` or by using `zebraw-fast-preview` in the CLI. This renders indentation lines as simple `|` characters:
 
 <p align="center"><a href="assets/19.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/19_Dark.svg"><img alt="typst-block" src="assets/19_Light.svg" /></picture></a></p>
+
+
 
 ### Themes
 
@@ -184,3 +202,4 @@ Extend at vertical is enabled at default. When there's header or footer it will 
 ## License
 
 Zebraw is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
+

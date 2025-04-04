@@ -1,6 +1,6 @@
 #set page(height: auto)
 
-#import "@preview/zebraw:0.5.0": *
+#import "@preview/zebraw:0.5.1": *
 
 = Documentation
 

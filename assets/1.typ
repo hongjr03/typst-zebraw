@@ -1,7 +1,7 @@
 #{
 // render_code
 context preview(````typ
-#import "@preview/zebraw:0.5.0": *
+#import "@preview/zebraw:0.5.1": *
 #show: zebraw
 
 ```typ
