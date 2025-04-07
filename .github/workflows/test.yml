@@ -1,0 +1,43 @@
+name: Tests
+on:
+  push:
+    # ensures this is not run for PRs too
+    branches: [ main ]
+  pull_request:
+    # optional but a good default
+    branches: [ main ]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Probe runner package cache
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: cargo
+          version: 1.0
+
+      - name: Install tytanic from github
+        uses: baptiste0928/cargo-install@v3.0.0
+        with:
+          crate: tytanic
+          version: '0.2.2'
+      - name: Setup typst
+        uses: typst-community/setup-typst@v4
+        with:
+          version: 'v0.13.1'
+      - name: Run test suite
+        run: tt run
+      - name: Archive diffs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: artifacts
+          path: |
+            tests/**/diff/*.png
+            tests/**/out/*.png
+            tests/**/ref/*.png
+          retention-days: 5
