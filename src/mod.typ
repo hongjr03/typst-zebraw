@@ -308,13 +308,13 @@
 
           // 2. Line numbers column
           grid(
-            ..if numbering-separator { (stroke: (right: gray.transparentize(34%))) },
             rows: lines-with-height.map(item => item.height),
             ..lines-with-height.map(item => line-render(item.line, num: true))
           ),
 
           // 3. Code lines column
           grid(
+            ..if numbering-separator { (stroke: (left: gray.transparentize(34%) + 0.05em)) },
             rows: lines-with-height.map(item => item.height),
             ..lines-with-height.map(item => line-render(item.line, height: item.height))
           ),
