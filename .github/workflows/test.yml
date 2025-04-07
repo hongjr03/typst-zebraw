@@ -1,4 +1,4 @@
-name: Tests
+name: Test
 on:
   push:
     # ensures this is not run for PRs too
@@ -14,23 +14,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Probe runner package cache
-        uses: awalsh128/cache-apt-pkgs-action@latest
-        with:
-          packages: cargo
-          version: 1.0
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
 
-      - name: Install tytanic from github
-        uses: baptiste0928/cargo-install@v3.0.0
+      - name: Install cargo-binstall
+        uses: taiki-e/install-action@v2
         with:
-          crate: tytanic
-          version: '0.2.2'
+          tool: cargo-binstall
+
+      - name: Install tytanic
+        run: cargo binstall tytanic@0.2.2 -y
+
       - name: Setup typst
         uses: typst-community/setup-typst@v4
         with:
           version: 'v0.13.1'
+
       - name: Run test suite
         run: tt run
+
       - name: Archive diffs
         uses: actions/upload-artifact@v4
         if: always()
