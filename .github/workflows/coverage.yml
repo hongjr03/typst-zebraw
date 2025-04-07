@@ -65,10 +65,14 @@ jobs:
           # Create coverage section content
           COV_SECTION="[![Coverage](${BADGE_URL})](coverage/output/coverage_report.md)"
             
-          # Update README
+          # Update README and README_zh
           if grep -q "\[\!\[Coverage\]" README.md; then
             # Replace line starting with [![Coverage]
             sed -i 's|\[\!\[Coverage\].*|'"${COV_SECTION}"'|' README.md
+          fi
+          if grep -q "\[\!\[Coverage\]" README_zh.md; then
+            # Replace line starting with [![Coverage]
+            sed -i 's|\[\!\[Coverage\].*|'"${COV_SECTION}"'|' README_zh.md
           fi
       
       - name: Commit and push changes
