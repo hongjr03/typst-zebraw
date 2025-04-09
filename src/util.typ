@@ -168,7 +168,7 @@
 
 
 // Renders a single indentation marker (vertical line)
-#let render-indentation-marker(height-val, line-height) = {
+#let render-indentation-marker(height-val, line-height, indentation) = {
   if indentation <= 0 { return " " }
 
   if fast-preview {
@@ -207,7 +207,7 @@
   for i in range(len) {
     // Add vertical line for each position that's a multiple of indentation
     if calc.rem(i, indentation) == 0 and idt.at(i) == " " {
-      processed += box(render-indentation-marker(height, line-height))
+      processed += box(render-indentation-marker(height, line-height, indentation))
     } else if idt.at(i) != " " {
       breakpoint = i
       break
