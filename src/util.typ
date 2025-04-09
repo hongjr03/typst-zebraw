@@ -107,13 +107,18 @@
       res.push((
         type: "highlight",
         indentation: indentation,
-        number: if numbering != false {
+        number: if numbering == true {
           if keep-offset {
             line.number + numbering-offset
           } else {
             line.number + numbering-offset - start
           }
-        } else { none },
+        } else if numbering == false { none } else {
+          numbering.map(list => {
+            assert(list.len() == lines.len(), message: "numbering list length should be equal to lines length")
+            list.at(line.number - 1)
+          })
+        },
         body: body,
         fill: highlight-color,
         // if it's html, the comment will be saved in this field

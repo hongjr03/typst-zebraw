@@ -207,9 +207,6 @@
           set text(..numbering-font-args)
 
           let nums = (line.number,).flatten()
-          // for num in nums {
-          //   box(width: (max-number-width), )[#num]
-          // }
           nums
             .map(num => {
               box(
