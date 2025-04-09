@@ -187,14 +187,6 @@
     }
   }
 
-  let max-number-width = measure([#if type(numbering) == array {
-      calc.max(..numbering.flatten().map(x => if type(x) == content { 0 } else { x }))
-    } else if type(numbering) == bool {
-      it.lines.len() + numbering-offset
-    } else {
-      numbering
-    }]).width
-
   // Helper function to render a line (either code or line number)
   let line-render(line, num: false, height: none) = grid.cell(
     fill: line.fill,
@@ -205,16 +197,12 @@
         if num {
           // Line number rendering
           set text(..numbering-font-args)
-
-          let nums = (line.number,).flatten()
-          nums
+          (line.number,)
+            .flatten()
             .map(num => {
-              box(
-                width: max-number-width,
-                [#num],
-              )
+              box([#num])
             })
-            .join(" ")
+            .join(h(0.3em, weak: true))
         } else {
           // Code line rendering with optional indentation processing
           render-code-line(line, height)

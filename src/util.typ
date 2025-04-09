@@ -113,7 +113,7 @@
           } else {
             line.number + numbering-offset - start
           }
-        } else if numbering == false { none } else {
+        } else if numbering == false { none } else if type(numbering) == array {
           numbering.map(list => {
             assert(list.len() == lines.len(), message: "numbering list length should be equal to lines length")
             list.at(line.number - 1)
@@ -152,7 +152,7 @@
           } else {
             line.number + numbering-offset - start
           }
-        } else if numbering == false { none } else {
+        } else if numbering == false { none } else if type(numbering) == array {
           numbering.map(list => {
             assert(list.len() == lines.len(), message: "numbering list length should be equal to lines length")
             list.at(line.number - 1)
