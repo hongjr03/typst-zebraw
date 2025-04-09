@@ -80,6 +80,101 @@
   // Determine if we should show a language tab
   let has-lang = (type(lang) == bool and lang and it.lang != none) or type(lang) != bool
 
+  // Renders indentation markers (vertical lines) for code structure
+  let render-indentation-marker(height-val, indentation, fast-preview) = {
+    if indentation <= 0 { return " " }
+
+    if fast-preview {
+      set text(fill: gray.transparentize(50%))
+      "|"
+    } else if height-val != none {
+      let line-height = measure("|").height
+      let line-end-y = if hanging-indent {
+        height-val - inset.top
+      } else {
+        line-height + inset.bottom
+      }
+
+      place(
+        std.line(
+          start: (0em, -inset.top),
+          end: (0em, line-end-y),
+          stroke: .05em + gray.transparentize(50%),
+        ),
+        left + top,
+      )
+      " "
+    } else {
+      " "
+    }
+  }
+
+  // Processes indentation spaces with visual guides
+  let process-indentation-spaces(idt, indentation, height) = {
+    if indentation <= 0 { return idt }
+    
+    let len = idt.len()
+    let processed = ""
+    let breakpoint = -1
+    
+    // Add vertical lines at indentation points
+    for i in range(len) {
+      if calc.rem(i, indentation) == 0 and idt.at(i) == " " {
+        processed += box(render-indentation-marker(height, indentation, fast-preview))
+      } else if idt.at(i) != " " {
+        breakpoint = i
+        break
+      } else {
+        processed += idt.at(i)
+      }
+    }
+    
+    // Add remaining characters after first non-space
+    if breakpoint != -1 {
+      for i in range(breakpoint, len) {
+        processed += idt.at(i)
+      }
+    }
+    
+    return processed
+  }
+
+  // Renders code content with proper indentation handling
+  let render-code-content(line, height) = {
+    let line-height = measure("|").height
+
+    // Only process indentation if available
+    if line.keys().contains("indentation") {
+      // Handle different content types
+      if repr(line.body.func()) == "sequence" and line.body.children.first().func() == text {
+        if line.body.children.first().text.trim() == "" {
+          // Empty first text node
+          if hanging-indent {
+            grid(
+              columns: 2,
+              process-indentation-spaces(line.indentation, indentation, height), 
+              line.body.children.slice(1).join(),
+            )
+          } else {
+            process-indentation-spaces(line.indentation, indentation, height)
+            line.body.children.slice(1).join()
+          }
+        } else {
+          process-indentation-spaces(line.body.children.first().text, indentation, height)
+          line.body.children.slice(1).join()
+        }
+      } else if repr(line.body.func()) == "text" {
+        process-indentation-spaces(line.indentation, indentation, height)
+        line.body.text.trim()
+      } else {
+        line.body
+      }
+    } else {
+      // No indentation processing needed
+      line.body
+    }
+  }
+
   // Helper function to render a line (either code or line number)
   let line-render(line, num: false, height: none) = grid.cell(
     fill: line.fill,
@@ -93,97 +188,7 @@
           [#(line.number)]
         } else {
           // Code line rendering
-          let line-height = measure("|").height
-
-          // Only process indentation if available
-          if line.keys().contains("indentation") {
-            let render-indentation-marker(height-val) = {
-              if indentation <= 0 { return " " }
-
-              if fast-preview {
-                set text(fill: gray.transparentize(50%))
-                "|"
-              } else if height-val != none {
-                let line-end-y = if hanging-indent {
-                  height-val - inset.top
-                } else {
-                  line-height + inset.bottom
-                }
-
-                place(
-                  std.line(
-                    start: (0em, -inset.top),
-                    end: (0em, line-end-y),
-                    stroke: .05em + gray.transparentize(50%),
-                  ),
-                  left + top,
-                )
-                " "
-              } else {
-                " "
-              }
-            }
-
-            // Apply indentation styling
-            let indentation-spaces(idt) = {
-              if indentation > 0 {
-                // Process each leading space in indentation string
-                let leading-spaces = idt
-                let processed = ""
-                let len = leading-spaces.len()
-
-                let breakpoint = -1
-                for i in range(len) {
-                  // Add vertical line for each position that's a multiple of indentation
-                  if calc.rem(i, indentation) == 0 and idt.at(i) == " " {
-                    processed += box(render-indentation-marker(height))
-                  } else if idt.at(i) != " " {
-                    breakpoint = i
-                    break
-                  } else {
-                    processed += idt.at(i)
-                  }
-                }
-                // Add remaining spaces
-                if breakpoint != -1 {
-                  for i in range(breakpoint, len) {
-                    processed += idt.at(i)
-                  }
-                }
-                processed
-              } else {
-                idt
-              }
-            }
-
-
-            // Handle different content types
-            if repr(line.body.func()) == "sequence" and line.body.children.first().func() == text {
-              if line.body.children.first().text.trim() == "" {
-                // Empty first text node
-                if hanging-indent {
-                  grid(
-                    columns: 2,
-                    indentation-spaces(line.indentation), line.body.children.slice(1).join(),
-                  )
-                } else {
-                  indentation-spaces(line.indentation)
-                  line.body.children.slice(1).join()
-                }
-              } else {
-                indentation-spaces(line.body.children.first().text)
-                line.body.children.slice(1).join()
-              }
-            } else if repr(line.body.func()) == "text" {
-              indentation-spaces(line.indentation)
-              line.body.text.trim()
-            } else {
-              line.body
-            }
-          } else {
-            // No indentation processing needed
-            line.body
-          }
+          render-code-content(line, height)
         }
       },
     ),
