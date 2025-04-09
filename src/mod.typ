@@ -61,8 +61,8 @@
   let numbering-separator = args.numbering-separator
 
   // Calculate width for line numbering
-  let numbering-width = if numbering {
-    if (it.lines.len() + numbering-offset < 100) { 2.1em } else { auto }
+  let numbering-width = if numbering != false {
+    if (it.lines.len() + numbering-offset < 100) and type(numbering) != array { 2.1em } else { auto }
   } else { 0pt }
 
   // Process highlight lines and comments
@@ -80,100 +80,13 @@
   // Determine if we should show a language tab
   let has-lang = (type(lang) == bool and lang and it.lang != none) or type(lang) != bool
 
-  // Renders indentation markers (vertical lines) for code structure
-  let render-indentation-marker(height-val, indentation, fast-preview) = {
-    if indentation <= 0 { return " " }
-
-    if fast-preview {
-      set text(fill: gray.transparentize(50%))
-      "|"
-    } else if height-val != none {
-      let line-height = measure("|").height
-      let line-end-y = if hanging-indent {
-        height-val - inset.top
-      } else {
-        line-height + inset.bottom
-      }
-
-      place(
-        std.line(
-          start: (0em, -inset.top),
-          end: (0em, line-end-y),
-          stroke: .05em + gray.transparentize(50%),
-        ),
-        left + top,
-      )
-      " "
+  let max-number-width = measure([#if type(numbering) == array {
+      calc.max(..numbering.flatten().map(x => if type(x) == content { 0 } else { x }))
+    } else if type(numbering) == bool {
+      it.lines.len() + numbering-offset
     } else {
-      " "
-    }
-  }
-
-  // Processes indentation spaces with visual guides
-  let process-indentation-spaces(idt, indentation, height) = {
-    if indentation <= 0 { return idt }
-    
-    let len = idt.len()
-    let processed = ""
-    let breakpoint = -1
-    
-    // Add vertical lines at indentation points
-    for i in range(len) {
-      if calc.rem(i, indentation) == 0 and idt.at(i) == " " {
-        processed += box(render-indentation-marker(height, indentation, fast-preview))
-      } else if idt.at(i) != " " {
-        breakpoint = i
-        break
-      } else {
-        processed += idt.at(i)
-      }
-    }
-    
-    // Add remaining characters after first non-space
-    if breakpoint != -1 {
-      for i in range(breakpoint, len) {
-        processed += idt.at(i)
-      }
-    }
-    
-    return processed
-  }
-
-  // Renders code content with proper indentation handling
-  let render-code-content(line, height) = {
-    let line-height = measure("|").height
-
-    // Only process indentation if available
-    if line.keys().contains("indentation") {
-      // Handle different content types
-      if repr(line.body.func()) == "sequence" and line.body.children.first().func() == text {
-        if line.body.children.first().text.trim() == "" {
-          // Empty first text node
-          if hanging-indent {
-            grid(
-              columns: 2,
-              process-indentation-spaces(line.indentation, indentation, height), 
-              line.body.children.slice(1).join(),
-            )
-          } else {
-            process-indentation-spaces(line.indentation, indentation, height)
-            line.body.children.slice(1).join()
-          }
-        } else {
-          process-indentation-spaces(line.body.children.first().text, indentation, height)
-          line.body.children.slice(1).join()
-        }
-      } else if repr(line.body.func()) == "text" {
-        process-indentation-spaces(line.indentation, indentation, height)
-        line.body.text.trim()
-      } else {
-        line.body
-      }
-    } else {
-      // No indentation processing needed
-      line.body
-    }
-  }
+      numbering
+    }]).width
 
   // Helper function to render a line (either code or line number)
   let line-render(line, num: false, height: none) = grid.cell(
@@ -185,14 +98,27 @@
         if num {
           // Line number rendering
           set text(..numbering-font-args)
-          [#(line.number)]
+
+          let nums = (line.number,).flatten()
+          // for num in nums {
+          //   box(width: (max-number-width), )[#num]
+          // }
+          nums
+            .map(num => {
+              box(
+                width: max-number-width,
+                [#num],
+              )
+            })
+            .join(" ")
         } else {
-          // Code line rendering
-          render-code-content(line, height)
+          // Code line rendering with optional indentation processing
+          render-code-line(line, height, hanging-indent, indentation)
         }
       },
     ),
   )
+
 
   // Process lines with highlighting, numbers, and comments
   let lines = tidy-lines(
