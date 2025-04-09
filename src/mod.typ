@@ -113,7 +113,7 @@
             .join(" ")
         } else {
           // Code line rendering with optional indentation processing
-          render-code-line(line, height, hanging-indent, indentation)
+          render-code-line(line, height, hanging-indent, indentation, fast-preview)
         }
       },
     ),

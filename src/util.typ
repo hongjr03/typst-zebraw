@@ -168,7 +168,7 @@
 
 
 // Renders a single indentation marker (vertical line)
-#let render-indentation-marker(height-val, line-height, indentation) = {
+#let render-indentation-marker(height-val, line-height, indentation, fast-preview) = {
   if indentation <= 0 { return " " }
 
   if fast-preview {
@@ -196,7 +196,7 @@
 }
 
 // Format indentation with vertical guides
-#let format-indentation(idt, height, line-height, indentation) = {
+#let format-indentation(idt, height, line-height, indentation, fast-preview) = {
   if indentation <= 0 { return idt }
 
   // Process each leading space in indentation string
@@ -207,7 +207,7 @@
   for i in range(len) {
     // Add vertical line for each position that's a multiple of indentation
     if calc.rem(i, indentation) == 0 and idt.at(i) == " " {
-      processed += box(render-indentation-marker(height, line-height, indentation))
+      processed += box(render-indentation-marker(height, line-height, indentation, fast-preview))
     } else if idt.at(i) != " " {
       breakpoint = i
       break
@@ -227,7 +227,7 @@
 }
 
 // Process line's indentation
-#let process-indentation(line, height, line-height, hanging-indent, indentation) = {
+#let process-indentation(line, height, line-height, hanging-indent, indentation, fast-preview) = {
   // Handle different content types based on hanging-indent setting
   if repr(line.body.func()) == "sequence" and line.body.children.first().func() == text {
     if line.body.children.first().text.trim() == "" {
@@ -235,24 +235,24 @@
       if hanging-indent {
         grid(
           columns: 2,
-          format-indentation(line.indentation, height, line-height, indentation), line.body.children.slice(1).join(),
+          format-indentation(line.indentation, height, line-height, indentation, fast-preview), line.body.children.slice(1).join(),
         )
       } else {
-        format-indentation(line.indentation, height, line-height, indentation)
+        format-indentation(line.indentation, height, line-height, indentation, fast-preview)
         line.body.children.slice(1).join()
       }
     } else {
-      format-indentation(line.body.children.first().text, height, line-height, indentation)
+      format-indentation(line.body.children.first().text, height, line-height, indentation, fast-preview)
       line.body.children.slice(1).join()
     }
   } else if repr(line.body.func()) == "text" {
     if hanging-indent {
       grid(
         columns: 2,
-        format-indentation(line.indentation, height, line-height, indentation), line.body.text.trim(),
+        format-indentation(line.indentation, height, line-height, indentation, fast-preview), line.body.text.trim(),
       )
     } else {
-      format-indentation(line.indentation, height, line-height, indentation)
+      format-indentation(line.indentation, height, line-height, indentation, fast-preview)
       line.body.text.trim()
     }
   } else {
@@ -261,12 +261,12 @@
 }
 
 // Renders a code line with indentation processing
-#let render-code-line(line, height, hanging-indent, indentation) = {
+#let render-code-line(line, height, hanging-indent, indentation, fast-preview) = {
   let line-height = measure("|").height
 
   // Only process indentation if available
   if line.keys().contains("indentation") {
-    let indented-content = process-indentation(line, height, line-height, hanging-indent, indentation)
+    let indented-content = process-indentation(line, height, line-height, hanging-indent, indentation, fast-preview)
     indented-content
   } else {
     // No indentation processing needed
