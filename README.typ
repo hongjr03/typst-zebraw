@@ -765,7 +765,7 @@ Extend at vertical is enabled at default. When there's header or footer it will 
 == Example
 
 #context {
-  // set page(paper: "a4", height: auto, margin: 2.5em)
+  set page(paper: "a4", height: auto, margin: 2.5em)
   zebraw(
     highlight-lines: (
       (3, [to avoid negative numbers]),

@@ -770,7 +770,7 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 == 示例
 
 #context {
-  // set page(paper: "a4", height: auto, margin: 2.5em)
+  set page(paper: "a4", height: auto, margin: 2.5em)
   zebraw(
     highlight-lines: (
       (3, [to avoid negative numbers]),
