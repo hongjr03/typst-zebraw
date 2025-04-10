@@ -8,6 +8,8 @@
 #include "language-tab.typ"
 #include "indentation-lines.typ"
 #include "hanging-indentation.typ"
-#include "fast-preview.typ"
 #include "themes.typ"
 #include "multi-numbering.typ"
+
+// should be included last
+#include "fast-preview.typ"
