@@ -1,4 +1,4 @@
 #{
 // render_code
-$b$
+$[a, b)$
 }

@@ -1,5 +1,4 @@
-#set page(paper: "a4")
-
+#set page(paper: "a4", height: auto)
 #import "src/lib.typ": *
 
 #set text(font: ((name: "SF Pro", covers: "latin-in-cjk"), "Noto Sans SC"))
@@ -75,10 +74,10 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 
 == 快速开始
 
-使用 ```typ #import "@preview/zebraw:0.5.1": *``` 导入 `zebraw` 包，然后添加 ```typ #show: zebraw``` 以最简单的方式开始使用 zebraw。
+使用 ```typ #import "@preview/zebraw:0.5.2": *``` 导入 `zebraw` 包，然后添加 ```typ #show: zebraw``` 以最简单的方式开始使用 zebraw。
 
 #context preview(````typ
-#import "@preview/zebraw:0.5.1": *
+#import "@preview/zebraw:0.5.2": *
 #show: zebraw
 
 ```typ
@@ -110,7 +109,7 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 `zebraw` 函数提供了多种参数来自定义代码块的外观和行为。以下部分详细描述了这些参数：
 
 - *核心功能*
-  - 显示行号（可自定义起始值）
+  - 可自定义的行号显示
   - 选择性显示代码行范围
   - 代码行高亮及注释
   - 代码块标题和页脚
@@ -155,6 +154,23 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
   ```
 )
 ````)
+
+如果你想要更高级的行号控制，可以向 `numbering` 参数传递一个由数组组成的数组。每个内层数组表示一列内容用来替代行号。这样，一行就可以显示多个行号、标记或者自定义的标识符。
+
+#context preview(````typ
+#zebraw(
+  numbering: (
+    ([\+], [\*], [\#], [\-]),
+  ),
+  ```typ
+  #grid(
+    columns: (1fr, 1fr),
+    [Hello], [world!],
+  )
+  ```
+)
+````)
+
 
 === 行号分隔线
 

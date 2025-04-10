@@ -2,23 +2,13 @@
 // render_code
 context preview(````typ
 #zebraw(
-  background-color: luma(250),
+  inset: (top: 6pt, bottom: 6pt),
   ```typ
   #grid(
     columns: (1fr, 1fr),
     [Hello], [world!],
   )
-  ```,
-)
-
-#zebraw(
-  background-color: (luma(235), luma(245), luma(255), luma(245)),
-  ```typ
-  #grid(
-    columns: (1fr, 1fr),
-    [Hello], [world!],
-  )
-  ```,
+  ```
 )
 ````)
 }

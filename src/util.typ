@@ -50,50 +50,64 @@
   line-range: (1, none),
   hanging-indent: false,
 ) = {
-  let lines-result = ()
+  // Process line range
   let (start, end, keep-offset) = if type(line-range) == array {
-    (
-      line-range.at(0) - 1,
-      if line-range.at(1) != none {
-        line-range.at(1) - 1
-      } else { none },
-      true,
-    )
+    (line-range.at(0) - 1, if line-range.at(1) != none { line-range.at(1) - 1 } else { none }, true)
   } else if type(line-range) == dictionary {
     (
       line-range.range.at(0) - 1,
-      if line-range.range.at(1) != none {
-        line-range.range.at(1) - 1
-      } else { none },
+      if line-range.range.at(1) != none { line-range.range.at(1) - 1 } else { none },
       line-range.keep-offset,
     )
   } else {
     (0, none, true)
   }
+
+  // Slice lines according to range
   let lines = lines.slice(start, end)
+  let lines-result = ()
+
+  // Process each line
   for (x, line) in lines.enumerate() {
-    let res = ()
+    // Determine indentation
     let indentation = if line.text.trim() == "" {
-      if x > 0 and lines-result.last().keys().contains("indentation") and lines-result.last().type != "comment" {
-        lines-result.last().indentation
-      } else if (
-        lines-result.len() > 1
-          and lines-result.at(-2).keys().contains("indentation")
-          and lines-result.at(-2).type != "comment"
-      ) {
-        lines-result.at(-2).indentation
+      // For empty lines, use indentation from previous non-comment lines
+      let prev-line = if x > 0 and lines-result.last().type != "comment" {
+        lines-result.last()
+      } else if lines-result.len() > 1 and lines-result.at(-2).type != "comment" {
+        lines-result.at(-2)
+      } else {
+        none
+      }
+
+      if prev-line != none and prev-line.keys().contains("indentation") {
+        prev-line.indentation
+      } else {
+        indentation * " "
       }
     } else {
+      // For non-empty lines, use the leading whitespace
       line.text.split(regex("\S")).first()
     }
-    let body = if line.text.trim() == "" {
-      [#indentation\ ]
-    } else {
-      line.body
+
+    // Format body
+    let body = if line.text.trim() == "" { [#indentation\ ] } else { line.body }
+
+    // Calculate line number to display
+    let display-number = if numbering == true {
+      if keep-offset { line.number + numbering-offset } else { line.number + numbering-offset - start }
+    } else if numbering == false {
+      none
+    } else if type(numbering) == array {
+      numbering.map(list => {
+        assert(list.len() == lines.len(), message: "numbering list length should be equal to lines length")
+        list.at(line.number - 1)
+      })
     }
 
-
-    if (type(highlight-nums) == array and highlight-nums.contains(line.number)) {
+    // Process highlighted lines
+    if type(highlight-nums) == array and highlight-nums.contains(line.number) {
+      // Create comment if it exists for this line
       let comment = if comments.keys().contains(str(line.number)) {
         (
           type: "comment",
@@ -104,59 +118,44 @@
         )
       } else { none }
 
-      res.push((
+      // Add highlighted line
+      lines-result.push((
         type: "highlight",
         indentation: indentation,
-        number: if numbering {
-          if keep-offset {
-            line.number + numbering-offset
-          } else {
-            line.number + numbering-offset - start
-          }
-        } else { none },
+        number: display-number,
         body: body,
         fill: highlight-color,
-        // if it's html, the comment will be saved in this field
-        comment: if not is-html { none } else { comment },
+        comment: if is-html { comment } else { none },
       ))
 
-      // otherwise, we need to push the comment as a separate line
+      // Add separate comment line if needed
       if not is-html and comment != none {
-        res.push((
+        lines-result.push((
           type: "comment",
           number: none,
-          body: if comment != none {
+          body: {
             if comment-flag != "" {
               indentation
               strong(text(ligatures: true, comment.comment-flag))
               h(0.35em, weak: true)
             }
             comment.body
-          } else { "" },
+          },
           fill: comment-color,
         ))
       }
     } else {
-      let fill-color = curr-background-color(background-color, line.number)
-      res.push((
+      // Add normal line
+      lines-result.push((
         type: "normal",
         indentation: indentation,
-        number: if numbering {
-          if keep-offset {
-            line.number + numbering-offset
-          } else {
-            line.number + numbering-offset - start
-          }
-        } else { none },
+        number: display-number,
         body: body,
-        fill: fill-color,
+        fill: curr-background-color(background-color, line.number),
         comment: none,
       ))
     }
-
-    for item in res {
-      lines-result.push(item)
-    }
   }
+
   lines-result
 }

@@ -1,7 +1,7 @@
 #{
 // render_code
 context preview(````typ
-#show: zebraw.with(..zebraw-themes.zebra-reverse)
+#show: zebraw.with(..zebraw-themes.zebra)
 
 ```rust
 pub fn fibonacci_reccursive(n: i32) -> u64 {

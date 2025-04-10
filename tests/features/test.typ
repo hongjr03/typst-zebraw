@@ -10,3 +10,4 @@
 #include "hanging-indentation.typ"
 #include "fast-preview.typ"
 #include "themes.typ"
+#include "multi-numbering.typ"

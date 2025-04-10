@@ -1,20 +1,34 @@
 #{
 // render_code
-context preview(````typ
-#show: zebraw.with(..zebraw-themes.zebra)
-
-```rust
-pub fn fibonacci_reccursive(n: i32) -> u64 {
-    if n < 0 {
-        panic!("{} is negative!", n);
-    }
-    match n {
-        0 => panic!("zero is not a right argument to fibonacci_reccursive()!"),
-        1 | 2 => 1,
-        3 => 2,
-        _ => fibonacci_reccursive(n - 1) + fibonacci_reccursive(n - 2),
-    }
-}
-```
-````)
+context zebraw-init(
+  fast-preview: true,
+  indentation: 2,
+  [
+    #context preview(````typ
+    #zebraw(
+      hanging-indent: true,
+      ```typ
+      #let forecast(day) = block[
+        #box(square(
+          width: 2cm,
+          inset: 8pt,
+          fill: if day.weather == "sunny" {
+            yellow
+          } else {
+            aqua
+          },
+          align(
+            bottom + right,
+            strong(day.weather),
+          ),
+        ))
+        #h(6pt)
+        #set text(22pt, baseline: -8pt)
+        #day.temperature °#day.unit
+      ]
+      ```
+    )
+    ````)
+  ],
+)
 }
