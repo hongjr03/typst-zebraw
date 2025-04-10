@@ -1,44 +1,33 @@
 #{
 // render_code
 context preview(````typ
+#let code = ```typ
+#grid(
+  columns: (1fr, 1fr),
+  [Hello],
+  [world!],
+)
+```
+
+#zebraw(code)
+
+#zebraw(line-range: (2, 4), code)
+
 #zebraw(
-  // Single line number:
-  highlight-lines: 2,
-  ```typ
-  #grid(
-    columns: (1fr, 1fr),
-    [Hello], [world!],
-  )
-  ```
+  line-range: (range: (2, 4), keep-offset: false),
+  code
 )
 
 #zebraw(
-  // Array of line numbers:
-  highlight-lines: (6, 7) + range(9, 15),
-  ```typ
-  = Fibonacci sequence
-  The Fibonacci sequence is defined through the
-  recurrence relation $F_n = F_(n-1) + F_(n-2)$.
-  It can also be expressed in _closed form:_
+  numbering-offset: 30,
+  line-range: (range: (2, 4), keep-offset: false),
+  code
+)
 
-  $ F_n = round(1 / sqrt(5) phi.alt^n), quad
-    phi.alt = (1 + sqrt(5)) / 2 $
-
-  #let count = 8
-  #let nums = range(1, count + 1)
-  #let fib(n) = (
-    if n <= 2 { 1 }
-    else { fib(n - 1) + fib(n - 2) }
-  )
-
-  The first #count numbers of the sequence are:
-
-  #align(center, table(
-    columns: count,
-    ..nums.map(n => $F_#n$),
-    ..nums.map(n => str(fib(n))),
-  ))
-  ```
+#zebraw(
+  numbering-offset: 30,
+  line-range: (range: (2, 4), keep-offset: true),
+  code
 )
 ````)
 }

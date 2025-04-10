@@ -11,7 +11,7 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 
 ## 快速开始
 
-使用 `#import "@preview/zebraw:0.5.1": *` 导入 `zebraw` 包，然后添加 `#show: zebraw` 以最简单的方式开始使用 zebraw。
+使用 `#import "@preview/zebraw:0.5.2": *` 导入 `zebraw` 包，然后添加 `#show: zebraw` 以最简单的方式开始使用 zebraw。
 
 <p align="center"><a href="assets/1.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/1_Dark.svg"><img alt="typst-block" src="assets/1_Light.svg" /></picture></a></p>
 
@@ -24,7 +24,7 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 `zebraw` 函数提供了多种参数来自定义代码块的外观和行为。以下部分详细描述了这些参数：
 
 - **核心功能**
-  - 显示行号（可自定义起始值）
+  - 可自定义的行号显示
   - 选择性显示代码行范围
   - 代码行高亮及注释
   - 代码块标题和页脚
@@ -48,84 +48,88 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 
 <p align="center"><a href="assets/4.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/4_Dark.svg"><img alt="typst-block" src="assets/4_Light.svg" /></picture></a></p>
 
+如果你想要更高级的行号控制，可以向 `numbering` 参数传递一个由数组组成的数组。每个内层数组表示一列内容用来替代行号。这样，一行就可以显示多个行号、标记或者自定义的标识符。
+
+<p align="center"><a href="assets/5.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/5_Dark.svg"><img alt="typst-block" src="assets/5_Light.svg" /></picture></a></p>
+
 ### 行号分隔线
 
 你可以通过设置 `numbering-separator` 参数为 `true` 来在行号和代码内容之间添加分隔线：
 
-<p align="center"><a href="assets/5.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/5_Dark.svg"><img alt="typst-block" src="assets/5_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/6.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/6_Dark.svg"><img alt="typst-block" src="assets/6_Light.svg" /></picture></a></p>
 
 ### 代码行切片
 
 使用 `line-range` 参数可以显示代码块的特定行范围。该参数支持两种格式：
 
-- 包含 2 个整数的数组，表示范围 <a href="assets/6.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/6_Dark.svg"><img style="vertical-align: -0.35em" alt="typst-block" src="assets/6_Light.svg" /></picture></a>（<a href="assets/7.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/7_Dark.svg"><img style="vertical-align: -0.35em" alt="typst-block" src="assets/7_Light.svg" /></picture></a> 可以是 `none`，此功能基于 Typst 数组切片）
+- 包含 2 个整数的数组，表示范围 <a href="assets/7.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/7_Dark.svg"><img style="vertical-align: -0.35em" alt="typst-block" src="assets/7_Light.svg" /></picture></a>（<a href="assets/8.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/8_Dark.svg"><img style="vertical-align: -0.35em" alt="typst-block" src="assets/8_Light.svg" /></picture></a> 可以是 `none`，此功能基于 Typst 数组切片）
 - 包含 `range` 和 `keep-offset` 键的字典
 
 当 `keep-offset` 为 `true` 时，行号保留原始值；为 `false` 时，行号从 1 开始重新计数。默认值为 `true`。
 
-<p align="center"><a href="assets/8.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/8_Dark.svg"><img alt="typst-block" src="assets/8_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/9.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/9_Dark.svg"><img alt="typst-block" src="assets/9_Light.svg" /></picture></a></p>
 
 ### 行高亮
 
 通过向 `zebraw` 函数传递 `highlight-lines` 参数来高亮显示代码块中的特定行。`highlight-lines` 参数可以接受单个行号或行号数组。
 
-<p align="center"><a href="assets/9.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/9_Dark.svg"><img alt="typst-block" src="assets/9_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/10.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/10_Dark.svg"><img alt="typst-block" src="assets/10_Light.svg" /></picture></a></p>
 
 ### 注释
 
 通过向 `highlight-lines` 参数传递一个包含行号和注释的数组，可以为高亮显示的行添加注释。
 
-<p align="center"><a href="assets/10.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/10_Dark.svg"><img alt="typst-block" src="assets/10_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/11.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/11_Dark.svg"><img alt="typst-block" src="assets/11_Light.svg" /></picture></a></p>
 
 注释默认以 `">"` 开头。你可以通过 `comment-flag` 参数更改这个标志：
 
-<p align="center"><a href="assets/11.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/11_Dark.svg"><img alt="typst-block" src="assets/11_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/12.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/12_Dark.svg"><img alt="typst-block" src="assets/12_Light.svg" /></picture></a></p>
 
 要完全移除注释标志，可以将 `comment-flag` 参数设为空字符串 `""`（这也会同时禁用注释缩进）：
 
-<p align="center"><a href="assets/12.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/12_Dark.svg"><img alt="typst-block" src="assets/12_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/13.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/13_Dark.svg"><img alt="typst-block" src="assets/13_Light.svg" /></picture></a></p>
 
 ### 标题和页脚
 
 你可以为代码块添加标题和页脚。可以通过在 `highlight-lines` 参数中传入键为 `header` 或 `footer` 的字典来实现。
 
-<p align="center"><a href="assets/13.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/13_Dark.svg"><img alt="typst-block" src="assets/13_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/14.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/14_Dark.svg"><img alt="typst-block" src="assets/14_Light.svg" /></picture></a></p>
 
 或者，可以使用专门的 `header` 和 `footer` 参数使代码更简洁：
 
-<p align="center"><a href="assets/14.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/14_Dark.svg"><img alt="typst-block" src="assets/14_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/15.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/15_Dark.svg"><img alt="typst-block" src="assets/15_Light.svg" /></picture></a></p>
 
 ### 语言标签
 
 通过设置 `lang` 参数为 `true`，可以在代码块的右上角显示一个浮动的语言标签：
 
-<p align="center"><a href="assets/15.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/15_Dark.svg"><img alt="typst-block" src="assets/15_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/16.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/16_Dark.svg"><img alt="typst-block" src="assets/16_Light.svg" /></picture></a></p>
 
 通过向 `lang` 参数传递字符串或内容来自定义显示的语言：
 
-<p align="center"><a href="assets/16.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/16_Dark.svg"><img alt="typst-block" src="assets/16_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/17.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/17_Dark.svg"><img alt="typst-block" src="assets/17_Light.svg" /></picture></a></p>
 
 ### 缩进指引线、悬挂缩进和快速预览
 
 通过向 `indentation` 参数传递一个正整数来显示缩进指引线，该整数表示每个缩进级别的空格数：
 
-<p align="center"><a href="assets/17.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/17_Dark.svg"><img alt="typst-block" src="assets/17_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/18.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/18_Dark.svg"><img alt="typst-block" src="assets/18_Light.svg" /></picture></a></p>
 
 要启用悬挂缩进，只需将 `hanging-indent` 设置为 `true`：
 
-<p align="center"><a href="assets/18.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/18_Dark.svg"><img alt="typst-block" src="assets/18_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/19.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/19_Dark.svg"><img alt="typst-block" src="assets/19_Light.svg" /></picture></a></p>
 
 缩进线可能会降低预览性能。为了加快预览速度，可以通过在 `zebraw-init` 中将 `fast-preview` 参数设置为 `true`，或在 typst-cli 中传入 `zebraw-fast-preview`。这会将缩进线渲染为简单的 `|` 字符：
 
-<p align="center"><a href="assets/19.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/19_Dark.svg"><img alt="typst-block" src="assets/19_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/20.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/20_Dark.svg"><img alt="typst-block" src="assets/20_Light.svg" /></picture></a></p>
 
 ### 主题
 
 Zebraw 包含内置主题。欢迎提交 PR 添加更多主题！
 
-<p align="center"><a href="assets/20.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/20_Dark.svg"><img alt="typst-block" src="assets/20_Light.svg" /></picture></a></p>
-
 <p align="center"><a href="assets/21.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/21_Dark.svg"><img alt="typst-block" src="assets/21_Light.svg" /></picture></a></p>
+
+<p align="center"><a href="assets/22.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/22_Dark.svg"><img alt="typst-block" src="assets/22_Light.svg" /></picture></a></p>
 
 ### （实验性）HTML 导出
 
@@ -143,25 +147,25 @@ Zebraw 包含内置主题。欢迎提交 PR 添加更多主题！
 
 通过向 `inset` 参数传递一个字典来自定义每行代码周围的内边距（行号不受影响）：
 
-<p align="center"><a href="assets/22.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/22_Dark.svg"><img alt="typst-block" src="assets/22_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/23.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/23_Dark.svg"><img alt="typst-block" src="assets/23_Light.svg" /></picture></a></p>
 
 ### 颜色
 
 通过 `background-color` 参数设置代码块背景色，可以是单一颜色或一个颜色数组（会循环使用各个颜色）：
 
-<p align="center"><a href="assets/23.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/23_Dark.svg"><img alt="typst-block" src="assets/23_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/24.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/24_Dark.svg"><img alt="typst-block" src="assets/24_Light.svg" /></picture></a></p>
 
 通过 `highlight-color` 参数设置高亮行的背景颜色：
 
-<p align="center"><a href="assets/24.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/24_Dark.svg"><img alt="typst-block" src="assets/24_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/25.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/25_Dark.svg"><img alt="typst-block" src="assets/25_Light.svg" /></picture></a></p>
 
 通过 `comment-color` 参数更改注释行背景颜色：
 
-<p align="center"><a href="assets/25.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/25_Dark.svg"><img alt="typst-block" src="assets/25_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/26.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/26_Dark.svg"><img alt="typst-block" src="assets/26_Light.svg" /></picture></a></p>
 
 通过 `lang-color` 参数设置语言标签的背景颜色：
 
-<p align="center"><a href="assets/26.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/26_Dark.svg"><img alt="typst-block" src="assets/26_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/27.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/27_Dark.svg"><img alt="typst-block" src="assets/27_Light.svg" /></picture></a></p>
 
 ### 字体
 
@@ -169,21 +173,21 @@ Zebraw 包含内置主题。欢迎提交 PR 添加更多主题！
 
 如果没有提供自定义的 `lang-font-args`，语言标签会继承注释字体的样式：
 
-<p align="center"><a href="assets/27.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/27_Dark.svg"><img alt="typst-block" src="assets/27_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/28.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/28_Dark.svg"><img alt="typst-block" src="assets/28_Light.svg" /></picture></a></p>
 
 比如自定义语言标签样式：
 
-<p align="center"><a href="assets/28.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/28_Dark.svg"><img alt="typst-block" src="assets/28_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/29.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/29_Dark.svg"><img alt="typst-block" src="assets/29_Light.svg" /></picture></a></p>
 
 ### 延展
 
 垂直方向延展默认为启用。当存在标题或页脚时，它会自动禁用。
 
-<p align="center"><a href="assets/29.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/29_Dark.svg"><img alt="typst-block" src="assets/29_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/30.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/30_Dark.svg"><img alt="typst-block" src="assets/30_Light.svg" /></picture></a></p>
 
 ## 示例
 
-<p align="center"><a href="assets/30.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/30_Dark.svg"><img alt="typst-block" src="assets/30_Light.svg" /></picture></a></p>
+<p align="center"><a href="assets/31.typ"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/31_Dark.svg"><img alt="typst-block" src="assets/31_Light.svg" /></picture></a></p>
 
 ## 许可证
 

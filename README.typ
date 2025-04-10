@@ -1,6 +1,6 @@
-#set page(paper: "a4")
+#set page(paper: "a4", height: auto)
 
-#import "@preview/zebraw:0.5.1": *
+#import "@preview/zebraw:0.5.2": *
 
 #set raw(theme: "assets/tokyo-night.tmTheme") if sys.inputs.at("x-color-theme", default: none) == "dark"
 #show raw: set text(font: "Fira Code")
@@ -72,10 +72,10 @@ Zebraw is a lightweight and fast package for displaying code blocks with line nu
 
 == Quick Start
 
-Import the `zebraw` package with ```typ #import "@preview/zebraw:0.5.1": *``` then add ```typ #show: zebraw``` to start using zebraw in the simplest way.
+Import the `zebraw` package with ```typ #import "@preview/zebraw:0.5.2": *``` then add ```typ #show: zebraw``` to start using zebraw in the simplest way.
 
 #context preview(````typ
-#import "@preview/zebraw:0.5.1": *
+#import "@preview/zebraw:0.5.2": *
 #show: zebraw
 
 ```typ
@@ -107,11 +107,11 @@ To manually render specific code blocks with zebraw, use the ```typ #zebraw()```
 The `zebraw` function provides a variety of parameters to customize the appearance and behavior of code blocks. The following sections describe these parameters in detail:
 
 - *Core Features*
-  - Line numbering, with customizable offset and range slicing
+  - Customizable line numbering and range slicing
   - Line highlighting and explanatory comments for code
   - Headers and footers
   - Language identifier tabs
-  - The indentation line and hanging indentation (and fast preview mode for better performance)
+  - The indentation guide line and hanging indentation (and fast preview mode for better performance)
 - *Customization Options*
   - Custom colors for background, highlights, and comments
   - Custom fonts for different elements
@@ -150,6 +150,23 @@ To disable line numbering, pass `false` to the `numbering` parameter:
   ```
 )
 ````)
+
+For more advanced numbering control, pass an array of arrays to the numbering parameter. Each inner array represents a column of markers that will be displayed instead of standard line numbers. This allows displaying multiple line numbers, markers or custom identifiers for each line.
+
+#context preview(````typ
+#zebraw(
+  numbering: (
+    ([\+], [\*], [\#], [\-]),
+  ),
+  ```typ
+  #grid(
+    columns: (1fr, 1fr),
+    [Hello], [world!],
+  )
+  ```
+)
+````)
+
 
 === Numbering Separator
 

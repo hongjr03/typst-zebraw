@@ -1,6 +1,6 @@
 [package]
 name = "zebraw"
-version = "0.5.1"
+version = "0.5.2"
 entrypoint = "src/lib.typ"
 authors = ["hongjr03 <https://github.com/hongjr03>"]
 license = "MIT"

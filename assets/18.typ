@@ -2,7 +2,7 @@
 // render_code
 context preview(````typ
 #zebraw(
-  hanging-indent: true,
+  indentation: 2,
   ```typ
   #let forecast(day) = block[
     #box(square(
