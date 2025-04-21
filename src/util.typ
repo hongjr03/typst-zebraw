@@ -80,7 +80,7 @@
   // Process each line
   for (x, line) in lines.enumerate() {
     // Determine indentation
-    let indentation = if line.text.trim(whitespace-regex) == "" {
+    let indentation = if line.text.trim(whitespace-regex, at: std.start) == "" {
       // For empty lines, use indentation from previous non-comment lines
       let prev-line = if x > 0 and lines-result.last().type != "comment" {
         lines-result.last()
@@ -116,7 +116,7 @@
     }
 
     // Format body
-    let body = if line.text.trim() == "" { [#indentation\ ] } else { line.body }
+    let body = if line.text.trim(at: std.start) == "" { [#indentation\ ] } else { line.body }
 
     // Calculate line number to display
     let display-number = if numbering == true {
