@@ -1,14 +1,5 @@
 #import "state.typ": *
-
-#let whitespaces = (
-  "\u{0009}",
-  "\u{000B}",
-  "\u{000C}",
-  "\u{0020}",
-  "\u{00A0}",
-  "\u{FEFF}",
-)
-#let whitespace-regex = regex("[" + whitespaces.join() + "]")
+#import "indentation.typ": *
 
 #let tidy-highlight-lines(highlight-lines) = {
   let nums = ()
@@ -79,8 +70,7 @@
 
   // Process each line
   for (x, line) in lines.enumerate() {
-    // Determine indentation
-    let indentation = if line.text.trim(whitespace-regex, at: std.start) == "" {
+    let indent-string = if line.text.trim(whitespace-regex, at: std.start) == "" {
       // For empty lines, use indentation from previous non-comment lines
       let prev-line = if x > 0 and lines-result.last().type != "comment" {
         lines-result.last()
@@ -96,27 +86,15 @@
         indentation * " "
       }
     } else {
-      // For non-empty lines, use the leading whitespace
-      // Count leading whitespace characters more precisely
-      let leading-whitespace = ""
-      for c in line.text {
-        if whitespaces.contains(c) {
-          if c == "\u{FEFF}" {
-            // do nothing
-          } else if c == "\u{00A0}" or c == " " {
-            leading-whitespace += " "
-          } else {
-            leading-whitespace += c
-          }
-        } else {
-          break
-        }
-      }
-      leading-whitespace
+      // Use function from indentation.typ to extract indentation string
+      indentation-extract-from-text(line.text)
     }
 
-    // Format body
-    let body = if line.text.trim(at: std.start) == "" { [#indentation\ ] } else { line.body }
+    let body = if line.text.trim(whitespace-regex, at: std.start) == "" {
+      [#indent-string\ ]
+    } else {
+      line.body
+    }
 
     // Calculate line number to display
     let display-number = if numbering == true {
@@ -146,7 +124,7 @@
       // Add highlighted line
       lines-result.push((
         type: "highlight",
-        indentation: indentation,
+        indentation: indent-string,
         number: display-number,
         body: body,
         fill: highlight-color,
@@ -160,7 +138,7 @@
           number: none,
           body: {
             if comment-flag != "" {
-              indentation
+              indent-string
               strong(text(ligatures: true, comment.comment-flag))
               h(0.35em, weak: true)
             }
@@ -173,7 +151,7 @@
       // Add normal line
       lines-result.push((
         type: "normal",
-        indentation: indentation,
+        indentation: indent-string,
         number: display-number,
         body: body,
         fill: curr-background-color(background-color, line.number),
