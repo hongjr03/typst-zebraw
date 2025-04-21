@@ -1,5 +1,15 @@
 #import "state.typ": *
 
+#let whitespaces = (
+  "\u{0009}",
+  "\u{000B}",
+  "\u{000C}",
+  "\u{0020}",
+  "\u{00A0}",
+  "\u{FEFF}",
+)
+#let whitespace-regex = regex("[" + whitespaces.join() + "]")
+
 #let tidy-highlight-lines(highlight-lines) = {
   let nums = ()
   let comments = (:)
@@ -70,7 +80,7 @@
   // Process each line
   for (x, line) in lines.enumerate() {
     // Determine indentation
-    let indentation = if line.text.trim() == "" {
+    let indentation = if line.text.trim(whitespace-regex) == "" {
       // For empty lines, use indentation from previous non-comment lines
       let prev-line = if x > 0 and lines-result.last().type != "comment" {
         lines-result.last()
@@ -87,7 +97,22 @@
       }
     } else {
       // For non-empty lines, use the leading whitespace
-      line.text.split(regex("\S")).first()
+      // Count leading whitespace characters more precisely
+      let leading-whitespace = ""
+      for c in line.text {
+        if whitespaces.contains(c) {
+          if c == "\u{FEFF}" {
+            // do nothing
+          } else if c == "\u{00A0}" or c == " " {
+            leading-whitespace += " "
+          } else {
+            leading-whitespace += c
+          }
+        } else {
+          break
+        }
+      }
+      leading-whitespace
     }
 
     // Format body
