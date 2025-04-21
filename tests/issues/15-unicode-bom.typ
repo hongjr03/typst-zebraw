@@ -14,7 +14,16 @@
 
 
 #for ws in whitespaces {
-  let code = raw(ws * 2 + "hi", block: true)
+  let code = raw(ws * 2 + " " * 2 + "hi", block: true, lang: "python")
   code
 }
 
+#for ws in whitespaces {
+  let code = raw(ws * 2 + " " * 2 + "hi", block: true, lang: "c")
+  code
+}
+
+#for ws in whitespaces {
+  let code = raw(ws * 2 + " " * 2 + "hi", block: true)
+  code
+}
