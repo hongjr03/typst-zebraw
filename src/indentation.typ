@@ -68,40 +68,6 @@
   processed
 }
 
-/// Process line indentation
-#let indentation-process-line(line, config) = {
-  // Process different content types based on hanging-indent setting
-  if repr(line.body.func()) == "sequence" and line.body.children.first().func() == text {
-    if line.body.children.first().text.trim(whitespace-regex, at: std.start) == "" {
-      // First text node is empty
-      if config.hanging-indent {
-        grid(
-          columns: 2,
-          indentation-format(line.indentation, config), line.body.children.slice(1).join(),
-        )
-      } else {
-        indentation-format(line.indentation, config)
-        line.body.children.slice(1).join()
-      }
-    } else {
-      indentation-format(line.indentation, config)
-      line.body.children.slice(1).join()
-    }
-  } else if repr(line.body.func()) == "text" {
-    if config.hanging-indent {
-      grid(
-        columns: 2,
-        indentation-format(line.indentation, config), line.body.text.trim(whitespace-regex, at: std.start),
-      )
-    } else {
-      indentation-format(line.indentation, config)
-      line.body.text.trim(whitespace-regex, at: std.start)
-    }
-  } else {
-    line.body
-  }
-}
-
 /// Render a code line with indentation processing
 #let indentation-render-line(line, height, hanging-indent, indentation, inset, fast-preview) = {
   let line-height = measure("|").height
@@ -116,10 +82,15 @@
   )
 
   // Only process indentation when it exists
-  if line.keys().contains("indentation") {
-    indentation-process-line(line, config)
+  if hanging-indent {
+    grid(
+      columns: 2,
+      indentation-format(line.indentation, config), line.body,
+    )
   } else {
-    // No indentation processing needed
+    if line.keys().contains("indentation") {
+      indentation-format(line.indentation, config)
+    }
     line.body
   }
 }
