@@ -75,13 +75,13 @@
   let (highlight-nums, comments) = tidy-highlight-lines(highlight-lines)
 
   // Common styles
-  let numbering-width = if numbering {
+  let numbering-width = if numbering == true {
     if it.lines.len() + numbering-offset < 100 {
       2.1em
     } else {
       auto
     }
-  } else { 0 }
+  } else if type(numbering) == array { auto } else { 0 }
 
   let number-div-style = (
     "margin: 0",
@@ -127,7 +127,7 @@
           text-div-style,
           if is-background { ("background: " + line.fill.to-hex(),) },
         ),
-        ..if not is-background { (class: "zebraw-code-line-container") },
+        ..if not is-background { (class: "zebraw-code-line-container", translate: "no") },
       ),
       {
         // Line number
@@ -137,10 +137,23 @@
           attrs: (
             style: create-style(
               number-div-style,
+              "display: flex",
+              "justify-content: flex-end",
               if is-background { background-text-style } else { ("opacity: 0.7",) },
             ),
           ),
-          [#line.number],
+          if type(line.number) == array {
+            line
+              .number
+              .map(n => html.elem(
+                "span",
+                attrs: (style: "margin-left: 0.2em"),
+                n,
+              ))
+              .join()
+          } else {
+            [#line.number]
+          },
         )
 
         // Code content
@@ -154,7 +167,7 @@
                 ("border-left: 1px solid #ccc",)
               },
             ),
-            ..if not is-background { (class: "zebraw-code-line") },
+            ..if not is-background { (class: "zebraw-code-line", translate: "no") },
           ),
           {
             show underline: it => html.elem(
@@ -176,7 +189,7 @@
                 it,
               )
             }
-            line.body
+            line.indentation + line.body
           },
         )
       },
@@ -190,11 +203,11 @@
           style: create-style(
             text-div-style,
             if is-background { ("background: " + line.comment.fill.to-hex(),) },
-            if wrap { ("white-space: pre-wrap",) } else { ("white-space: pre",) },
+            "align-items: flex-start", // 改为顶部对齐，防止垂直居中导致的奇怪布局
           ),
+          ..if not is-background { (class: "zebraw-code-comment-container") },
         ),
         {
-          // Empty space for indentation
           html.elem(
             "pre",
             attrs: (
@@ -206,18 +219,27 @@
             "",
           )
 
-          // Comment content
+          // 注释内容容器
           html.elem(
-            "p",
+            "div",
             attrs: (
               style: create-style(
                 "margin: 0",
-                "padding: 0",
+                "padding: "
+                  + repr-or-str(inset.top)
+                  + " "
+                  + repr-or-str(inset.right)
+                  + " "
+                  + repr-or-str(inset.bottom)
+                  + " "
+                  + repr-or-str(inset.left), // 使用与代码行一致的内边距
                 "width: 100%",
+                if wrap { ("white-space: pre-wrap",) } else { ("white-space: pre",) },
               ),
+              class: "zebraw-code-comment",
             ),
             {
-              // Comment flag
+              // 注释标记
               html.elem(
                 "span",
                 attrs: (
@@ -225,22 +247,21 @@
                     ("user-select: none",),
                     if is-background { background-text-style },
                   ),
+                  class: "zebraw-comment-flag",
                 ),
-                {
-                  line.comment.indentation.clusters().len() * " "
+                if line.comment.comment-flag != "" {
+                  line.comment.indentation
                   strong(text(ligatures: true, line.comment.comment-flag))
                   " "
-                },
+                } else { },
               )
 
-              // Comment text
+              // 注释文本
               html.elem(
                 "span",
                 attrs: (
-                  style: create-style(
-                    ("font-size: 0.8em",),
-                    if is-background { background-text-style },
-                  ),
+                  ..if is-background { (style: create-style(background-text-style)) },
+                  class: "zebraw-comment-text",
                 ),
                 line.comment.body,
               )
@@ -350,6 +371,7 @@
               "border-radius: " + repr-or-str(inset.left),
             ),
             class: "zebraw-code-lang",
+            translate: "no",
           ),
           if type(lang) == bool { it.lang } else { lang },
         )
@@ -394,7 +416,6 @@
         ).join(),
       )
 
-      // JavaScript for copy functionality
       html.elem(
         "script",
         ```javascript
@@ -412,7 +433,6 @@
 
             navigator.clipboard.writeText(code)
               .catch(() => {
-                // Fallback for older browsers
                 const textarea = document.createElement('textarea');
                 textarea.value = code;
                 document.body.appendChild(textarea);
