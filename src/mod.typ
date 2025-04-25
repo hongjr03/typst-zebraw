@@ -1,4 +1,5 @@
 #import "util.typ": *
+#import "indentation.typ": *
 #import "html.typ": zebraw-html-show
 
 #let zebraw-show(
@@ -80,113 +81,6 @@
   // Determine if we should show a language tab
   let has-lang = (type(lang) == bool and lang and it.lang != none) or type(lang) != bool
 
-  // Renders a single indentation marker (vertical line)
-  let render-indentation-marker(height-val, line-height) = {
-    if indentation <= 0 { return " " }
-
-    if fast-preview {
-      set text(fill: gray.transparentize(50%))
-      "|"
-    } else if height-val != none {
-      let line-end-y = if hanging-indent {
-        height-val - inset.top
-      } else {
-        line-height + inset.bottom
-      }
-
-      place(
-        std.line(
-          start: (0em, -inset.top),
-          end: (0em, line-end-y),
-          stroke: .05em + gray.transparentize(50%),
-        ),
-        left + top,
-      )
-      " "
-    } else {
-      " "
-    }
-  }
-
-  // Format indentation with vertical guides
-  let format-indentation(idt, height, line-height) = {
-    if indentation <= 0 { return idt }
-
-    // Process each leading space in indentation string
-    let len = idt.len()
-    let processed = ""
-
-    let breakpoint = -1
-    for i in range(len) {
-      // Add vertical line for each position that's a multiple of indentation
-      if calc.rem(i, indentation) == 0 and idt.at(i) == " " {
-        processed += box(render-indentation-marker(height, line-height))
-      } else if idt.at(i) != " " {
-        breakpoint = i
-        break
-      } else {
-        processed += idt.at(i)
-      }
-    }
-
-    // Add remaining non-space characters
-    if breakpoint != -1 {
-      for i in range(breakpoint, len) {
-        processed += idt.at(i)
-      }
-    }
-
-    processed
-  }
-
-  // Process line's indentation
-  let process-indentation(line, height, line-height) = {
-    // Handle different content types based on hanging-indent setting
-    if repr(line.body.func()) == "sequence" and line.body.children.first().func() == text {
-      if line.body.children.first().text.trim() == "" {
-        // Empty first text node
-        if hanging-indent {
-          grid(
-            columns: 2,
-            format-indentation(line.indentation, height, line-height), line.body.children.slice(1).join(),
-          )
-        } else {
-          format-indentation(line.indentation, height, line-height)
-          line.body.children.slice(1).join()
-        }
-      } else {
-        format-indentation(line.body.children.first().text, height, line-height)
-        line.body.children.slice(1).join()
-      }
-    } else if repr(line.body.func()) == "text" {
-      if hanging-indent {
-        grid(
-          columns: 2,
-          format-indentation(line.indentation, height, line-height), line.body.text.trim(),
-        )
-      } else {
-        format-indentation(line.indentation, height, line-height)
-        line.body.text.trim()
-      }
-    } else {
-      line.body
-    }
-  }
-
-  // Renders a code line with indentation processing
-  let render-code-line(line, height) = {
-    let line-height = measure("|").height
-
-    // Only process indentation if available
-    if line.keys().contains("indentation") {
-      let indented-content = process-indentation(line, height, line-height)
-      indented-content
-    } else {
-      // No indentation processing needed
-      line.body
-    }
-  }
-
   // Helper function to render a line (either code or line number)
   let line-render(line, num: false, height: none) = grid.cell(
     fill: line.fill,
@@ -205,12 +99,11 @@
             .join(h(0.3em, weak: true))
         } else {
           // Code line rendering with optional indentation processing
-          render-code-line(line, height)
+          indentation-render-line(line, height, hanging-indent, indentation, inset, fast-preview)
         }
       },
     ),
   )
-
 
   // Process lines with highlighting, numbers, and comments
   let lines = tidy-lines(
@@ -228,6 +121,7 @@
     indentation: indentation,
     is-html: false,
     line-range: line-range,
+    hanging-indent: hanging-indent,
   )
 
   // Helper function to create header or footer section
@@ -421,7 +315,7 @@
   /// ````typ
   /// #zebraw(
   ///   inset: (top: 6pt, bottom: 6pt),
-  ///   ```typst
+  ///   ```typ
   ///   #let count = 8
   ///   #let nums = range(1, count + 1)
   ///   #let fib(n) = (
