@@ -1,6 +1,6 @@
 #set page(paper: "a4", height: auto)
 
-#import "@preview/zebraw:0.5.2": *
+#import "/src/lib.typ": *
 
 #set raw(theme: "assets/tokyo-night.tmTheme") if sys.inputs.at("x-color-theme", default: none) == "dark"
 #show raw: set text(font: "Fira Code")
@@ -72,10 +72,10 @@ Zebraw is a lightweight and fast package for displaying code blocks with line nu
 
 == Quick Start
 
-Import the `zebraw` package with ```typ #import "@preview/zebraw:0.5.2": *``` then add ```typ #show: zebraw``` to start using zebraw in the simplest way.
+Import the `zebraw` package with ```typ #import "@preview/zebraw:0.5.3": *``` then add ```typ #show: zebraw``` to start using zebraw in the simplest way.
 
 #context preview(````typ
-#import "@preview/zebraw:0.5.2": *
+#import "@preview/zebraw:0.5.3": *
 #show: zebraw
 
 ```typ
