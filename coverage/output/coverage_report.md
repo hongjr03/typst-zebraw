@@ -1,20 +1,20 @@
 # Tinymist Coverage Report
 
-![Coverage](https://img.shields.io/badge/coverage-65.64%25-yellow)
+![Coverage](https://img.shields.io/badge/coverage-66.40%25-yellow)
 
-## Overall Coverage: 65.64%
+## Overall Coverage: 66.40%
 
 | File | Executed | Not Executed | Total | Coverage |
 |------|--------|--------|------|--------|
-| mod.typ | 159 | 14 | 173 | 91.91% |
 | state.typ | 68 | 6 | 74 | 91.89% |
-| util.typ | 84 | 16 | 100 | 84.00% |
+| mod.typ | 166 | 15 | 181 | 91.71% |
+| util.typ | 86 | 14 | 100 | 86.00% |
 | README.typ | 10 | 8 | 18 | 55.56% |
 | html.typ | 0 | 124 | 124 | 0.00% |
 | lib.typ | 0 | 0 | 0 | 0.00% |
 | theme.typ | 0 | 0 | 0 | 0.00% |
 
-**Total:** 321 executed, 168 not executed, 489 total items
+**Total:** 330 executed, 167 not executed, 497 total items
 
 
-Last updated: 2025-04-09 03:10:54
+Last updated: 2025-04-25 07:16:09
