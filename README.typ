@@ -504,6 +504,7 @@ Indentation lines can slow down preview performance. For faster previews, enable
 #context zebraw-init(
   fast-preview: true,
   indentation: 2,
+  lang: false,
   [
     #context preview(````typ
     #zebraw(
