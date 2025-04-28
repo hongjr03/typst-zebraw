@@ -1,4 +1,4 @@
-#set page(paper: "a4", height: auto)
+// #set page(paper: "a4", height: auto)
 #import "src/lib.typ": *
 
 #set text(font: ((name: "SF Pro", covers: "latin-in-cjk"), "Noto Sans SC"))
@@ -8,8 +8,8 @@
 #show raw: set text(font: "Fira Code")
 #show raw.where(lang: "typlite"): none
 
-#let preview(..args, body) = (
-  v(0.5em)
+#let preview(..args, body) = html.frame(
+  v(1em)
     + grid(
       columns: (20em, 20em),
       ..args,
@@ -35,6 +35,7 @@
         ),
       ),
     )
+    + v(1em),
 )
 
 #show: zebraw-init.with(
@@ -74,10 +75,10 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 
 == 快速开始
 
-使用 ```typ #import "@preview/zebraw:0.5.3": *``` 导入 `zebraw` 包，然后添加 ```typ #show: zebraw``` 以最简单的方式开始使用 zebraw。
+使用 ```typ #import "@preview/zebraw:0.5.4": *``` 导入 `zebraw` 包，然后添加 ```typ #show: zebraw``` 以最简单的方式开始使用 zebraw。
 
 #context preview(````typ
-#import "@preview/zebraw:0.5.3": *
+#import "@preview/zebraw:0.5.4": *
 #show: zebraw
 
 ```typ
@@ -769,34 +770,37 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 
 == 示例
 
-#context {
-  set page(paper: "a4", height: auto, margin: 2.5em)
-  zebraw(
-    highlight-lines: (
-      (3, [to avoid negative numbers]),
-      (9, "50 => 12586269025"),
-    ),
-    lang: true,
-    header: "Calculate Fibonacci number using reccursive function",
-    indentation: 4,
-    ```rust
-    pub fn fibonacci_reccursive(n: i32) -> u64 {
-        if n < 0 {
-            panic!("{} is negative!", n);
+#html.frame(
+  block(
+    width: 38em,
+    {
+      zebraw(
+        highlight-lines: (
+          (3, [to avoid negative numbers]),
+          (9, "50 => 12586269025"),
+        ),
+        lang: true,
+        header: "Calculate Fibonacci number using reccursive function",
+        indentation: 4,
+        ```rust
+        pub fn fibonacci_reccursive(n: i32) -> u64 {
+            if n < 0 {
+                panic!("{} is negative!", n);
+            }
+            match n {
+                0 => panic!("zero is not a right argument to fibonacci_reccursive()!"),
+                1 | 2 => 1,
+                3 => 2,
+                _ => fibonacci_reccursive(n - 1) + fibonacci_reccursive(n - 2),
+            }
         }
-        match n {
-            0 => panic!("zero is not a right argument to fibonacci_reccursive()!"),
-            1 | 2 => 1,
-            3 => 2,
-            _ => fibonacci_reccursive(n - 1) + fibonacci_reccursive(n - 2),
-        }
-    }
-    ```,
-  )
-}
+        ```,
+      )
+    },
+  ),
+)
 
-```typlite
-## 许可证
+
+== 许可证
 
 Zebraw 使用 MIT 许可证授权。更多信息请查看 [LICENSE](LICENSE) 文件。
-```

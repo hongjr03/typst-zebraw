@@ -1,4 +1,4 @@
-#set page(paper: "a4", height: auto)
+// #set page(paper: "a4", height: auto)
 
 #import "/src/lib.typ": *
 
@@ -6,8 +6,8 @@
 #show raw: set text(font: "Fira Code")
 #show raw.where(lang: "typlite"): none
 
-#let preview(..args, body) = (
-  v(0.5em)
+#let preview(..args, body) = html.frame(
+  v(1em)
     + grid(
       columns: (20em, 20em),
       ..args,
@@ -33,6 +33,7 @@
         ),
       ),
     )
+    + v(1em),
 )
 
 #show: zebraw-init.with(
@@ -72,10 +73,10 @@ Zebraw is a lightweight and fast package for displaying code blocks with line nu
 
 == Quick Start
 
-Import the `zebraw` package with ```typ #import "@preview/zebraw:0.5.3": *``` then add ```typ #show: zebraw``` to start using zebraw in the simplest way.
+Import the `zebraw` package with ```typ #import "@preview/zebraw:0.5.4": *``` then add ```typ #show: zebraw``` to start using zebraw in the simplest way.
 
 #context preview(````typ
-#import "@preview/zebraw:0.5.3": *
+#import "@preview/zebraw:0.5.4": *
 #show: zebraw
 
 ```typ
@@ -765,34 +766,36 @@ Extend at vertical is enabled at default. When there's header or footer it will 
 
 == Example
 
-#context {
-  set page(paper: "a4", height: auto, margin: 2.5em)
-  zebraw(
-    highlight-lines: (
-      (3, [to avoid negative numbers]),
-      (9, "50 => 12586269025"),
-    ),
-    lang: true,
-    header: "Calculate Fibonacci number using reccursive function",
-    indentation: 4,
-    ```rust
-    pub fn fibonacci_reccursive(n: i32) -> u64 {
-        if n < 0 {
-            panic!("{} is negative!", n);
+#html.frame(
+  block(
+    width: 38em,
+    {
+      zebraw(
+        highlight-lines: (
+          (3, [to avoid negative numbers]),
+          (9, "50 => 12586269025"),
+        ),
+        lang: true,
+        header: "Calculate Fibonacci number using reccursive function",
+        indentation: 4,
+        ```rust
+        pub fn fibonacci_reccursive(n: i32) -> u64 {
+            if n < 0 {
+                panic!("{} is negative!", n);
+            }
+            match n {
+                0 => panic!("zero is not a right argument to fibonacci_reccursive()!"),
+                1 | 2 => 1,
+                3 => 2,
+                _ => fibonacci_reccursive(n - 1) + fibonacci_reccursive(n - 2),
+            }
         }
-        match n {
-            0 => panic!("zero is not a right argument to fibonacci_reccursive()!"),
-            1 | 2 => 1,
-            3 => 2,
-            _ => fibonacci_reccursive(n - 1) + fibonacci_reccursive(n - 2),
-        }
-    }
-    ```,
-  )
-}
+        ```,
+      )
+    },
+  ),
+)
 
-```typlite
-## License
+=== License
 
 Zebraw is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
-```
