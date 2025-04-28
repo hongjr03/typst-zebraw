@@ -96,8 +96,8 @@
       if repr(line.body.func()) == "sequence" {
         if (
           line.body.children.first().func() == text
-            and line.body.children.first().text.trim(whitespace-regex, at: std.start) == ""
         ) {
+          line.body.children.first().text.trim(whitespace-regex, at: std.start)
           line.body.children.slice(1).join()
         } else {
           line.body.children.join()
