@@ -8,36 +8,20 @@
 #show raw: set text(font: "Fira Code")
 #show raw.where(lang: "typlite"): none
 
-#let preview(..args, body) = html.frame(
-  v(1em)
-    + grid(
-      columns: (20em, 20em),
-      ..args,
-      column-gutter: 0.5em,
-      block(
-        stroke: gray,
-        radius: 0.25em,
-        width: 100%,
-        inset: 0.5em,
-        {
-          set text(size: 0.95em)
-          body
-        },
+#let preview(..args, body) = {
+  body
+  html.frame(
+    block(
+      width: 20em,
+      inset: (y: 2em),
+      eval(
+        body.text,
+        mode: "markup",
+        scope: (zebraw: zebraw, zebraw-init: zebraw-init, zebraw-themes: zebraw-themes),
       ),
-      block(
-        stroke: gray,
-        radius: 0.25em,
-        inset: 0.5em,
-        eval(
-          body.text,
-          mode: "markup",
-          scope: (zebraw: zebraw, zebraw-init: zebraw-init, zebraw-themes: zebraw-themes),
-        ),
-      ),
-    )
-    + v(1em),
-)
-
+    ),
+  )
+}
 #show: zebraw-init.with(
   ..if sys.inputs.at("x-color-theme", default: none) == "dark" {
     (
@@ -772,7 +756,7 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 
 #html.frame(
   block(
-    width: 38em,
+    width: 42em,
     {
       zebraw(
         highlight-lines: (
