@@ -6,7 +6,7 @@
 #show raw: set text(font: "Fira Code")
 #show raw.where(lang: "typlite"): none
 
-#let preview(..args, body) = html.frame(
+#let preview(..args, body) = (
   v(1em)
     + grid(
       columns: (20em, 20em),
@@ -766,7 +766,7 @@ Extend at vertical is enabled at default. When there's header or footer it will 
 
 == Example
 
-#html.frame(
+#(
   block(
     width: 38em,
     {
