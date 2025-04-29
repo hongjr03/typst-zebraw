@@ -25,12 +25,16 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y bc
+          cargo install typship
       
       - name: Install Tinymist
         env:
             TINYMIST_VERSION: v0.13.10
         run: curl --proto '=https' --tlsv1.2 -LsSf https://github.com/Myriad-Dreamin/tinymist/releases/download/${TINYMIST_VERSION}/tinymist-installer.sh | sh
-
+      
+      - name: typship dev
+        run: typship dev
+        
       - name: Run file coverage (Typst)
         run: tinymist cov README.typ
       
