@@ -11,17 +11,15 @@ jobs:
   coverage:
     runs-on: ubuntu-latest
     steps:
-      # 首先检出代码
       - name: Checkout code
         uses: actions/checkout@v4
     
-      # 然后使用您的 Tinymist Coverage 工作流操作
       - name: Run Tinymist Coverage
-        uses: hongjr03/tinymist-coverage-workflow@v0.1.3
+        uses: hongjr03/tinymist-coverage-workflow@v0.1.5
         with:
           target_files: README.typ
           tinymist_version: latest
-          setup_typship: true
+          create_symlinks: true
           report_path: coverage/output
           auto_commit: true
           readme_paths: README.md,README_zh.md
