@@ -6,9 +6,32 @@
 #show raw: set text(font: "Fira Code")
 #show raw.where(lang: "typlite"): none
 
-#let preview(..args, body) = {
+#let preview(..args, body) = context if dictionary(std).keys().contains("html"){
   body
   html.frame(
+    block(
+      width: 20em,
+      stroke: gray,
+      radius: 0.25em,
+      inset: 0.5em,
+      eval(
+        body.text,
+        mode: "markup",
+        scope: (zebraw: zebraw, zebraw-init: zebraw-init, zebraw-themes: zebraw-themes),
+      ),
+    ),
+  )
+} else {
+  grid(
+    columns: 2,
+    column-gutter: .5em,
+    block(
+      width: 20em,
+      stroke: gray,
+      radius: 0.25em,
+      inset: 0.5em,
+      body,
+    ),
     block(
       width: 20em,
       stroke: gray,
@@ -47,11 +70,41 @@
 
 = 🦓 Zebraw
 
-#link("README_zh.md")[#("![🇨🇳中文 README](https://img.shields.io/badge/🇨🇳中文README-blue)")]
-#link("https://typst.app/universe/package/zebraw")[#("![Universe](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Ftypst.app%2Funiverse%2Fpackage%2Fzebraw&query=%2Fhtml%2Fbody%2Fdiv%2Fmain%2Fdiv%5B2%5D%2Faside%2Fsection%5B2%5D%2Fdl%2Fdd%5B3%5D&logo=typst&label=Universe&color=%2339cccc)")]
-#link("https://github.com/hongjr03/typst-zebraw")[#("![GitHub](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fhongjr03%2Ftypst-zebraw%2Frefs%2Fheads%2Fmain%2Ftypst.toml&query=package.version&logo=GitHub&label=GitHub)")]
-#link("coverage_report.md")[#("![Coverage](https://img.shields.io/badge/coverage-67.30%25-yellow)")]
-#link("https://github.com/hongjr03/typst-zebraw/actions/workflows/test.yml")[#("![Test](https://github.com/hongjr03/typst-zebraw/actions/workflows/test.yml/badge.svg)")]
+#context if dictionary(std).keys().contains("html") [
+  #html.elem("a", attrs: (href: "README_zh.md"))[
+    #html.elem("img", attrs: (src: "https://img.shields.io/badge/🇨🇳中文README-blue", alt: "🇨🇳中文 README"))
+  ]
+  #html.elem("a", attrs: (href: "https://typst.app/universe/package/zebraw"))[
+    #html.elem(
+      "img",
+      attrs: (
+        src: "https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Ftypst.app%2Funiverse%2Fpackage%2Fzebraw&query=%2Fhtml%2Fbody%2Fdiv%2Fmain%2Fdiv%5B2%5D%2Faside%2Fsection%5B2%5D%2Fdl%2Fdd%5B3%5D&logo=typst&label=Universe&color=%2339cccc",
+        alt: "Universe",
+      ),
+    )
+  ]
+  #html.elem("a", attrs: (href: "https://github.com/hongjr03/typst-zebraw"))[
+    #html.elem(
+      "img",
+      attrs: (
+        src: "https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fhongjr03%2Ftypst-zebraw%2Frefs%2Fheads%2Fmain%2Ftypst.toml&query=package.version&logo=GitHub&label=GitHub",
+        alt: "GitHub",
+      ),
+    )
+  ]
+  #html.elem("a", attrs: (href: "coverage_report.md"))[
+    #html.elem("img", attrs: (src: "https://img.shields.io/badge/coverage-67.30%25-yellow", alt: "Coverage"))
+  ]
+  #html.elem("a", attrs: (href: "https://github.com/hongjr03/typst-zebraw/actions/workflows/test.yml"))[
+    #html.elem(
+      "img",
+      attrs: (
+        src: "https://github.com/hongjr03/typst-zebraw/actions/workflows/test.yml/badge.svg",
+        alt: "Test",
+      ),
+    )
+  ]
+]
 
 Zebraw is a lightweight and fast package for displaying code blocks with line numbers in Typst, supporting code line highlighting. The term _*zebraw*_ is a combination of _*zebra*_ and _*raw*_, as the highlighted lines display in the code block with a zebra-striped pattern.
 
@@ -752,36 +805,37 @@ Extend at vertical is enabled at default. When there's header or footer it will 
 
 == Example
 
-#html.frame(
-  block(
-    width: 42em,
-    {
-      zebraw(
-        highlight-lines: (
-          (3, [to avoid negative numbers]),
-          (9, "50 => 12586269025"),
-        ),
-        lang: true,
-        header: "Calculate Fibonacci number using reccursive function",
-        indentation: 4,
-        ```rust
-        pub fn fibonacci_reccursive(n: i32) -> u64 {
-            if n < 0 {
-                panic!("{} is negative!", n);
-            }
-            match n {
-                0 => panic!("zero is not a right argument to fibonacci_reccursive()!"),
-                1 | 2 => 1,
-                3 => 2,
-                _ => fibonacci_reccursive(n - 1) + fibonacci_reccursive(n - 2),
-            }
-        }
-        ```,
-      )
-    },
-  ),
+#let example = block(
+  width: 42em,
+  {
+    zebraw(
+      highlight-lines: (
+        (3, [to avoid negative numbers]),
+        (9, "50 => 12586269025"),
+      ),
+      lang: true,
+      header: "Calculate Fibonacci number using reccursive function",
+      indentation: 4,
+      ```rust
+      pub fn fibonacci_reccursive(n: i32) -> u64 {
+          if n < 0 {
+              panic!("{} is negative!", n);
+          }
+          match n {
+              0 => panic!("zero is not a right argument to fibonacci_reccursive()!"),
+              1 | 2 => 1,
+              3 => 2,
+              _ => fibonacci_reccursive(n - 1) + fibonacci_reccursive(n - 2),
+          }
+      }
+      ```,
+    )
+  },
 )
+#context if dictionary(std).keys().contains("html") and target() == "html" {
+  html.frame(example)
+} else { example }
 
-=== License
+== License
 
 Zebraw is licensed under the MIT License. See the #link("LICENSE")[LICENSE] file for more information.
