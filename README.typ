@@ -11,9 +11,9 @@
   html.frame(
     block(
       width: 20em,
-      stroke: gray,
+      // stroke: gray,
       radius: 0.25em,
-      inset: 0.5em,
+      inset: (top: 1.5em),
       eval(
         body.text,
         mode: "markup",
