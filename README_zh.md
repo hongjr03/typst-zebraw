@@ -1,5 +1,7 @@
 # 🦓 Zebraw
 
+<a href="README_zh.md"><img src="https://img.shields.io/badge/🇨🇳中文README-blue" alt="🇨🇳中文 README" /></a> <a href="https://typst.app/universe/package/zebraw"><img src="https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Ftypst.app%2Funiverse%2Fpackage%2Fzebraw&query=%2Fhtml%2Fbody%2Fdiv%2Fmain%2Fdiv%5B2%5D%2Faside%2Fsection%5B2%5D%2Fdl%2Fdd%5B3%5D&logo=typst&label=Universe&color=%2339cccc" alt="Universe" /></a> <a href="https://github.com/hongjr03/typst-zebraw"><img src="https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fhongjr03%2Ftypst-zebraw%2Frefs%2Fheads%2Fmain%2Ftypst.toml&query=package.version&logo=GitHub&label=GitHub" alt="GitHub" /></a> <a href="coverage_report.md"><img src="https://img.shields.io/badge/coverage-67.30%25-yellow" alt="Coverage" /></a> <a href="https://github.com/hongjr03/typst-zebraw/actions/workflows/test.yml"><img src="https://github.com/hongjr03/typst-zebraw/actions/workflows/test.yml/badge.svg" alt="Test" /></a>
+
 Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代码块，支持代码行高亮。***zebraw*** 一词是 ***zebra***（斑马）和 ***raw***（原始）的组合，因为高亮显示的代码行在代码块中就像斑马纹一样。
 
 ## 快速开始
@@ -727,4 +729,8 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 
 ## 许可证
 
-Zebraw 使用 MIT 许可证授权。更多信息请查看 \[LICENSE\](LICENSE) 文件。
+Zebraw 使用 MIT 许可证授权。更多信息请查看 [LICENSE](LICENSE) 文件。
+
+## Star History
+
+<a href="https://www.star-history.com/#hongjr03/typst-zebraw&Date"><picture><source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=hongjr03/typst-zebraw&type=Date&theme=dark" /><source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=hongjr03/typst-zebraw&type=Date" /><img alt="Star History Chart" src="https://api.star-history.com/svg?repos=hongjr03/typst-zebraw&type=Date" /></picture></a>

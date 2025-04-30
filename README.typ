@@ -6,7 +6,7 @@
 #show raw: set text(font: "Fira Code")
 #show raw.where(lang: "typlite"): none
 
-#let preview(..args, body) = context if dictionary(std).keys().contains("html"){
+#let preview(..args, body) = context if dictionary(std).keys().contains("html") {
   body
   html.frame(
     block(
@@ -71,9 +71,11 @@
 = 🦓 Zebraw
 
 #context if dictionary(std).keys().contains("html") [
-  #html.elem("a", attrs: (href: "README_zh.md"))[
-    #html.elem("img", attrs: (src: "https://img.shields.io/badge/🇨🇳中文README-blue", alt: "🇨🇳中文 README"))
-  ]
+  #html.elem(
+    "a",
+    attrs: (href: "README_zh.md"),
+    html.elem("img", attrs: (src: "https://img.shields.io/badge/🇨🇳中文README-blue", alt: "🇨🇳中文 README")),
+  )
   #html.elem("a", attrs: (href: "https://typst.app/universe/package/zebraw"))[
     #html.elem(
       "img",
@@ -839,3 +841,40 @@ Extend at vertical is enabled at default. When there's header or footer it will 
 == License
 
 Zebraw is licensed under the MIT License. See the #link("LICENSE")[LICENSE] file for more information.
+
+#context if dictionary(std).keys().contains("html") [
+
+  == Star History
+
+  #html.elem(
+    "a",
+    attrs: (href: "https://www.star-history.com/#hongjr03/typst-zebraw&Date"),
+    html.elem(
+      "picture",
+      [
+        #html.elem(
+          "source",
+          attrs: (
+            media: "(prefers-color-scheme: dark)",
+            srcset: "https://api.star-history.com/svg?repos=hongjr03/typst-zebraw&type=Date&theme=dark",
+          ),
+        )
+        #html.elem(
+          "source",
+          attrs: (
+            media: "(prefers-color-scheme: light)",
+            srcset: "https://api.star-history.com/svg?repos=hongjr03/typst-zebraw&type=Date",
+          ),
+        )
+        #html.elem(
+          "img",
+          attrs: (
+            alt: "Star History Chart",
+            src: "https://api.star-history.com/svg?repos=hongjr03/typst-zebraw&type=Date",
+          ),
+        )
+      ],
+    ),
+  )
+
+]

@@ -1,19 +1,41 @@
 // #set page(paper: "a4", height: auto)
-#import "src/lib.typ": *
-
-#set text(font: ((name: "SF Pro", covers: "latin-in-cjk"), "Noto Sans SC"))
-#show smartquote: set text(font: "SF Pro")
+#import "@preview/zebraw:0.5.4": *
 
 #set raw(theme: "assets/tokyo-night.tmTheme") if sys.inputs.at("x-color-theme", default: none) == "dark"
 #show raw: set text(font: "Fira Code")
 #show raw.where(lang: "typlite"): none
 
-#let preview(..args, body) = {
+#let preview(..args, body) = context if dictionary(std).keys().contains("html") {
   body
   html.frame(
     block(
       width: 20em,
-      inset: (y: 2em),
+      stroke: gray,
+      radius: 0.25em,
+      inset: 0.5em,
+      eval(
+        body.text,
+        mode: "markup",
+        scope: (zebraw: zebraw, zebraw-init: zebraw-init, zebraw-themes: zebraw-themes),
+      ),
+    ),
+  )
+} else {
+  grid(
+    columns: 2,
+    column-gutter: .5em,
+    block(
+      width: 20em,
+      stroke: gray,
+      radius: 0.25em,
+      inset: 0.5em,
+      body,
+    ),
+    block(
+      width: 20em,
+      stroke: gray,
+      radius: 0.25em,
+      inset: 0.5em,
       eval(
         body.text,
         mode: "markup",
@@ -22,6 +44,8 @@
     ),
   )
 }
+
+
 #show: zebraw-init.with(
   ..if sys.inputs.at("x-color-theme", default: none) == "dark" {
     (
@@ -45,13 +69,43 @@
 
 = 🦓 Zebraw
 
-```typlite
-[![🇨🇳中文 README](https://img.shields.io/badge/🇨🇳中文README-blue)](README_zh.md)
-[![Universe](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Ftypst.app%2Funiverse%2Fpackage%2Fzebraw&query=%2Fhtml%2Fbody%2Fdiv%2Fmain%2Fdiv%5B2%5D%2Faside%2Fsection%5B2%5D%2Fdl%2Fdd%5B3%5D&logo=typst&label=Universe&color=%2339cccc)](https://typst.app/universe/package/zebraw)
-[![GitHub](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fhongjr03%2Ftypst-zebraw%2Frefs%2Fheads%2Fmain%2Ftypst.toml&query=package.version&logo=GitHub&label=GitHub)](https://github.com/hongjr03/typst-zebraw)
-[![Coverage](https://img.shields.io/badge/coverage-67.30%25-yellow)](coverage_report.md)
-[![Test](https://github.com/hongjr03/typst-zebraw/actions/workflows/test.yml/badge.svg)](https://github.com/hongjr03/typst-zebraw/actions/workflows/test.yml)
-```
+#context if dictionary(std).keys().contains("html") [
+  #html.elem(
+    "a",
+    attrs: (href: "README_zh.md"),
+    html.elem("img", attrs: (src: "https://img.shields.io/badge/🇨🇳中文README-blue", alt: "🇨🇳中文 README")),
+  )
+  #html.elem("a", attrs: (href: "https://typst.app/universe/package/zebraw"))[
+    #html.elem(
+      "img",
+      attrs: (
+        src: "https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Ftypst.app%2Funiverse%2Fpackage%2Fzebraw&query=%2Fhtml%2Fbody%2Fdiv%2Fmain%2Fdiv%5B2%5D%2Faside%2Fsection%5B2%5D%2Fdl%2Fdd%5B3%5D&logo=typst&label=Universe&color=%2339cccc",
+        alt: "Universe",
+      ),
+    )
+  ]
+  #html.elem("a", attrs: (href: "https://github.com/hongjr03/typst-zebraw"))[
+    #html.elem(
+      "img",
+      attrs: (
+        src: "https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fhongjr03%2Ftypst-zebraw%2Frefs%2Fheads%2Fmain%2Ftypst.toml&query=package.version&logo=GitHub&label=GitHub",
+        alt: "GitHub",
+      ),
+    )
+  ]
+  #html.elem("a", attrs: (href: "coverage_report.md"))[
+    #html.elem("img", attrs: (src: "https://img.shields.io/badge/coverage-67.30%25-yellow", alt: "Coverage"))
+  ]
+  #html.elem("a", attrs: (href: "https://github.com/hongjr03/typst-zebraw/actions/workflows/test.yml"))[
+    #html.elem(
+      "img",
+      attrs: (
+        src: "https://github.com/hongjr03/typst-zebraw/actions/workflows/test.yml/badge.svg",
+        alt: "Test",
+      ),
+    )
+  ]
+]
 
 Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代码块，支持代码行高亮。*_zebraw_* 一词是 *_zebra_*（斑马）和 *_raw_*（原始）的组合，因为高亮显示的代码行在代码块中就像斑马纹一样。
 
@@ -787,4 +841,41 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 
 == 许可证
 
-Zebraw 使用 MIT 许可证授权。更多信息请查看 [LICENSE](LICENSE) 文件。
+Zebraw 使用 MIT 许可证授权。更多信息请查看 #link("LICENSE")[LICENSE] 文件。
+
+#context if dictionary(std).keys().contains("html") [
+
+  == Star History
+
+  #html.elem(
+    "a",
+    attrs: (href: "https://www.star-history.com/#hongjr03/typst-zebraw&Date"),
+    html.elem(
+      "picture",
+      [
+        #html.elem(
+          "source",
+          attrs: (
+            media: "(prefers-color-scheme: dark)",
+            srcset: "https://api.star-history.com/svg?repos=hongjr03/typst-zebraw&type=Date&theme=dark",
+          ),
+        )
+        #html.elem(
+          "source",
+          attrs: (
+            media: "(prefers-color-scheme: light)",
+            srcset: "https://api.star-history.com/svg?repos=hongjr03/typst-zebraw&type=Date",
+          ),
+        )
+        #html.elem(
+          "img",
+          attrs: (
+            alt: "Star History Chart",
+            src: "https://api.star-history.com/svg?repos=hongjr03/typst-zebraw&type=Date",
+          ),
+        )
+      ],
+    ),
+  )
+
+]
