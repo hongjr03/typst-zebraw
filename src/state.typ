@@ -74,7 +74,7 @@
   body,
 ) = context {
   numbering-state.update(numbering)
-  inset-state.update(inset)
+  inset-state.update(it => it + inset)
 
   background-color-state.update(background-color)
   highlight-color-state.update(highlight-color)
