@@ -6,10 +6,10 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 
 ## 快速开始
 
-使用 `#import "@preview/zebraw:0.5.4": *` 导入 `zebraw` 包，然后添加 `#show: zebraw` 以最简单的方式开始使用 zebraw。
+使用 `#import "@preview/zebraw:0.5.5": *` 导入 `zebraw` 包，然后添加 `#show: zebraw` 以最简单的方式开始使用 zebraw。
 
 ````typ
-#import "@preview/zebraw:0.5.4": *
+#import "@preview/zebraw:0.5.5": *
 #show: zebraw
 
 ```typ

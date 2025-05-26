@@ -1,5 +1,5 @@
 // #set page(paper: "a4", height: auto)
-#import "@preview/zebraw:0.5.4": *
+#import "@preview/zebraw:0.5.5": *
 
 #set raw(theme: "assets/tokyo-night.tmTheme") if sys.inputs.at("x-color-theme", default: none) == "dark"
 #show raw: set text(font: "Fira Code")
@@ -113,10 +113,10 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 
 == 快速开始
 
-使用 ```typ #import "@preview/zebraw:0.5.4": *``` 导入 `zebraw` 包，然后添加 ```typ #show: zebraw``` 以最简单的方式开始使用 zebraw。
+使用 ```typ #import "@preview/zebraw:0.5.5": *``` 导入 `zebraw` 包，然后添加 ```typ #show: zebraw``` 以最简单的方式开始使用 zebraw。
 
 #context preview(````typ
-#import "@preview/zebraw:0.5.4": *
+#import "@preview/zebraw:0.5.5": *
 #show: zebraw
 
 ```typ
