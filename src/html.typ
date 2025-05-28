@@ -9,6 +9,137 @@
 }
 
 #let create-style(..styles) = styles.pos().filter(s => s != none).flatten().join("; ")
+#let create-style2(styles) = styles.filter(s => s != none).join(";")
+
+#let zebraw-html-show-inline(
+  numbering: none,
+  inset: none,
+  background-color: none,
+  highlight-color: none,
+  comment-color: none,
+  lang-color: none,
+  comment-flag: none,
+  lang: none,
+  comment-font-args: none,
+  lang-font-args: none,
+  numbering-font-args: none,
+  extend: none,
+  hanging-indent: none,
+  indentation: none,
+  highlight-lines: (),
+  numbering-offset: 0,
+  header: none,
+  footer: none,
+  numbering-separator: none,
+  line-range: (0, -1),
+  wrap: true,
+  block-width: 42em,
+  it,
+) = context {
+  let args = parse-zebraw-args(
+    numbering: numbering,
+    inset: inset,
+    background-color: background-color,
+    highlight-color: highlight-color,
+    comment-color: comment-color,
+    lang-color: lang-color,
+    comment-flag: comment-flag,
+    lang: lang,
+    comment-font-args: comment-font-args,
+    lang-font-args: lang-font-args,
+    numbering-font-args: numbering-font-args,
+    extend: extend,
+    hanging-indent: hanging-indent,
+    indentation: indentation,
+    numbering-separator: numbering-separator,
+  )
+
+  // Extract args
+  let numbering = args.numbering
+  let inset = args.inset
+  let background-color = args.background-color
+  let highlight-color = args.highlight-color
+  let comment-color = args.comment-color
+  let lang-color = args.lang-color
+  let comment-flag = args.comment-flag
+  let lang = args.lang
+  let comment-font-args = args.comment-font-args
+  let lang-font-args = args.lang-font-args
+  let numbering-font-args = args.numbering-font-args
+  let extend = args.extend
+  let hanging-indent = args.hanging-indent
+  let indentation = args.indentation
+  let numbering-separator = args.numbering-separator
+  let fast-preview = args.fast-preview
+
+  // Process highlight lines
+  let (highlight-nums, comments) = tidy-highlight-lines(highlight-lines)
+
+  // Helper for creating code line elements
+  let build-code-line-elem(line) = {
+    // Create main line element
+    line.indentation
+
+    show underline: it => html.elem(
+      "span",
+      attrs: (style: "text-decoration: underline"),
+      it,
+    )
+
+    show text: it => context {
+      let c = text.fill
+      let b = text.weight
+      html.elem(
+        "span",
+        attrs: (
+          style: create-style2((
+            "color: " + c.to-hex(),
+            if b != "regular" { "font-weight: " + b },
+          )),
+        ),
+        it,
+      )
+    }
+    line.body
+  }
+
+  // Process lines
+  let lines = tidy-lines(
+    numbering,
+    it.lines,
+    highlight-nums,
+    comments,
+    highlight-color,
+    background-color,
+    comment-color,
+    comment-flag,
+    comment-font-args,
+    numbering-offset,
+    inset,
+    is-html: true,
+    line-range: line-range,
+  )
+
+  // if content != none {
+  //   comment-color.to-hex()
+  // } else {
+  // }
+
+  let attrs = (
+    style: create-style({
+      "background: "
+      curr-background-color(background-color, lines.len() + 1).to-hex()
+    }),
+  )
+
+  if it.lang != none {
+    // As suggested by whatwg, https://html.spec.whatwg.org/
+    attrs.insert("class", "language-" + it.lang)
+  }
+
+  // Main code block container
+  html.elem("code", attrs: attrs, lines.map(build-code-line-elem).join())
+}
 
 #let zebraw-html-show(
   numbering: none,
