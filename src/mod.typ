@@ -1,6 +1,6 @@
 #import "util.typ": *
 #import "indentation.typ": *
-#import "html.typ": zebraw-html-show
+#import "html.typ": zebraw-html-show, zebraw-html-show-inline
 
 #let zebraw-show(
   numbering: none,
@@ -648,6 +648,34 @@
   /// -> content
   body,
 ) = context {
+  show raw.where(block: false): if dictionary(std).keys().contains("html") and std.target() == "html" {
+    zebraw-html-show-inline.with(
+      numbering: numbering,
+      inset: inset,
+      background-color: background-color,
+      highlight-color: highlight-color,
+      comment-color: comment-color,
+      lang-color: lang-color,
+      comment-flag: comment-flag,
+      lang: lang,
+      comment-font-args: comment-font-args,
+      lang-font-args: lang-font-args,
+      numbering-font-args: numbering-font-args,
+      extend: extend,
+      hanging-indent: hanging-indent,
+      indentation: indentation,
+      highlight-lines: highlight-lines,
+      numbering-offset: numbering-offset,
+      header: header,
+      footer: footer,
+      line-range: line-range,
+      wrap: wrap,
+      block-width: block-width,
+      numbering-separator: numbering-separator,
+    )
+  } else {
+    it => it
+  }
   show raw.where(block: true): if dictionary(std).keys().contains("html") and std.target() == "html" {
     zebraw-html-show.with(
       numbering: numbering,
