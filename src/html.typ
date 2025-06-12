@@ -1,15 +1,30 @@
 #import "util.typ": *
+#import "html-utils.typ": *
 
-#let repr-or-str(x) = {
-  if type(x) == str {
-    x
+
+#let style-code-line(it, default-color: black) = context {
+  if it.text == "" {
+    return none
+  }
+  if it.text.trim().len() == 0 {
+    return it
+  }
+  let fill = text.fill
+  let weight = text.weight
+  let style = {
+    if fill != default-color {
+      "color:" + fill.to-hex() + ";"
+    }
+    if weight != "regular" {
+      "font-weight:" + weight
+    }
+  }
+  if style != none {
+    html.elem("span", attrs: (style: style), it)
   } else {
-    repr(x)
+    it
   }
 }
-
-#let create-style(..styles) = styles.pos().filter(s => s != none).flatten().join("; ")
-#let create-style2(styles) = styles.filter(s => s != none).join(";")
 
 #let zebraw-html-show-inline(
   numbering: none,
@@ -36,7 +51,23 @@
   block-width: 42em,
   it,
 ) = context {
-  let args = parse-zebraw-args(
+  let (
+    numbering,
+    inset,
+    background-color,
+    highlight-color,
+    comment-color,
+    lang-color,
+    comment-flag,
+    lang,
+    comment-font-args,
+    lang-font-args,
+    numbering-font-args,
+    extend,
+    hanging-indent,
+    indentation,
+    numbering-separator,
+  ) = parse-zebraw-args(
     numbering: numbering,
     inset: inset,
     background-color: background-color,
@@ -54,52 +85,14 @@
     numbering-separator: numbering-separator,
   )
 
-  // Extract args
-  let numbering = args.numbering
-  let inset = args.inset
-  let background-color = args.background-color
-  let highlight-color = args.highlight-color
-  let comment-color = args.comment-color
-  let lang-color = args.lang-color
-  let comment-flag = args.comment-flag
-  let lang = args.lang
-  let comment-font-args = args.comment-font-args
-  let lang-font-args = args.lang-font-args
-  let numbering-font-args = args.numbering-font-args
-  let extend = args.extend
-  let hanging-indent = args.hanging-indent
-  let indentation = args.indentation
-  let numbering-separator = args.numbering-separator
-  let fast-preview = args.fast-preview
-
-  // Process highlight lines
-  let (highlight-nums, comments) = tidy-highlight-lines(highlight-lines)
+  // Does not support highlight or comments
 
   // Helper for creating code line elements
   let build-code-line-elem(line) = {
     // Create main line element
     line.indentation
 
-    show underline: it => html.elem(
-      "span",
-      attrs: (style: "text-decoration: underline"),
-      it,
-    )
-
-    show text: it => context {
-      let c = text.fill
-      let b = text.weight
-      html.elem(
-        "span",
-        attrs: (
-          style: create-style2((
-            "color: " + c.to-hex(),
-            if b != "regular" { "font-weight: " + b },
-          )),
-        ),
-        it,
-      )
-    }
+    show text: style-code-line.with(default-color: text.fill)
     line.body
   }
 
@@ -107,8 +100,8 @@
   let lines = tidy-lines(
     numbering,
     it.lines,
-    highlight-nums,
-    comments,
+    none,
+    none,
     highlight-color,
     background-color,
     comment-color,
@@ -120,16 +113,8 @@
     line-range: line-range,
   )
 
-  // if content != none {
-  //   comment-color.to-hex()
-  // } else {
-  // }
-
   let attrs = (
-    style: create-style({
-      "background: "
-      curr-background-color(background-color, lines.len() + 1).to-hex()
-    }),
+    style: create-style(background: curr-background-color(background-color, 0).to-hex()),
   )
 
   if it.lang != none {
@@ -166,7 +151,23 @@
   block-width: 42em,
   it,
 ) = context {
-  let args = parse-zebraw-args(
+  let (
+    numbering,
+    inset,
+    background-color,
+    highlight-color,
+    comment-color,
+    lang-color,
+    comment-flag,
+    lang,
+    comment-font-args,
+    lang-font-args,
+    numbering-font-args,
+    extend,
+    hanging-indent,
+    indentation,
+    numbering-separator,
+  ) = parse-zebraw-args(
     numbering: numbering,
     inset: inset,
     background-color: background-color,
@@ -184,230 +185,66 @@
     numbering-separator: numbering-separator,
   )
 
-  // Extract args
-  let numbering = args.numbering
-  let inset = args.inset
-  let background-color = args.background-color
-  let highlight-color = args.highlight-color
-  let comment-color = args.comment-color
-  let lang-color = args.lang-color
-  let comment-flag = args.comment-flag
-  let lang = args.lang
-  let comment-font-args = args.comment-font-args
-  let lang-font-args = args.lang-font-args
-  let numbering-font-args = args.numbering-font-args
-  let extend = args.extend
-  let hanging-indent = args.hanging-indent
-  let indentation = args.indentation
-  let numbering-separator = args.numbering-separator
-  let fast-preview = args.fast-preview
-
   // Process highlight lines
   let (highlight-nums, comments) = tidy-highlight-lines(highlight-lines)
 
   // Common styles
   let numbering-width = if numbering == true {
-    if it.lines.len() + numbering-offset < 100 {
-      2.1em
-    } else {
-      auto
-    }
-  } else if type(numbering) == array { auto } else { 0 }
+    if it.lines.len() + numbering-offset < 100 { 1.5em } else { auto }
+  } else if type(numbering) == array {
+    auto
+  } else {
+    0
+  }
 
-  let number-div-style = (
-    "margin: 0",
-    "text-align: right",
-    "vertical-align: top",
-    // "padding-right: 0.65em",
-    "user-select: none",
-    "flex-shrink: 0",
-    "width: " + repr-or-str(numbering-width),
-    "padding: " + repr-or-str(inset.top) + " 0.65em " + repr-or-str(inset.bottom) + " 0.35em",
-    "height: 100%",
-  )
+  let lineno-style = create-style(width: repr-or-str(numbering-width))
 
-  let pre-style = (
-    "padding-top: " + repr-or-str(inset.top),
-    "padding-bottom: " + repr-or-str(inset.bottom),
-    "margin: 0",
-    "padding-left: " + repr-or-str(inset.left),
-    "padding-right: " + repr-or-str(inset.right),
-    ..if wrap { ("white-space: pre-wrap",) },
-  )
-
-  let text-div-style = (
-    "text-align: left",
-    "display: flex",
-    "align-items: center",
-    "width: 100%",
-  )
-
-  let background-text-style = (
-    "user-select: none",
-    "opacity: 0",
-    "color: transparent",
-  )
+  let default-color = text.fill
+  let default-bg = curr-background-color(background-color, 0)
 
   // Helper for creating code line elements
   let build-code-line-elem(line, is-background: false) = {
     // Create main line element
-    let line-elem = html.elem(
-      "div",
-      attrs: (
-        style: create-style(
-          text-div-style,
-          if is-background { ("background: " + line.fill.to-hex(),) },
-        ),
-        ..if not is-background { (class: "zebraw-code-line-container", translate: "no") },
-      ),
-      {
+    let line-elem = {
+      if numbering-width != 0 {
         // Line number
         set text(..numbering-font-args)
-        html.elem(
-          "pre",
-          attrs: (
-            style: create-style(
-              number-div-style,
-              "display: flex",
-              "justify-content: flex-end",
-              if is-background { background-text-style } else { ("opacity: 0.7",) },
-            ),
-          ),
-          if type(line.number) == array {
-            line
-              .number
-              .map(n => html.elem(
-                "span",
-                attrs: (style: "margin-left: 0.2em"),
-                n,
-              ))
-              .join()
-          } else {
-            [#line.number]
-          },
-        )
+        let attrs = (class: class-list("lineno", if numbering-separator { "sep" }), style: lineno-style)
+        html.elem("span", attrs: attrs, if type(line.number) == array {
+          line.number.map(n => html.elem("span", attrs: (style: "margin-left: 0.2em"), n)).join()
+        } else {
+          [#line.number]
+        })
+      }
 
-        // Code content
-        html.elem(
-          "pre",
-          attrs: (
-            style: create-style(
-              pre-style,
-              "position: relative", // Add relative positioning
-              if numbering-separator == true and not is-background {
-                ("border-left: 1px solid #ccc",)
-              },
-            ),
-            ..if not is-background { (class: "zebraw-code-line", translate: "no") },
-          ),
-          {
-            show underline: it => html.elem(
-              "span",
-              attrs: (style: "text-decoration: underline"),
-              it,
-            )
+      // Code content
+      line.indentation
 
-            show text: it => context {
-              let c = text.fill
-              let b = text.weight
-              html.elem(
-                "span",
-                attrs: (
-                  style: create-style(if is-background { background-text-style } else {
-                    ("color: " + c.to-hex(), "font-weight: " + b)
-                  }),
-                ),
-                it,
-              )
-            }
-            line.indentation + line.body
-          },
-        )
-      },
-    )
+      show linebreak: none
+      show text: style-code-line.with(default-color: default-color)
+      line.body
+    }
 
-    // Create comment element if needed
-    let comment-elem = if line.comment != none {
-      html.elem(
-        "div",
+    // Create optional background wrapper
+    let bg = line.fill
+    let is-block = false
+    if bg != default-bg {
+      is-block = true
+      line-elem = html.elem(
+        "span",
         attrs: (
+          class: "hll",
           style: create-style(
-            text-div-style,
-            if is-background { ("background: " + line.comment.fill.to-hex(),) },
-            "align-items: flex-start", // 改为顶部对齐，防止垂直居中导致的奇怪布局
+            background: bg.to-hex(),
+            margin: "0 " + repr-or-str(-inset.right) + " 0 " + repr-or-str(-inset.left),
+            padding: "0 " + repr-or-str(inset.right) + " 0 " + repr-or-str(inset.left),
           ),
-          ..if not is-background { (class: "zebraw-code-comment-container") },
         ),
-        {
-          html.elem(
-            "pre",
-            attrs: (
-              style: create-style(
-                number-div-style,
-                if is-background { background-text-style } else { ("opacity: 0.7",) },
-              ),
-            ),
-            "",
-          )
-
-          // 注释内容容器
-          html.elem(
-            "div",
-            attrs: (
-              style: create-style(
-                "margin: 0",
-                "padding: "
-                  + repr-or-str(inset.top)
-                  + " "
-                  + repr-or-str(inset.right)
-                  + " "
-                  + repr-or-str(inset.bottom)
-                  + " "
-                  + repr-or-str(inset.left), // 使用与代码行一致的内边距
-                "width: 100%",
-                if wrap { ("white-space: pre-wrap",) } else { ("white-space: pre",) },
-              ),
-              class: "zebraw-code-comment",
-            ),
-            {
-              // 注释标记
-              html.elem(
-                "span",
-                attrs: (
-                  style: create-style(
-                    ("user-select: none",),
-                    if is-background { background-text-style },
-                  ),
-                  class: "zebraw-comment-flag",
-                ),
-                if line.comment.comment-flag != "" {
-                  line.comment.indentation
-                  strong(text(ligatures: true, line.comment.comment-flag))
-                  " "
-                } else { },
-              )
-
-              // 注释文本
-              html.elem(
-                "span",
-                attrs: (
-                  ..if is-background { (style: create-style(background-text-style)) },
-                  class: "zebraw-comment-text",
-                ),
-                line.comment.body,
-              )
-            },
-          )
-        },
+        line-elem,
       )
     }
 
-    // Return both elements
-    if comment-elem != none {
-      (line-elem, comment-elem)
-    } else {
-      (line-elem,)
-    }
+    (line-elem, is-block)
   }
 
   // Process lines
@@ -427,158 +264,162 @@
     line-range: line-range,
   )
 
-  // Helper for creating header/footer cells
-  let build-cell(is-header, content, is-background: false) = html.elem(
-    "div",
-    attrs: (
-      style: create-style(
-        if is-background {
-          (
-            "background: "
-              + if content != none {
-                comment-color.to-hex()
-              } else {
-                if is-header {
-                  curr-background-color(background-color, 0).to-hex()
-                } else {
-                  curr-background-color(background-color, lines.len() + 1).to-hex()
-                }
-              },
-          )
-        },
-        "width: 100%",
-      ),
-    ),
+  // Helper functions for header/footer
+  let create-header-footer(is-header, content) = {
+    let key = if is-header { "header" } else { "footer" }
+
+    let content = if content != none {
+      content
+    } else if key in comments {
+      comments.at(key)
+    } else {
+      return none
+    }
+
     html.elem(
-      "div",
+      "span",
       attrs: (
         style: create-style(
-          "padding: " + repr-or-str(inset.right) + " " + repr-or-str(inset.left),
-          if is-background { background-text-style },
+          padding: repr-or-str(inset.right) + " " + repr-or-str(inset.left),
+          background: if is-header {
+            curr-background-color(background-color, 0).to-hex()
+          } else {
+            curr-background-color(background-color, lines.len() + 1).to-hex()
+          },
+          display: "block",
         ),
       ),
       text(..comment-font-args, content),
-    ),
-  )
-
-  // Helper functions for header/footer
-  let create-header-footer(is_header, content, comments, extend, is_background: false) = {
-    let key = if is_header { "header" } else { "footer" }
-
-    if content != none or comments.keys().contains(key) {
-      (build-cell(is_header, if content != none { content } else { comments.at(key) }, is-background: is_background),)
-    } else if extend {
-      (build-cell(is_header, none, is-background: is_background),)
-    } else {
-      ()
-    }
+    )
   }
 
   // Main code block container
-  html.elem(
-    "div",
-    attrs: (
-      style: create-style(
-        "position: relative",
-        "width: " + repr-or-str(block-width),
-        "font-size: 0.8em",
-      ),
-      class: "zebraw-code-block",
-    ),
-    {
-      // Language label
-      let has-lang = (type(lang) == bool and lang and it.lang != none) or type(lang) != bool
-      if has-lang {
-        html.elem(
-          "div",
-          attrs: (
-            style: create-style(
-              "position: absolute",
-              "top: -" + repr-or-str(inset.top + inset.bottom),
-              "right: 0",
-              "padding: 0.25em",
-              "background: " + lang-color.to-hex(),
-              "font-size: 0.8em",
-              "border-radius: " + repr-or-str(inset.left),
-            ),
-            class: "zebraw-code-lang",
-            translate: "no",
-          ),
-          if type(lang) == bool { it.lang } else { lang },
-        )
+  html.elem("div", attrs: (class: "zebraw-code-block"), {
+    // Language label
+    if type(lang) != bool or lang == true and it.lang != none {
+      html.elem(
+        "div",
+        attrs: (
+          style: create-style(background: lang-color.to-hex(), border-radius: repr-or-str(inset.left)),
+          class: "zebraw-code-lang",
+          translate: "no",
+        ),
+        if type(lang) == bool { it.lang } else { lang },
+      )
+    }
+
+    html.elem("pre", {
+      let attrs = (
+        style: create-style(
+          background: default-bg.to-hex(),
+          border-radius: repr-or-str(inset.left),
+          padding: repr-or-str(inset.top)
+            + " "
+            + repr-or-str(inset.right)
+            + " "
+            + repr-or-str(inset.bottom)
+            + " "
+            + repr-or-str(inset.left),
+        ),
+      )
+
+      let cls = class-list(if it.lang != none { "language-" + it.lang }, if wrap { "pre-wrap" })
+      if cls.len() > 0 {
+        attrs.class = cls
       }
+      html.elem("code", attrs: attrs, {
+        create-header-footer(true, header)
+        {
+          // gather code lines
+          let is-prev-block = true
+          for line in lines {
+            let (line-elem, is-cur-block) = build-code-line-elem(line)
+            if not (is-prev-block or is-cur-block) {
+              "\n"
+            }
+            is-prev-block = is-cur-block
+            line-elem
+          }
+        }
+        create-header-footer(false, footer)
+      })
+    })
+  })
+}
 
-      // Background layer
-      html.elem(
-        "div",
-        attrs: (
-          style: create-style(
-            "position: absolute",
-            "top: 0",
-            "left: 0",
-            "width: 100%",
-            "height: 100%",
-            "overflow: hidden",
-            "z-index: 0",
-            "pointer-events: none",
-            "border-radius: " + repr-or-str(inset.left),
-          ),
-        ),
-        (
-          ..create-header-footer(true, header, comments, extend, is_background: true),
-          ..lines.map(line => build-code-line-elem(line, is-background: true)).flatten(),
-          ..create-header-footer(false, footer, comments, extend, is_background: true),
-        ).join(),
-      )
+#let zebraw-html-styles() = {
+  html.elem("style", {
+    ````css
+    .zebraw-code-block {
+      position: relative;
+    }
+    .zebraw-code-block .zebraw-code-lang {
+      position: absolute;
+      right: 0;
+      padding: 0.25em;
+      font-size: 0.8em;
+    }
+    .zebraw-code-block .header {
+      display: block;
+    }
+    .zebraw-code-block pre>code {
+      display: block;
+      overflow: auto;
+    }
+    .zebraw-code-block pre.pre-wrap {
+      white-space: pre-wrap;
+    }
+    .zebraw-code-block .lineno {
+      display: inline-block;
+      margin-right: 0.35em;
+      padding-right: 0.35em;
+      text-align: right;
+      user-select: none;
+    }
+    .zebraw-code-block .lineno.sep {
+      box-shadow: -0.05rem 0 hsla(0, 0%, 0%, 0.07) inset;
+    }
+    .zebraw-code-block .hll {
+      display: block;
+    }
+    .zebraw-code-block .underline {
+      text-decoration: underline;
+    }
+    ````.text
+  })
+}
 
-      // Foreground content
-      html.elem(
-        "div",
-        attrs: (
-          style: create-style(
-            "overflow-x: auto",
-            "overflow-y: hidden",
-          ),
-        ),
-        (
-          ..create-header-footer(true, header, comments, extend),
-          ..lines.map(line => build-code-line-elem(line)).flatten(),
-          ..create-header-footer(false, footer, comments, extend),
-        ).join(),
-      )
+#let zebraw-html-clipboard-copy() = {
+  html.elem(
+    "script",
+    ```javascript
+    document.querySelectorAll('.zebraw-code-block').forEach(codeBlock => {
+      const copyButton = codeBlock.querySelector('.zebraw-code-lang');
+      if (!copyButton) return;
 
-      html.elem(
-        "script",
-        ```javascript
-        document.querySelectorAll('.zebraw-code-block').forEach(codeBlock => {
-          const copyButton = codeBlock.querySelector('.zebraw-code-lang');
-          if (!copyButton) return;
+      copyButton.style.cursor = 'pointer';
+      copyButton.title = 'Click to copy code';
 
-          copyButton.style.cursor = 'pointer';
-          copyButton.title = 'Click to copy code';
+      copyButton.addEventListener('click', () => {
+        const code = Array.from(codeBlock.querySelectorAll('.zebraw-code-line'))
+          .map(line => line.textContent)
+          .join('\n');
 
-          copyButton.addEventListener('click', () => {
-            const code = Array.from(codeBlock.querySelectorAll('.zebraw-code-line'))
-              .map(line => line.textContent)
-              .join('\n');
-
-            navigator.clipboard.writeText(code)
-              .catch(() => {
-                const textarea = document.createElement('textarea');
-                textarea.value = code;
-                document.body.appendChild(textarea);
-                textarea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textarea);
-              });
-
-            const originalTitle = copyButton.title;
-            copyButton.title = 'Code copied!';
-            setTimeout(() => copyButton.title = originalTitle, 2000);
+        navigator.clipboard.writeText(code)
+          .catch(() => {
+            const textarea = document.createElement('textarea');
+            textarea.value = code;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
           });
-        });
-        ```.text,
-      )
-    },
+
+        const originalTitle = copyButton.title;
+        copyButton.title = 'Code copied!';
+        setTimeout(() => copyButton.title = originalTitle, 2000);
+      });
+    });
+    ```.text,
   )
 }
