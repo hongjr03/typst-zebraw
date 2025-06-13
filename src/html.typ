@@ -1,24 +1,40 @@
+/// HTML output module for Zebraw code highlighting
+
 #import "util.typ": *
 #import "html/utils.typ": *
 
-
+/// Styles a single line of code for HTML output
+///
+/// Applies text color and font weight styling to code content by wrapping
+/// it in HTML span elements with appropriate CSS styles.
 #let style-code-line(it, default-color: black) = context {
+  // Skip empty lines
   if it.text == "" {
     return none
   }
+
+  // Return whitespace as-is
   if it.text.trim().len() == 0 {
     return it
   }
+
+  // Build CSS style string based on text properties
   let style = {
     let fill = text.fill
     let weight = text.weight
+
+    // Add color style if different from default
     if fill != default-color {
       "color:" + fill.to-hex() + ";"
     }
+
+    // Add font weight if not regular
     if weight != "regular" {
       "font-weight:" + weight
     }
   }
+
+  // Wrap in span element if styling is needed, otherwise return as-is
   if style != none {
     html.elem("span", attrs: (style: style), it)
   } else {
@@ -26,6 +42,7 @@
   }
 }
 
+/// Renders inline code blocks as HTML
 #let zebraw-html-show-inline(
   numbering: none,
   inset: none,
@@ -85,13 +102,14 @@
     numbering-separator: numbering-separator,
   )
 
-  // Does not support highlight or comments
+  // NOTE: Inline mode does not support highlight or comments for simplicity
 
   // Helper for creating code line elements
-  let build-code-line-elem(line) = {
-    // Create main line element
+  let create-code-line-elem(line) = {
+    // Add indentation spacing
     line.indentation
 
+    // Apply text styling to all text within this line
     show text: style-code-line.with(default-color: text.fill)
     line.body
   }
@@ -100,8 +118,8 @@
   let lines = tidy-lines(
     numbering,
     it.lines,
-    none,
-    none,
+    none, // No highlight numbers for inline
+    none, // No comments for inline
     highlight-color,
     background-color,
     comment-color,
@@ -117,15 +135,17 @@
     style: create-style(background: curr-background-color(background-color, 0).to-hex()),
   )
 
+  // Add language class for syntax highlighting compatibility
   if it.lang != none {
     // As suggested by whatwg, https://html.spec.whatwg.org/
     attrs.insert("class", "language-" + it.lang)
   }
 
-  // Main code block container
-  html.elem("code", attrs: attrs, lines.map(build-code-line-elem).join())
+  // Create the main inline code element
+  html.elem("code", attrs: attrs, lines.map(create-code-line-elem).join())
 }
 
+/// Renders full-featured code blocks as HTML
 #let zebraw-html-show(
   numbering: none,
   inset: none,
@@ -205,39 +225,46 @@
     line-range: line-range,
   )
 
-  // Common styles
+  // Calculate optimal width for line numbering column
   let numbering-width = if numbering == true {
+    // Auto-adjust width based on total line count
     if it.lines.len() + numbering-offset < 100 { 1.5em } else { auto }
   } else if type(numbering) == array {
-    auto
+    auto // Custom numbering may have variable width
   } else {
-    0
+    0 // No numbering
   }
+
+  // HTML attributes for line number elements
   let lineno-attrs = (
     class: class-list("lineno", if numbering-separator { "sep" }),
     style: create-style(width: repr-or-str(numbering-width)),
   )
 
+  // Store default styling values to avoid duplicated styling
   let default-color = text.fill
   let default-bg = curr-background-color(background-color, 0)
 
+  /// Creates HTML element for line numbers
   let create-lineno(lineno) = {
     set text(..numbering-font-args)
     html.elem("span", attrs: lineno-attrs, if type(lineno) == array {
-      // todo: can be improved
+      // TODO: Multi-numbering display can be improved
       lineno.map(n => html.elem("span", n)).join()
     } else {
       [#lineno]
     })
   }
 
+  /// Creates highlight background wrapper for lines
   let create-highlight(line, bg) = {
     html.elem(
       "span",
       attrs: (
-        class: "hll",
+        class: "hll", // "highlighted line" class
         style: create-style(
           background: bg.to-hex(),
+          // Extend highlight to full width by using negative margins
           margin: "0 " + repr-or-str(-inset.right) + " 0 " + repr-or-str(-inset.left),
           padding: "0 " + repr-or-str(inset.right) + " 0 " + repr-or-str(inset.left),
         ),
@@ -246,23 +273,24 @@
     )
   }
 
-  // Helper for creating code line elements
+  /// Helper function to create complete HTML elements for code lines
   let create-code-line-elem(line) = {
-    // Create main line element
+    // Build the main line content
     let line-elem = {
+      // Add line number if numbering is enabled
       if numbering-width != 0 {
         create-lineno(line.number)
       }
 
-      // Code content
       line.indentation
 
+      // NOTE: when the line is empty, there is a redundant linebreak
       show linebreak: none
       show text: style-code-line.with(default-color: default-color)
       line.body
     }
 
-    // Create optional background wrapper
+    // Wrap in highlight background if needed
     let bg = line.fill
     let is-block = false
     if bg != default-bg {
@@ -273,33 +301,40 @@
     (line-elem, is-block)
   }
 
-  // Helper functions for header/footer
+  /// Creates header/footer element
   let create-header-footer(content, bg) = {
     html.elem(
       "span",
       attrs: (
         class: "header",
-        style: create-style(padding: repr-or-str(inset.right) + " " + repr-or-str(inset.left), background: bg.to-hex()),
+        style: create-style(
+          padding: repr-or-str(inset.right) + " " + repr-or-str(inset.left),
+          background: bg.to-hex(),
+        ),
       ),
       text(..comment-font-args, content),
     )
   }
 
+  /// Creates the language label element
   let create-lang-label() = {
     html.elem(
       "div",
       attrs: (
         class: "zebraw-code-lang",
-        style: create-style(background: lang-color.to-hex(), border-radius: repr-or-str(inset.left)),
-        translate: "no",
+        style: create-style(
+          background: lang-color.to-hex(),
+          border-radius: repr-or-str(inset.left),
+        ),
+        translate: "no", // Prevent translation of code language names
       ),
       if type(lang) == bool { it.lang } else { lang },
     )
   }
 
-  // Main code block container
+  // Build the complete HTML structure: div > pre > code
   html.elem("div", attrs: (class: "zebraw-code-block"), {
-    // Language label
+    // Add language label at the top if configured
     if type(lang) != bool or lang == true and it.lang != none {
       create-lang-label()
     }
@@ -318,20 +353,25 @@
             + repr-or-str(inset.left),
         ),
       )
+
       let cls = class-list(if it.lang != none { "language-" + it.lang }, if wrap { "pre-wrap" })
       if cls.len() > 0 {
         attrs.class = cls
       }
       html.elem("code", attrs: attrs, {
+        // Add header if specified
         create-header-footer(
           if header != none { header } else { comments.at("header", default: none) },
           curr-background-color(background-color, 0),
         )
+
         {
-          // gather code lines
+          // Render all code lines with proper linebreaks
           let is-prev-block = true
           for line in lines {
             let (line-elem, is-cur-block) = create-code-line-elem(line)
+
+            // Add newline separator between non-block elements
             if not (is-prev-block or is-cur-block) {
               "\n"
             }
@@ -339,6 +379,8 @@
             line-elem
           }
         }
+
+        // Add footer if specified
         create-header-footer(
           if footer != none { footer } else { comments.at("footer", default: none) },
           curr-background-color(background-color, lines.len() + 1),
@@ -348,10 +390,18 @@
   })
 }
 
+/// Generates CSS styles for HTML code blocks
+///
+/// Returns a <style> element containing all the CSS rules needed for
+/// proper display of Zebraw-generated HTML code blocks.
 #let zebraw-html-styles() = {
   html.elem("style", read("html/styles.css"))
 }
 
+/// Generates JavaScript for clipboard copy functionality
+///
+/// Returns a <script> element containing JavaScript code that enables
+/// copy-to-clipboard functionality for code blocks.
 #let zebraw-html-clipboard-copy() = {
   html.elem("script", read("html/clipboard-copy.js"))
 }
