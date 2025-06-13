@@ -631,7 +631,10 @@
       zebraw-html-styles()
       counter("zebraw-html-styles").step()
     }
-    show underline: html.elem.with("span", attrs: (class: "underline"))
+    show raw: it => {
+      show underline: html.elem.with("span", attrs: (class: "underline"))
+      it
+    }
     show raw.where(block: false): zebraw-html-show-inline.with(
       numbering: numbering,
       inset: inset,

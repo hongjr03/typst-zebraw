@@ -1,5 +1,5 @@
 #import "util.typ": *
-#import "html-utils.typ": *
+#import "html/utils.typ": *
 
 
 #let style-code-line(it, default-color: black) = context {
@@ -9,9 +9,9 @@
   if it.text.trim().len() == 0 {
     return it
   }
-  let fill = text.fill
-  let weight = text.weight
   let style = {
+    let fill = text.fill
+    let weight = text.weight
     if fill != default-color {
       "color:" + fill.to-hex() + ";"
     }
@@ -188,65 +188,6 @@
   // Process highlight lines
   let (highlight-nums, comments) = tidy-highlight-lines(highlight-lines)
 
-  // Common styles
-  let numbering-width = if numbering == true {
-    if it.lines.len() + numbering-offset < 100 { 1.5em } else { auto }
-  } else if type(numbering) == array {
-    auto
-  } else {
-    0
-  }
-
-  let lineno-style = create-style(width: repr-or-str(numbering-width))
-
-  let default-color = text.fill
-  let default-bg = curr-background-color(background-color, 0)
-
-  // Helper for creating code line elements
-  let build-code-line-elem(line, is-background: false) = {
-    // Create main line element
-    let line-elem = {
-      if numbering-width != 0 {
-        // Line number
-        set text(..numbering-font-args)
-        let attrs = (class: class-list("lineno", if numbering-separator { "sep" }), style: lineno-style)
-        html.elem("span", attrs: attrs, if type(line.number) == array {
-          line.number.map(n => html.elem("span", attrs: (style: "margin-left: 0.2em"), n)).join()
-        } else {
-          [#line.number]
-        })
-      }
-
-      // Code content
-      line.indentation
-
-      show linebreak: none
-      show text: style-code-line.with(default-color: default-color)
-      line.body
-    }
-
-    // Create optional background wrapper
-    let bg = line.fill
-    let is-block = false
-    if bg != default-bg {
-      is-block = true
-      line-elem = html.elem(
-        "span",
-        attrs: (
-          class: "hll",
-          style: create-style(
-            background: bg.to-hex(),
-            margin: "0 " + repr-or-str(-inset.right) + " 0 " + repr-or-str(-inset.left),
-            padding: "0 " + repr-or-str(inset.right) + " 0 " + repr-or-str(inset.left),
-          ),
-        ),
-        line-elem,
-      )
-    }
-
-    (line-elem, is-block)
-  }
-
   // Process lines
   let lines = tidy-lines(
     numbering,
@@ -264,32 +205,95 @@
     line-range: line-range,
   )
 
-  // Helper functions for header/footer
-  let create-header-footer(is-header, content) = {
-    let key = if is-header { "header" } else { "footer" }
+  // Common styles
+  let numbering-width = if numbering == true {
+    if it.lines.len() + numbering-offset < 100 { 1.5em } else { auto }
+  } else if type(numbering) == array {
+    auto
+  } else {
+    0
+  }
+  let lineno-attrs = (
+    class: class-list("lineno", if numbering-separator { "sep" }),
+    style: create-style(width: repr-or-str(numbering-width)),
+  )
 
-    let content = if content != none {
-      content
-    } else if key in comments {
-      comments.at(key)
+  let default-color = text.fill
+  let default-bg = curr-background-color(background-color, 0)
+
+  let create-lineno(lineno) = {
+    set text(..numbering-font-args)
+    html.elem("span", attrs: lineno-attrs, if type(lineno) == array {
+      // todo: can be improved
+      lineno.map(n => html.elem("span", n)).join()
     } else {
-      return none
-    }
+      [#lineno]
+    })
+  }
 
+  let create-highlight(line, bg) = {
     html.elem(
       "span",
       attrs: (
+        class: "hll",
         style: create-style(
-          padding: repr-or-str(inset.right) + " " + repr-or-str(inset.left),
-          background: if is-header {
-            curr-background-color(background-color, 0).to-hex()
-          } else {
-            curr-background-color(background-color, lines.len() + 1).to-hex()
-          },
-          display: "block",
+          background: bg.to-hex(),
+          margin: "0 " + repr-or-str(-inset.right) + " 0 " + repr-or-str(-inset.left),
+          padding: "0 " + repr-or-str(inset.right) + " 0 " + repr-or-str(inset.left),
         ),
       ),
+      line,
+    )
+  }
+
+  // Helper for creating code line elements
+  let create-code-line-elem(line) = {
+    // Create main line element
+    let line-elem = {
+      if numbering-width != 0 {
+        create-lineno(line.number)
+      }
+
+      // Code content
+      line.indentation
+
+      show linebreak: none
+      show text: style-code-line.with(default-color: default-color)
+      line.body
+    }
+
+    // Create optional background wrapper
+    let bg = line.fill
+    let is-block = false
+    if bg != default-bg {
+      is-block = true
+      line-elem = create-highlight(line-elem, bg)
+    }
+
+    (line-elem, is-block)
+  }
+
+  // Helper functions for header/footer
+  let create-header-footer(content, bg) = {
+    html.elem(
+      "span",
+      attrs: (
+        class: "header",
+        style: create-style(padding: repr-or-str(inset.right) + " " + repr-or-str(inset.left), background: bg.to-hex()),
+      ),
       text(..comment-font-args, content),
+    )
+  }
+
+  let create-lang-label() = {
+    html.elem(
+      "div",
+      attrs: (
+        class: "zebraw-code-lang",
+        style: create-style(background: lang-color.to-hex(), border-radius: repr-or-str(inset.left)),
+        translate: "no",
+      ),
+      if type(lang) == bool { it.lang } else { lang },
     )
   }
 
@@ -297,15 +301,7 @@
   html.elem("div", attrs: (class: "zebraw-code-block"), {
     // Language label
     if type(lang) != bool or lang == true and it.lang != none {
-      html.elem(
-        "div",
-        attrs: (
-          style: create-style(background: lang-color.to-hex(), border-radius: repr-or-str(inset.left)),
-          class: "zebraw-code-lang",
-          translate: "no",
-        ),
-        if type(lang) == bool { it.lang } else { lang },
-      )
+      create-lang-label()
     }
 
     html.elem("pre", {
@@ -322,18 +318,20 @@
             + repr-or-str(inset.left),
         ),
       )
-
       let cls = class-list(if it.lang != none { "language-" + it.lang }, if wrap { "pre-wrap" })
       if cls.len() > 0 {
         attrs.class = cls
       }
       html.elem("code", attrs: attrs, {
-        create-header-footer(true, header)
+        create-header-footer(
+          if header != none { header } else { comments.at("header", default: none) },
+          curr-background-color(background-color, 0),
+        )
         {
           // gather code lines
           let is-prev-block = true
           for line in lines {
-            let (line-elem, is-cur-block) = build-code-line-elem(line)
+            let (line-elem, is-cur-block) = create-code-line-elem(line)
             if not (is-prev-block or is-cur-block) {
               "\n"
             }
@@ -341,85 +339,19 @@
             line-elem
           }
         }
-        create-header-footer(false, footer)
+        create-header-footer(
+          if footer != none { footer } else { comments.at("footer", default: none) },
+          curr-background-color(background-color, lines.len() + 1),
+        )
       })
     })
   })
 }
 
 #let zebraw-html-styles() = {
-  html.elem("style", {
-    ````css
-    .zebraw-code-block {
-      position: relative;
-    }
-    .zebraw-code-block .zebraw-code-lang {
-      position: absolute;
-      right: 0;
-      padding: 0.25em;
-      font-size: 0.8em;
-    }
-    .zebraw-code-block .header {
-      display: block;
-    }
-    .zebraw-code-block pre>code {
-      display: block;
-      overflow: auto;
-    }
-    .zebraw-code-block pre.pre-wrap {
-      white-space: pre-wrap;
-    }
-    .zebraw-code-block .lineno {
-      display: inline-block;
-      margin-right: 0.35em;
-      padding-right: 0.35em;
-      text-align: right;
-      user-select: none;
-    }
-    .zebraw-code-block .lineno.sep {
-      box-shadow: -0.05rem 0 hsla(0, 0%, 0%, 0.07) inset;
-    }
-    .zebraw-code-block .hll {
-      display: block;
-    }
-    .zebraw-code-block .underline {
-      text-decoration: underline;
-    }
-    ````.text
-  })
+  html.elem("style", read("html/styles.css"))
 }
 
 #let zebraw-html-clipboard-copy() = {
-  html.elem(
-    "script",
-    ```javascript
-    document.querySelectorAll('.zebraw-code-block').forEach(codeBlock => {
-      const copyButton = codeBlock.querySelector('.zebraw-code-lang');
-      if (!copyButton) return;
-
-      copyButton.style.cursor = 'pointer';
-      copyButton.title = 'Click to copy code';
-
-      copyButton.addEventListener('click', () => {
-        const code = Array.from(codeBlock.querySelectorAll('.zebraw-code-line'))
-          .map(line => line.textContent)
-          .join('\n');
-
-        navigator.clipboard.writeText(code)
-          .catch(() => {
-            const textarea = document.createElement('textarea');
-            textarea.value = code;
-            document.body.appendChild(textarea);
-            textarea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textarea);
-          });
-
-        const originalTitle = copyButton.title;
-        copyButton.title = 'Code copied!';
-        setTimeout(() => copyButton.title = originalTitle, 2000);
-      });
-    });
-    ```.text,
-  )
+  html.elem("script", read("html/clipboard-copy.js"))
 }
