@@ -43,6 +43,8 @@
 }
 
 /// Renders inline code blocks as HTML
+///
+/// NOTE: Inline mode does not support highlight or comments for simplicity
 #let zebraw-html-show-inline(
   numbering: none,
   inset: none,
@@ -102,7 +104,7 @@
     numbering-separator: numbering-separator,
   )
 
-  // NOTE: Inline mode does not support highlight or comments for simplicity
+  let default-color = text.fill
 
   // Helper for creating code line elements
   let create-code-line-elem(line) = {
@@ -110,7 +112,7 @@
     line.indentation
 
     // Apply text styling to all text within this line
-    show text: style-code-line.with(default-color: text.fill)
+    show text: style-code-line.with(default-color: default-color)
     line.body
   }
 
@@ -132,14 +134,16 @@
   )
 
   let attrs = (
-    style: create-style(background: curr-background-color(background-color, 0).to-hex()),
+    class: class-list(
+      "zebraw",
+      // As suggested by whatwg, https://html.spec.whatwg.org/
+      if it.lang != none { "language-" + it.lang },
+    ),
+    style: create-style-dict((
+      "--zebraw-fg-color": default-color.to-hex(),
+      "--zebraw-bg-color": curr-background-color(background-color, 0).to-hex(),
+    )),
   )
-
-  // Add language class for syntax highlighting compatibility
-  if it.lang != none {
-    // As suggested by whatwg, https://html.spec.whatwg.org/
-    attrs.insert("class", "language-" + it.lang)
-  }
 
   // Create the main inline code element
   html.elem("code", attrs: attrs, lines.map(create-code-line-elem).join())
@@ -238,7 +242,6 @@
   // HTML attributes for line number elements
   let lineno-attrs = (
     class: class-list("lineno", if numbering-separator { "sep" }),
-    style: create-style(width: repr-or-str(numbering-width)),
   )
 
   // Store default styling values to avoid duplicated styling
@@ -258,19 +261,13 @@
 
   /// Creates highlight background wrapper for lines
   let create-highlight(line, bg) = {
-    html.elem(
-      "span",
-      attrs: (
-        class: "hll", // "highlighted line" class
-        style: create-style(
-          background: bg.to-hex(),
-          // Extend highlight to full width by using negative margins
-          margin: "0 " + repr-or-str(-inset.right) + " 0 " + repr-or-str(-inset.left),
-          padding: "0 " + repr-or-str(inset.right) + " 0 " + repr-or-str(inset.left),
-        ),
-      ),
-      line,
+    let attrs = (
+      class: "hll", // "highlighted line" class
     )
+    if bg != highlight-color {
+      attrs.style = create-style(background: bg.to-hex())
+    }
+    html.elem("span", attrs: attrs, line)
   }
 
   /// Helper function to create complete HTML elements for code lines
@@ -303,17 +300,15 @@
 
   /// Creates header/footer element
   let create-header-footer(content, bg) = {
-    html.elem(
-      "span",
-      attrs: (
-        class: "header",
-        style: create-style(
-          padding: repr-or-str(inset.right) + " " + repr-or-str(inset.left),
-          background: bg.to-hex(),
-        ),
-      ),
-      text(..comment-font-args, content),
-    )
+    if content == none {
+      return
+    }
+
+    let attrs = (class: "header")
+    if bg != default-bg {
+      attrs.style = create-style(background: bg.to-hex())
+    }
+    html.elem("span", attrs: attrs, text(..comment-font-args, content))
   }
 
   /// Creates the language label element
@@ -322,10 +317,6 @@
       "div",
       attrs: (
         class: "zebraw-code-lang",
-        style: create-style(
-          background: lang-color.to-hex(),
-          border-radius: repr-or-str(inset.left),
-        ),
         translate: "no", // Prevent translation of code language names
       ),
       if type(lang) == bool { it.lang } else { lang },
@@ -333,32 +324,30 @@
   }
 
   // Build the complete HTML structure: div > pre > code
-  html.elem("div", attrs: (class: "zebraw-code-block"), {
+  let zebraw-variables = create-style-dict((
+    "--zebraw-inset-top": repr-or-str(inset.top),
+    "--zebraw-inset-right": repr-or-str(inset.right),
+    "--zebraw-inset-bottom": repr-or-str(inset.bottom),
+    "--zebraw-inset-left": repr-or-str(inset.left),
+    "--zebraw-fg-color": default-color.to-hex(),
+    "--zebraw-bg-color": default-bg.to-hex(),
+    "--zebraw-hl-color": highlight-color.to-hex(),
+    "--zebraw-lang-color": lang-color.to-hex(),
+  ))
+  html.elem("div", attrs: (class: "zebraw", style: zebraw-variables), {
     // Add language label at the top if configured
     if type(lang) != bool or lang == true and it.lang != none {
       create-lang-label()
     }
 
     html.elem("pre", {
-      let attrs = (
-        style: create-style(
-          background: default-bg.to-hex(),
-          border-radius: repr-or-str(inset.left),
-          padding: repr-or-str(inset.top)
-            + " "
-            + repr-or-str(inset.right)
-            + " "
-            + repr-or-str(inset.bottom)
-            + " "
-            + repr-or-str(inset.left),
-        ),
-      )
+      let code-attrs = (:)
 
       let cls = class-list(if it.lang != none { "language-" + it.lang }, if wrap { "pre-wrap" })
       if cls.len() > 0 {
-        attrs.class = cls
+        code-attrs.class = cls
       }
-      html.elem("code", attrs: attrs, {
+      html.elem("code", attrs: code-attrs, {
         // Add header if specified
         create-header-footer(
           if header != none { header } else { comments.at("header", default: none) },

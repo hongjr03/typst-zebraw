@@ -1,4 +1,4 @@
-document.querySelectorAll(".zebraw-code-block").forEach((codeBlock) => {
+document.querySelectorAll("div.zebraw").forEach((codeBlock) => {
   const copyButton = codeBlock.querySelector(".zebraw-code-lang");
   if (!copyButton) return;
 
