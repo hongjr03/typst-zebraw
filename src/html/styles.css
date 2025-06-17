@@ -1,61 +1,79 @@
-.zebraw .zebraw-code-lang {
-  position: absolute;
-  right: 0;
-  padding: 0.25em;
-  font-size: 0.8em;
-  border-radius: var(--zebraw-inset-right);
-  background: var(--zebraw-lang-color);
-}
-.zebraw .header {
-  display: block;
-  padding: var(--zebraw-inset-right) var(--zebraw-inset-left);
+@layer components, utilities;
+
+@layer components {
+  .zebraw {
+    position: relative;
+
+    .code-lang {
+      position: absolute;
+      right: 0;
+      padding: 0.25em;
+      font-size: 0.8em;
+      border-radius: var(--zebraw-inset-right);
+      background: var(--zebraw-lang-color);
+    }
+
+    .header {
+      display: block;
+      padding: var(--zebraw-inset-right) var(--zebraw-inset-left);
+    }
+
+    .lineno {
+      display: inline-block;
+      width: 1.5em;
+      margin-right: 0.35em;
+      padding-right: 0.35em;
+      text-align: right;
+      user-select: none;
+
+      > span {
+        margin-left: 0.2em;
+      }
+    }
+
+    .lineno-sep .lineno {
+      box-shadow: -0.05rem 0 hsla(0, 0%, 0%, 0.07) inset;
+    }
+
+    .hll {
+      display: block;
+      /* Extend highlight to full width by using negative margins */
+      margin: 0 calc(var(--zebraw-inset-right) * -1) 0
+        calc(var(--zebraw-inset-left) * -1);
+      padding: 0 var(--zebraw-inset-right) 0 var(--zebraw-inset-left);
+      background-color: var(--zebraw-hl-color);
+    }
+
+    pre > code {
+      display: block;
+      overflow: auto;
+      padding-top: var(--zebraw-inset-top);
+      padding-right: var(--zebraw-inset-right);
+      padding-bottom: var(--zebraw-inset-bottom);
+      padding-left: var(--zebraw-inset-left);
+      color: var(--zebraw-fg-color);
+      background: var(--zebraw-bg-color);
+    }
+  }
+
+  code.zebraw {
+    padding-top: var(--zebraw-inset-top, 0em);
+    padding-right: var(--zebraw-inset-right, 0.3em);
+    padding-bottom: var(--zebraw-inset-bottom, 0em);
+    padding-left: var(--zebraw-inset-left, 0.3em);
+    color: var(--zebraw-fg-color);
+    background: var(--zebraw-bg-color);
+  }
 }
 
-.zebraw pre > code {
-  display: block;
-  overflow: auto;
-  padding-top: var(--zebraw-inset-top);
-  padding-right: var(--zebraw-inset-right);
-  padding-bottom: var(--zebraw-inset-bottom);
-  padding-left: var(--zebraw-inset-left);
-  color: var(--zebraw-fg-color);
-  background: var(--zebraw-bg-color);
-}
-code.zebraw {
-  padding-top: var(--zebraw-inset-top, 0em);
-  padding-right: var(--zebraw-inset-right, 0.3em);
-  padding-bottom: var(--zebraw-inset-bottom, 0em);
-  padding-left: var(--zebraw-inset-left, 0.3em);
-  color: var(--zebraw-fg-color);
-  background: var(--zebraw-bg-color);
-}
-.zebraw pre.pre-wrap {
-  white-space: pre-wrap;
-}
+@layer utility {
+  .zebraw {
+    pre.pre-wrap {
+      white-space: pre-wrap;
+    }
 
-.zebraw .lineno {
-  display: inline-block;
-  width: 1.5em;
-  margin-right: 0.35em;
-  padding-right: 0.35em;
-  text-align: right;
-  user-select: none;
-}
-.zebraw .lineno > span {
-  margin-left: 0.2em;
-}
-.zebraw .lineno.sep {
-  box-shadow: -0.05rem 0 hsla(0, 0%, 0%, 0.07) inset;
-}
-
-.zebraw .hll {
-  display: block;
-  /* Extend highlight to full width by using negative margins */
-  margin: 0 calc(var(--zebraw-inset-right) * -1) 0
-    calc(var(--zebraw-inset-left) * -1);
-  padding: 0 var(--zebraw-inset-right) 0 var(--zebraw-inset-left);
-  background-color: var(--zebraw-hl-color);
-}
-.zebraw .underline {
-  text-decoration: underline;
+    .underline {
+      text-decoration: underline;
+    }
+  }
 }

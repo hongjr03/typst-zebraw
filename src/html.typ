@@ -241,7 +241,7 @@
 
   // HTML attributes for line number elements
   let lineno-attrs = (
-    class: class-list("lineno", if numbering-separator { "sep" }),
+    class: "lineno",
   )
 
   // Store default styling values to avoid duplicated styling
@@ -316,7 +316,7 @@
     html.elem(
       "div",
       attrs: (
-        class: "zebraw-code-lang",
+        class: "code-lang",
         translate: "no", // Prevent translation of code language names
       ),
       if type(lang) == bool { it.lang } else { lang },
@@ -343,8 +343,12 @@
     html.elem("pre", {
       let code-attrs = (:)
 
-      let cls = class-list(if it.lang != none { "language-" + it.lang }, if wrap { "pre-wrap" })
-      if cls.len() > 0 {
+      let cls = class-list(
+        if it.lang != none { "language-" + it.lang },
+        if wrap { "pre-wrap" },
+        if numbering-separator { "lineno-sep" },
+      )
+      if cls != none {
         code-attrs.class = cls
       }
       html.elem("code", attrs: code-attrs, {
