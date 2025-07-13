@@ -68,19 +68,6 @@
   let lines = lines.slice(start, end)
   let lines-result = ()
 
-  let get-highlight-color(line-number) = {
-    if type(highlight-color) == array {
-      let highlight-index = highlight-nums.position(n => n == line-number)
-      if highlight-index != none {
-        highlight-color.at(calc.rem(highlight-index, highlight-color.len()))
-      } else {
-        highlight-color.at(0)
-      }
-    } else {
-      highlight-color
-    }
-  }
-
   // Process each line
   for (x, line) in lines.enumerate() {
     let indent-string = if line.text.trim(whitespace-regex, at: std.start) == "" {
@@ -137,8 +124,6 @@
 
     // Process highlighted lines
     if type(highlight-nums) == array and highlight-nums.contains(line.number) {
-      let line-highlight-color = get-highlight-color(line.number)
-
       // Create comment if it exists for this line
       let comment = if comments.keys().contains(str(line.number)) {
         (
@@ -150,13 +135,13 @@
         )
       } else { none }
 
-      // Add highlighted line with specific color
+      // Add highlighted line
       lines-result.push((
         type: "highlight",
         indentation: indent-string,
         number: display-number,
         body: body,
-        fill: line-highlight-color,
+        fill: highlight-color,
         comment: if is-html { comment } else { none },
       ))
 

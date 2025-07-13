@@ -122,7 +122,6 @@
       }
     }
 
-
     // Calculate line number to display
     let display-number = if numbering == true {
       if keep-offset { line.number + numbering-offset } else { line.number + numbering-offset - start }
