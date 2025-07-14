@@ -83,14 +83,18 @@
 
   // Only process indentation when it exists
   if hanging-indent {
-    grid(
-      columns: 2,
-      indentation-format(line.indentation, config), line.body,
+    let indent = indentation-format(line.indentation, config)
+    place(indent)
+    context par(
+      line.body,
+      hanging-indent: measure(indent).width,
+      justify: false,
+      linebreaks: "simple",
     )
   } else {
-    if line.keys().contains("indentation") {
+    place(if line.keys().contains("indentation") {
       indentation-format(line.indentation, config)
-    }
+    })
     line.body
   }
 }
