@@ -4,25 +4,52 @@
 #let tidy-highlight-lines(highlight-lines) = {
   let nums = ()
   let comments = (:)
-  let lines = if type(highlight-lines) == int {
-    (highlight-lines,)
+  let line-colors = (:)
+
+  if type(highlight-lines) == int {
+    nums.push(highlight-lines)
   } else if type(highlight-lines) == array {
-    highlight-lines
-  }
-  for line in lines {
-    if type(line) == int {
-      nums.push(line)
-    } else if type(line) == array {
-      nums.push(line.first())
-      comments.insert(str(line.at(0)), line.at(1))
-    } else if type(line) == dictionary {
-      if not (line.keys().contains("header") or line.keys().contains("footer")) {
-        nums.push(int(line.keys().first()))
+    for line in highlight-lines {
+      if type(line) == int {
+        nums.push(line)
+      } else if type(line) == array {
+        let line-num = line.first()
+        nums.push(line-num)
+
+        for item in line.slice(1) {
+          if type(item) == color {
+            line-colors.insert(str(line-num), item)
+          } else {
+            comments.insert(str(line-num), item)
+          }
+        }
+      } else if type(line) == dictionary {
+        if not (line.keys().contains("header") or line.keys().contains("footer")) {
+          let line-num = int(line.keys().first())
+          nums.push(line-num)
+          comments.insert(str(line-num), line.at(line.keys().first()))
+        } else {
+          comments += line
+        }
       }
-      comments += line
+    }
+  } else if type(highlight-lines) == dictionary {
+    for (key, value) in highlight-lines {
+      if not (key == "header" or key == "footer") {
+        let line-num = int(key)
+        nums.push(line-num)
+        if type(value) == color {
+          line-colors.insert(str(line-num), value)
+        } else {
+          comments.insert(str(line-num), value)
+        }
+      } else {
+        comments.insert(key, value)
+      }
     }
   }
-  (nums, comments)
+
+  (nums, comments, line-colors)
 }
 
 #let curr-background-color(background-color, idx) = {
@@ -33,6 +60,7 @@
   }
   res
 }
+
 
 #let tidy-lines(
   numbering,
@@ -50,6 +78,7 @@
   is-html: false,
   line-range: (1, none),
   hanging-indent: false,
+  line-colors: (:),
 ) = {
   // Process line range
   let (start, end, keep-offset) = if type(line-range) == array {
@@ -69,7 +98,9 @@
   let lines-result = ()
 
   let get-highlight-color(line-number) = {
-    if type(highlight-color) == array {
+    if line-colors.keys().contains(str(line-number)) {
+      line-colors.at(str(line-number))
+    } else if type(highlight-color) == array {
       let highlight-index = highlight-nums.position(n => n == line-number)
       if highlight-index != none {
         highlight-color.at(calc.rem(highlight-index, highlight-color.len()))
