@@ -1,6 +1,186 @@
 #import "state.typ": *
 #import "indentation.typ": *
 
+/// Get the current background color based on type (single color or array)
+#let curr-background-color(background-color, idx) = {
+  let res = if type(background-color) == color {
+    background-color
+  } else if type(background-color) == array {
+    background-color.at(calc.rem(idx, background-color.len()))
+  }
+  res
+}
+
+/// Calculate the width for line numbering column
+/// Returns appropriate width based on line count and numbering type
+#let calculate-numbering-width(numbering, total-lines, numbering-offset) = {
+  if numbering == false {
+    0pt
+  } else if (total-lines + numbering-offset < 100) and type(numbering) != array {
+    2.1em
+  } else {
+    auto
+  }
+}
+
+/// Render a single line (either line number or code content)
+#let render-line(
+  line,
+  is-line-number: false,
+  numbering-width: auto,
+  height: none,
+  hanging-indent: false,
+  indentation: 0,
+  inset: (:),
+  fast-preview: false,
+  numbering-font-args: (:),
+  numbering-separator: 0.3em,
+) = {
+  grid.cell(
+    fill: line.fill,
+    block(
+      width: if not is-line-number { 100% } else { numbering-width },
+      inset: inset,
+      {
+        if is-line-number {
+          // Line number rendering
+          set text(..numbering-font-args)
+          (line.number,).flatten().map(num => box([#num])).join(h(numbering-separator, weak: true))
+        } else {
+          // Code line rendering with optional indentation processing
+          indentation-render-line(line, height, hanging-indent, indentation, inset, fast-preview)
+        }
+      },
+    ),
+  )
+}
+
+/// Create a header section for the code block
+#let create-header(
+  header-param,
+  comments,
+  comment-color,
+  comment-font-args,
+  inset,
+  has-lang,
+  extend,
+  background-color,
+) = {
+  let content = if header-param != none {
+    header-param
+  } else if comments.keys().contains("header") {
+    comments.at("header")
+  } else {
+    none
+  }
+
+  if content != none {
+    // Custom header content
+    grid.cell(
+      align: left + top,
+      colspan: 2,
+      box(
+        width: 100%,
+        inset: inset.pairs().map(((key, value)) => (key, value * 2)).to-dict(),
+        radius: if not has-lang { (top: inset.left) } else { (top-left: inset.left) },
+        fill: comment-color,
+        text(..comment-font-args, content),
+      ),
+    )
+  } else if extend {
+    // Empty header with background for extension
+    grid.cell(
+      colspan: 2,
+      box(
+        width: 100%,
+        fill: curr-background-color(background-color, 0),
+        inset: (:) + (top: inset.top),
+        radius: (top: inset.left),
+        [],
+      ),
+    )
+  } else {
+    none
+  }
+}
+
+/// Create a footer section for the code block
+#let create-footer(
+  footer-param,
+  comments,
+  comment-color,
+  comment-font-args,
+  inset,
+  extend,
+  background-color,
+  lines-len,
+) = {
+  let content = if footer-param != none {
+    footer-param
+  } else if comments.keys().contains("footer") {
+    comments.at("footer")
+  } else {
+    none
+  }
+
+  if content != none {
+    // Custom footer content
+    grid.cell(
+      align: left + top,
+      colspan: 2,
+      box(
+        width: 100%,
+        inset: inset.pairs().map(((key, value)) => (key, value * 2)).to-dict(),
+        radius: (bottom: inset.left),
+        fill: comment-color,
+        text(..comment-font-args, content),
+      ),
+    )
+  } else if extend {
+    // Empty footer with background for extension
+    grid.cell(
+      colspan: 2,
+      box(
+        width: 100%,
+        fill: curr-background-color(background-color, lines-len + 1),
+        inset: (:) + (bottom: inset.bottom),
+        radius: (bottom: inset.left),
+        [],
+      ),
+    )
+  } else {
+    none
+  }
+}
+
+/// Render the language tab if needed
+#let render-lang-tab(
+  has-lang,
+  lang,
+  lang-color,
+  lang-font-args,
+  inset,
+  it,
+) = context {
+  if has-lang {
+    let lang-tab = box(
+      inset: 0.34em,
+      outset: (bottom: inset.left),
+      radius: (top: inset.left),
+      fill: lang-color,
+      text(
+        bottom-edge: "bounds",
+        ..lang-font-args,
+        if type(lang) == bool { it.lang } else { lang },
+      ),
+    )
+    v(-measure(lang-tab).height)
+    h(1fr)
+    lang-tab
+    v(0em, weak: true)
+  }
+}
+
 #let tidy-highlight-lines(highlight-lines) = {
   let nums = ()
   let comments = (:)
@@ -23,15 +203,6 @@
     }
   }
   (nums, comments)
-}
-
-#let curr-background-color(background-color, idx) = {
-  let res = if type(background-color) == color {
-    background-color
-  } else if type(background-color) == array {
-    background-color.at(calc.rem(idx, background-color.len()))
-  }
-  res
 }
 
 #let tidy-lines(

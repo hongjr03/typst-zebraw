@@ -26,6 +26,8 @@
   it,
 ) = context {
   set par(first-line-indent: 0em)
+
+  // Parse all arguments with state fallbacks
   let args = parse-zebraw-args(
     numbering: numbering,
     inset: inset,
@@ -43,6 +45,7 @@
     indentation: indentation,
     numbering-separator: numbering-separator,
   )
+
   // Extract all necessary parameters from args dictionary
   let numbering = args.numbering
   let inset = args.inset
@@ -59,19 +62,15 @@
   let hanging-indent = args.hanging-indent
   let indentation = args.indentation
   let fast-preview = args.fast-preview
-  let numbering-separator = args.numbering-separator
+  let numbering-separator-enabled = args.numbering-separator
 
-  // Calculate width for line numbering
-  let numbering-width = if numbering != false {
-    if (it.lines.len() + numbering-offset < 100) and type(numbering) != array { 2.1em } else { auto }
-  } else { 0pt }
+  // Calculate width for line numbering using helper function
+  let numbering-width = calculate-numbering-width(numbering, it.lines.len(), numbering-offset)
 
   // Process highlight lines and comments
   let (highlight-nums, comments) = tidy-highlight-lines(highlight-lines)
 
-  // Setup helper functions for layout
-  let b(..args, body) = box(width: 100%, inset: inset, ..args, body)
-
+  // Setup grid helper
   let g(..args) = grid(
     columns: (numbering-width, 1fr),
     align: (right + top, left),
@@ -80,27 +79,6 @@
 
   // Determine if we should show a language tab
   let has-lang = (type(lang) == bool and lang and it.lang != none) or type(lang) != bool
-
-  // Helper function to render a line (either code or line number)
-  let line-render(line, num: false, height: none) = grid.cell(fill: line.fill, block(
-    width: if not num { 100% } else { numbering-width },
-    inset: inset,
-    {
-      if num {
-        // Line number rendering
-        set text(..numbering-font-args)
-        (line.number,)
-          .flatten()
-          .map(num => {
-            box([#num])
-          })
-          .join(h(0.3em, weak: true))
-      } else {
-        // Code line rendering with optional indentation processing
-        indentation-render-line(line, height, hanging-indent, indentation, inset, fast-preview)
-      }
-    },
-  ))
 
   // Process lines with highlighting, numbers, and comments
   let lines = tidy-lines(
@@ -121,53 +99,8 @@
     hanging-indent: hanging-indent,
   )
 
-  // Helper function to create header or footer section
-  let create-section(position, content-param, comment-key) = {
-    let content = if content-param != none {
-      content-param
-    } else if comments.keys().contains(comment-key) {
-      comments.at(comment-key)
-    } else {
-      none
-    }
-
-    if content != none {
-      // Custom header or footer content
-      grid.cell(align: left + top, colspan: 2, b(
-        inset: inset.pairs().map(((key, value)) => (key, value * 2)).to-dict(),
-        radius: if position == "header" {
-          if not has-lang { (top: inset.left) } else { (top-left: inset.left) }
-        } else {
-          (bottom: inset.left)
-        },
-        fill: comment-color,
-        text(..comment-font-args, content),
-      ))
-    } else if extend {
-      // Empty header or footer with background for extension
-      grid.cell(colspan: 2, b(
-        fill: curr-background-color(background-color, if position == "header" { 0 } else { lines.len() + 1 }),
-        inset: (:) + (if position == "header" { (top: inset.top) } else { (bottom: inset.bottom) }),
-        radius: if position == "header" { (top: inset.left) } else { (bottom: inset.left) },
-        [],
-      ))
-    } else {
-      none
-    }
-  }
-
   // Render language tab if needed
-  context if has-lang {
-    let lang-tab = box(inset: 0.34em, outset: (bottom: inset.left), radius: (top: inset.left), fill: lang-color, text(
-      bottom-edge: "bounds",
-      ..lang-font-args,
-      if type(lang) == bool { it.lang } else { lang },
-    ))
-    v(-measure(lang-tab).height)
-    h(1fr)
-    lang-tab
-    v(0em, weak: true)
-  }
+  render-lang-tab(has-lang, lang, lang-color, lang-font-args, inset, it)
 
   // Render the code block
   block(breakable: true, radius: inset.left, clip: true, fill: curr-background-color(background-color, 0), {
@@ -188,7 +121,23 @@
       // Create line objects with their heights pre-computed
       let lines-with-height = lines.map(line => {
         let height = measure(
-          g(line-render(last-line, num: true), line-render(line)),
+          g(
+            render-line(
+              last-line,
+              is-line-number: true,
+              inset: inset,
+              numbering-width: numbering-width,
+              numbering-font-args: numbering-font-args,
+            ),
+            render-line(
+              line,
+              is-line-number: false,
+              hanging-indent: hanging-indent,
+              indentation: indentation,
+              inset: inset,
+              fast-preview: fast-preview,
+            ),
+          ),
           width: code-block-size.width,
         ).height
         (line: line, height: height)
@@ -198,26 +147,58 @@
       g(
         // 1. Header section
         ..{
-          let header-cell = create-section("header", header, "header")
+          let header-cell = create-header(
+            header,
+            comments,
+            comment-color,
+            comment-font-args,
+            inset,
+            has-lang,
+            extend,
+            background-color,
+          )
           if header-cell != none { (grid.header(repeat: false, header-cell),) } else { () }
         },
 
         // 2. Line numbers column
         grid(
           rows: lines-with-height.map(item => item.height),
-          ..lines-with-height.map(item => line-render(item.line, num: true))
+          ..lines-with-height.map(item => render-line(
+            item.line,
+            is-line-number: true,
+            inset: inset,
+            numbering-width: numbering-width,
+            numbering-font-args: numbering-font-args,
+          ))
         ),
 
         // 3. Code lines column
         grid(
-          ..if numbering-separator { (stroke: (left: gray.transparentize(34%) + 0.05em)) },
+          ..if numbering-separator-enabled { (stroke: (left: gray.transparentize(34%) + 0.05em)) },
           rows: lines-with-height.map(item => item.height),
-          ..lines-with-height.map(item => line-render(item.line, height: item.height))
+          ..lines-with-height.map(item => render-line(
+            item.line,
+            is-line-number: false,
+            height: item.height,
+            hanging-indent: hanging-indent,
+            indentation: indentation,
+            inset: inset,
+            fast-preview: fast-preview,
+          ))
         ),
 
         // 4. Footer section
         ..{
-          let footer-cell = create-section("footer", footer, "footer")
+          let footer-cell = create-footer(
+            footer,
+            comments,
+            comment-color,
+            comment-font-args,
+            inset,
+            extend,
+            background-color,
+            lines.len(),
+          )
           if footer-cell != none { (grid.footer(repeat: false, footer-cell),) } else { () }
         },
       )
