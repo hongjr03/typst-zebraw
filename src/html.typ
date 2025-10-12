@@ -117,7 +117,7 @@
   }
 
   // Process lines
-  let lines = tidy-lines(
+  let lines = process-lines(
     numbering,
     it.lines,
     none, // No highlight numbers for inline
@@ -140,7 +140,7 @@
     ),
     style: create-style-dict((
       "--ec-codeFg": default-color.to-hex(),
-      "--ec-codeBg": curr-background-color(background-color, 0).to-hex(),
+      "--ec-codeBg": background-color-at-index(background-color, 0).to-hex(),
       "--ec-codePadInl": repr-or-str(inset.left),
       "--ec-codePadBlk": repr-or-str(inset.top),
       "--ec-borderRad": repr-or-str(inset.left),
@@ -212,10 +212,10 @@
   )
 
   // Process highlight lines
-  let (highlight-nums, comments) = tidy-highlight-lines(highlight-lines)
+  let (highlight-nums, comments) = parse-highlight-lines(highlight-lines)
 
   // Process lines
-  let lines = tidy-lines(
+  let lines = process-lines(
     numbering,
     it.lines,
     highlight-nums,
@@ -232,7 +232,7 @@
   )
 
   let default-color = text.fill
-  let default-bg = curr-background-color(background-color, 0)
+  let default-bg = background-color-at-index(background-color, 0)
   let show-numbering = numbering != false
 
   /// Renders the language badge shown above the block
@@ -490,8 +490,8 @@
 
   let header-content = if header != none { header } else { comments.at("header", default: none) }
   let footer-content = if footer != none { footer } else { comments.at("footer", default: none) }
-  let header-bg = curr-background-color(background-color, 0)
-  let footer-bg = curr-background-color(background-color, lines.len() + 1)
+  let header-bg = background-color-at-index(background-color, 0)
+  let footer-bg = background-color-at-index(background-color, lines.len() + 1)
 
   html.elem("div", attrs: (class: wrapper-class, style: wrapper-style), {
     if type(lang) != bool or lang == true and it.lang != none {

@@ -68,7 +68,7 @@
   let numbering-width = calculate-numbering-width(numbering, it.lines.len(), numbering-offset)
 
   // Process highlight lines and comments
-  let (highlight-nums, comments) = tidy-highlight-lines(highlight-lines)
+  let (highlight-nums, comments) = parse-highlight-lines(highlight-lines)
 
   // Setup grid helper
   let g(..args) = grid(
@@ -81,7 +81,7 @@
   let has-lang = (type(lang) == bool and lang and it.lang != none) or type(lang) != bool
 
   // Process lines with highlighting, numbers, and comments
-  let lines = tidy-lines(
+  let lines = process-lines(
     numbering,
     it.lines,
     highlight-nums,
@@ -103,7 +103,7 @@
   render-lang-tab(has-lang, lang, lang-color, lang-font-args, inset, it)
 
   // Render the code block
-  block(breakable: true, radius: inset.left, clip: true, fill: curr-background-color(background-color, 0), {
+  block(breakable: true, radius: inset.left, clip: true, fill: background-color-at-index(background-color, 0), {
     context layout(code-block-size => {
       // Calculate line heights for consistent rendering
       let last-line = if lines.len() > 2 {

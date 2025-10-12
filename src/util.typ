@@ -2,7 +2,7 @@
 #import "indentation.typ": *
 
 /// Get the current background color based on type (single color or array)
-#let curr-background-color(background-color, idx) = {
+#let background-color-at-index(background-color, idx) = {
   let res = if type(background-color) == color {
     background-color
   } else if type(background-color) == array {
@@ -93,7 +93,7 @@
       colspan: 2,
       box(
         width: 100%,
-        fill: curr-background-color(background-color, 0),
+        fill: background-color-at-index(background-color, 0),
         inset: (:) + (top: inset.top),
         radius: (top: inset.left),
         [],
@@ -142,7 +142,7 @@
       colspan: 2,
       box(
         width: 100%,
-        fill: curr-background-color(background-color, lines-len + 1),
+        fill: background-color-at-index(background-color, lines-len + 1),
         inset: (:) + (bottom: inset.bottom),
         radius: (bottom: inset.left),
         [],
@@ -181,7 +181,7 @@
   }
 }
 
-#let tidy-highlight-lines(highlight-lines) = {
+#let parse-highlight-lines(highlight-lines) = {
   let nums = ()
   let comments = (:)
   let lines = if type(highlight-lines) == int {
@@ -205,7 +205,149 @@
   (nums, comments)
 }
 
-#let tidy-lines(
+/// Process line range parameter and return (start, end, keep-offset)
+/// Converts 1-based line numbers to 0-based indices
+#let process-line-range(line-range) = {
+  if type(line-range) == array {
+    (
+      line-range.at(0) - 1,
+      if line-range.at(1) != none { line-range.at(1) - 1 } else { none },
+      true,
+    )
+  } else if type(line-range) == dictionary {
+    (
+      line-range.range.at(0) - 1,
+      if line-range.range.at(1) != none { line-range.range.at(1) - 1 } else { none },
+      line-range.keep-offset,
+    )
+  } else {
+    (0, none, true)
+  }
+}
+
+/// Extract indentation string from current line or previous lines
+/// For empty lines, uses indentation from previous non-comment line
+#let extract-indent-string(line, x, lines-result, indentation) = {
+  if line.text.trim(whitespace-regex, at: std.start) == "" {
+    // For empty lines, use indentation from previous non-comment lines
+    let prev-line = if x > 0 and lines-result.last().type != "comment" {
+      lines-result.last()
+    } else if lines-result.len() > 1 and lines-result.at(-2).type != "comment" {
+      lines-result.at(-2)
+    } else {
+      none
+    }
+
+    if prev-line != none and prev-line.keys().contains("indentation") {
+      prev-line.indentation
+    } else {
+      indentation * " "
+    }
+  } else {
+    // Use function from indentation.typ to extract indentation string
+    indentation-extract-from-text(line.text)
+  }
+}
+
+/// Calculate the display number for a line based on numbering settings
+#let calculate-display-number(numbering, line, keep-offset, numbering-offset, start, lines-len) = {
+  if numbering == true {
+    if keep-offset {
+      line.number + numbering-offset
+    } else {
+      line.number + numbering-offset - start
+    }
+  } else if numbering == false {
+    none
+  } else if type(numbering) == array {
+    numbering.map(list => {
+      assert(
+        list.len() == lines-len,
+        message: "numbering list length should be equal to lines length",
+      )
+      list.at(line.number - 1)
+    })
+  }
+}
+
+/// Create a comment object for a highlighted line
+#let create-comment-for-line(line-number, comments, comment-flag, comment-font-args, comment-color, line-text) = {
+  if comments.keys().contains(str(line-number)) {
+    (
+      type: "comment",
+      indentation: line-text.split(regex("\S")).first(),
+      comment-flag: comment-flag,
+      body: text(..comment-font-args, comments.at(str(line-number))),
+      fill: comment-color,
+    )
+  } else {
+    none
+  }
+}
+
+/// Process a highlighted line and return line object(s)
+#let process-highlight-line(
+  line,
+  indent-string,
+  display-number,
+  body,
+  highlight-color,
+  comment,
+  is-html,
+  comment-color,
+  comment-flag,
+) = {
+  let result = ()
+
+  // Add highlighted line
+  result.push((
+    type: "highlight",
+    indentation: indent-string,
+    number: display-number,
+    body: body,
+    fill: highlight-color,
+    comment: if is-html { comment } else { none },
+  ))
+
+  // Add separate comment line if needed (for non-HTML output)
+  if not is-html and comment != none {
+    result.push((
+      type: "comment",
+      number: none,
+      body: {
+        if comment-flag != "" {
+          indent-string
+          strong(text(ligatures: true, comment.comment-flag))
+          h(0.35em, weak: true)
+        }
+        comment.body
+      },
+      fill: comment-color,
+    ))
+  }
+
+  result
+}
+
+/// Process a normal (non-highlighted) line and return line object
+#let process-normal-line(
+  line,
+  indent-string,
+  display-number,
+  body,
+  background-color,
+) = {
+  (
+    type: "normal",
+    indentation: indent-string,
+    number: display-number,
+    body: body,
+    fill: background-color-at-index(background-color, line.number),
+    comment: none,
+  )
+}
+
+#let process-lines(
   numbering,
   lines,
   highlight-nums,
@@ -223,17 +365,7 @@
   hanging-indent: false,
 ) = {
   // Process line range
-  let (start, end, keep-offset) = if type(line-range) == array {
-    (line-range.at(0) - 1, if line-range.at(1) != none { line-range.at(1) - 1 } else { none }, true)
-  } else if type(line-range) == dictionary {
-    (
-      line-range.range.at(0) - 1,
-      if line-range.range.at(1) != none { line-range.range.at(1) - 1 } else { none },
-      line-range.keep-offset,
-    )
-  } else {
-    (0, none, true)
-  }
+  let (start, end, keep-offset) = process-line-range(line-range)
 
   // Slice lines according to range
   let lines = lines.slice(start, end)
@@ -241,94 +373,65 @@
 
   // Process each line
   for (x, line) in lines.enumerate() {
-    let indent-string = if line.text.trim(whitespace-regex, at: std.start) == "" {
-      // For empty lines, use indentation from previous non-comment lines
-      let prev-line = if x > 0 and lines-result.last().type != "comment" {
-        lines-result.last()
-      } else if lines-result.len() > 1 and lines-result.at(-2).type != "comment" {
-        lines-result.at(-2)
-      } else {
-        none
-      }
+    // Extract indentation string
+    let indent-string = extract-indent-string(line, x, lines-result, indentation)
 
-      if prev-line != none and prev-line.keys().contains("indentation") {
-        prev-line.indentation
-      } else {
-        indentation * " "
-      }
-    } else {
-      // Use function from indentation.typ to extract indentation string
-      indentation-extract-from-text(line.text)
-    }
-
+    // Determine body content
     let body = if line.text.trim(whitespace-regex, at: std.start) == "" {
       [\ ]
     } else {
       line.body
     }
 
-
     // Calculate line number to display
-    let display-number = if numbering == true {
-      if keep-offset { line.number + numbering-offset } else { line.number + numbering-offset - start }
-    } else if numbering == false {
-      none
-    } else if type(numbering) == array {
-      numbering.map(list => {
-        assert(list.len() == lines.len(), message: "numbering list length should be equal to lines length")
-        list.at(line.number - 1)
-      })
-    }
+    let display-number = calculate-display-number(
+      numbering,
+      line,
+      keep-offset,
+      numbering-offset,
+      start,
+      lines.len(),
+    )
 
-    // Process highlighted lines
+    // Process highlighted or normal lines
     if type(highlight-nums) == array and highlight-nums.contains(line.number) {
       // Create comment if it exists for this line
-      let comment = if comments.keys().contains(str(line.number)) {
-        (
-          type: "comment",
-          indentation: line.text.split(regex("\S")).first(),
-          comment-flag: comment-flag,
-          body: text(..comment-font-args, comments.at(str(line.number))),
-          fill: comment-color,
-        )
-      } else { none }
+      let comment = create-comment-for-line(
+        line.number,
+        comments,
+        comment-flag,
+        comment-font-args,
+        comment-color,
+        line.text,
+      )
 
-      // Add highlighted line
-      lines-result.push((
-        type: "highlight",
-        indentation: indent-string,
-        number: display-number,
-        body: body,
-        fill: highlight-color,
-        comment: if is-html { comment } else { none },
-      ))
+      // Process highlight line and add to result
+      let processed-lines = process-highlight-line(
+        line,
+        indent-string,
+        display-number,
+        body,
+        highlight-color,
+        comment,
+        is-html,
+        comment-color,
+        comment-flag,
+      )
 
-      // Add separate comment line if needed
-      if not is-html and comment != none {
-        lines-result.push((
-          type: "comment",
-          number: none,
-          body: {
-            if comment-flag != "" {
-              indent-string
-              strong(text(ligatures: true, comment.comment-flag))
-              h(0.35em, weak: true)
-            }
-            comment.body
-          },
-          fill: comment-color,
-        ))
+      for processed-line in processed-lines {
+        lines-result.push(processed-line)
       }
     } else {
       // Add normal line
-      lines-result.push((
-        type: "normal",
-        indentation: indent-string,
-        number: display-number,
-        body: body,
-        fill: curr-background-color(background-color, line.number),
-        comment: none,
-      ))
+      lines-result.push(
+        process-normal-line(
+          line,
+          indent-string,
+          display-number,
+          body,
+          background-color,
+        ),
+      )
     }
   }
 
