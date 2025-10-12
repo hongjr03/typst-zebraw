@@ -51,5 +51,5 @@
     columns: (1fr, 1fr),
     [Hello], [world!],
   )
-  ```
+  ```,
 )

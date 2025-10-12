@@ -181,28 +181,64 @@
   }
 }
 
+/// Parse highlight lines to extract line numbers, comments, and colors
 #let parse-highlight-lines(highlight-lines) = {
   let nums = ()
   let comments = (:)
-  let lines = if type(highlight-lines) == int {
-    (highlight-lines,)
+  let line-colors = (:)
+
+  if type(highlight-lines) == int {
+    nums.push(highlight-lines)
   } else if type(highlight-lines) == array {
-    highlight-lines
-  }
-  for line in lines {
-    if type(line) == int {
-      nums.push(line)
-    } else if type(line) == array {
-      nums.push(line.first())
-      comments.insert(str(line.at(0)), line.at(1))
-    } else if type(line) == dictionary {
-      if not (line.keys().contains("header") or line.keys().contains("footer")) {
-        nums.push(int(line.keys().first()))
+    for line in highlight-lines {
+      if type(line) == int {
+        nums.push(line)
+      } else if type(line) == array {
+        let line-num = line.first()
+        nums.push(line-num)
+
+        // Process additional elements (color and/or comment)
+        for item in line.slice(1) {
+          if type(item) == color {
+            line-colors.insert(str(line-num), item)
+          } else {
+            comments.insert(str(line-num), item)
+          }
+        }
+      } else if type(line) == dictionary {
+        if not (line.keys().contains("header") or line.keys().contains("footer")) {
+          let line-num = int(line.keys().first())
+          nums.push(line-num)
+
+          let value = line.at(line.keys().first())
+          if type(value) == color {
+            line-colors.insert(str(line-num), value)
+          } else {
+            comments.insert(str(line-num), value)
+          }
+        } else {
+          comments += line
+        }
       }
-      comments += line
+    }
+  } else if type(highlight-lines) == dictionary {
+    for (key, value) in highlight-lines {
+      if not (key == "header" or key == "footer") {
+        let line-num = int(key)
+        nums.push(line-num)
+
+        if type(value) == color {
+          line-colors.insert(str(line-num), value)
+        } else {
+          comments.insert(str(line-num), value)
+        }
+      } else {
+        comments.insert(key, value)
+      }
     }
   }
-  (nums, comments)
+
+  (nums, comments, line-colors)
 }
 
 /// Process line range parameter and return (start, end, keep-offset)
@@ -363,6 +399,7 @@
   is-html: false,
   line-range: (1, none),
   hanging-indent: false,
+  line-colors: (:), // New parameter for per-line colors
 ) = {
   // Process line range
   let (start, end, keep-offset) = process-line-range(line-range)
@@ -370,6 +407,25 @@
   // Slice lines according to range
   let lines = lines.slice(start, end)
   let lines-result = ()
+
+  // Helper function to get highlight color for a specific line
+  let get-highlight-color(line-number) = {
+    // First check if this line has a specific color
+    if line-colors.keys().contains(str(line-number)) {
+      line-colors.at(str(line-number))
+    } else if type(highlight-color) == array {
+      // Use array colors cyclically
+      let highlight-index = highlight-nums.position(n => n == line-number)
+      if highlight-index != none {
+        highlight-color.at(calc.rem(highlight-index, highlight-color.len()))
+      } else {
+        highlight-color.at(0)
+      }
+    } else {
+      // Single color for all highlights
+      highlight-color
+    }
+  }
 
   // Process each line
   for (x, line) in lines.enumerate() {
@@ -395,6 +451,9 @@
 
     // Process highlighted or normal lines
     if type(highlight-nums) == array and highlight-nums.contains(line.number) {
+      // Get the color for this specific highlighted line
+      let line-highlight-color = get-highlight-color(line.number)
+
       // Create comment if it exists for this line
       let comment = create-comment-for-line(
         line.number,
@@ -405,13 +464,13 @@
         line.text,
       )
 
-      // Process highlight line and add to result
+      // Process highlight line with specific color
       let processed-lines = process-highlight-line(
         line,
         indent-string,
         display-number,
         body,
-        highlight-color,
+        line-highlight-color, // Use specific color here
         comment,
         is-html,
         comment-color,

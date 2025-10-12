@@ -67,8 +67,8 @@
   // Calculate width for line numbering using helper function
   let numbering-width = calculate-numbering-width(numbering, it.lines.len(), numbering-offset)
 
-  // Process highlight lines and comments
-  let (highlight-nums, comments) = parse-highlight-lines(highlight-lines)
+  // Process highlight lines, comments, and line-specific colors
+  let (highlight-nums, comments, line-colors) = parse-highlight-lines(highlight-lines)
 
   // Setup grid helper
   let g(..args) = grid(
@@ -97,6 +97,7 @@
     is-html: false,
     line-range: line-range,
     hanging-indent: hanging-indent,
+    line-colors: line-colors, // Pass line-specific colors
   )
 
   // Render language tab if needed

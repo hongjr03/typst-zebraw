@@ -2,3 +2,4 @@
 #include "colors.typ"
 #include "font.typ"
 #include "extend.typ"
+#include "multi-highlight-color.typ"

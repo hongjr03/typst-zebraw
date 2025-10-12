@@ -212,7 +212,7 @@
   )
 
   // Process highlight lines
-  let (highlight-nums, comments) = parse-highlight-lines(highlight-lines)
+  let (highlight-nums, comments, line-colors) = parse-highlight-lines(highlight-lines)
 
   // Process lines
   let lines = process-lines(
@@ -229,6 +229,7 @@
     inset,
     is-html: true,
     line-range: line-range,
+    line-colors: line-colors, // Pass line-colors
   )
 
   let default-color = text.fill

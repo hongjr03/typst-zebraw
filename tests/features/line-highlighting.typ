@@ -40,3 +40,17 @@
   ))
   ```,
 )
+
+#zebraw(
+  lang: false,
+  block-width: 100%,
+  highlight-lines: (
+    (1, rgb("#edb4b0").lighten(50%)),
+    (2, rgb("#a4c9a6").lighten(50%)),
+  ),
+  ```python
+  - device = "cuda"
+  + device = accelerator.device
+    model.to(device)
+  ```,
+)
