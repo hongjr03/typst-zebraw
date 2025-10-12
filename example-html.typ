@@ -16,6 +16,7 @@
   block-width: 100%,
   numbering-separator: true,
   wrap: false,
+  indentation: 4,
   ```rust
   pub fn fibonacci_reccursive(n: i32) -> u64 {
       if n < 0 {
@@ -42,6 +43,7 @@
   block-width: 100%,
   wrap: true,
   numbering-offset: 300,
+  indentation: 4,
   ```rust
   pub fn fibonacci_reccursive(n: i32) -> u64 {
       if n < 0 {
@@ -69,9 +71,11 @@
   block-width: 100%,
   wrap: true,
   numbering-separator: true,
+  indentation: 4,
+  header: [Test],
   ```typst
   = Fibonacci Reccursive Function
-  
+
   This function calculates the Fibonacci number at the given index using a recursive approach.
   ```,
 )
