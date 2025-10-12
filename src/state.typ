@@ -18,6 +18,26 @@
 #let indentation-state = state("zebraw-indentation", 0)
 #let fast-preview-state = state("zebraw-fast-preview", false)
 
+/// Helper function to get argument value or fallback to state
+/// If arg is none, returns the state value; otherwise returns arg itself
+#let get-arg-or-state(arg, state-getter) = {
+  if arg == none {
+    state-getter.get()
+  } else {
+    arg
+  }
+}
+
+/// Helper function to merge state with provided argument (for dictionaries)
+/// Used for inset and font-args which need to be merged with global state
+#let merge-state-with-arg(arg, state-getter) = {
+  if arg == none {
+    state-getter.get()
+  } else {
+    state-getter.get() + arg
+  }
+}
+
 /// Initialize the `zebraw` block in global.
 /// -> content
 #let zebraw-init(
@@ -116,29 +136,13 @@
   fast-preview: none,
   numbering-separator: none,
 ) = {
-  let numbering = if numbering == none {
-    numbering-state.get()
-  } else {
-    numbering
-  }
-  let inset = if inset == none {
-    inset-state.get()
-  } else {
-    inset-state.get() + inset
-  }
-
-  let background-color = if background-color == none {
-    background-color-state.get()
-  } else {
-    background-color
-  }
-
-  let highlight-color = if highlight-color == none {
-    highlight-color-state.get()
-  } else {
-    highlight-color
-  }
-
+  // Use helper functions to reduce repetition
+  let numbering = get-arg-or-state(numbering, numbering-state)
+  let inset = merge-state-with-arg(inset, inset-state)
+  let background-color = get-arg-or-state(background-color, background-color-state)
+  let highlight-color = get-arg-or-state(highlight-color, highlight-color-state)
+  
+  // Comment color has special fallback logic
   let comment-color = if comment-color == none {
     if comment-color-state.get() == none {
       highlight-color-state.get().lighten(50%)
@@ -149,68 +153,28 @@
     comment-color
   }
 
+  // Lang color falls back to comment color if not set
   let lang-color = if lang-color == none {
     if lang-color-state.get() == none { comment-color } else { lang-color-state.get() }
   } else {
     lang-color
   }
 
-  let comment-flag = if comment-flag == none {
-    comment-flag-state.get()
-  } else {
-    comment-flag
-  }
-
-  let lang = if lang == none {
-    lang-state.get()
-  } else {
-    lang
-  }
-
-  let comment-font-args = if comment-font-args == none {
-    comment-font-args-state.get()
-  } else {
-    comment-font-args-state.get() + comment-font-args
-  }
-
-  let lang-font-args = if lang-font-args == none {
-    lang-font-args-state.get()
-  } else {
-    lang-font-args-state.get() + lang-font-args
-  }
-
-  let numbering-font-args = if numbering-font-args == none {
-    numbering-font-args-state.get()
-  } else {
-    numbering-font-args-state.get() + numbering-font-args
-  }
-
-  let extend = if extend == none {
-    extend-state.get()
-  } else {
-    extend
-  }
-
-  let hanging-indent = if hanging-indent == none {
-    hanging-indent-state.get()
-  } else {
-    hanging-indent
-  }
-
-  let indentation = if indentation == none {
-    indentation-state.get()
-  } else {
-    indentation
-  }
-
+  let comment-flag = get-arg-or-state(comment-flag, comment-flag-state)
+  let lang = get-arg-or-state(lang, lang-state)
+  
+  // Font args need to be merged with state
+  let comment-font-args = merge-state-with-arg(comment-font-args, comment-font-args-state)
+  let lang-font-args = merge-state-with-arg(lang-font-args, lang-font-args-state)
+  let numbering-font-args = merge-state-with-arg(numbering-font-args, numbering-font-args-state)
+  
+  let extend = get-arg-or-state(extend, extend-state)
+  let hanging-indent = get-arg-or-state(hanging-indent, hanging-indent-state)
+  let indentation = get-arg-or-state(indentation, indentation-state)
+  let numbering-separator = get-arg-or-state(numbering-separator, numbering-separator-state)
+  
+  // Fast preview has special logic with sys.inputs
   let fast-preview = fast-preview-state.get() or sys.inputs.at("zebraw-fast-preview", default: false)
-
-  let numbering-separator = if numbering-separator == none {
-    numbering-separator-state.get()
-  } else {
-    numbering-separator
-  }
-
 
   (
     numbering: numbering,

@@ -33,32 +33,8 @@
     "script",
     attrs: (src: "https://unpkg.com/@tailwindcss/browser@4"),
   )
-  html.elem(
-    "style",
-    // 48rem is from tailwindcss, the medium breakpoint.
-    ```css
-    @media (width >= 64rem) {
-      .exp {
-        display: grid;
-        grid-template-columns: 50% 50%;
-        gap: 0.5em;
-      }
-    }
-
-    @media (width < 64rem) {
-      .exp {
-        display: block;
-      }
-    }
-
-    .frame {
-      shadow: 0 0 0.5em rgba(0, 0, 0, 0.1);
-      border-radius: 0.5em;
-      background: #fff;
-      padding: 0.5em;
-    }
-    ```.text,
-  )
+  
+  html.elem("style", read("template-styles.css"))
 
   html.elem(
     "div",
@@ -75,7 +51,7 @@
 
       html.elem("h2", [Example], attrs: (class: "text-xl font-bold"))
 
-      [#body]
+      body
     },
   )
 }
