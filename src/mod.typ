@@ -1,6 +1,6 @@
 #import "util.typ": *
 #import "indentation.typ": *
-#import "html.typ": zebraw-html-show, zebraw-html-show-inline, zebraw-html-styles
+#import "html.typ": zebraw-html-clipboard-copy, zebraw-html-show, zebraw-html-show-inline, zebraw-html-styles
 
 #let zebraw-show(
   numbering: none,
@@ -630,6 +630,10 @@
     if counter("zebraw-html-styles").get() == (0,) {
       zebraw-html-styles()
       counter("zebraw-html-styles").step()
+    }
+    if counter("zebraw-html-clipboard").get() == (0,) {
+      zebraw-html-clipboard-copy()
+      counter("zebraw-html-clipboard").step()
     }
     show raw: it => {
       show underline: html.elem.with("span", attrs: (class: "underline"))
