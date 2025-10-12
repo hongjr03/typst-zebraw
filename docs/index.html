@@ -1,37 +1,40 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
   <body>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-    <style>@media (width >= 64rem) {
-  .exp {
-    display: grid;
-    grid-template-columns: 50% 50%;
-    gap: 0.5em;
-  }
-}
+    <style>
+      @media (min-width: 64rem) {
+        .exp {
+          display: grid;
+          grid-template-columns: 50% 50%;
+          gap: 0.5em;
+        }
+      }
 
-@media (width &lt; 64rem) {
-  .exp {
-    display: block;
-  }
-}
+      @media (max-width: 64rem) {
+        .exp {
+          display: block;
+        }
+      }
 
-.frame {
-  shadow: 0 0 0.5em rgba(0, 0, 0, 0.1);
-  border-radius: 0.5em;
-  background: #fff;
-  padding: 0.5em;
-}</style>
+      .frame {
+        box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.1);
+        border-radius: 0.5em;
+        background: #fff;
+        padding: 0.5em;
+      }
+    </style>
     <div class="container xl:max-w-5xl mx-auto p-4">
       <h1 class="text-2xl font-bold underline">🦓 Zebraw but in HTML world</h1>
       <h2 class="text-xl font-bold">Example</h2>
       <div>
-        <div class="exp" style="margin: 1em 0em;">
-          <pre style="white-space: pre-wrap;">#zebraw(
+        <div class="exp" style="margin: 1em 0em">
+          <pre style="white-space: pre-wrap">
+#zebraw(
   highlight-lines: (
     (3, [to avoid negative numbers]),
     (9, "50 => 12586269025"),
@@ -40,6 +43,7 @@
   block-width: 100%,
   numbering-separator: true,
   wrap: false,
+  indentation: 4,
   ```rust
   pub fn fibonacci_reccursive(n: i32) -> u64 {
       if n &lt; 0 {
@@ -53,165 +57,583 @@
       }
   }
   ```,
-)</pre>
-          <div style="padding: 1em; font-size: 0.9em;">
-            <div style="position: relative; width: 100%; font-size: 0.8em" class="zebraw-code-block">
-              <div style="position: absolute; top: -0.68em; right: 0; padding: 0.25em; background: #effbf9; font-size: 0.8em; border-radius: 0.34em" class="zebraw-code-lang">rust</div>
-              <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; pointer-events: none; border-radius: 0.34em">
-                <div style="background: #f5f5f5; width: 100%">
-                  <div style="padding: 0.34em 0.34em; user-select: none; opacity: 0; color: transparent"></div>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #f5f5f5">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; user-select: none; opacity: 0; color: transparent">1</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; position: relative"><span style="user-select: none; opacity: 0; color: transparent">pub</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">fn</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">fibonacci_reccursive</span><span style="user-select: none; opacity: 0; color: transparent">(</span><span style="user-select: none; opacity: 0; color: transparent">n</span><span style="user-select: none; opacity: 0; color: transparent">:</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">i32</span><span style="user-select: none; opacity: 0; color: transparent">)</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">-></span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">u64</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">{</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #f5f5f5">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; user-select: none; opacity: 0; color: transparent">2</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; position: relative"><span style="user-select: none; opacity: 0; color: transparent">    </span><span style="user-select: none; opacity: 0; color: transparent">if</span><span style="user-select: none; opacity: 0; color: transparent"> n </span><span style="user-select: none; opacity: 0; color: transparent">&lt;</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">0</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">{</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #dff6f2">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; user-select: none; opacity: 0; color: transparent">3</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; position: relative"><span style="user-select: none; opacity: 0; color: transparent">        </span><span style="user-select: none; opacity: 0; color: transparent">panic!</span><span style="user-select: none; opacity: 0; color: transparent">(</span><span style="user-select: none; opacity: 0; color: transparent">"</span><span style="user-select: none; opacity: 0; color: transparent">{} is negative!</span><span style="user-select: none; opacity: 0; color: transparent">"</span><span style="user-select: none; opacity: 0; color: transparent">,</span><span style="user-select: none; opacity: 0; color: transparent"> n</span><span style="user-select: none; opacity: 0; color: transparent">)</span><span style="user-select: none; opacity: 0; color: transparent">;</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #effbf9; white-space: pre">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; user-select: none; opacity: 0; color: transparent"></pre>
-                  <p style="margin: 0; padding: 0; width: 100%"><span style="user-select: none; user-select: none; opacity: 0; color: transparent">        <strong>></strong> </span><span style="font-size: 0.8em; user-select: none; opacity: 0; color: transparent">to avoid negative numbers</span></p>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #f5f5f5">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; user-select: none; opacity: 0; color: transparent">4</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; position: relative"><span style="user-select: none; opacity: 0; color: transparent">    </span><span style="user-select: none; opacity: 0; color: transparent">}</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #f5f5f5">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; user-select: none; opacity: 0; color: transparent">5</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; position: relative"><span style="user-select: none; opacity: 0; color: transparent">    </span><span style="user-select: none; opacity: 0; color: transparent">match</span><span style="user-select: none; opacity: 0; color: transparent"> n </span><span style="user-select: none; opacity: 0; color: transparent">{</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #f5f5f5">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; user-select: none; opacity: 0; color: transparent">6</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; position: relative"><span style="user-select: none; opacity: 0; color: transparent">        </span><span style="user-select: none; opacity: 0; color: transparent">0</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">=></span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">panic!</span><span style="user-select: none; opacity: 0; color: transparent">(</span><span style="user-select: none; opacity: 0; color: transparent">"</span><span style="user-select: none; opacity: 0; color: transparent">zero is not a right argument to fibonacci_reccursive()!</span><span style="user-select: none; opacity: 0; color: transparent">"</span><span style="user-select: none; opacity: 0; color: transparent">)</span><span style="user-select: none; opacity: 0; color: transparent">,</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">0</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">=></span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">panic!</span><span style="user-select: none; opacity: 0; color: transparent">(</span><span style="user-select: none; opacity: 0; color: transparent">"</span><span style="user-select: none; opacity: 0; color: transparent">zero is not a right argument to fibonacci_reccursive()!</span><span style="user-select: none; opacity: 0; color: transparent">"</span><span style="user-select: none; opacity: 0; color: transparent">)</span><span style="user-select: none; opacity: 0; color: transparent">,</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #f5f5f5">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; user-select: none; opacity: 0; color: transparent">7</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; position: relative"><span style="user-select: none; opacity: 0; color: transparent">        </span><span style="user-select: none; opacity: 0; color: transparent">1</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">|</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">2</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">=></span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">1</span><span style="user-select: none; opacity: 0; color: transparent">,</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #f5f5f5">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; user-select: none; opacity: 0; color: transparent">8</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; position: relative"><span style="user-select: none; opacity: 0; color: transparent">        </span><span style="user-select: none; opacity: 0; color: transparent">3</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">=></span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">2</span><span style="user-select: none; opacity: 0; color: transparent">,</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #dff6f2">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; user-select: none; opacity: 0; color: transparent">9</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; position: relative"><span style="user-select: none; opacity: 0; color: transparent">        </span><span style="user-select: none; opacity: 0; color: transparent">_</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">=></span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">fibonacci_reccursive</span><span style="user-select: none; opacity: 0; color: transparent">(</span><span style="user-select: none; opacity: 0; color: transparent">n </span><span style="user-select: none; opacity: 0; color: transparent">-</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">1</span><span style="user-select: none; opacity: 0; color: transparent">)</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">+</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">fibonacci_reccursive</span><span style="user-select: none; opacity: 0; color: transparent">(</span><span style="user-select: none; opacity: 0; color: transparent">n </span><span style="user-select: none; opacity: 0; color: transparent">-</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">2</span><span style="user-select: none; opacity: 0; color: transparent">)</span><span style="user-select: none; opacity: 0; color: transparent">,</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #effbf9; white-space: pre">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; user-select: none; opacity: 0; color: transparent"></pre>
-                  <p style="margin: 0; padding: 0; width: 100%"><span style="user-select: none; user-select: none; opacity: 0; color: transparent">        <strong>></strong> </span><span style="font-size: 0.8em; user-select: none; opacity: 0; color: transparent">50 => 12586269025</span></p>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #f5f5f5">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; user-select: none; opacity: 0; color: transparent">10</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; position: relative"><span style="user-select: none; opacity: 0; color: transparent">    </span><span style="user-select: none; opacity: 0; color: transparent">}</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #f5f5f5">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; user-select: none; opacity: 0; color: transparent">11</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; position: relative"><span style="user-select: none; opacity: 0; color: transparent">}</span></pre>
-                </div>
-                <div style="background: #f5f5f5; width: 100%">
-                  <div style="padding: 0.34em 0.34em; user-select: none; opacity: 0; color: transparent"></div>
-                </div>
-              </div>
-              <div style="overflow-x: auto; overflow-y: hidden">
-                <div style="width: 100%">
-                  <div style="padding: 0.34em 0.34em"></div>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%" class="zebraw-code-line-container">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; opacity: 0.7">1</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; position: relative; border-left: 1px solid #ccc" class="zebraw-code-line"><span style="color: #d73a49; font-weight: regular">pub</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #d73a49; font-weight: regular">fn</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #4b69c6; font-weight: regular">fibonacci_reccursive</span><span style="color: #000000; font-weight: regular">(</span><span style="color: #000000; font-weight: regular">n</span><span style="color: #000000; font-weight: regular">:</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #d73a49; font-weight: regular">i32</span><span style="color: #000000; font-weight: regular">)</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #000000; font-weight: regular">-></span><span style="color: #000000; font-weight: regular"> </span><span style="color: #d73a49; font-weight: regular">u64</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #000000; font-weight: regular">{</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%" class="zebraw-code-line-container">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; opacity: 0.7">2</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; position: relative; border-left: 1px solid #ccc" class="zebraw-code-line"><span style="color: #000000; font-weight: regular">    </span><span style="color: #d73a49; font-weight: regular">if</span><span style="color: #000000; font-weight: regular"> n </span><span style="color: #d73a49; font-weight: regular">&lt;</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #b60157; font-weight: regular">0</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #000000; font-weight: regular">{</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%" class="zebraw-code-line-container">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; opacity: 0.7">3</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; position: relative; border-left: 1px solid #ccc" class="zebraw-code-line"><span style="color: #000000; font-weight: regular">        </span><span style="color: #16718d; font-weight: regular">panic!</span><span style="color: #000000; font-weight: regular">(</span><span style="color: #298e0d; font-weight: regular">"</span><span style="color: #298e0d; font-weight: regular">{} is negative!</span><span style="color: #298e0d; font-weight: regular">"</span><span style="color: #000000; font-weight: regular">,</span><span style="color: #000000; font-weight: regular"> n</span><span style="color: #000000; font-weight: regular">)</span><span style="color: #000000; font-weight: regular">;</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; white-space: pre">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; opacity: 0.7"></pre>
-                  <p style="margin: 0; padding: 0; width: 100%"><span style="user-select: none">        <strong>></strong> </span><span style="font-size: 0.8em">to avoid negative numbers</span></p>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%" class="zebraw-code-line-container">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; opacity: 0.7">4</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; position: relative; border-left: 1px solid #ccc" class="zebraw-code-line"><span style="color: #000000; font-weight: regular">    </span><span style="color: #000000; font-weight: regular">}</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%" class="zebraw-code-line-container">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; opacity: 0.7">5</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; position: relative; border-left: 1px solid #ccc" class="zebraw-code-line"><span style="color: #000000; font-weight: regular">    </span><span style="color: #d73a49; font-weight: regular">match</span><span style="color: #000000; font-weight: regular"> n </span><span style="color: #000000; font-weight: regular">{</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%" class="zebraw-code-line-container">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; opacity: 0.7">6</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; position: relative; border-left: 1px solid #ccc" class="zebraw-code-line"><span style="color: #000000; font-weight: regular">        </span><span style="color: #b60157; font-weight: regular">0</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #d73a49; font-weight: regular">=></span><span style="color: #000000; font-weight: regular"> </span><span style="color: #16718d; font-weight: regular">panic!</span><span style="color: #000000; font-weight: regular">(</span><span style="color: #298e0d; font-weight: regular">"</span><span style="color: #298e0d; font-weight: regular">zero is not a right argument to fibonacci_reccursive()!</span><span style="color: #298e0d; font-weight: regular">"</span><span style="color: #000000; font-weight: regular">)</span><span style="color: #000000; font-weight: regular">,</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #b60157; font-weight: regular">0</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #d73a49; font-weight: regular">=></span><span style="color: #000000; font-weight: regular"> </span><span style="color: #16718d; font-weight: regular">panic!</span><span style="color: #000000; font-weight: regular">(</span><span style="color: #298e0d; font-weight: regular">"</span><span style="color: #298e0d; font-weight: regular">zero is not a right argument to fibonacci_reccursive()!</span><span style="color: #298e0d; font-weight: regular">"</span><span style="color: #000000; font-weight: regular">)</span><span style="color: #000000; font-weight: regular">,</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%" class="zebraw-code-line-container">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; opacity: 0.7">7</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; position: relative; border-left: 1px solid #ccc" class="zebraw-code-line"><span style="color: #000000; font-weight: regular">        </span><span style="color: #b60157; font-weight: regular">1</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #d73a49; font-weight: regular">|</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #b60157; font-weight: regular">2</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #d73a49; font-weight: regular">=></span><span style="color: #000000; font-weight: regular"> </span><span style="color: #b60157; font-weight: regular">1</span><span style="color: #000000; font-weight: regular">,</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%" class="zebraw-code-line-container">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; opacity: 0.7">8</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; position: relative; border-left: 1px solid #ccc" class="zebraw-code-line"><span style="color: #000000; font-weight: regular">        </span><span style="color: #b60157; font-weight: regular">3</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #d73a49; font-weight: regular">=></span><span style="color: #000000; font-weight: regular"> </span><span style="color: #b60157; font-weight: regular">2</span><span style="color: #000000; font-weight: regular">,</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%" class="zebraw-code-line-container">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; opacity: 0.7">9</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; position: relative; border-left: 1px solid #ccc" class="zebraw-code-line"><span style="color: #000000; font-weight: regular">        </span><span style="color: #d73a49; font-weight: regular">_</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #d73a49; font-weight: regular">=></span><span style="color: #000000; font-weight: regular"> </span><span style="color: #4b69c6; font-weight: regular">fibonacci_reccursive</span><span style="color: #000000; font-weight: regular">(</span><span style="color: #000000; font-weight: regular">n </span><span style="color: #d73a49; font-weight: regular">-</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #b60157; font-weight: regular">1</span><span style="color: #000000; font-weight: regular">)</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #d73a49; font-weight: regular">+</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #4b69c6; font-weight: regular">fibonacci_reccursive</span><span style="color: #000000; font-weight: regular">(</span><span style="color: #000000; font-weight: regular">n </span><span style="color: #d73a49; font-weight: regular">-</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #b60157; font-weight: regular">2</span><span style="color: #000000; font-weight: regular">)</span><span style="color: #000000; font-weight: regular">,</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; white-space: pre">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; opacity: 0.7"></pre>
-                  <p style="margin: 0; padding: 0; width: 100%"><span style="user-select: none">        <strong>></strong> </span><span style="font-size: 0.8em">50 => 12586269025</span></p>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%" class="zebraw-code-line-container">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; opacity: 0.7">10</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; position: relative; border-left: 1px solid #ccc" class="zebraw-code-line"><span style="color: #000000; font-weight: regular">    </span><span style="color: #000000; font-weight: regular">}</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%" class="zebraw-code-line-container">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; opacity: 0.7">11</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; position: relative; border-left: 1px solid #ccc" class="zebraw-code-line"><span style="color: #000000; font-weight: regular">}</span></pre>
-                </div>
-                <div style="width: 100%">
-                  <div style="padding: 0.34em 0.34em"></div>
-                </div>
-              </div>
-              <script>document.querySelectorAll('.zebraw-code-block').forEach(codeBlock => {
-  const copyButton = codeBlock.querySelector('.zebraw-code-lang');
-  if (!copyButton) return;
+)</pre
+          >
+          <div style="padding: 1em; font-size: 0.9em">
+            <style>
+              @layer components {
+                .expressive-code {
+                  position: relative;
+                  font-family: var(
+                    --ec-uiFontFamily,
+                    ui-sans-serif,
+                    system-ui,
+                    -apple-system,
+                    BlinkMacSystemFont,
+                    "Segoe UI",
+                    sans-serif
+                  );
+                  font-size: var(--ec-uiFontSize, 0.9rem);
+                  font-weight: var(--ec-uiFontWeight, 400);
+                  line-height: var(--ec-uiLineHeight, 1.65);
+                  text-size-adjust: none;
+                  -webkit-text-size-adjust: none;
+                }
 
-  copyButton.style.cursor = 'pointer';
-  copyButton.title = 'Click to copy code';
+                .expressive-code *:not(:is(svg, svg *)) {
+                  box-sizing: border-box;
+                }
 
-  copyButton.addEventListener('click', () => {
-    const code = Array.from(codeBlock.querySelectorAll('.zebraw-code-line'))
-      .map(line => line.textContent)
-      .join('\n');
+                .expressive-code::selection {
+                  background: var(--ec-uiSelBg, var(--ec-codeBg, #0d1117));
+                  color: var(--ec-uiSelFg, currentColor);
+                }
 
-    navigator.clipboard.writeText(code)
-      .catch(() => {
-        // Fallback for older browsers
-        const textarea = document.createElement('textarea');
-        textarea.value = code;
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textarea);
-      });
+                .expressive-code pre {
+                  display: flex;
+                  margin: 0;
+                  padding: 0;
+                  border: var(--ec-borderWd, 1.5px) solid
+                    var(--ec-borderCol, rgba(148, 163, 184, 0.25));
+                  border-radius: calc(
+                    var(--ec-borderRad, 0.3rem) + var(--ec-borderWd, 1.5px)
+                  );
+                  background: var(--ec-codeBg, #0d1117);
+                  color: var(--ec-codeFg, #c9d1d9);
+                  overflow-x: auto;
+                  position: relative;
+                  z-index: 1;
+                }
 
-    const originalTitle = copyButton.title;
-    copyButton.title = 'Code copied!';
-    setTimeout(() => copyButton.title = originalTitle, 2000);
-  });
-});</script>
+                .expressive-code pre:focus-visible {
+                  outline: 3px solid var(--ec-focusBorder, #3b82f6);
+                  outline-offset: -3px;
+                }
+
+                .expressive-code pre > code {
+                  all: unset;
+                  display: block;
+                  flex: 1 0 100%;
+                  padding: var(--ec-codePadBlk, 0.5rem) 0;
+                  color: var(--ec-codeFg, #c9d1d9);
+                  font-family: var(
+                    --ec-codeFontFamily,
+                    ui-monospace,
+                    SFMono-Regular,
+                    Menlo,
+                    Monaco,
+                    Consolas,
+                    "Liberation Mono",
+                    "Courier New",
+                    monospace
+                  );
+                  font-size: var(--ec-codeFontSize, 0.85rem);
+                  font-weight: var(--ec-codeFontWeight, 400);
+                  line-height: var(--ec-codeLineHeight, 1.35);
+                }
+
+                .expressive-code pre > code::selection {
+                  background: var(--ec-codeSelBg, rgba(56, 189, 248, 0.35));
+                  color: inherit;
+                }
+
+                .expressive-code pre.wrap .ec-line .code {
+                  white-space: pre-wrap;
+                  overflow-wrap: break-word;
+                  min-width: min(20ch, var(--ecMaxLine, 20ch));
+                }
+
+                /* When lines are allowed to wrap, the absolute overlay can overlap
+     wrapped text. Disable the overlay in wrap mode and rely on per-slot
+     borders for guides (these are handled by .indent-slot). */
+                .expressive-code pre.wrap .ec-line .code .indent-overlay {
+                  display: none;
+                }
+
+                .expressive-code pre.wrap .ec-line .code::before {
+                  content: "";
+                  position: absolute;
+                  left: 0;
+                  top: 0;
+                  /* use the code line-height times the element font-size to match one line */
+                  height: calc(var(--ec-codeLineHeight, 1.65) * 1em);
+                  width: max(0px, calc(var(--ecIndent, 0) - 2px));
+                  pointer-events: none;
+                  background-image: repeating-linear-gradient(
+                    to right,
+                    transparent 0,
+                    transparent calc(var(--ec-indentStep, 4ch) - 1px),
+                    var(--ec-indentGuideCol, rgba(148, 163, 184, 0.35))
+                      calc(var(--ec-indentStep, 4ch) - 1px),
+                    var(--ec-indentGuideCol, rgba(148, 163, 184, 0.35))
+                      var(--ec-indentStep, 4ch)
+                  );
+                  background-repeat: no-repeat;
+                  background-size: 100% 100%;
+                  mix-blend-mode: multiply;
+                  opacity: 0.85;
+                  z-index: 0;
+                }
+
+                .expressive-code pre.wrap .ec-line .code span.indent {
+                  white-space: pre;
+                }
+
+                .expressive-code .ec-line .code .indent {
+                  display: inline-flex;
+                  white-space: pre;
+                }
+
+                .expressive-code .ec-line .code .indent-slot {
+                  display: inline-flex;
+                  white-space: pre;
+                  position: relative;
+                }
+
+                .expressive-code.has-indent-guides .ec-line .code .indent-slot {
+                  border-inline-end: 1px solid
+                    var(--ec-indentGuideCol, rgba(148, 163, 184, 0.35));
+                }
+
+                .expressive-code.has-indent-guides
+                  .ec-line
+                  .code
+                  .indent-slot.indent-slot-partial {
+                  border-inline-end: none;
+                }
+
+                .expressive-code pre::-webkit-scrollbar,
+                .expressive-code pre::-webkit-scrollbar-track {
+                  background-color: inherit;
+                  border-radius: calc(
+                    var(--ec-borderRad, 0.3rem) + var(--ec-borderWd, 1.5px)
+                  );
+                  border-top-left-radius: 0;
+                  border-top-right-radius: 0;
+                }
+
+                .expressive-code pre::-webkit-scrollbar-thumb {
+                  background-color: var(
+                    --ec-scrollbarThumbCol,
+                    rgba(148, 163, 184, 0.4)
+                  );
+                  border: 4px solid transparent;
+                  background-clip: content-box;
+                  border-radius: 10px;
+                }
+
+                .expressive-code pre::-webkit-scrollbar-thumb:hover {
+                  background-color: var(
+                    --ec-scrollbarThumbHoverCol,
+                    rgba(148, 163, 184, 0.55)
+                  );
+                }
+
+                .expressive-code .code-lang {
+                  position: absolute;
+                  top: 0.25rem;
+                  right: 0.6rem;
+                  padding: 0;
+                  display: inline-flex;
+                  align-items: baseline;
+                  gap: 0.25rem;
+                  background: none;
+                  color: var(--ec-langFg, var(--ec-codeFg, currentColor));
+                  font-size: 0.68em;
+                  pointer-events: none;
+                  opacity: 0.6;
+                  transition: opacity 160ms ease, color 160ms ease;
+                  z-index: 2;
+                }
+
+                .expressive-code:focus-within .code-lang,
+                .expressive-code:hover .code-lang {
+                  opacity: 1;
+                  color: var(--ec-langFg, var(--ec-codeFg, currentColor));
+                }
+
+                .expressive-code .copy-button {
+                  position: absolute;
+                  top: 0.6rem;
+                  right: 0.6rem;
+                  display: inline-flex;
+                  align-items: center;
+                  justify-content: center;
+                  width: 2.3rem;
+                  height: 2.3rem;
+                  border-radius: 0.45rem;
+                  border: 1px solid rgba(148, 163, 184, 0.28);
+                  background-color: var(--ec-copyBg, rgba(15, 23, 42, 0.04));
+                  color: var(--ec-copyFg, rgba(15, 23, 42, 0.7));
+                  cursor: pointer;
+                  opacity: 0;
+                  pointer-events: auto;
+                  transition: opacity 160ms ease, transform 160ms ease,
+                    background-color 140ms ease, color 140ms ease;
+                  transform: translateY(-0.3rem);
+                  background-image: url("data:image/svg+xml,%3Csvg xmlns%3D%27http://www.w3.org/2000/svg%27 viewBox%3D%270 0 24 24%27 fill%3D%27none%27 stroke%3D%27currentColor%27 stroke-width%3D%271.75%27 stroke-linecap%3D%27round%27 stroke-linejoin%3D%27round%27%3E%3Cpath d%3D%27M3 19a2 2 0 0 1-1-2V3a2 2 0 0 1 1-1h13a2 2 0 0 1 2 1%27/%3E%3Crect x%3D%276%27 y%3D%275%27 width%3D%2716%27 height%3D%2718%27 rx%3D%271.6%27 ry%3D%271.6%27/%3E%3C/svg%3E");
+                  background-repeat: no-repeat;
+                  background-position: center;
+                  background-size: 60%;
+                  z-index: 3;
+                }
+
+                .expressive-code
+                  .copy-button:is(:hover, :focus-visible, :active) {
+                  opacity: 1;
+                  transform: translateY(0);
+                }
+
+                .expressive-code .copy-button:focus-visible {
+                  outline: 2px solid rgba(148, 163, 184, 0.55);
+                  outline-offset: 2px;
+                  background-color: var(
+                    --ec-copyBgFocus,
+                    rgba(15, 23, 42, 0.16)
+                  );
+                  color: var(--ec-copyFgFocus, rgba(15, 23, 42, 1));
+                }
+
+                .expressive-code .copy-button::before {
+                  content: "";
+                  width: 100%;
+                  height: 100%;
+                  border-radius: inherit;
+                  background: transparent;
+                  border: none;
+                  pointer-events: none;
+                }
+
+                .expressive-code .copy-button::after {
+                  content: none;
+                  pointer-events: none;
+                }
+
+                .expressive-code .copy-button .copy-label,
+                .expressive-code .copy-button .copy-feedback {
+                  display: none;
+                }
+
+                .expressive-code .copy-button:hover {
+                  background-color: var(
+                    --ec-copyBgHover,
+                    rgba(15, 23, 42, 0.12)
+                  );
+                  color: var(--ec-copyFgHover, rgba(15, 23, 42, 0.9));
+                }
+
+                .expressive-code .copy-button span[aria-hidden="true"] {
+                  font-family: var(--ec-uiFontFamily, inherit);
+                }
+
+                .expressive-code .ec-header,
+                .expressive-code .ec-footer {
+                  display: block;
+                  padding: 0.35rem var(--ec-codePadInl, 1.35rem);
+                  color: var(--ec-uiFg, currentColor);
+                }
+
+                .expressive-code .ec-header.ec-ext,
+                .expressive-code .ec-footer.ec-ext {
+                  padding: 0.25rem var(--ec-codePadInl, 1.35rem);
+                }
+
+                .expressive-code .ec-line {
+                  direction: ltr;
+                  unicode-bidi: isolate;
+                  display: grid;
+                  grid-template-areas: "gutter code";
+                  grid-template-columns: auto 1fr;
+                  column-gap: var(--ec-gutterGap, 0.25rem);
+                  position: relative;
+                  --lineBg: var(--ec-codeBg, #0d1117);
+                  background: var(--lineBg);
+                }
+
+                .expressive-code .ec-line .gutter {
+                  grid-area: gutter;
+                  color: var(--ec-gtrFg, rgba(148, 163, 184, 0.8));
+                  position: sticky;
+                  left: 0;
+                  z-index: 2;
+                  background: var(
+                    --lineBg,
+                    var(--ec-gutterBg, var(--ec-codeBg, #0d1117))
+                  );
+                  box-shadow: 1px 0 0
+                    var(--ec-gtrBrdCol, rgba(148, 163, 184, 0.2));
+                }
+
+                .expressive-code .ec-line .gutter > * {
+                  pointer-events: none;
+                  user-select: none;
+                  -webkit-user-select: none;
+                }
+
+                .expressive-code .ec-line .gutter ~ .code {
+                  --ecLineBrdCol: var(--ec-gtrBrdCol, rgba(148, 163, 184, 0.2));
+                }
+
+                .expressive-code .ec-line.highlight .gutter {
+                  color: var(--ec-gtrHighlightFg, rgba(226, 232, 240, 0.95));
+                }
+
+                .expressive-code .ec-line .gutter .ln {
+                  display: inline-flex;
+                  justify-content: flex-end;
+                  align-items: flex-start;
+                  box-sizing: content-box;
+                  min-width: var(--lnWidth, 2ch);
+                  padding-inline-start: var(--ec-gutterPadLeft, 0.5rem);
+                  padding-inline-end: var(--ec-codePadInl, 1.35rem);
+                  font-size: var(--ec-codeFontSize, 0.85rem);
+                  font-variant-numeric: tabular-nums;
+                  color: inherit;
+                }
+
+                .expressive-code .ec-line .gutter .ln > span + span {
+                  margin-inline-start: 0.25em;
+                }
+
+                .expressive-code .ec-line .code {
+                  position: relative;
+                  z-index: 1;
+                }
+
+                .expressive-code .ec-line .code .indent-overlay {
+                  display: none;
+                }
+
+                .expressive-code.has-indent-guides
+                  .ec-line
+                  .code
+                  .indent-overlay {
+                  position: absolute;
+                  inset: 0 auto 0 0;
+                  display: block;
+                  /* Shrink overlay by 1px to avoid drawing a vertical guide at the very end of
+       the inline area (prevents an extra line appearing at each row end).
+       Use max(...) to avoid negative values when --ecIndent is small. */
+                  width: max(0px, calc(var(--ecIndent, 0) - 2px));
+                  pointer-events: none;
+                  background-image: repeating-linear-gradient(
+                    to right,
+                    transparent 0,
+                    transparent calc(var(--ec-indentStep, 4ch) - 1px),
+                    var(--ec-indentGuideCol, rgba(148, 163, 184, 0.35))
+                      calc(var(--ec-indentStep, 4ch) - 1px),
+                    var(--ec-indentGuideCol, rgba(148, 163, 184, 0.35))
+                      var(--ec-indentStep, 4ch)
+                  );
+                  background-repeat: no-repeat;
+                  background-size: 100% 100%;
+                  mix-blend-mode: multiply;
+                  opacity: 0.85;
+                  z-index: 0;
+                }
+                .expressive-code .ec-comment {
+                  grid-column: 1 / -1;
+                  padding: 0.55rem calc(var(--ec-codePadInl, 1.35rem) + 0.25rem);
+                  font-size: 0.85em;
+                  background: var(--ec-commentBg, rgba(56, 189, 248, 0.18));
+                  color: var(--ec-commentFg, currentColor);
+                  box-shadow: inset 0 1px 0 rgba(15, 23, 42, 0.08),
+                    inset 0 -1px 0 rgba(15, 23, 42, 0.06);
+                }
+
+                .expressive-code .sr-only {
+                  position: absolute;
+                  width: 1px;
+                  height: 1px;
+                  padding: 0;
+                  margin: -1px;
+                  overflow: hidden;
+                  clip: rect(0, 0, 0, 0);
+                  white-space: nowrap;
+                  border-width: 0;
+                }
+
+                code.expressive-code-inline {
+                  display: inline-block;
+                  padding: 0 var(--ec-inlinePadInl, 0.4rem);
+                  border-radius: calc(var(--ec-borderRad, 0.3rem) / 1.2);
+                  background: var(--ec-inlineBg, rgba(148, 163, 184, 0.2));
+                  color: var(--ec-inlineFg, inherit);
+                  font-family: var(
+                    --ec-codeFontFamily,
+                    ui-monospace,
+                    SFMono-Regular,
+                    Menlo,
+                    Monaco,
+                    Consolas,
+                    "Liberation Mono",
+                    "Courier New",
+                    monospace
+                  );
+                  font-size: 0.95em;
+                  line-height: 1.2;
+                  white-space: pre;
+                }
+              }
+            </style>
+            <script>
+              const CODE_BLOCK_SELECTOR = ".expressive-code";
+              const COPY_BUTTON_SELECTOR = ".copy-button";
+
+              const selectCodeBlocks = () =>
+                Array.from(document.querySelectorAll(CODE_BLOCK_SELECTOR));
+
+              const extractCodeText = (codeBlock) =>
+                Array.from(codeBlock.querySelectorAll(".ec-line .code"))
+                  .map((line) => {
+                    const indent = line.dataset.indent ?? "";
+                    const content = line.textContent
+                      .replace(/\u00a0/g, " ")
+                      .replace(/\u200b/gi, "");
+                    return indent + content;
+                  })
+                  .join("\n");
+
+              const fallbackCopy = (text) => {
+                const textarea = document.createElement("textarea");
+                textarea.value = text;
+                textarea.setAttribute("readonly", "true");
+                textarea.style.position = "absolute";
+                textarea.style.left = "-9999px";
+                document.body.appendChild(textarea);
+                textarea.select();
+                /** @type {any} */ (document).execCommand("copy");
+                document.body.removeChild(textarea);
+              };
+
+              const setStateWithTimeout = (button, state, delay = 1600) => {
+                button.dataset.state = state;
+                if (state === "copied") {
+                  setTimeout(() => {
+                    if (button.dataset.state === "copied") {
+                      button.dataset.state = "idle";
+                    }
+                  }, delay);
+                }
+              };
+
+              const bindCopyButton = (codeBlock) => {
+                if (!codeBlock || codeBlock.dataset.copyBound === "true")
+                  return;
+
+                const copyButton =
+                  codeBlock.querySelector(COPY_BUTTON_SELECTOR);
+                if (!copyButton) return;
+
+                codeBlock.dataset.copyBound = "true";
+
+                const copyHandler = async () => {
+                  const code = extractCodeText(codeBlock);
+
+                  try {
+                    if (navigator.clipboard?.writeText) {
+                      await navigator.clipboard.writeText(code);
+                    } else {
+                      fallbackCopy(code);
+                    }
+                    setStateWithTimeout(copyButton, "copied");
+                  } catch (error) {
+                    try {
+                      fallbackCopy(code);
+                      setStateWithTimeout(copyButton, "copied");
+                    } catch (fallbackError) {
+                      setStateWithTimeout(copyButton, "error", 2200);
+                    }
+                  }
+                };
+
+                const resetHandler = () => {
+                  if (copyButton.dataset.state === "copied") {
+                    copyButton.dataset.state = "idle";
+                  }
+                };
+
+                copyButton.addEventListener("click", copyHandler);
+                copyButton.addEventListener("blur", resetHandler);
+                copyButton.addEventListener("mouseleave", resetHandler);
+              };
+
+              selectCodeBlocks().forEach(bindCopyButton);
+
+              const observer = new MutationObserver((mutations) => {
+                for (const mutation of mutations) {
+                  mutation.addedNodes.forEach((node) => {
+                    if (!(node instanceof HTMLElement)) return;
+                    if (node.matches?.(CODE_BLOCK_SELECTOR)) {
+                      bindCopyButton(node);
+                    } else {
+                      node
+                        .querySelectorAll?.(CODE_BLOCK_SELECTOR)
+                        .forEach((block) => bindCopyButton(block));
+                    }
+                  });
+                }
+              });
+
+              observer.observe(document.documentElement, {
+                childList: true,
+                subtree: true,
+              });
+            </script>
+            <div
+              class="expressive-code lineno-sep has-gutter has-indent-guides"
+              style="
+                --ec-borderRad: 0.34em;
+                --ec-codePadBlk: 0.34em;
+                --ec-codePadInl: 0.34em;
+                --ec-codeFg: #000000;
+                --ec-codeBg: #f5f5f5;
+                --ec-langBg: #effbf9;
+                --ec-langFg: #000000;
+                --ec-copyBg: #f7f7f7;
+                --ec-copyFg: #000000;
+                --ec-gutterBg: #f5f5f5;
+                --ec-gutterGap: 0.25rem;
+                --ec-gutterPadLeft: 0.5rem;
+                --ec-codeFontSize: 0.85em;
+                --ec-codeLineHeight: 1.5;
+                --ec-copyBgHover: #f8f8f8;
+                --ec-copyBgFocus: #f8f8f8;
+                --ec-copyFgHover: #000000;
+                --ec-copyFgFocus: #000000;
+                --ec-hlBg: #dff6f2;
+                --ec-commentBg: #effbf9;
+                --ec-gtrFg: #999999;
+                --ec-gtrHighlightFg: #737373;
+                --ec-gtrBrdCol: #999999a6;
+                --ec-indentStep: 4ch;
+                --ec-indentGuideCol: #00000059;
+              "
+            >
+              <div class="code-lang" translate="no">rust</div>
+              <button
+                type="button"
+                class="copy-button"
+                title="Copy code"
+                data-state="idle"
+                aria-label="Copy code"
+              >
+                <span class="sr-only">Copy code</span
+                ><span class="copy-label" aria-hidden="true">Copy</span
+                ><span class="copy-feedback" aria-hidden="true">Copied!</span>
+              </button>
+              <pre
+                data-language="rust"
+                style="--lnWidth: 2ch"
+              ><code class="language-rust"><div class="ec-header ec-ext" style="background:#f5f5f5"></div><div class="ec-line" style="--lineBg:#f5f5f5"><div class="gutter"><div class="ln">1</div></div><div class="code" data-indent=""><span style="color:#d73a49;">pub</span> <span style="color:#d73a49;">fn</span> <span style="color:#4b69c6;">fibonacci_reccursive</span>(n: <span style="color:#d73a49;">i32</span>) -> <span style="color:#d73a49;">u64</span> {</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:4ch"><div class="gutter"><div class="ln">2</div></div><div class="code" data-indent="    "><span class="indent-overlay" aria-hidden="true"></span>    <span style="color:#d73a49;">if</span> n <span style="color:#d73a49;">&lt;</span> <span style="color:#b60157;">0</span> {</div></div><div class="ec-line highlight has-comment" style="--lineBg:#dff6f2;background:#dff6f2;--ecIndent:8ch"><div class="gutter"><div class="ln">3</div></div><div class="code" data-indent="        "><span class="indent-overlay" aria-hidden="true"></span>        <span style="color:#16718d;">panic!</span>(<span style="color:#298e0d;">"</span><span style="color:#298e0d;">{} is negative!</span><span style="color:#298e0d;">"</span>, n);</div><div class="ec-comment" style="background:#effbf9">> to avoid negative numbers</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:4ch"><div class="gutter"><div class="ln">4</div></div><div class="code" data-indent="    "><span class="indent-overlay" aria-hidden="true"></span>    }</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:4ch"><div class="gutter"><div class="ln">5</div></div><div class="code" data-indent="    "><span class="indent-overlay" aria-hidden="true"></span>    <span style="color:#d73a49;">match</span> n {</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:8ch"><div class="gutter"><div class="ln">6</div></div><div class="code" data-indent="        "><span class="indent-overlay" aria-hidden="true"></span>        <span style="color:#b60157;">0</span> <span style="color:#d73a49;">=></span> <span style="color:#16718d;">panic!</span>(<span style="color:#298e0d;">"</span><span style="color:#298e0d;">zero is not a right argument to fibonacci_reccursive()!</span><span style="color:#298e0d;">"</span>), <span style="color:#b60157;">0</span> <span style="color:#d73a49;">=></span> <span style="color:#16718d;">panic!</span>(<span style="color:#298e0d;">"</span><span style="color:#298e0d;">zero is not a right argument to fibonacci_reccursive()!</span><span style="color:#298e0d;">"</span>),</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:8ch"><div class="gutter"><div class="ln">7</div></div><div class="code" data-indent="        "><span class="indent-overlay" aria-hidden="true"></span>        <span style="color:#b60157;">1</span> <span style="color:#d73a49;">|</span> <span style="color:#b60157;">2</span> <span style="color:#d73a49;">=></span> <span style="color:#b60157;">1</span>,</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:8ch"><div class="gutter"><div class="ln">8</div></div><div class="code" data-indent="        "><span class="indent-overlay" aria-hidden="true"></span>        <span style="color:#b60157;">3</span> <span style="color:#d73a49;">=></span> <span style="color:#b60157;">2</span>,</div></div><div class="ec-line highlight has-comment" style="--lineBg:#dff6f2;background:#dff6f2;--ecIndent:8ch"><div class="gutter"><div class="ln">9</div></div><div class="code" data-indent="        "><span class="indent-overlay" aria-hidden="true"></span>        <span style="color:#d73a49;">_</span> <span style="color:#d73a49;">=></span> <span style="color:#4b69c6;">fibonacci_reccursive</span>(n <span style="color:#d73a49;">-</span> <span style="color:#b60157;">1</span>) <span style="color:#d73a49;">+</span> <span style="color:#4b69c6;">fibonacci_reccursive</span>(n <span style="color:#d73a49;">-</span> <span style="color:#b60157;">2</span>),</div><div class="ec-comment" style="background:#effbf9">> 50 => 12586269025</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:4ch"><div class="gutter"><div class="ln">10</div></div><div class="code" data-indent="    "><span class="indent-overlay" aria-hidden="true"></span>    }</div></div><div class="ec-line" style="--lineBg:#f5f5f5"><div class="gutter"><div class="ln">11</div></div><div class="code" data-indent="">}</div></div><div class="ec-footer ec-ext" style="background:#f5f5f5"></div></code></pre>
             </div>
           </div>
         </div>
       </div>
       <div>
-        <div class="exp" style="margin: 1em 0em;">
-          <pre style="white-space: pre-wrap;">#zebraw(
+        <div class="exp" style="margin: 1em 0em">
+          <pre style="white-space: pre-wrap">
+#zebraw(
   highlight-lines: (
     (3, [to avoid negative numbers]),
     (9, "50 => 12586269025"),
@@ -220,6 +642,7 @@
   block-width: 100%,
   wrap: true,
   numbering-offset: 300,
+  indentation: 4,
   ```rust
   pub fn fibonacci_reccursive(n: i32) -> u64 {
       if n &lt; 0 {
@@ -233,165 +656,64 @@
       }
   }
   ```,
-)</pre>
-          <div style="padding: 1em; font-size: 0.9em;">
-            <div style="position: relative; width: 100%; font-size: 0.8em" class="zebraw-code-block">
-              <div style="position: absolute; top: -0.68em; right: 0; padding: 0.25em; background: #effbf9; font-size: 0.8em; border-radius: 0.34em" class="zebraw-code-lang">rust</div>
-              <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; pointer-events: none; border-radius: 0.34em">
-                <div style="background: #f5f5f5; width: 100%">
-                  <div style="padding: 0.34em 0.34em; user-select: none; opacity: 0; color: transparent"></div>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #f5f5f5">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: auto; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; user-select: none; opacity: 0; color: transparent">301</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; white-space: pre-wrap; position: relative"><span style="user-select: none; opacity: 0; color: transparent">pub</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">fn</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">fibonacci_reccursive</span><span style="user-select: none; opacity: 0; color: transparent">(</span><span style="user-select: none; opacity: 0; color: transparent">n</span><span style="user-select: none; opacity: 0; color: transparent">:</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">i32</span><span style="user-select: none; opacity: 0; color: transparent">)</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">-></span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">u64</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">{</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #f5f5f5">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: auto; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; user-select: none; opacity: 0; color: transparent">302</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; white-space: pre-wrap; position: relative"><span style="user-select: none; opacity: 0; color: transparent">    </span><span style="user-select: none; opacity: 0; color: transparent">if</span><span style="user-select: none; opacity: 0; color: transparent"> n </span><span style="user-select: none; opacity: 0; color: transparent">&lt;</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">0</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">{</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #dff6f2">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: auto; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; user-select: none; opacity: 0; color: transparent">303</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; white-space: pre-wrap; position: relative"><span style="user-select: none; opacity: 0; color: transparent">        </span><span style="user-select: none; opacity: 0; color: transparent">panic!</span><span style="user-select: none; opacity: 0; color: transparent">(</span><span style="user-select: none; opacity: 0; color: transparent">"</span><span style="user-select: none; opacity: 0; color: transparent">{} is negative!</span><span style="user-select: none; opacity: 0; color: transparent">"</span><span style="user-select: none; opacity: 0; color: transparent">,</span><span style="user-select: none; opacity: 0; color: transparent"> n</span><span style="user-select: none; opacity: 0; color: transparent">)</span><span style="user-select: none; opacity: 0; color: transparent">;</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #effbf9; white-space: pre-wrap">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: auto; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; user-select: none; opacity: 0; color: transparent"></pre>
-                  <p style="margin: 0; padding: 0; width: 100%"><span style="user-select: none; user-select: none; opacity: 0; color: transparent">        <strong>></strong> </span><span style="font-size: 0.8em; user-select: none; opacity: 0; color: transparent">to avoid negative numbers</span></p>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #f5f5f5">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: auto; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; user-select: none; opacity: 0; color: transparent">304</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; white-space: pre-wrap; position: relative"><span style="user-select: none; opacity: 0; color: transparent">    </span><span style="user-select: none; opacity: 0; color: transparent">}</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #f5f5f5">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: auto; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; user-select: none; opacity: 0; color: transparent">305</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; white-space: pre-wrap; position: relative"><span style="user-select: none; opacity: 0; color: transparent">    </span><span style="user-select: none; opacity: 0; color: transparent">match</span><span style="user-select: none; opacity: 0; color: transparent"> n </span><span style="user-select: none; opacity: 0; color: transparent">{</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #f5f5f5">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: auto; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; user-select: none; opacity: 0; color: transparent">306</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; white-space: pre-wrap; position: relative"><span style="user-select: none; opacity: 0; color: transparent">        </span><span style="user-select: none; opacity: 0; color: transparent">0</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">=></span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">panic!</span><span style="user-select: none; opacity: 0; color: transparent">(</span><span style="user-select: none; opacity: 0; color: transparent">"</span><span style="user-select: none; opacity: 0; color: transparent">zero is not a right argument to fibonacci_reccursive()!</span><span style="user-select: none; opacity: 0; color: transparent">"</span><span style="user-select: none; opacity: 0; color: transparent">)</span><span style="user-select: none; opacity: 0; color: transparent">,</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #f5f5f5">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: auto; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; user-select: none; opacity: 0; color: transparent">307</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; white-space: pre-wrap; position: relative"><span style="user-select: none; opacity: 0; color: transparent">        </span><span style="user-select: none; opacity: 0; color: transparent">1</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">|</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">2</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">=></span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">1</span><span style="user-select: none; opacity: 0; color: transparent">,</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #f5f5f5">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: auto; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; user-select: none; opacity: 0; color: transparent">308</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; white-space: pre-wrap; position: relative"><span style="user-select: none; opacity: 0; color: transparent">        </span><span style="user-select: none; opacity: 0; color: transparent">3</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">=></span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">2</span><span style="user-select: none; opacity: 0; color: transparent">,</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #dff6f2">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: auto; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; user-select: none; opacity: 0; color: transparent">309</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; white-space: pre-wrap; position: relative"><span style="user-select: none; opacity: 0; color: transparent">        </span><span style="user-select: none; opacity: 0; color: transparent">_</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">=></span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">fibonacci_reccursive</span><span style="user-select: none; opacity: 0; color: transparent">(</span><span style="user-select: none; opacity: 0; color: transparent">n </span><span style="user-select: none; opacity: 0; color: transparent">-</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">1</span><span style="user-select: none; opacity: 0; color: transparent">)</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">+</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">fibonacci_reccursive</span><span style="user-select: none; opacity: 0; color: transparent">(</span><span style="user-select: none; opacity: 0; color: transparent">n </span><span style="user-select: none; opacity: 0; color: transparent">-</span><span style="user-select: none; opacity: 0; color: transparent"> </span><span style="user-select: none; opacity: 0; color: transparent">2</span><span style="user-select: none; opacity: 0; color: transparent">)</span><span style="user-select: none; opacity: 0; color: transparent">,</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #effbf9; white-space: pre-wrap">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: auto; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; user-select: none; opacity: 0; color: transparent"></pre>
-                  <p style="margin: 0; padding: 0; width: 100%"><span style="user-select: none; user-select: none; opacity: 0; color: transparent">        <strong>></strong> </span><span style="font-size: 0.8em; user-select: none; opacity: 0; color: transparent">50 => 12586269025</span></p>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #f5f5f5">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: auto; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; user-select: none; opacity: 0; color: transparent">310</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; white-space: pre-wrap; position: relative"><span style="user-select: none; opacity: 0; color: transparent">    </span><span style="user-select: none; opacity: 0; color: transparent">}</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #f5f5f5">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: auto; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; user-select: none; opacity: 0; color: transparent">311</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; white-space: pre-wrap; position: relative"><span style="user-select: none; opacity: 0; color: transparent">}</span></pre>
-                </div>
-                <div style="background: #f5f5f5; width: 100%">
-                  <div style="padding: 0.34em 0.34em; user-select: none; opacity: 0; color: transparent"></div>
-                </div>
-              </div>
-              <div style="overflow-x: auto; overflow-y: hidden">
-                <div style="width: 100%">
-                  <div style="padding: 0.34em 0.34em"></div>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%" class="zebraw-code-line-container">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: auto; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; opacity: 0.7">301</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; white-space: pre-wrap; position: relative" class="zebraw-code-line"><span style="color: #d73a49; font-weight: regular">pub</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #d73a49; font-weight: regular">fn</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #4b69c6; font-weight: regular">fibonacci_reccursive</span><span style="color: #000000; font-weight: regular">(</span><span style="color: #000000; font-weight: regular">n</span><span style="color: #000000; font-weight: regular">:</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #d73a49; font-weight: regular">i32</span><span style="color: #000000; font-weight: regular">)</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #000000; font-weight: regular">-></span><span style="color: #000000; font-weight: regular"> </span><span style="color: #d73a49; font-weight: regular">u64</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #000000; font-weight: regular">{</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%" class="zebraw-code-line-container">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: auto; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; opacity: 0.7">302</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; white-space: pre-wrap; position: relative" class="zebraw-code-line"><span style="color: #000000; font-weight: regular">    </span><span style="color: #d73a49; font-weight: regular">if</span><span style="color: #000000; font-weight: regular"> n </span><span style="color: #d73a49; font-weight: regular">&lt;</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #b60157; font-weight: regular">0</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #000000; font-weight: regular">{</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%" class="zebraw-code-line-container">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: auto; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; opacity: 0.7">303</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; white-space: pre-wrap; position: relative" class="zebraw-code-line"><span style="color: #000000; font-weight: regular">        </span><span style="color: #16718d; font-weight: regular">panic!</span><span style="color: #000000; font-weight: regular">(</span><span style="color: #298e0d; font-weight: regular">"</span><span style="color: #298e0d; font-weight: regular">{} is negative!</span><span style="color: #298e0d; font-weight: regular">"</span><span style="color: #000000; font-weight: regular">,</span><span style="color: #000000; font-weight: regular"> n</span><span style="color: #000000; font-weight: regular">)</span><span style="color: #000000; font-weight: regular">;</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; white-space: pre-wrap">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: auto; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; opacity: 0.7"></pre>
-                  <p style="margin: 0; padding: 0; width: 100%"><span style="user-select: none">        <strong>></strong> </span><span style="font-size: 0.8em">to avoid negative numbers</span></p>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%" class="zebraw-code-line-container">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: auto; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; opacity: 0.7">304</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; white-space: pre-wrap; position: relative" class="zebraw-code-line"><span style="color: #000000; font-weight: regular">    </span><span style="color: #000000; font-weight: regular">}</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%" class="zebraw-code-line-container">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: auto; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; opacity: 0.7">305</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; white-space: pre-wrap; position: relative" class="zebraw-code-line"><span style="color: #000000; font-weight: regular">    </span><span style="color: #d73a49; font-weight: regular">match</span><span style="color: #000000; font-weight: regular"> n </span><span style="color: #000000; font-weight: regular">{</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%" class="zebraw-code-line-container">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: auto; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; opacity: 0.7">306</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; white-space: pre-wrap; position: relative" class="zebraw-code-line"><span style="color: #000000; font-weight: regular">        </span><span style="color: #b60157; font-weight: regular">0</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #d73a49; font-weight: regular">=></span><span style="color: #000000; font-weight: regular"> </span><span style="color: #16718d; font-weight: regular">panic!</span><span style="color: #000000; font-weight: regular">(</span><span style="color: #298e0d; font-weight: regular">"</span><span style="color: #298e0d; font-weight: regular">zero is not a right argument to fibonacci_reccursive()!</span><span style="color: #298e0d; font-weight: regular">"</span><span style="color: #000000; font-weight: regular">)</span><span style="color: #000000; font-weight: regular">,</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%" class="zebraw-code-line-container">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: auto; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; opacity: 0.7">307</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; white-space: pre-wrap; position: relative" class="zebraw-code-line"><span style="color: #000000; font-weight: regular">        </span><span style="color: #b60157; font-weight: regular">1</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #d73a49; font-weight: regular">|</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #b60157; font-weight: regular">2</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #d73a49; font-weight: regular">=></span><span style="color: #000000; font-weight: regular"> </span><span style="color: #b60157; font-weight: regular">1</span><span style="color: #000000; font-weight: regular">,</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%" class="zebraw-code-line-container">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: auto; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; opacity: 0.7">308</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; white-space: pre-wrap; position: relative" class="zebraw-code-line"><span style="color: #000000; font-weight: regular">        </span><span style="color: #b60157; font-weight: regular">3</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #d73a49; font-weight: regular">=></span><span style="color: #000000; font-weight: regular"> </span><span style="color: #b60157; font-weight: regular">2</span><span style="color: #000000; font-weight: regular">,</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%" class="zebraw-code-line-container">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: auto; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; opacity: 0.7">309</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; white-space: pre-wrap; position: relative" class="zebraw-code-line"><span style="color: #000000; font-weight: regular">        </span><span style="color: #d73a49; font-weight: regular">_</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #d73a49; font-weight: regular">=></span><span style="color: #000000; font-weight: regular"> </span><span style="color: #4b69c6; font-weight: regular">fibonacci_reccursive</span><span style="color: #000000; font-weight: regular">(</span><span style="color: #000000; font-weight: regular">n </span><span style="color: #d73a49; font-weight: regular">-</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #b60157; font-weight: regular">1</span><span style="color: #000000; font-weight: regular">)</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #d73a49; font-weight: regular">+</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #4b69c6; font-weight: regular">fibonacci_reccursive</span><span style="color: #000000; font-weight: regular">(</span><span style="color: #000000; font-weight: regular">n </span><span style="color: #d73a49; font-weight: regular">-</span><span style="color: #000000; font-weight: regular"> </span><span style="color: #b60157; font-weight: regular">2</span><span style="color: #000000; font-weight: regular">)</span><span style="color: #000000; font-weight: regular">,</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; white-space: pre-wrap">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: auto; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; opacity: 0.7"></pre>
-                  <p style="margin: 0; padding: 0; width: 100%"><span style="user-select: none">        <strong>></strong> </span><span style="font-size: 0.8em">50 => 12586269025</span></p>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%" class="zebraw-code-line-container">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: auto; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; opacity: 0.7">310</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; white-space: pre-wrap; position: relative" class="zebraw-code-line"><span style="color: #000000; font-weight: regular">    </span><span style="color: #000000; font-weight: regular">}</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%" class="zebraw-code-line-container">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: auto; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; opacity: 0.7">311</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; white-space: pre-wrap; position: relative" class="zebraw-code-line"><span style="color: #000000; font-weight: regular">}</span></pre>
-                </div>
-                <div style="width: 100%">
-                  <div style="padding: 0.34em 0.34em"></div>
-                </div>
-              </div>
-              <script>document.querySelectorAll('.zebraw-code-block').forEach(codeBlock => {
-  const copyButton = codeBlock.querySelector('.zebraw-code-lang');
-  if (!copyButton) return;
-
-  copyButton.style.cursor = 'pointer';
-  copyButton.title = 'Click to copy code';
-
-  copyButton.addEventListener('click', () => {
-    const code = Array.from(codeBlock.querySelectorAll('.zebraw-code-line'))
-      .map(line => line.textContent)
-      .join('\n');
-
-    navigator.clipboard.writeText(code)
-      .catch(() => {
-        // Fallback for older browsers
-        const textarea = document.createElement('textarea');
-        textarea.value = code;
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textarea);
-      });
-
-    const originalTitle = copyButton.title;
-    copyButton.title = 'Code copied!';
-    setTimeout(() => copyButton.title = originalTitle, 2000);
-  });
-});</script>
+)</pre
+          >
+          <div style="padding: 1em; font-size: 0.9em">
+            <div
+              class="expressive-code has-gutter has-indent-guides"
+              style="
+                --ec-borderRad: 0.34em;
+                --ec-codePadBlk: 0.34em;
+                --ec-codePadInl: 0.34em;
+                --ec-codeFg: #000000;
+                --ec-codeBg: #f5f5f5;
+                --ec-langBg: #effbf9;
+                --ec-langFg: #000000;
+                --ec-copyBg: #f7f7f7;
+                --ec-copyFg: #000000;
+                --ec-gutterBg: #f5f5f5;
+                --ec-gutterGap: 0.25rem;
+                --ec-gutterPadLeft: 0.5rem;
+                --ec-codeFontSize: 0.85em;
+                --ec-codeLineHeight: 1.5;
+                --ec-copyBgHover: #f8f8f8;
+                --ec-copyBgFocus: #f8f8f8;
+                --ec-copyFgHover: #000000;
+                --ec-copyFgFocus: #000000;
+                --ec-hlBg: #dff6f2;
+                --ec-commentBg: #effbf9;
+                --ec-gtrFg: #999999;
+                --ec-gtrHighlightFg: #737373;
+                --ec-gtrBrdCol: #999999a6;
+                --ec-indentStep: 4ch;
+                --ec-indentGuideCol: #00000059;
+              "
+            >
+              <div class="code-lang" translate="no">rust</div>
+              <button
+                type="button"
+                class="copy-button"
+                title="Copy code"
+                data-state="idle"
+                aria-label="Copy code"
+              >
+                <span class="sr-only">Copy code</span
+                ><span class="copy-label" aria-hidden="true">Copy</span
+                ><span class="copy-feedback" aria-hidden="true">Copied!</span>
+              </button>
+              <pre
+                data-language="rust"
+                class="wrap"
+                style="--lnWidth: 3ch"
+              ><code class="language-rust"><div class="ec-header ec-ext" style="background:#f5f5f5"></div><div class="ec-line" style="--lineBg:#f5f5f5"><div class="gutter"><div class="ln">301</div></div><div class="code" data-indent=""><span style="color:#d73a49;">pub</span> <span style="color:#d73a49;">fn</span> <span style="color:#4b69c6;">fibonacci_reccursive</span>(n: <span style="color:#d73a49;">i32</span>) -> <span style="color:#d73a49;">u64</span> {</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:4ch"><div class="gutter"><div class="ln">302</div></div><div class="code" data-indent="    "><span class="indent-overlay" aria-hidden="true"></span>    <span style="color:#d73a49;">if</span> n <span style="color:#d73a49;">&lt;</span> <span style="color:#b60157;">0</span> {</div></div><div class="ec-line highlight has-comment" style="--lineBg:#dff6f2;background:#dff6f2;--ecIndent:8ch"><div class="gutter"><div class="ln">303</div></div><div class="code" data-indent="        "><span class="indent-overlay" aria-hidden="true"></span>        <span style="color:#16718d;">panic!</span>(<span style="color:#298e0d;">"</span><span style="color:#298e0d;">{} is negative!</span><span style="color:#298e0d;">"</span>, n);</div><div class="ec-comment" style="background:#effbf9">> to avoid negative numbers</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:4ch"><div class="gutter"><div class="ln">304</div></div><div class="code" data-indent="    "><span class="indent-overlay" aria-hidden="true"></span>    }</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:4ch"><div class="gutter"><div class="ln">305</div></div><div class="code" data-indent="    "><span class="indent-overlay" aria-hidden="true"></span>    <span style="color:#d73a49;">match</span> n {</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:8ch"><div class="gutter"><div class="ln">306</div></div><div class="code" data-indent="        "><span class="indent-overlay" aria-hidden="true"></span>        <span style="color:#b60157;">0</span> <span style="color:#d73a49;">=></span> <span style="color:#16718d;">panic!</span>(<span style="color:#298e0d;">"</span><span style="color:#298e0d;">zero is not a right argument to fibonacci_reccursive()!</span><span style="color:#298e0d;">"</span>),</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:8ch"><div class="gutter"><div class="ln">307</div></div><div class="code" data-indent="        "><span class="indent-overlay" aria-hidden="true"></span>        <span style="color:#b60157;">1</span> <span style="color:#d73a49;">|</span> <span style="color:#b60157;">2</span> <span style="color:#d73a49;">=></span> <span style="color:#b60157;">1</span>,</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:8ch"><div class="gutter"><div class="ln">308</div></div><div class="code" data-indent="        "><span class="indent-overlay" aria-hidden="true"></span>        <span style="color:#b60157;">3</span> <span style="color:#d73a49;">=></span> <span style="color:#b60157;">2</span>,</div></div><div class="ec-line highlight has-comment" style="--lineBg:#dff6f2;background:#dff6f2;--ecIndent:8ch"><div class="gutter"><div class="ln">309</div></div><div class="code" data-indent="        "><span class="indent-overlay" aria-hidden="true"></span>        <span style="color:#d73a49;">_</span> <span style="color:#d73a49;">=></span> <span style="color:#4b69c6;">fibonacci_reccursive</span>(n <span style="color:#d73a49;">-</span> <span style="color:#b60157;">1</span>) <span style="color:#d73a49;">+</span> <span style="color:#4b69c6;">fibonacci_reccursive</span>(n <span style="color:#d73a49;">-</span> <span style="color:#b60157;">2</span>),</div><div class="ec-comment" style="background:#effbf9">> 50 => 12586269025</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:4ch"><div class="gutter"><div class="ln">310</div></div><div class="code" data-indent="    "><span class="indent-overlay" aria-hidden="true"></span>    }</div></div><div class="ec-line" style="--lineBg:#f5f5f5"><div class="gutter"><div class="ln">311</div></div><div class="code" data-indent="">}</div></div><div class="ec-footer ec-ext" style="background:#f5f5f5"></div></code></pre>
             </div>
           </div>
         </div>
       </div>
       <div>
-        <div class="exp" style="margin: 1em 0em;">
-          <pre style="white-space: pre-wrap;">#zebraw(
+        <div class="exp" style="margin: 1em 0em">
+          <pre style="white-space: pre-wrap">
+#zebraw(
   highlight-lines: (
     (3, [to avoid negative numbers]),
     (9, "50 => 12586269025"),
@@ -401,91 +723,128 @@
   block-width: 100%,
   wrap: true,
   numbering-separator: true,
+  indentation: 4,
+  header: [Test],
   ```typst
   = Fibonacci Reccursive Function
-  
+
   This function calculates the Fibonacci number at the given index using a recursive approach.
   ```,
-)</pre>
-          <div style="padding: 1em; font-size: 0.9em;">
-            <div style="position: relative; width: 100%; font-size: 0.8em" class="zebraw-code-block">
-              <div style="position: absolute; top: -0.68em; right: 0; padding: 0.25em; background: #effbf9; font-size: 0.8em; border-radius: 0.34em" class="zebraw-code-lang">typst</div>
-              <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; pointer-events: none; border-radius: 0.34em">
-                <div style="background: #f5f5f5; width: 100%">
-                  <div style="padding: 0.34em 0.34em; user-select: none; opacity: 0; color: transparent"></div>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #f5f5f5">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; user-select: none; opacity: 0; color: transparent">1</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; white-space: pre-wrap; position: relative"><span style="text-decoration: underline"><strong><span style="user-select: none; opacity: 0; color: transparent">=</span></strong></span><span style="text-decoration: underline"><strong><span style="user-select: none; opacity: 0; color: transparent"> </span></strong></span><span style="text-decoration: underline"><strong><span style="user-select: none; opacity: 0; color: transparent">Fibonacci Reccursive Function</span></strong></span><span style="user-select: none; opacity: 0; color: transparent"></span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #f5f5f5">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; user-select: none; opacity: 0; color: transparent">2</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; white-space: pre-wrap; position: relative"><span style="user-select: none; opacity: 0; color: transparent"></span><br></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #dff6f2">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; user-select: none; opacity: 0; color: transparent">3</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; white-space: pre-wrap; position: relative"><span style="user-select: none; opacity: 0; color: transparent"></span><span style="user-select: none; opacity: 0; color: transparent">This function calculates the Fibonacci number at the given index using a recursive approach.</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; background: #effbf9; white-space: pre-wrap">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; user-select: none; opacity: 0; color: transparent"></pre>
-                  <p style="margin: 0; padding: 0; width: 100%"><span style="user-select: none; user-select: none; opacity: 0; color: transparent"><strong>></strong> </span><span style="font-size: 0.8em; user-select: none; opacity: 0; color: transparent">to avoid negative numbers</span></p>
-                </div>
-                <div style="background: #f5f5f5; width: 100%">
-                  <div style="padding: 0.34em 0.34em; user-select: none; opacity: 0; color: transparent"></div>
-                </div>
-              </div>
-              <div style="overflow-x: auto; overflow-y: hidden">
-                <div style="width: 100%">
-                  <div style="padding: 0.34em 0.34em"></div>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%" class="zebraw-code-line-container">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; opacity: 0.7">1</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; white-space: pre-wrap; position: relative; border-left: 1px solid #ccc" class="zebraw-code-line"><span style="text-decoration: underline"><strong><span style="color: #000000; font-weight: regular">=</span></strong></span><span style="text-decoration: underline"><strong><span style="color: #000000; font-weight: regular"> </span></strong></span><span style="text-decoration: underline"><strong><span style="color: #000000; font-weight: regular">Fibonacci Reccursive Function</span></strong></span><span style="color: #000000; font-weight: regular"></span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%" class="zebraw-code-line-container">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; opacity: 0.7">2</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; white-space: pre-wrap; position: relative; border-left: 1px solid #ccc" class="zebraw-code-line"><span style="color: #000000; font-weight: regular"></span><br></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%" class="zebraw-code-line-container">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; opacity: 0.7">3</pre>
-                  <pre style="padding-top: 0.34em; padding-bottom: 0.34em; margin: 0; padding-left: 0.34em; padding-right: 0.34em; white-space: pre-wrap; position: relative; border-left: 1px solid #ccc" class="zebraw-code-line"><span style="color: #000000; font-weight: regular"></span><span style="color: #000000; font-weight: regular">This function calculates the Fibonacci number at the given index using a recursive approach.</span></pre>
-                </div>
-                <div style="text-align: left; display: flex; align-items: center; width: 100%; white-space: pre-wrap">
-                  <pre style="margin: 0; text-align: right; vertical-align: top; user-select: none; flex-shrink: 0; width: 2.1em; padding: 0.34em 0.65em 0.34em 0.35em; height: 100%; opacity: 0.7"></pre>
-                  <p style="margin: 0; padding: 0; width: 100%"><span style="user-select: none"><strong>></strong> </span><span style="font-size: 0.8em">to avoid negative numbers</span></p>
-                </div>
-                <div style="width: 100%">
-                  <div style="padding: 0.34em 0.34em"></div>
-                </div>
-              </div>
-              <script>document.querySelectorAll('.zebraw-code-block').forEach(codeBlock => {
-  const copyButton = codeBlock.querySelector('.zebraw-code-lang');
-  if (!copyButton) return;
-
-  copyButton.style.cursor = 'pointer';
-  copyButton.title = 'Click to copy code';
-
-  copyButton.addEventListener('click', () => {
-    const code = Array.from(codeBlock.querySelectorAll('.zebraw-code-line'))
-      .map(line => line.textContent)
-      .join('\n');
-
-    navigator.clipboard.writeText(code)
-      .catch(() => {
-        // Fallback for older browsers
-        const textarea = document.createElement('textarea');
-        textarea.value = code;
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textarea);
-      });
-
-    const originalTitle = copyButton.title;
-    copyButton.title = 'Code copied!';
-    setTimeout(() => copyButton.title = originalTitle, 2000);
-  });
-});</script>
+)</pre
+          >
+          <div style="padding: 1em; font-size: 0.9em">
+            <div
+              class="expressive-code lineno-sep has-gutter has-indent-guides"
+              style="
+                --ec-borderRad: 0.34em;
+                --ec-codePadBlk: 0.34em;
+                --ec-codePadInl: 0.34em;
+                --ec-codeFg: #000000;
+                --ec-codeBg: #f5f5f5;
+                --ec-langBg: #effbf9;
+                --ec-langFg: #000000;
+                --ec-copyBg: #f7f7f7;
+                --ec-copyFg: #000000;
+                --ec-gutterBg: #f5f5f5;
+                --ec-gutterGap: 0.25rem;
+                --ec-gutterPadLeft: 0.5rem;
+                --ec-codeFontSize: 0.85em;
+                --ec-codeLineHeight: 1.5;
+                --ec-copyBgHover: #f8f8f8;
+                --ec-copyBgFocus: #f8f8f8;
+                --ec-copyFgHover: #000000;
+                --ec-copyFgFocus: #000000;
+                --ec-hlBg: #dff6f2;
+                --ec-commentBg: #effbf9;
+                --ec-gtrFg: #999999;
+                --ec-gtrHighlightFg: #737373;
+                --ec-gtrBrdCol: #999999a6;
+                --ec-indentStep: 4ch;
+                --ec-indentGuideCol: #00000059;
+              "
+            >
+              <div class="code-lang" translate="no">typst</div>
+              <button
+                type="button"
+                class="copy-button"
+                title="Copy code"
+                data-state="idle"
+                aria-label="Copy code"
+              >
+                <span class="sr-only">Copy code</span
+                ><span class="copy-label" aria-hidden="true">Copy</span
+                ><span class="copy-feedback" aria-hidden="true">Copied!</span>
+              </button>
+              <pre
+                data-language="typst"
+                class="wrap"
+                style="--lnWidth: 2ch"
+              ><code class="language-typst"><div class="ec-header" style="background:#f5f5f5">Test</div><div class="ec-line" style="--lineBg:#f5f5f5"><div class="gutter"><div class="ln">1</div></div><div class="code" data-indent=""><strong>=</strong><strong> </strong><strong>Fibonacci Reccursive Function</strong></div></div><div class="ec-line" style="--lineBg:#f5f5f5"><div class="gutter"><div class="ln">2</div></div><div class="code" data-indent=""></div></div><div class="ec-line highlight has-comment" style="--lineBg:#dff6f2;background:#dff6f2"><div class="gutter"><div class="ln">3</div></div><div class="code" data-indent="">This function calculates the Fibonacci number at the given index using a recursive approach.</div><div class="ec-comment" style="background:#effbf9">> to avoid negative numbers</div></div><div class="ec-footer ec-ext" style="background:#f5f5f5"></div></code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="exp" style="margin: 1em 0em">
+          <pre style="white-space: pre-wrap">
+#zebraw(
+  lang: false,
+  highlight-lines: (
+    (1, rgb("#edb4b0").lighten(50%)),
+    (2, rgb("#a4c9a6").lighten(50%)),
+  ),
+  ```python
+  - device = "cuda"
+  + device = accelerator.device
+    model.to(device)
+  ```,
+)</pre
+          >
+          <div style="padding: 1em; font-size: 0.9em">
+            <div
+              class="expressive-code has-gutter"
+              style="
+                --ec-borderRad: 0.34em;
+                --ec-codePadBlk: 0.34em;
+                --ec-codePadInl: 0.34em;
+                --ec-codeFg: #000000;
+                --ec-codeBg: #f5f5f5;
+                --ec-langBg: #effbf9;
+                --ec-langFg: #000000;
+                --ec-copyBg: #f7f7f7;
+                --ec-copyFg: #000000;
+                --ec-gutterBg: #f5f5f5;
+                --ec-gutterGap: 0.25rem;
+                --ec-gutterPadLeft: 0.5rem;
+                --ec-codeFontSize: 0.85em;
+                --ec-codeLineHeight: 1.5;
+                --ec-copyBgHover: #f8f8f8;
+                --ec-copyBgFocus: #f8f8f8;
+                --ec-copyFgHover: #000000;
+                --ec-copyFgFocus: #000000;
+                --ec-hlBg: #dff6f2;
+                --ec-commentBg: #effbf9;
+                --ec-gtrFg: #999999;
+                --ec-gtrHighlightFg: #737373;
+                --ec-gtrBrdCol: #999999a6;
+              "
+            >
+              <button
+                type="button"
+                class="copy-button"
+                title="Copy code"
+                data-state="idle"
+                aria-label="Copy code"
+              >
+                <span class="sr-only">Copy code</span
+                ><span class="copy-label" aria-hidden="true">Copy</span
+                ><span class="copy-feedback" aria-hidden="true">Copied!</span>
+              </button>
+              <pre
+                data-language="python"
+                class="wrap"
+                style="--lnWidth: 2ch"
+              ><code class="language-python"><div class="ec-header ec-ext" style="background:#f5f5f5"></div><div class="ec-line highlight" style="--lineBg:#f6dad8;background:#f6dad8"><div class="gutter"><div class="ln">1</div></div><div class="code" data-indent=""><span style="color:#d73a49;">-</span> device <span style="color:#d73a49;">=</span> <span style="color:#298e0d;">"</span><span style="color:#298e0d;">cuda</span><span style="color:#298e0d;">"</span></div></div><div class="ec-line highlight" style="--lineBg:#d2e4d3;background:#d2e4d3"><div class="gutter"><div class="ln">2</div></div><div class="code" data-indent=""><span style="color:#d73a49;">+</span> device <span style="color:#d73a49;">=</span> accelerator.device</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:2ch"><div class="gutter"><div class="ln">3</div></div><div class="code" data-indent="  ">  model.<span style="color:#4b69c6;">to</span>(device)</div></div><div class="ec-footer ec-ext" style="background:#f5f5f5"></div></code></pre>
             </div>
           </div>
         </div>
