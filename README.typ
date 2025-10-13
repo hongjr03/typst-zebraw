@@ -396,6 +396,78 @@ To disable the flag feature entirely, pass an empty string `""` to the `comment-
 )
 ````)
 
+=== Multiple Highlight Colors
+
+You can assign different colors to specific highlighted lines. There are two ways to achieve this:
+
+1. *Per-line colors*: Specify colors directly in the `highlight-lines` array by adding a color as the second element in each tuple:
+
+  #context preview(````typ
+  #zebraw(
+    highlight-lines: (
+      (1, rgb("#edb4b0").lighten(50%)),
+      (2, rgb("#a4c9a6").lighten(50%)),
+    ),
+    ```python
+    - device = "cuda"
+    + device = accelerator.device
+      model.to(device)
+    ```,
+  )
+  ````)
+
+2. *Cyclic colors*: Pass an array of colors to `highlight-color`, which will be applied cyclically to the highlighted lines:
+
+  #context preview(````typ
+  #zebraw(
+    highlight-lines: (1, 2, 3),
+    highlight-color: (
+      rgb("#edb4b0"),
+      rgb("#a4c9a6"),
+      rgb("#94e2d5")
+    ).map(c => c.lighten(70%)),
+    ```python
+    line 1
+    line 2
+    line 3
+    ```,
+  )
+  ````)
+
+You can also mix per-line colors with a default `highlight-color`. Lines without specific colors will use the default:
+
+#context preview(````typ
+#zebraw(
+  highlight-lines: (
+    ("1": rgb("#ff0000").lighten(80%)),
+    2,  // Uses default color
+    (3, rgb("#00ff00").lighten(80%)),
+  ),
+  highlight-color: rgb("#0000ff").lighten(80%),
+  ```python
+  line 1
+  line 2
+  line 3
+  ```,
+)
+````)
+
+When combining colors with comments, the color should come before the comment in the tuple:
+
+#context preview(````typ
+#zebraw(
+  highlight-lines: (
+    (1, rgb("#edb4b0").lighten(50%), [Removed line]),
+    (2, rgb("#a4c9a6").lighten(50%), [Added line]),
+  ),
+  ```python
+  - device = "cuda"
+  + device = accelerator.device
+    model.to(device)
+  ```,
+)
+````)
+
 === Headers and Footers
 
 You can add headers and footers to code blocks. One approach is to use special keys in the `highlight-lines` parameter:

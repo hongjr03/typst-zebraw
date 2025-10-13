@@ -1,10 +1,10 @@
-# 🦓 Zebraw
+## 🦓 Zebraw
 
-<a href="README_zh.md"><img src="https://img.shields.io/badge/🇨🇳中文README-blue" alt="🇨🇳中文 README" /></a> <a href="https://typst.app/universe/package/zebraw"><img src="https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Ftypst.app%2Funiverse%2Fpackage%2Fzebraw&query=%2Fhtml%2Fbody%2Fdiv%2Fmain%2Fdiv%5B2%5D%2Faside%2Fsection%5B2%5D%2Fdl%2Fdd%5B3%5D&logo=typst&label=Universe&color=%2339cccc" alt="Universe" /></a> <a href="https://github.com/hongjr03/typst-zebraw"><img src="https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fhongjr03%2Ftypst-zebraw%2Frefs%2Fheads%2Fmain%2Ftypst.toml&query=package.version&logo=GitHub&label=GitHub" alt="GitHub" /></a> <a href="coverage_report.md"><img src="https://img.shields.io/badge/coverage-67.30%25-yellow" alt="Coverage" /></a> <a href="https://github.com/hongjr03/typst-zebraw/actions/workflows/test.yml"><img src="https://github.com/hongjr03/typst-zebraw/actions/workflows/test.yml/badge.svg" alt="Test" /></a>
+<a href="README_zh.md"><img src="https://img.shields.io/badge/🇨🇳中文README-blue" alt="🇨🇳中文 README" /></a> <a href="https://typst.app/universe/package/zebraw"><img src="https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Ftypst.app%2Funiverse%2Fpackage%2Fzebraw&amp;query=%2Fhtml%2Fbody%2Fdiv%2Fmain%2Fdiv%5B2%5D%2Faside%2Fsection%5B2%5D%2Fdl%2Fdd%5B3%5D&amp;logo=typst&amp;label=Universe&amp;color=%2339cccc" alt="Universe" /></a> <a href="https://github.com/hongjr03/typst-zebraw"><img src="https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fhongjr03%2Ftypst-zebraw%2Frefs%2Fheads%2Fmain%2Ftypst.toml&amp;query=package.version&amp;logo=GitHub&amp;label=GitHub" alt="GitHub" /></a> <a href="coverage_report.md"><img src="https://img.shields.io/badge/coverage-67.30%25-yellow" alt="Coverage" /></a> <a href="https://github.com/hongjr03/typst-zebraw/actions/workflows/test.yml"><img src="https://github.com/hongjr03/typst-zebraw/actions/workflows/test.yml/badge.svg" alt="Test" /></a>
 
-Zebraw is a lightweight and fast package for displaying code blocks with line numbers in Typst, supporting code line highlighting. The term ***zebraw*** is a combination of ***zebra*** and ***raw***, as the highlighted lines display in the code block with a zebra-striped pattern.
+Zebraw is a lightweight and fast package for displaying code blocks with line numbers in Typst, supporting code line highlighting. The term _**zebraw**_ is a combination of _**zebra**_ and _**raw**_, as the highlighted lines display in the code block with a zebra-striped pattern.
 
-## Quick Start
+### Quick Start
 
 Import the `zebraw` package with `#import "@preview/zebraw:0.5.5": *` then add `#show: zebraw` to start using zebraw in the simplest way.
 
@@ -37,7 +37,7 @@ To manually render specific code blocks with zebraw, use the `#zebraw()` functio
 
 ![typst-frame](assets/frame_1.svg)
 
-## Features
+### Features
 
 The `zebraw` function provides a variety of parameters to customize the appearance and behavior of code blocks. The following sections describe these parameters in detail:
 
@@ -55,7 +55,7 @@ The `zebraw` function provides a variety of parameters to customize the appearan
 - **Export Options**
   - Experimental HTML export
 
-### Line Numbering
+#### Line Numbering
 
 Line numbers appear on the left side of the code block. Change the starting line number by passing an integer to the `numbering-offset` parameter. The default value is `0`.
 
@@ -108,7 +108,7 @@ For more advanced numbering control, pass an array of arrays to the numbering pa
 
 ![typst-frame](assets/frame_4.svg)
 
-### Numbering Separator
+#### Numbering Separator
 
 You can add a separator line between line numbers and code content by setting the `numbering-separator` parameter to `true`:
 
@@ -126,11 +126,13 @@ You can add a separator line between line numbers and code content by setting th
 
 ![typst-frame](assets/frame_5.svg)
 
-### Line Slicing
+#### Line Slicing
 
 Slice code blocks by passing the `line-range` parameter to the `zebraw` function. The `line-range` parameter can be either:
 
-- An array of 2 integers representing the range![typst-frame](assets/frame_6.svg)(![typst-frame](assets/frame_7.svg)can be `none` as this feature is based on Typst array slicing)
+- An array of 2 integers representing the range
+  ![typst-frame](assets/frame_6.svg)(
+  ![typst-frame](assets/frame_7.svg)can be `none` as this feature is based on Typst array slicing)
 - A dictionary with `range` and `keep-offset` keys
 
 When `keep-offset` is set to `true`, line numbers maintain their original values. Otherwise, they reset to start from 1. By default, `keep-offset` is set to `true`.
@@ -168,7 +170,7 @@ When `keep-offset` is set to `true`, line numbers maintain their original values
 
 ![typst-frame](assets/frame_8.svg)
 
-### Line Highlighting
+#### Line Highlighting
 
 Highlight specific lines in the code block by passing the `highlight-lines` parameter to the `zebraw` function. The `highlight-lines` parameter accepts either a single line number or an array of line numbers.
 
@@ -216,7 +218,7 @@ Highlight specific lines in the code block by passing the `highlight-lines` para
 
 ![typst-frame](assets/frame_9.svg)
 
-### Comments
+#### Comments
 
 Add explanatory comments to highlighted lines by passing an array of line numbers and comments to the `highlight-lines` parameter.
 
@@ -307,7 +309,81 @@ To disable the flag feature entirely, pass an empty string `""` to the `comment-
 
 ![typst-frame](assets/frame_12.svg)
 
-### Headers and Footers
+#### Multiple Highlight Colors
+
+You can assign different colors to specific highlighted lines. There are two ways to achieve this:
+
+1. **Per-line colors**: Specify colors directly in the `highlight-lines` array by adding a color as the second element in each tuple:
+   ````typ
+   #zebraw(
+     highlight-lines: (
+       (1, rgb("#edb4b0").lighten(50%)),
+       (2, rgb("#a4c9a6").lighten(50%)),
+     ),
+     ```python
+     - device = "cuda"
+     + device = accelerator.device
+       model.to(device)
+     ```,
+   )
+   ````
+
+2. **Cyclic colors**: Pass an array of colors to `highlight-color`, which will be applied cyclically to the highlighted lines:
+   ````typ
+   #zebraw(
+     highlight-lines: (1, 2, 3),
+     highlight-color: (
+       rgb("#edb4b0"),
+       rgb("#a4c9a6"),
+       rgb("#94e2d5")
+     ).map(c => c.lighten(70%)),
+     ```python
+     line 1
+     line 2
+     line 3
+     ```,
+   )
+   ````
+
+You can also mix per-line colors with a default `highlight-color`. Lines without specific colors will use the default:
+
+````typ
+#zebraw(
+  highlight-lines: (
+    ("1": rgb("#ff0000").lighten(80%)),
+    2,  // Uses default color
+    (3, rgb("#00ff00").lighten(80%)),
+  ),
+  highlight-color: rgb("#0000ff").lighten(80%),
+  ```python
+  line 1
+  line 2
+  line 3
+  ```,
+)
+````
+
+![typst-frame](assets/frame_13.svg)
+
+When combining colors with comments, the color should come before the comment in the tuple:
+
+````typ
+#zebraw(
+  highlight-lines: (
+    (1, rgb("#edb4b0").lighten(50%), [Removed line]),
+    (2, rgb("#a4c9a6").lighten(50%), [Added line]),
+  ),
+  ```python
+  - device = "cuda"
+  + device = accelerator.device
+    model.to(device)
+  ```,
+)
+````
+
+![typst-frame](assets/frame_14.svg)
+
+#### Headers and Footers
 
 You can add headers and footers to code blocks. One approach is to use special keys in the `highlight-lines` parameter:
 
@@ -337,7 +413,7 @@ You can add headers and footers to code blocks. One approach is to use special k
 )
 ````
 
-![typst-frame](assets/frame_13.svg)
+![typst-frame](assets/frame_15.svg)
 
 Alternatively, use the dedicated `header` and `footer` parameters for cleaner code:
 
@@ -366,9 +442,9 @@ Alternatively, use the dedicated `header` and `footer` parameters for cleaner co
 )
 ````
 
-![typst-frame](assets/frame_14.svg)
+![typst-frame](assets/frame_16.svg)
 
-### Language Tab
+#### Language Tab
 
 Display a floating language identifier tab in the top-right corner of the code block by setting `lang` to `true`:
 
@@ -384,7 +460,7 @@ Display a floating language identifier tab in the top-right corner of the code b
 )
 ````
 
-![typst-frame](assets/frame_15.svg)
+![typst-frame](assets/frame_17.svg)
 
 Customize the language display by passing a string or content to the `lang` parameter:
 
@@ -400,9 +476,9 @@ Customize the language display by passing a string or content to the `lang` para
 )
 ````
 
-![typst-frame](assets/frame_16.svg)
+![typst-frame](assets/frame_18.svg)
 
-### Indentation Lines, Hanging Indentation and Fast Preview
+#### Indentation Lines, Hanging Indentation and Fast Preview
 
 Display indentation guides by passing a positive integer to the `indentation` parameter, representing the number of spaces per indentation level:
 
@@ -432,7 +508,7 @@ Display indentation guides by passing a positive integer to the `indentation` pa
 )
 ````
 
-![typst-frame](assets/frame_17.svg)
+![typst-frame](assets/frame_19.svg)
 
 Enable hanging indentation by setting `hanging-indent` to `true`:
 
@@ -462,7 +538,7 @@ Enable hanging indentation by setting `hanging-indent` to `true`:
 )
 ````
 
-![typst-frame](assets/frame_18.svg)
+![typst-frame](assets/frame_20.svg)
 
 Indentation lines can slow down preview performance. For faster previews, enable fast preview mode by passing `true` to the `fast-preview` parameter in `zebraw-init` or by using `zebraw-fast-preview` in the CLI. This renders indentation lines as simple `|` characters:
 
@@ -492,9 +568,9 @@ Indentation lines can slow down preview performance. For faster previews, enable
 )
 ````
 
-![typst-frame](assets/frame_19.svg)
+![typst-frame](assets/frame_21.svg)
 
-### Themes
+#### Themes
 
 Zebraw includes built-in themes. PRs for additional themes are welcome!
 
@@ -516,7 +592,7 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 ```
 ````
 
-![typst-frame](assets/frame_20.svg)
+![typst-frame](assets/frame_22.svg)
 
 ````typ
 #show: zebraw.with(..zebraw-themes.zebra-reverse)
@@ -536,13 +612,13 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 ```
 ````
 
-![typst-frame](assets/frame_21.svg)
+![typst-frame](assets/frame_23.svg)
 
-### (Experimental) HTML Export
+#### (Experimental) HTML Export
 
 See [example-html.typ](example-html.typ) or [GitHub Pages](https://hongjr03.github.io/typst-zebraw/) for more information.
 
-## Customization
+### Customization
 
 There are three ways to customize code blocks in your document:
 
@@ -550,7 +626,7 @@ There are three ways to customize code blocks in your document:
 2. **Local customization**: Apply styling to all subsequent raw blocks with `#show: zebraw.with()`. This affects all raw blocks after the `#show` rule, **except** those created manually with `#zebraw()`.
 3. **Global customization**: Use `#show: zebraw-init.with()` to affect **all** raw blocks after the rule, **including** those created manually with `#zebraw()`. Reset to defaults by using `zebraw-init` without parameters.
 
-### Inset
+#### Inset
 
 Customize the padding around each code line(numberings are not affected) by passing a dictionary to the `inset` parameter:
 
@@ -566,9 +642,9 @@ Customize the padding around each code line(numberings are not affected) by pass
 )
 ````
 
-![typst-frame](assets/frame_22.svg)
+![typst-frame](assets/frame_24.svg)
 
-### Colors
+#### Colors
 
 Customize the background color with a single color or an array of alternating colors:
 
@@ -594,7 +670,7 @@ Customize the background color with a single color or an array of alternating co
 )
 ````
 
-![typst-frame](assets/frame_23.svg)
+![typst-frame](assets/frame_25.svg)
 
 Set the highlight color for marked lines with the `highlight-color` parameter:
 
@@ -609,7 +685,7 @@ Set the highlight color for marked lines with the `highlight-color` parameter:
 )
 ````
 
-![typst-frame](assets/frame_24.svg)
+![typst-frame](assets/frame_26.svg)
 
 Change the comment background color with the `comment-color` parameter:
 
@@ -628,7 +704,7 @@ Change the comment background color with the `comment-color` parameter:
 )
 ````
 
-![typst-frame](assets/frame_25.svg)
+![typst-frame](assets/frame_27.svg)
 
 Set the language tab background color with the `lang-color` parameter:
 
@@ -645,9 +721,9 @@ Set the language tab background color with the `lang-color` parameter:
 )
 ````
 
-![typst-frame](assets/frame_26.svg)
+![typst-frame](assets/frame_28.svg)
 
-### Font
+#### Font
 
 Customize font properties for comments, language tabs, and line numbers by passing a dictionary to the `comment-font-args`, `lang-font-args`, or `numbering-font-args` parameters respectively.
 
@@ -673,7 +749,7 @@ If no custom `lang-font-args` are provided, language tabs inherit the comment fo
 )
 ````
 
-![typst-frame](assets/frame_27.svg)
+![typst-frame](assets/frame_29.svg)
 
 Example with custom language tab styling:
 
@@ -702,9 +778,9 @@ Example with custom language tab styling:
 )
 ````
 
-![typst-frame](assets/frame_28.svg)
+![typst-frame](assets/frame_30.svg)
 
-### Extend
+#### Extend
 
 Extend at vertical is enabled at default. When there's header or footer it will be automatically disabled.
 
@@ -720,16 +796,16 @@ Extend at vertical is enabled at default. When there's header or footer it will 
 )
 ````
 
-![typst-frame](assets/frame_29.svg)
+![typst-frame](assets/frame_31.svg)
 
-## Example
+### Example
 
-![typst-frame](assets/frame_30.svg)
+![typst-frame](assets/frame_32.svg)
 
-## License
+### License
 
 Zebraw is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
 
-## Star History
+### Star History
 
-<a href="https://www.star-history.com/#hongjr03/typst-zebraw&Date"><picture><source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=hongjr03/typst-zebraw&type=Date&theme=dark" /><source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=hongjr03/typst-zebraw&type=Date" /><img alt="Star History Chart" src="https://api.star-history.com/svg?repos=hongjr03/typst-zebraw&type=Date" /></picture></a>
+<a href="https://www.star-history.com/#hongjr03/typst-zebraw&amp;Date"><picture><source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=hongjr03/typst-zebraw&amp;type=Date&amp;theme=dark" /><source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=hongjr03/typst-zebraw&amp;type=Date" /><img alt="Star History Chart" src="https://api.star-history.com/svg?repos=hongjr03/typst-zebraw&amp;type=Date" /></picture></a>

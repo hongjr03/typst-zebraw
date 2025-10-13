@@ -1,10 +1,10 @@
-# 🦓 Zebraw
+## 🦓 Zebraw
 
-<a href="README_zh.md"><img src="https://img.shields.io/badge/🇨🇳中文README-blue" alt="🇨🇳中文 README" /></a> <a href="https://typst.app/universe/package/zebraw"><img src="https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Ftypst.app%2Funiverse%2Fpackage%2Fzebraw&query=%2Fhtml%2Fbody%2Fdiv%2Fmain%2Fdiv%5B2%5D%2Faside%2Fsection%5B2%5D%2Fdl%2Fdd%5B3%5D&logo=typst&label=Universe&color=%2339cccc" alt="Universe" /></a> <a href="https://github.com/hongjr03/typst-zebraw"><img src="https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fhongjr03%2Ftypst-zebraw%2Frefs%2Fheads%2Fmain%2Ftypst.toml&query=package.version&logo=GitHub&label=GitHub" alt="GitHub" /></a> <a href="coverage_report.md"><img src="https://img.shields.io/badge/coverage-67.30%25-yellow" alt="Coverage" /></a> <a href="https://github.com/hongjr03/typst-zebraw/actions/workflows/test.yml"><img src="https://github.com/hongjr03/typst-zebraw/actions/workflows/test.yml/badge.svg" alt="Test" /></a>
+<a href="README_zh.md"><img src="https://img.shields.io/badge/🇨🇳中文README-blue" alt="🇨🇳中文 README" /></a> <a href="https://typst.app/universe/package/zebraw"><img src="https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Ftypst.app%2Funiverse%2Fpackage%2Fzebraw&amp;query=%2Fhtml%2Fbody%2Fdiv%2Fmain%2Fdiv%5B2%5D%2Faside%2Fsection%5B2%5D%2Fdl%2Fdd%5B3%5D&amp;logo=typst&amp;label=Universe&amp;color=%2339cccc" alt="Universe" /></a> <a href="https://github.com/hongjr03/typst-zebraw"><img src="https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fhongjr03%2Ftypst-zebraw%2Frefs%2Fheads%2Fmain%2Ftypst.toml&amp;query=package.version&amp;logo=GitHub&amp;label=GitHub" alt="GitHub" /></a> <a href="coverage_report.md"><img src="https://img.shields.io/badge/coverage-67.30%25-yellow" alt="Coverage" /></a> <a href="https://github.com/hongjr03/typst-zebraw/actions/workflows/test.yml"><img src="https://github.com/hongjr03/typst-zebraw/actions/workflows/test.yml/badge.svg" alt="Test" /></a>
 
-Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代码块，支持代码行高亮。***zebraw*** 一词是 ***zebra***（斑马）和 ***raw***（原始）的组合，因为高亮显示的代码行在代码块中就像斑马纹一样。
+Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代码块，支持代码行高亮。**_zebraw_** 一词是 **_zebra_**（斑马）和 **_raw_**（原始）的组合，因为高亮显示的代码行在代码块中就像斑马纹一样。
 
-## 快速开始
+### 快速开始
 
 使用 `#import "@preview/zebraw:0.5.5": *` 导入 `zebraw` 包，然后添加 `#show: zebraw` 以最简单的方式开始使用 zebraw。
 
@@ -37,7 +37,81 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 
 ![typst-frame](assets/frame_1.svg)
 
-## 功能
+#### 多种高亮颜色
+
+你可以为不同的高亮行指定不同的颜色。有两种方法可以实现：
+
+1. **按行指定颜色**：在 `highlight-lines` 数组中直接指定颜色，在每个元组中添加颜色作为第二个元素：
+   ````typ
+   #zebraw(
+     highlight-lines: (
+       (1, rgb("#edb4b0").lighten(50%)),
+       (2, rgb("#a4c9a6").lighten(50%)),
+     ),
+     ```python
+     - device = "cuda"
+     + device = accelerator.device
+       model.to(device)
+     ```,
+   )
+   ````
+
+2. **循环颜色**：向 `highlight-color` 传递颜色数组，这些颜色将循环应用到高亮行：
+   ````typ
+   #zebraw(
+     highlight-lines: (1, 2, 3),
+     highlight-color: (
+       rgb("#edb4b0"),
+       rgb("#a4c9a6"),
+       rgb("#94e2d5")
+     ).map(c => c.lighten(70%)),
+     ```python
+     line 1
+     line 2
+     line 3
+     ```,
+   )
+   ````
+
+你也可以将按行指定颜色与默认的 `highlight-color` 混合使用。没有指定颜色的行将使用默认颜色：
+
+````typ
+#zebraw(
+  highlight-lines: (
+    ("1": rgb("#ff0000").lighten(80%)),
+    2,  // 使用默认颜色
+    (3, rgb("#00ff00").lighten(80%)),
+  ),
+  highlight-color: rgb("#0000ff").lighten(80%),
+  ```python
+  line 1
+  line 2
+  line 3
+  ```,
+)
+````
+
+![typst-frame](assets/frame_2.svg)
+
+当同时使用颜色和注释时，颜色应该放在元组中注释的前面：
+
+````typ
+#zebraw(
+  highlight-lines: (
+    (1, rgb("#edb4b0").lighten(50%), [删除的行]),
+    (2, rgb("#a4c9a6").lighten(50%), [添加的行]),
+  ),
+  ```python
+  - device = "cuda"
+  + device = accelerator.device
+    model.to(device)
+  ```,
+)
+````
+
+![typst-frame](assets/frame_3.svg)
+
+### 功能
 
 `zebraw` 函数提供了多种参数来自定义代码块的外观和行为。以下部分详细描述了这些参数：
 
@@ -56,7 +130,7 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 - **导出功能**
   - 实验性 HTML 导出
 
-### 行号显示
+#### 行号显示
 
 代码块的左侧会显示行号。通过向 `numbering-offset` 参数传递一个整数来更改行号偏移量。默认值为 `0`。
 
@@ -73,7 +147,7 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 )
 ````
 
-![typst-frame](assets/frame_2.svg)
+![typst-frame](assets/frame_4.svg)
 
 要禁用行号显示，可向 `numbering` 参数传递 `false`：
 
@@ -89,7 +163,7 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 )
 ````
 
-![typst-frame](assets/frame_3.svg)
+![typst-frame](assets/frame_5.svg)
 
 如果你想要更高级的行号控制，可以向 `numbering` 参数传递一个由数组组成的数组。每个内层数组表示一列内容用来替代行号。这样，一行就可以显示多个行号、标记或者自定义的标识符。
 
@@ -107,9 +181,9 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 )
 ````
 
-![typst-frame](assets/frame_4.svg)
+![typst-frame](assets/frame_6.svg)
 
-### 行号分隔线
+#### 行号分隔线
 
 你可以通过设置 `numbering-separator` 参数为 `true` 来在行号和代码内容之间添加分隔线：
 
@@ -125,13 +199,15 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 )
 ````
 
-![typst-frame](assets/frame_5.svg)
+![typst-frame](assets/frame_7.svg)
 
-### 代码行切片
+#### 代码行切片
 
 使用 `line-range` 参数可以显示代码块的特定行范围。该参数支持两种格式：
 
-- 包含2个整数的数组，表示范围![typst-frame](assets/frame_6.svg)（![typst-frame](assets/frame_7.svg)可以是 `none`，此功能基于 Typst 数组切片）
+- 包含2个整数的数组，表示范围
+  ![typst-frame](assets/frame_8.svg)（
+  ![typst-frame](assets/frame_9.svg)可以是 `none`，此功能基于 Typst 数组切片）
 - 包含 `range` 和 `keep-offset` 键的字典
 
 当 `keep-offset` 为 `true` 时，行号保留原始值；为 `false` 时，行号从1开始重新计数。默认值为 `true`。
@@ -167,9 +243,9 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 )
 ````
 
-![typst-frame](assets/frame_8.svg)
+![typst-frame](assets/frame_10.svg)
 
-### 行高亮
+#### 行高亮
 
 通过向 `zebraw` 函数传递 `highlight-lines` 参数来高亮显示代码块中的特定行。`highlight-lines` 参数可以接受单个行号或行号数组。
 
@@ -215,9 +291,9 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 )
 ````
 
-![typst-frame](assets/frame_9.svg)
+![typst-frame](assets/frame_11.svg)
 
-### 注释
+#### 注释
 
 通过向 `highlight-lines` 参数传递一个包含行号和注释的数组，可以为高亮显示的行添加注释。
 
@@ -249,7 +325,7 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 )
 ````
 
-![typst-frame](assets/frame_10.svg)
+![typst-frame](assets/frame_12.svg)
 
 注释默认以 `">"` 开头。你可以通过 `comment-flag` 参数更改这个标志：
 
@@ -278,7 +354,7 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 )
 ````
 
-![typst-frame](assets/frame_11.svg)
+![typst-frame](assets/frame_13.svg)
 
 要完全移除注释标志，可以将 `comment-flag` 参数设为空字符串 `""`（这也会同时禁用注释缩进）：
 
@@ -306,9 +382,9 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 )
 ````
 
-![typst-frame](assets/frame_12.svg)
+![typst-frame](assets/frame_14.svg)
 
-### 标题和页脚
+#### 标题和页脚
 
 你可以为代码块添加标题和页脚。可以通过在 `highlight-lines` 参数中传入键为 `header` 或 `footer` 的字典来实现。
 
@@ -338,7 +414,7 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 )
 ````
 
-![typst-frame](assets/frame_13.svg)
+![typst-frame](assets/frame_15.svg)
 
 或者，可以使用专门的 `header` 和 `footer` 参数使代码更简洁：
 
@@ -367,9 +443,9 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 )
 ````
 
-![typst-frame](assets/frame_14.svg)
+![typst-frame](assets/frame_16.svg)
 
-### 语言标签
+#### 语言标签
 
 通过设置 `lang` 参数为 `true`，可以在代码块的右上角显示一个浮动的语言标签：
 
@@ -385,7 +461,7 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 )
 ````
 
-![typst-frame](assets/frame_15.svg)
+![typst-frame](assets/frame_17.svg)
 
 通过向 `lang` 参数传递字符串或内容来自定义显示的语言：
 
@@ -401,9 +477,9 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 )
 ````
 
-![typst-frame](assets/frame_16.svg)
+![typst-frame](assets/frame_18.svg)
 
-### 缩进指引线、悬挂缩进和快速预览
+#### 缩进指引线、悬挂缩进和快速预览
 
 通过向 `indentation` 参数传递一个正整数来显示缩进指引线，该整数表示每个缩进级别的空格数：
 
@@ -433,7 +509,7 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 )
 ````
 
-![typst-frame](assets/frame_17.svg)
+![typst-frame](assets/frame_19.svg)
 
 要启用悬挂缩进，只需将 `hanging-indent` 设置为 `true`：
 
@@ -463,7 +539,7 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 )
 ````
 
-![typst-frame](assets/frame_18.svg)
+![typst-frame](assets/frame_20.svg)
 
 缩进线可能会降低预览性能。为了加快预览速度，可以通过在 `zebraw-init` 中将 `fast-preview` 参数设置为 `true`，或在 typst-cli 中传入 `zebraw-fast-preview`。这会将缩进线渲染为简单的 `|` 字符：
 
@@ -493,9 +569,9 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 )
 ````
 
-![typst-frame](assets/frame_19.svg)
+![typst-frame](assets/frame_21.svg)
 
-### 主题
+#### 主题
 
 Zebraw 包含内置主题。欢迎提交PR添加更多主题！
 
@@ -517,7 +593,7 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 ```
 ````
 
-![typst-frame](assets/frame_20.svg)
+![typst-frame](assets/frame_22.svg)
 
 ````typ
 #show: zebraw.with(..zebraw-themes.zebra-reverse)
@@ -537,13 +613,13 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 ```
 ````
 
-![typst-frame](assets/frame_21.svg)
+![typst-frame](assets/frame_23.svg)
 
-### （实验性） HTML 导出
+#### （实验性） HTML 导出
 
 查看 [example-html.typ](example-html.typ) 或 [GitHub Pages](https://hongjr03.github.io/typst-zebraw/) 获取更多信息。
 
-## 自定义
+### 自定义
 
 文档中的代码块有三种自定义方式：
 
@@ -551,7 +627,7 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 2. **局部自定义**：通过 `#show: zebraw.with()` 为之后的所有原始代码块应用样式。这会影响该规则后的所有原始代码块，但**不包括**使用 `#zebraw()` 手动创建的代码块。
 3. **全局自定义**：使用 `#show: zebraw-init.with()` 影响之后的**所有**代码块，**包括**通过 `#zebraw()` 创建的代码块。使用不带参数的 `zebraw-init` 可恢复默认设置。
 
-### 内边距
+#### 内边距
 
 通过向 `inset` 参数传递一个字典来自定义每行代码周围的内边距（行号不受影响）：
 
@@ -567,9 +643,9 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 )
 ````
 
-![typst-frame](assets/frame_22.svg)
+![typst-frame](assets/frame_24.svg)
 
-### 颜色
+#### 颜色
 
 通过 `background-color` 参数设置代码块背景色，可以是单一颜色或一个颜色数组（会循环使用各个颜色）：
 
@@ -595,7 +671,7 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 )
 ````
 
-![typst-frame](assets/frame_23.svg)
+![typst-frame](assets/frame_25.svg)
 
 通过 `highlight-color` 参数设置高亮行的背景颜色：
 
@@ -610,7 +686,7 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 )
 ````
 
-![typst-frame](assets/frame_24.svg)
+![typst-frame](assets/frame_26.svg)
 
 通过 `comment-color` 参数更改注释行背景颜色：
 
@@ -629,7 +705,7 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 )
 ````
 
-![typst-frame](assets/frame_25.svg)
+![typst-frame](assets/frame_27.svg)
 
 通过 `lang-color` 参数设置语言标签的背景颜色：
 
@@ -646,9 +722,9 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 )
 ````
 
-![typst-frame](assets/frame_26.svg)
+![typst-frame](assets/frame_28.svg)
 
-### 字体
+#### 字体
 
 通过向 `comment-font-args`、`lang-font-args` 或 `numbering-font-args` 参数传递字典来自定义注释、语言标签和行号的字体属性。
 
@@ -674,7 +750,7 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 )
 ````
 
-![typst-frame](assets/frame_27.svg)
+![typst-frame](assets/frame_29.svg)
 
 比如自定义语言标签样式：
 
@@ -703,9 +779,9 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 )
 ````
 
-![typst-frame](assets/frame_28.svg)
+![typst-frame](assets/frame_30.svg)
 
-### 延展
+#### 延展
 
 垂直方向延展默认为启用。当存在标题或页脚时，它会自动禁用。
 
@@ -721,16 +797,16 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 )
 ````
 
-![typst-frame](assets/frame_29.svg)
+![typst-frame](assets/frame_31.svg)
 
-## 示例
+### 示例
 
-![typst-frame](assets/frame_30.svg)
+![typst-frame](assets/frame_32.svg)
 
-## 许可证
+### 许可证
 
 Zebraw 使用 MIT 许可证授权。更多信息请查看 [LICENSE](LICENSE) 文件。
 
-## Star History
+### Star History
 
-<a href="https://www.star-history.com/#hongjr03/typst-zebraw&Date"><picture><source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=hongjr03/typst-zebraw&type=Date&theme=dark" /><source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=hongjr03/typst-zebraw&type=Date" /><img alt="Star History Chart" src="https://api.star-history.com/svg?repos=hongjr03/typst-zebraw&type=Date" /></picture></a>
+<a href="https://www.star-history.com/#hongjr03/typst-zebraw&amp;Date"><picture><source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=hongjr03/typst-zebraw&amp;type=Date&amp;theme=dark" /><source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=hongjr03/typst-zebraw&amp;type=Date" /><img alt="Star History Chart" src="https://api.star-history.com/svg?repos=hongjr03/typst-zebraw&amp;type=Date" /></picture></a>

@@ -141,6 +141,79 @@ Zebraw 是一个轻量级且快速的 Typst 包，用于显示带有行号的代
 )
 ````)
 
+=== 多种高亮颜色
+
+你可以为不同的高亮行指定不同的颜色。有两种方法可以实现：
+
+1. *按行指定颜色*：在 `highlight-lines` 数组中直接指定颜色，在每个元组中添加颜色作为第二个元素：
+
+  #context preview(````typ
+  #zebraw(
+    highlight-lines: (
+      (1, rgb("#edb4b0").lighten(50%)),
+      (2, rgb("#a4c9a6").lighten(50%)),
+    ),
+    ```python
+    - device = "cuda"
+    + device = accelerator.device
+      model.to(device)
+    ```,
+  )
+  ````)
+
+2. *循环颜色*：向 `highlight-color` 传递颜色数组，这些颜色将循环应用到高亮行：
+
+  #context preview(````typ
+  #zebraw(
+    highlight-lines: (1, 2, 3),
+    highlight-color: (
+      rgb("#edb4b0"),
+      rgb("#a4c9a6"),
+      rgb("#94e2d5")
+    ).map(c => c.lighten(70%)),
+    ```python
+    line 1
+    line 2
+    line 3
+    ```,
+  )
+  ````)
+
+你也可以将按行指定颜色与默认的 `highlight-color` 混合使用。没有指定颜色的行将使用默认颜色：
+
+#context preview(````typ
+#zebraw(
+  highlight-lines: (
+    ("1": rgb("#ff0000").lighten(80%)),
+    2,  // 使用默认颜色
+    (3, rgb("#00ff00").lighten(80%)),
+  ),
+  highlight-color: rgb("#0000ff").lighten(80%),
+  ```python
+  line 1
+  line 2
+  line 3
+  ```,
+)
+````)
+
+当同时使用颜色和注释时，颜色应该放在元组中注释的前面：
+
+#context preview(````typ
+#zebraw(
+  highlight-lines: (
+    (1, rgb("#edb4b0").lighten(50%), [删除的行]),
+    (2, rgb("#a4c9a6").lighten(50%), [添加的行]),
+  ),
+  ```python
+  - device = "cuda"
+  + device = accelerator.device
+    model.to(device)
+  ```,
+)
+````)
+
+
 // #show heading.where(level: 2): it => pagebreak() + it
 
 == 功能
