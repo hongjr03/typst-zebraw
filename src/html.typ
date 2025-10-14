@@ -112,8 +112,12 @@
     line.indentation
 
     // Apply text styling to all text within this line
-    show text: style-code-line.with(default-color: default-color)
-    line.body
+    if sys.version < version(0, 14, 0) {
+      show text: style-code-line.with(default-color: default-color)
+      line.body
+    } else {
+      line.body
+    }
   }
 
   // Process lines
@@ -369,8 +373,12 @@
       html.elem("div", attrs: ((class: "code") + code-attrs), {
         if indent-overlay != none { indent-overlay }
         show linebreak: none
-        show text: style-code-line.with(default-color: default-color)
-        line.body
+        if sys.version < version(0, 14, 0) {
+          show text: style-code-line.with(default-color: default-color)
+          line.body
+        } else {
+          line.body
+        }
       })
 
       if line.comment != none {
