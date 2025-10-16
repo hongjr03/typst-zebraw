@@ -4,6 +4,7 @@
 #let lang-color-state = state("zebraw-lang-color", none)
 
 #let inset-state = state("zebraw-inset", (top: 0.34em, right: 0.34em, bottom: 0.34em, left: 0.34em))
+#let radius-state = state("zebraw-radius", 0.34em)
 #let comment-flag-state = state("zebraw-comment-flag", ">")
 #let numbering-state = state("zebraw-numbering", true)
 #let lang-state = state("zebraw-lang", true)
@@ -47,6 +48,9 @@
   /// The inset of each line.
   /// -> dictionary
   inset: (top: 0.34em, right: 0.34em, bottom: 0.34em, left: 0.34em),
+  /// The radius of the code block corners.
+  /// -> length
+  radius: 0.34em,
   /// The background color of the block and normal lines.
   /// -> color | array
   background-color: luma(245),
@@ -95,6 +99,7 @@
 ) = context {
   numbering-state.update(numbering)
   inset-state.update(it => it + inset)
+  radius-state.update(radius)
 
   background-color-state.update(background-color)
   highlight-color-state.update(highlight-color)
@@ -121,6 +126,7 @@
 #let parse-zebraw-args(
   numbering: none,
   inset: none,
+  radius: none,
   background-color: none,
   highlight-color: none,
   comment-color: none,
@@ -139,6 +145,7 @@
   // Use helper functions to reduce repetition
   let numbering = get-arg-or-state(numbering, numbering-state)
   let inset = merge-state-with-arg(inset, inset-state)
+  let radius = get-arg-or-state(radius, radius-state)
   let background-color = get-arg-or-state(background-color, background-color-state)
   let highlight-color = get-arg-or-state(highlight-color, highlight-color-state)
   
@@ -179,6 +186,7 @@
   (
     numbering: numbering,
     inset: inset,
+    radius: radius,
     background-color: background-color,
     highlight-color: highlight-color,
     comment-color: comment-color,

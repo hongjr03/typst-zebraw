@@ -5,6 +5,7 @@
 #let zebraw-show(
   numbering: none,
   inset: none,
+  radius: none,
   background-color: none,
   highlight-color: none,
   comment-color: none,
@@ -31,6 +32,7 @@
   let args = parse-zebraw-args(
     numbering: numbering,
     inset: inset,
+    radius: radius,
     background-color: background-color,
     highlight-color: highlight-color,
     comment-color: comment-color,
@@ -49,6 +51,7 @@
   // Extract all necessary parameters from args dictionary
   let numbering = args.numbering
   let inset = args.inset
+  let radius = args.radius
   let background-color = args.background-color
   let highlight-color = args.highlight-color
   let comment-color = args.comment-color
@@ -101,10 +104,10 @@
   )
 
   // Render language tab if needed
-  render-lang-tab(has-lang, lang, lang-color, lang-font-args, inset, it)
+  render-lang-tab(has-lang, lang, lang-color, lang-font-args, inset, radius, it)
 
   // Render the code block
-  block(breakable: true, radius: inset.left, clip: true, fill: background-color-at-index(background-color, 0), {
+  block(breakable: true, radius: radius, clip: true, fill: background-color-at-index(background-color, 0), {
     context layout(code-block-size => {
       // Calculate line heights for consistent rendering
       let last-line = if lines.len() > 2 {
@@ -154,6 +157,7 @@
             comment-color,
             comment-font-args,
             inset,
+            radius,
             has-lang,
             extend,
             background-color,
@@ -196,6 +200,7 @@
             comment-color,
             comment-font-args,
             inset,
+            radius,
             extend,
             background-color,
             lines.len(),
@@ -295,6 +300,24 @@
   /// )
   /// -> dictionary
   inset: none,
+  /// The radius of the code block corners.
+  ///
+  /// #example(
+  /// ````typ
+  /// #zebraw(
+  ///   radius: 10pt,
+  ///   ```typ
+  ///   #grid(
+  ///     columns: (1fr, 1fr),
+  ///     [Hello], [world!],
+  ///   )
+  ///   ```
+  /// )
+  /// ````,
+  /// scale-preview: 100%,
+  /// )
+  /// -> length
+  radius: none,
   /// The background color of the block and normal lines.
   ///
   /// #example(
@@ -624,6 +647,7 @@
     show raw.where(block: false): zebraw-html-show-inline.with(
       numbering: numbering,
       inset: inset,
+      radius: radius,
       background-color: background-color,
       highlight-color: highlight-color,
       comment-color: comment-color,
@@ -648,6 +672,7 @@
     show raw.where(block: true): zebraw-html-show.with(
       numbering: numbering,
       inset: inset,
+      radius: radius,
       background-color: background-color,
       highlight-color: highlight-color,
       comment-color: comment-color,
@@ -675,6 +700,7 @@
     show raw.where(block: true): zebraw-show.with(
       numbering: numbering,
       inset: inset,
+      radius: radius,
       background-color: background-color,
       highlight-color: highlight-color,
       comment-color: comment-color,
