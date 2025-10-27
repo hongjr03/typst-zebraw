@@ -1,6 +1,26 @@
 ## 🦓 Zebraw
 
-<a href="README_zh.md"><img src="https://img.shields.io/badge/🇨🇳中文README-blue" alt="🇨🇳中文 README" /></a> <a href="https://typst.app/universe/package/zebraw"><img src="https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Ftypst.app%2Funiverse%2Fpackage%2Fzebraw&amp;query=%2Fhtml%2Fbody%2Fdiv%2Fmain%2Fdiv%5B2%5D%2Faside%2Fsection%5B2%5D%2Fdl%2Fdd%5B3%5D&amp;logo=typst&amp;label=Universe&amp;color=%2339cccc" alt="Universe" /></a> <a href="https://github.com/hongjr03/typst-zebraw"><img src="https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fhongjr03%2Ftypst-zebraw%2Frefs%2Fheads%2Fmain%2Ftypst.toml&amp;query=package.version&amp;logo=GitHub&amp;label=GitHub" alt="GitHub" /></a> <a href="coverage_report.md"><img src="https://img.shields.io/badge/coverage-67.30%25-yellow" alt="Coverage" /></a> <a href="https://github.com/hongjr03/typst-zebraw/actions/workflows/test.yml"><img src="https://github.com/hongjr03/typst-zebraw/actions/workflows/test.yml/badge.svg" alt="Test" /></a>
+<a href="README_zh.md">
+
+<img src="https://img.shields.io/badge/🇨🇳中文README-blue" alt="🇨🇳中文 README" />
+
+</a> <a href="https://typst.app/universe/package/zebraw">
+
+<img src="https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Ftypst.app%2Funiverse%2Fpackage%2Fzebraw&amp;query=%2Fhtml%2Fbody%2Fdiv%2Fmain%2Fdiv%5B2%5D%2Faside%2Fsection%5B2%5D%2Fdl%2Fdd%5B3%5D&amp;logo=typst&amp;label=Universe&amp;color=%2339cccc" alt="Universe" />
+
+</a> <a href="https://github.com/hongjr03/typst-zebraw">
+
+<img src="https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fhongjr03%2Ftypst-zebraw%2Frefs%2Fheads%2Fmain%2Ftypst.toml&amp;query=package.version&amp;logo=GitHub&amp;label=GitHub" alt="GitHub" />
+
+</a> <a href="coverage_report.md">
+
+<img src="https://img.shields.io/badge/coverage-67.30%25-yellow" alt="Coverage" />
+
+</a> <a href="https://github.com/hongjr03/typst-zebraw/actions/workflows/test.yml">
+
+<img src="https://github.com/hongjr03/typst-zebraw/actions/workflows/test.yml/badge.svg" alt="Test" />
+
+</a>
 
 Zebraw is a lightweight and fast package for displaying code blocks with line numbers in Typst, supporting code line highlighting. The term _**zebraw**_ is a combination of _**zebra**_ and _**raw**_, as the highlighted lines display in the code block with a zebra-striped pattern.
 
@@ -644,6 +664,40 @@ Customize the padding around each code line(numberings are not affected) by pass
 
 ![typst-frame](assets/frame_24.svg)
 
+#### Radius
+
+Customize the corner radius of code blocks independently from the inset by passing a length to the `radius` parameter. The default value is `0.34em`.
+
+````typ
+#zebraw(
+  radius: 10pt,
+  ```typ
+  #grid(
+    columns: (1fr, 1fr),
+    [Hello], [world!],
+  )
+  ```
+)
+````
+
+![typst-frame](assets/frame_25.svg)
+
+You can also set `radius: 0pt` for sharp corners:
+
+````typ
+#zebraw(
+  radius: 0pt,
+  ```typ
+  #grid(
+    columns: (1fr, 1fr),
+    [Hello], [world!],
+  )
+  ```
+)
+````
+
+![typst-frame](assets/frame_26.svg)
+
 #### Colors
 
 Customize the background color with a single color or an array of alternating colors:
@@ -670,7 +724,7 @@ Customize the background color with a single color or an array of alternating co
 )
 ````
 
-![typst-frame](assets/frame_25.svg)
+![typst-frame](assets/frame_27.svg)
 
 Set the highlight color for marked lines with the `highlight-color` parameter:
 
@@ -685,7 +739,7 @@ Set the highlight color for marked lines with the `highlight-color` parameter:
 )
 ````
 
-![typst-frame](assets/frame_26.svg)
+![typst-frame](assets/frame_28.svg)
 
 Change the comment background color with the `comment-color` parameter:
 
@@ -704,7 +758,7 @@ Change the comment background color with the `comment-color` parameter:
 )
 ````
 
-![typst-frame](assets/frame_27.svg)
+![typst-frame](assets/frame_29.svg)
 
 Set the language tab background color with the `lang-color` parameter:
 
@@ -721,7 +775,7 @@ Set the language tab background color with the `lang-color` parameter:
 )
 ````
 
-![typst-frame](assets/frame_28.svg)
+![typst-frame](assets/frame_30.svg)
 
 #### Font
 
@@ -749,7 +803,7 @@ If no custom `lang-font-args` are provided, language tabs inherit the comment fo
 )
 ````
 
-![typst-frame](assets/frame_29.svg)
+![typst-frame](assets/frame_31.svg)
 
 Example with custom language tab styling:
 
@@ -778,7 +832,7 @@ Example with custom language tab styling:
 )
 ````
 
-![typst-frame](assets/frame_30.svg)
+![typst-frame](assets/frame_32.svg)
 
 #### Extend
 
@@ -796,11 +850,7 @@ Extend at vertical is enabled at default. When there's header or footer it will 
 )
 ````
 
-![typst-frame](assets/frame_31.svg)
-
-### Example
-
-![typst-frame](assets/frame_32.svg)
+![typst-frame](assets/frame_33.svg)
 
 ### License
 
@@ -808,4 +858,12 @@ Zebraw is licensed under the MIT License. See the [LICENSE](LICENSE) file for mo
 
 ### Star History
 
-<a href="https://www.star-history.com/#hongjr03/typst-zebraw&amp;Date"><picture><source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=hongjr03/typst-zebraw&amp;type=Date&amp;theme=dark" /><source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=hongjr03/typst-zebraw&amp;type=Date" /><img alt="Star History Chart" src="https://api.star-history.com/svg?repos=hongjr03/typst-zebraw&amp;type=Date" /></picture></a>
+<a href="https://www.star-history.com/#hongjr03/typst-zebraw&amp;Date">
+
+<picture>
+
+<source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=hongjr03/typst-zebraw&amp;type=Date&amp;theme=dark" /><source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=hongjr03/typst-zebraw&amp;type=Date" /><img alt="Star History Chart" src="https://api.star-history.com/svg?repos=hongjr03/typst-zebraw&amp;type=Date" />
+
+</picture>
+
+</a>

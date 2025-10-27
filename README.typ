@@ -1,5 +1,3 @@
-// #set page(paper: "a4", height: auto)
-
 #import "@preview/zebraw:0.6.0": *
 
 #set raw(theme: "assets/tokyo-night.tmTheme") if sys.inputs.at("x-color-theme", default: none) == "dark"
@@ -737,6 +735,36 @@ Customize the padding around each code line(numberings are not affected) by pass
 )
 ````)
 
+=== Radius
+
+Customize the corner radius of code blocks independently from the inset by passing a length to the `radius` parameter. The default value is `0.34em`.
+
+#context preview(````typ
+#zebraw(
+  radius: 10pt,
+  ```typ
+  #grid(
+    columns: (1fr, 1fr),
+    [Hello], [world!],
+  )
+  ```
+)
+````)
+
+You can also set `radius: 0pt` for sharp corners:
+
+#context preview(````typ
+#zebraw(
+  radius: 0pt,
+  ```typ
+  #grid(
+    columns: (1fr, 1fr),
+    [Hello], [world!],
+  )
+  ```
+)
+````)
+
 === Colors
 
 Customize the background color with a single color or an array of alternating colors:
@@ -876,39 +904,6 @@ Extend at vertical is enabled at default. When there's header or footer it will 
   ```
 )
 ````)
-
-== Example
-
-#let example = block(
-  width: 42em,
-  {
-    zebraw(
-      highlight-lines: (
-        (3, [to avoid negative numbers]),
-        (9, "50 => 12586269025"),
-      ),
-      lang: true,
-      header: "Calculate Fibonacci number using reccursive function",
-      indentation: 4,
-      ```rust
-      pub fn fibonacci_reccursive(n: i32) -> u64 {
-          if n < 0 {
-              panic!("{} is negative!", n);
-          }
-          match n {
-              0 => panic!("zero is not a right argument to fibonacci_reccursive()!"),
-              1 | 2 => 1,
-              3 => 2,
-              _ => fibonacci_reccursive(n - 1) + fibonacci_reccursive(n - 2),
-          }
-      }
-      ```,
-    )
-  },
-)
-#context if dictionary(std).keys().contains("html") and target() == "html" {
-  html.frame(example)
-} else { example }
 
 == License
 

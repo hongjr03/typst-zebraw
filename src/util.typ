@@ -62,6 +62,7 @@
   comment-color,
   comment-font-args,
   inset,
+  radius,
   has-lang,
   extend,
   background-color,
@@ -82,7 +83,7 @@
       box(
         width: 100%,
         inset: inset.pairs().map(((key, value)) => (key, value * 2)).to-dict(),
-        radius: if not has-lang { (top: inset.left) } else { (top-left: inset.left) },
+        radius: if not has-lang { (top: radius) } else { (top-left: radius) },
         fill: comment-color,
         text(..comment-font-args, content),
       ),
@@ -95,7 +96,7 @@
         width: 100%,
         fill: background-color-at-index(background-color, 0),
         inset: (:) + (top: inset.top),
-        radius: (top: inset.left),
+        radius: (top: radius),
         [],
       ),
     )
@@ -111,6 +112,7 @@
   comment-color,
   comment-font-args,
   inset,
+  radius,
   extend,
   background-color,
   lines-len,
@@ -131,7 +133,7 @@
       box(
         width: 100%,
         inset: inset.pairs().map(((key, value)) => (key, value * 2)).to-dict(),
-        radius: (bottom: inset.left),
+        radius: (bottom: radius),
         fill: comment-color,
         text(..comment-font-args, content),
       ),
@@ -144,7 +146,7 @@
         width: 100%,
         fill: background-color-at-index(background-color, lines-len + 1),
         inset: (:) + (bottom: inset.bottom),
-        radius: (bottom: inset.left),
+        radius: (bottom: radius),
         [],
       ),
     )
@@ -160,13 +162,14 @@
   lang-color,
   lang-font-args,
   inset,
+  radius,
   it,
 ) = context {
   if has-lang {
     let lang-tab = box(
       inset: 0.34em,
-      outset: (bottom: inset.left),
-      radius: (top: inset.left),
+      outset: (bottom: radius),
+      radius: (top: radius),
       fill: lang-color,
       text(
         bottom-edge: "bounds",

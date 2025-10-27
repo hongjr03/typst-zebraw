@@ -48,6 +48,7 @@
 #let zebraw-html-show-inline(
   numbering: none,
   inset: none,
+  radius: none,
   background-color: none,
   highlight-color: none,
   comment-color: none,
@@ -73,6 +74,7 @@
   let (
     numbering,
     inset,
+    radius,
     background-color,
     highlight-color,
     comment-color,
@@ -159,6 +161,7 @@
 #let zebraw-html-show(
   numbering: none,
   inset: none,
+  radius: none,
   background-color: none,
   highlight-color: none,
   comment-color: none,
@@ -184,6 +187,7 @@
   let (
     numbering,
     inset,
+    radius,
     background-color,
     highlight-color,
     comment-color,
@@ -200,6 +204,7 @@
   ) = parse-zebraw-args(
     numbering: numbering,
     inset: inset,
+    radius: radius,
     background-color: background-color,
     highlight-color: highlight-color,
     comment-color: comment-color,
