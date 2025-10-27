@@ -1,5 +1,3 @@
-// #set page(paper: "a4", height: auto)
-
 #import "@preview/zebraw:0.6.0": *
 
 #set raw(theme: "assets/tokyo-night.tmTheme") if sys.inputs.at("x-color-theme", default: none) == "dark"
@@ -728,6 +726,36 @@ Customize the padding around each code line(numberings are not affected) by pass
 #context preview(````typ
 #zebraw(
   inset: (top: 6pt, bottom: 6pt),
+  ```typ
+  #grid(
+    columns: (1fr, 1fr),
+    [Hello], [world!],
+  )
+  ```
+)
+````)
+
+=== Radius
+
+Customize the corner radius of code blocks independently from the inset by passing a length to the `radius` parameter. The default value is `0.34em`.
+
+#context preview(````typ
+#zebraw(
+  radius: 10pt,
+  ```typ
+  #grid(
+    columns: (1fr, 1fr),
+    [Hello], [world!],
+  )
+  ```
+)
+````)
+
+You can also set `radius: 0pt` for sharp corners:
+
+#context preview(````typ
+#zebraw(
+  radius: 0pt,
   ```typ
   #grid(
     columns: (1fr, 1fr),
