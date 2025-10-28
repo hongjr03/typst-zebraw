@@ -263,6 +263,121 @@ Zebraw 是一个轻量级且快速的包，用于在 Typst 中显示带有行号
 )
 ````)
 
+==== 多范围
+
+`line-range` 参数还支持多个范围，允许您显示代码的非连续部分。这对于仅显示较大代码块的相关部分非常有用。
+
+要指定多个范围，请传递一个范围规范数组。每个范围可以是：
+- 简单的数组 `(start, end)` 
+- 字典 `(range: (start, end), keep-offset: bool)`
+
+使用多个范围时，会在范围之间自动插入分隔线，显示跳过了多少行。您可以通过设置 `smart-skip: false` 来禁用此功能。
+
+#context preview(````typ
+#let code = ```python
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+print(fibonacci(10))
+result = fibonacci(20)
+print(f"Result: {result}")
+```
+
+// 显示第 1-3 行和第 6-8 行
+#zebraw(
+  line-range: ((1, 3), (6, 8)),
+  code
+)
+````)
+
+您可以混合使用简单范围和字典范围规范：
+
+#context preview(````typ
+#let code = ```python
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+print(fibonacci(10))
+result = fibonacci(20)
+print(f"Result: {result}")
+```
+
+#zebraw(
+  line-range: (
+    (range: (1, 3), keep-offset: true),
+    (range: (6, 8), keep-offset: true),
+  ),
+  code
+)
+````)
+
+要禁用范围之间的自动分隔符：
+
+#context preview(````typ
+#let code = ```python
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+print(fibonacci(10))
+result = fibonacci(20)
+print(f"Result: {result}")
+```
+
+#zebraw(
+  line-range: ((1, 3), (6, 8)),
+  smart-skip: false,
+  code
+)
+````)
+
+您可以使用 `skip-text` 参数自定义分隔符文本。使用 `{}` 作为行数的占位符：
+
+#context preview(````typ
+#let code = ```python
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+print(fibonacci(10))
+result = fibonacci(20)
+print(f"Result: {result}")
+```
+
+#zebraw(
+  line-range: ((1, 3), (6, 8)),
+  skip-text: "略过 {} 行",
+  code
+)
+````)
+
+`skip-text` 参数也可以是内容而不是字符串：
+
+#context preview(````typ
+#let code = ```python
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+print(fibonacci(10))
+result = fibonacci(20)
+print(f"Result: {result}")
+```
+
+#zebraw(
+  line-range: ((1, 3), (6, 8)),
+  skip-text: strong(emph[省略部分行]),
+  code
+)
+````)
+
 === 行高亮
 
 通过将 `highlight-lines` 参数传递给 `zebraw` 函数来高亮代码块中的特定行。`highlight-lines` 参数接受单个行号或行号数组。
