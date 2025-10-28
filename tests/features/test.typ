@@ -10,6 +10,7 @@
 #include "hanging-indentation.typ"
 #include "themes.typ"
 #include "multi-numbering.typ"
+#include "multi-range.typ"
 
 // should be included last
 #include "fast-preview.typ"

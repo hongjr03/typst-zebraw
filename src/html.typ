@@ -67,6 +67,8 @@
   footer: none,
   numbering-separator: none,
   line-range: (0, -1),
+  smart-skip: true,
+  skip-text: "{} lines skipped",
   wrap: true,
   block-width: 42em,
   it,
@@ -137,6 +139,8 @@
     inset,
     is-html: true,
     line-range: line-range,
+    smart-skip: smart-skip,
+    skip-text: skip-text,
   )
 
   let attrs = (
@@ -180,6 +184,8 @@
   footer: none,
   numbering-separator: none,
   line-range: (0, -1),
+  smart-skip: true,
+  skip-text: "{} lines skipped",
   wrap: true,
   block-width: 42em,
   it,
@@ -239,6 +245,8 @@
     is-html: true,
     line-range: line-range,
     line-colors: line-colors, // Pass line-colors
+    smart-skip: smart-skip,
+    skip-text: skip-text,
   )
 
   let default-color = text.fill

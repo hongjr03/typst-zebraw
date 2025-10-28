@@ -2,7 +2,7 @@
 
 <a href="README.md">
 
-<img src="https://img.shields.io/badge/🇺🇸English README-blue" alt="🇺🇸English README" />
+<img src="https://img.shields.io/badge/🇺🇸EnglishREADME-blue" alt="🇺🇸English README" />
 
 </a> <a href="https://typst.app/universe/package/zebraw">
 
@@ -190,6 +190,132 @@ Zebraw 是一个轻量级且快速的包，用于在 Typst 中显示带有行号
 
 ![typst-frame](assets/frame_8.svg)
 
+##### 多范围
+
+`line-range` 参数还支持多个范围，允许您显示代码的非连续部分。这对于仅显示较大代码块的相关部分非常有用。
+
+要指定多个范围，请传递一个范围规范数组。每个范围可以是：
+
+- 简单的数组 `(start, end)`
+- 字典 `(range: (start, end), keep-offset: bool)`
+
+使用多个范围时，会在范围之间自动插入分隔线，显示跳过了多少行。您可以通过设置 `smart-skip: false` 来禁用此功能。
+
+````typ
+#let code = ```python
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+print(fibonacci(10))
+result = fibonacci(20)
+print(f"Result: {result}")
+```
+
+// 显示第 1-3 行和第 6-8 行
+#zebraw(
+  line-range: ((1, 3), (6, 8)),
+  code
+)
+````
+
+![typst-frame](assets/frame_9.svg)
+
+您可以混合使用简单范围和字典范围规范：
+
+````typ
+#let code = ```python
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+print(fibonacci(10))
+result = fibonacci(20)
+print(f"Result: {result}")
+```
+
+#zebraw(
+  line-range: (
+    (range: (1, 3), keep-offset: true),
+    (range: (6, 8), keep-offset: true),
+  ),
+  code
+)
+````
+
+![typst-frame](assets/frame_10.svg)
+
+要禁用范围之间的自动分隔符：
+
+````typ
+#let code = ```python
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+print(fibonacci(10))
+result = fibonacci(20)
+print(f"Result: {result}")
+```
+
+#zebraw(
+  line-range: ((1, 3), (6, 8)),
+  smart-skip: false,
+  code
+)
+````
+
+![typst-frame](assets/frame_11.svg)
+
+您可以使用 `skip-text` 参数自定义分隔符文本。使用 `{}` 作为行数的占位符：
+
+````typ
+#let code = ```python
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+print(fibonacci(10))
+result = fibonacci(20)
+print(f"Result: {result}")
+```
+
+#zebraw(
+  line-range: ((1, 3), (6, 8)),
+  skip-text: "略过 {} 行",
+  code
+)
+````
+
+![typst-frame](assets/frame_12.svg)
+
+`skip-text` 参数也可以是内容而不是字符串：
+
+````typ
+#let code = ```python
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+print(fibonacci(10))
+result = fibonacci(20)
+print(f"Result: {result}")
+```
+
+#zebraw(
+  line-range: ((1, 3), (6, 8)),
+  skip-text: strong(emph[省略部分行]),
+  code
+)
+````
+
+![typst-frame](assets/frame_13.svg)
+
 #### 行高亮
 
 通过将 `highlight-lines` 参数传递给 `zebraw` 函数来高亮代码块中的特定行。`highlight-lines` 参数接受单个行号或行号数组。
@@ -236,7 +362,7 @@ Zebraw 是一个轻量级且快速的包，用于在 Typst 中显示带有行号
 )
 ````
 
-![typst-frame](assets/frame_9.svg)
+![typst-frame](assets/frame_14.svg)
 
 #### 注释
 
@@ -270,7 +396,7 @@ Zebraw 是一个轻量级且快速的包，用于在 Typst 中显示带有行号
 )
 ````
 
-![typst-frame](assets/frame_10.svg)
+![typst-frame](assets/frame_15.svg)
 
 注释以标志字符开头，默认是 `">"`。通过设置 `comment-flag` 参数来更改此标志：
 
@@ -299,7 +425,7 @@ Zebraw 是一个轻量级且快速的包，用于在 Typst 中显示带有行号
 )
 ````
 
-![typst-frame](assets/frame_11.svg)
+![typst-frame](assets/frame_16.svg)
 
 要完全禁用标志功能，请将空字符串 `""` 传递给 `comment-flag` 参数（这也会禁用注释缩进）：
 
@@ -327,7 +453,7 @@ Zebraw 是一个轻量级且快速的包，用于在 Typst 中显示带有行号
 )
 ````
 
-![typst-frame](assets/frame_12.svg)
+![typst-frame](assets/frame_17.svg)
 
 #### 多种高亮颜色
 
@@ -383,7 +509,7 @@ Zebraw 是一个轻量级且快速的包，用于在 Typst 中显示带有行号
 )
 ````
 
-![typst-frame](assets/frame_13.svg)
+![typst-frame](assets/frame_18.svg)
 
 当将颜色与注释组合时，颜色应在元组中的注释之前：
 
@@ -401,7 +527,7 @@ Zebraw 是一个轻量级且快速的包，用于在 Typst 中显示带有行号
 )
 ````
 
-![typst-frame](assets/frame_14.svg)
+![typst-frame](assets/frame_19.svg)
 
 #### 页眉和页脚
 
@@ -433,7 +559,7 @@ Zebraw 是一个轻量级且快速的包，用于在 Typst 中显示带有行号
 )
 ````
 
-![typst-frame](assets/frame_15.svg)
+![typst-frame](assets/frame_20.svg)
 
 或者，使用专用的 `header` 和 `footer` 参数以获得更清洁的代码：
 
@@ -462,7 +588,7 @@ Zebraw 是一个轻量级且快速的包，用于在 Typst 中显示带有行号
 )
 ````
 
-![typst-frame](assets/frame_16.svg)
+![typst-frame](assets/frame_21.svg)
 
 #### 语言标签
 
@@ -480,7 +606,7 @@ Zebraw 是一个轻量级且快速的包，用于在 Typst 中显示带有行号
 )
 ````
 
-![typst-frame](assets/frame_17.svg)
+![typst-frame](assets/frame_22.svg)
 
 通过将字符串或内容传递给 `lang` 参数来自定义语言显示：
 
@@ -496,7 +622,7 @@ Zebraw 是一个轻量级且快速的包，用于在 Typst 中显示带有行号
 )
 ````
 
-![typst-frame](assets/frame_18.svg)
+![typst-frame](assets/frame_23.svg)
 
 #### 缩进线、悬挂缩进和快速预览
 
@@ -528,7 +654,7 @@ Zebraw 是一个轻量级且快速的包，用于在 Typst 中显示带有行号
 )
 ````
 
-![typst-frame](assets/frame_19.svg)
+![typst-frame](assets/frame_24.svg)
 
 通过将 `hanging-indent` 设置为 `true` 来启用悬挂缩进：
 
@@ -558,7 +684,7 @@ Zebraw 是一个轻量级且快速的包，用于在 Typst 中显示带有行号
 )
 ````
 
-![typst-frame](assets/frame_20.svg)
+![typst-frame](assets/frame_25.svg)
 
 缩进线可能会减慢预览性能。为了更快的预览，通过将 `true` 传递给 `zebraw-init` 中的 `fast-preview` 参数或在 CLI 中使用 `zebraw-fast-preview` 来启用快速预览模式。这将缩进线渲染为简单的 `|` 字符：
 
@@ -588,7 +714,7 @@ Zebraw 是一个轻量级且快速的包，用于在 Typst 中显示带有行号
 )
 ````
 
-![typst-frame](assets/frame_21.svg)
+![typst-frame](assets/frame_26.svg)
 
 #### 主题
 
@@ -612,7 +738,7 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 ```
 ````
 
-![typst-frame](assets/frame_22.svg)
+![typst-frame](assets/frame_27.svg)
 
 ````typ
 #show: zebraw.with(..zebraw-themes.zebra-reverse)
@@ -632,7 +758,7 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 ```
 ````
 
-![typst-frame](assets/frame_23.svg)
+![typst-frame](assets/frame_28.svg)
 
 #### （实验性）HTML 导出
 
@@ -662,7 +788,7 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 )
 ````
 
-![typst-frame](assets/frame_24.svg)
+![typst-frame](assets/frame_29.svg)
 
 #### 圆角
 
@@ -680,7 +806,7 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 )
 ````
 
-![typst-frame](assets/frame_25.svg)
+![typst-frame](assets/frame_30.svg)
 
 您还可以设置 `radius: 0pt` 以获得尖角：
 
@@ -696,7 +822,7 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 )
 ````
 
-![typst-frame](assets/frame_26.svg)
+![typst-frame](assets/frame_31.svg)
 
 #### 颜色
 
@@ -724,7 +850,7 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 )
 ````
 
-![typst-frame](assets/frame_27.svg)
+![typst-frame](assets/frame_32.svg)
 
 使用 `highlight-color` 参数设置标记行的突出显示颜色：
 
@@ -739,7 +865,7 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 )
 ````
 
-![typst-frame](assets/frame_28.svg)
+![typst-frame](assets/frame_33.svg)
 
 使用 `comment-color` 参数更改注释背景颜色：
 
@@ -758,7 +884,7 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 )
 ````
 
-![typst-frame](assets/frame_29.svg)
+![typst-frame](assets/frame_34.svg)
 
 使用 `lang-color` 参数设置语言标签背景颜色：
 
@@ -775,7 +901,7 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 )
 ````
 
-![typst-frame](assets/frame_30.svg)
+![typst-frame](assets/frame_35.svg)
 
 #### 字体
 
@@ -803,7 +929,7 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 )
 ````
 
-![typst-frame](assets/frame_31.svg)
+![typst-frame](assets/frame_36.svg)
 
 具有自定义语言标签样式的示例：
 
@@ -832,7 +958,7 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 )
 ````
 
-![typst-frame](assets/frame_32.svg)
+![typst-frame](assets/frame_37.svg)
 
 #### 扩展
 
@@ -850,7 +976,7 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 )
 ````
 
-![typst-frame](assets/frame_33.svg)
+![typst-frame](assets/frame_38.svg)
 
 ### 许可证
 
