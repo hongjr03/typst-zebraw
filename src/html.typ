@@ -49,6 +49,7 @@
   numbering: none,
   inset: none,
   radius: none,
+  stroke: none,
   background-color: none,
   highlight-color: none,
   comment-color: none,
@@ -75,6 +76,7 @@
     numbering,
     inset,
     radius,
+    stroke,
     background-color,
     highlight-color,
     comment-color,
@@ -91,6 +93,8 @@
   ) = parse-zebraw-args(
     numbering: numbering,
     inset: inset,
+    radius: radius,  // TODO skipped on purpose?
+    stroke: stroke,
     background-color: background-color,
     highlight-color: highlight-color,
     comment-color: comment-color,
@@ -162,6 +166,7 @@
   numbering: none,
   inset: none,
   radius: none,
+  stroke: none,
   background-color: none,
   highlight-color: none,
   comment-color: none,
@@ -188,6 +193,7 @@
     numbering,
     inset,
     radius,
+    stroke,
     background-color,
     highlight-color,
     comment-color,
@@ -205,6 +211,7 @@
     numbering: numbering,
     inset: inset,
     radius: radius,
+    stroke: stroke,
     background-color: background-color,
     highlight-color: highlight-color,
     comment-color: comment-color,
@@ -450,6 +457,10 @@
     "--ec-copyFgHover": copy-fg-hover.to-hex(),
     "--ec-copyFgFocus": copy-fg-focus.to-hex(),
   )
+  if stroke != none {
+    wrapper-vars.insert("--ec-borderCol", stroke.paint.to-hex())
+    wrapper-vars.insert("--ec-borderWd", repr-or-str(stroke.thickness))
+  }
   if highlight-color != none {
     wrapper-vars.insert("--ec-hlBg", highlight-color.to-hex())
   }
