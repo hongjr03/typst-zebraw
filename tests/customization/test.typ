@@ -4,3 +4,4 @@
 #include "extend.typ"
 #include "multi-highlight-color.typ"
 #include "radius.typ"
+#include "stroke.typ"

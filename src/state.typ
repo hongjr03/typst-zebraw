@@ -5,6 +5,7 @@
 
 #let inset-state = state("zebraw-inset", (top: 0.34em, right: 0.34em, bottom: 0.34em, left: 0.34em))
 #let radius-state = state("zebraw-radius", 0.34em)
+#let stroke-state = state("zebraw-stroke", none)
 #let comment-flag-state = state("zebraw-comment-flag", ">")
 #let numbering-state = state("zebraw-numbering", true)
 #let lang-state = state("zebraw-lang", true)
@@ -51,6 +52,9 @@
   /// The radius of the code block corners.
   /// -> length
   radius: 0.34em,
+  /// The stroke with which to surround the code block.
+  /// -> stroke
+  stroke: none,
   /// The background color of the block and normal lines.
   /// -> color | array
   background-color: luma(245),
@@ -100,6 +104,7 @@
   numbering-state.update(numbering)
   inset-state.update(it => it + inset)
   radius-state.update(radius)
+  stroke-state.update(stroke)
 
   background-color-state.update(background-color)
   highlight-color-state.update(highlight-color)
@@ -127,6 +132,7 @@
   numbering: none,
   inset: none,
   radius: none,
+  stroke: none,
   background-color: none,
   highlight-color: none,
   comment-color: none,
@@ -146,9 +152,10 @@
   let numbering = get-arg-or-state(numbering, numbering-state)
   let inset = merge-state-with-arg(inset, inset-state)
   let radius = get-arg-or-state(radius, radius-state)
+  let stroke = get-arg-or-state(stroke, stroke-state)
   let background-color = get-arg-or-state(background-color, background-color-state)
   let highlight-color = get-arg-or-state(highlight-color, highlight-color-state)
-  
+
   // Comment color has special fallback logic
   let comment-color = if comment-color == none {
     if comment-color-state.get() == none {
@@ -169,17 +176,17 @@
 
   let comment-flag = get-arg-or-state(comment-flag, comment-flag-state)
   let lang = get-arg-or-state(lang, lang-state)
-  
+
   // Font args need to be merged with state
   let comment-font-args = merge-state-with-arg(comment-font-args, comment-font-args-state)
   let lang-font-args = merge-state-with-arg(lang-font-args, lang-font-args-state)
   let numbering-font-args = merge-state-with-arg(numbering-font-args, numbering-font-args-state)
-  
+
   let extend = get-arg-or-state(extend, extend-state)
   let hanging-indent = get-arg-or-state(hanging-indent, hanging-indent-state)
   let indentation = get-arg-or-state(indentation, indentation-state)
   let numbering-separator = get-arg-or-state(numbering-separator, numbering-separator-state)
-  
+
   // Fast preview has special logic with sys.inputs
   let fast-preview = fast-preview-state.get() or sys.inputs.at("zebraw-fast-preview", default: false)
 
@@ -187,6 +194,7 @@
     numbering: numbering,
     inset: inset,
     radius: radius,
+    stroke: stroke,
     background-color: background-color,
     highlight-color: highlight-color,
     comment-color: comment-color,
