@@ -26,10 +26,10 @@ Zebraw is a lightweight and fast package for displaying code blocks with line nu
 
 ### Quick Start
 
-Import the `zebraw` package with `#import "@preview/zebraw:0.6.0": *` then add `#show: zebraw` to start using zebraw in the simplest way.
+Import the `zebraw` package with `#import "@preview/zebraw:0.6.1": *` then add `#show: zebraw` to start using zebraw in the simplest way.
 
 ````typ
-#import "@preview/zebraw:0.6.0": *
+#import "@preview/zebraw:0.6.1": *
 #show: zebraw
 
 ```typ
@@ -641,7 +641,7 @@ See [example-html.typ](example-html.typ) or [GitHub Pages](https://hongjr03.gith
 To enable HTML export, you need to initialize the HTML styles and scripts using `zebraw-init` at the beginning of your document:
 
 ````typ
-#import "@preview/zebraw:0.6.0": zebraw-init
+#import "@preview/zebraw:0.6.1": zebraw-init
 #show: zebraw-init
 ````
 

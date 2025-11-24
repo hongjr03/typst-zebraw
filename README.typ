@@ -1,4 +1,4 @@
-#import "@preview/zebraw:0.6.0": *
+#import "@preview/zebraw:0.6.1": *
 
 #set raw(theme: "assets/tokyo-night.tmTheme") if sys.inputs.at("x-color-theme", default: none) == "dark"
 #show raw: set text(font: "Fira Code")
@@ -112,10 +112,10 @@ Zebraw is a lightweight and fast package for displaying code blocks with line nu
 
 == Quick Start
 
-Import the `zebraw` package with ```typ #import "@preview/zebraw:0.6.0": *``` then add ```typ #show: zebraw``` to start using zebraw in the simplest way.
+Import the `zebraw` package with ```typ #import "@preview/zebraw:0.6.1": *``` then add ```typ #show: zebraw``` to start using zebraw in the simplest way.
 
 #context preview(````typ
-#import "@preview/zebraw:0.6.0": *
+#import "@preview/zebraw:0.6.1": *
 #show: zebraw
 
 ```typ
@@ -714,7 +714,7 @@ See #link("example-html.typ")[example-html.typ] or #link("https://hongjr03.githu
 To enable HTML export, you need to initialize the HTML styles and scripts using `zebraw-init` at the beginning of your document:
 
 ````typ
-#import "@preview/zebraw:0.6.0": zebraw-init
+#import "@preview/zebraw:0.6.1": zebraw-init
 #show: zebraw-init
 ````
 

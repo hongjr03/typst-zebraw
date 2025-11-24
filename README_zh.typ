@@ -1,4 +1,4 @@
-#import "@preview/zebraw:0.6.0": *
+#import "@preview/zebraw:0.6.1": *
 
 #set raw(theme: "assets/tokyo-night.tmTheme") if sys.inputs.at("x-color-theme", default: none) == "dark"
 #show raw: set text(font: "Fira Code")
@@ -112,10 +112,10 @@ Zebraw 是一个轻量级且快速的包，用于在 Typst 中显示带有行号
 
 == 快速开始
 
-使用 ```typ #import "@preview/zebraw:0.6.0": *``` 导入 `zebraw` 包，然后添加 ```typ #show: zebraw``` 以最简单的方式开始使用 zebraw。
+使用 ```typ #import "@preview/zebraw:0.6.1": *``` 导入 `zebraw` 包，然后添加 ```typ #show: zebraw``` 以最简单的方式开始使用 zebraw。
 
 #context preview(````typ
-#import "@preview/zebraw:0.6.0": *
+#import "@preview/zebraw:0.6.1": *
 #show: zebraw
 
 ```typ
@@ -714,7 +714,7 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 要启用 HTML 导出，您需要在文档开头使用 `zebraw-init` 初始化 HTML 样式和脚本：
 
 ````typ
-#import "@preview/zebraw:0.6.0": zebraw-init
+#import "@preview/zebraw:0.6.1": zebraw-init
 #show: zebraw-init
 ````
 
