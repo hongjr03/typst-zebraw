@@ -636,7 +636,7 @@
 ) = context {
   if dictionary(std).keys().contains("html") and std.target() == "html" {
     if counter("zebraw-html-styles").get() == (0,) {
-      panic("zebraw-init is required in html export")
+      panic('HTML export requires zebraw-init. Add "#show: zebraw-init" at the beginning of your document.')
     }
     show raw: it => {
       show underline: html.elem.with("span", attrs: (class: "underline"))
