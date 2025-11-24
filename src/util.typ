@@ -371,6 +371,7 @@
 /// Process a normal (non-highlighted) line and return line object
 #let process-normal-line(
   line,
+  index,
   indent-string,
   display-number,
   body,
@@ -381,7 +382,7 @@
     indentation: indent-string,
     number: display-number,
     body: body,
-    fill: background-color-at-index(background-color, line.number),
+    fill: background-color-at-index(background-color, index),
     comment: none,
   )
 }
@@ -488,6 +489,7 @@
       lines-result.push(
         process-normal-line(
           line,
+          x + 1,
           indent-string,
           display-number,
           body,
