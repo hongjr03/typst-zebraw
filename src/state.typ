@@ -93,6 +93,9 @@
   /// Whether to enable the fast preview mode.
   /// -> boolean
   fast-preview: false,
+  /// (Only for HTML) Whether to show the copy button.
+  /// -> boolean
+  copy-button: true,
   /// The body
   /// -> content
   body,
@@ -119,6 +122,17 @@
   hanging-indent-state.update(hanging-indent)
   indentation-state.update(indentation)
   fast-preview-state.update(fast-preview)
+
+  if counter("zebraw-html-styles").get().last() == 0 {
+    import "html.typ": zebraw-html-styles
+    zebraw-html-styles()
+    counter("zebraw-html-styles").step()
+  }
+  if counter("zebraw-html-clipboard").get().last() == 0 and copy-button {
+    import "html.typ": zebraw-html-clipboard-copy
+    zebraw-html-clipboard-copy()
+    counter("zebraw-html-clipboard").step()
+  }
 
   body
 }
@@ -148,7 +162,7 @@
   let radius = get-arg-or-state(radius, radius-state)
   let background-color = get-arg-or-state(background-color, background-color-state)
   let highlight-color = get-arg-or-state(highlight-color, highlight-color-state)
-  
+
   // Comment color has special fallback logic
   let comment-color = if comment-color == none {
     if comment-color-state.get() == none {
@@ -169,17 +183,17 @@
 
   let comment-flag = get-arg-or-state(comment-flag, comment-flag-state)
   let lang = get-arg-or-state(lang, lang-state)
-  
+
   // Font args need to be merged with state
   let comment-font-args = merge-state-with-arg(comment-font-args, comment-font-args-state)
   let lang-font-args = merge-state-with-arg(lang-font-args, lang-font-args-state)
   let numbering-font-args = merge-state-with-arg(numbering-font-args, numbering-font-args-state)
-  
+
   let extend = get-arg-or-state(extend, extend-state)
   let hanging-indent = get-arg-or-state(hanging-indent, hanging-indent-state)
   let indentation = get-arg-or-state(indentation, indentation-state)
   let numbering-separator = get-arg-or-state(numbering-separator, numbering-separator-state)
-  
+
   // Fast preview has special logic with sys.inputs
   let fast-preview = fast-preview-state.get() or sys.inputs.at("zebraw-fast-preview", default: false)
 

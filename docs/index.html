@@ -29,6 +29,519 @@
       }
     </style>
     <div class="container xl:max-w-5xl mx-auto p-4">
+      <style>
+        @layer components {
+          .expressive-code {
+            position: relative;
+            font-family: var(
+              --ec-uiFontFamily,
+              ui-sans-serif,
+              system-ui,
+              -apple-system,
+              BlinkMacSystemFont,
+              "Segoe UI",
+              sans-serif
+            );
+            font-size: var(--ec-uiFontSize, 0.9rem);
+            font-weight: var(--ec-uiFontWeight, 400);
+            line-height: var(--ec-uiLineHeight, 1.65);
+            text-size-adjust: none;
+            -webkit-text-size-adjust: none;
+          }
+
+          .expressive-code *:not(:is(svg, svg *)) {
+            box-sizing: border-box;
+          }
+
+          .expressive-code::selection {
+            background: var(--ec-uiSelBg, var(--ec-codeBg, #0d1117));
+            color: var(--ec-uiSelFg, currentColor);
+          }
+
+          .expressive-code pre {
+            display: flex;
+            margin: 0;
+            padding: 0;
+            border: var(--ec-borderWd, 1.5px) solid
+              var(--ec-borderCol, rgba(148, 163, 184, 0.25));
+            border-radius: calc(
+              var(--ec-borderRad, 0.3rem) + var(--ec-borderWd, 1.5px)
+            );
+            background: var(--ec-codeBg, #0d1117);
+            color: var(--ec-codeFg, #c9d1d9);
+            overflow-x: auto;
+            position: relative;
+            z-index: 1;
+            container-type: inline-size;
+          }
+
+          .expressive-code pre:focus-visible {
+            outline: 3px solid var(--ec-focusBorder, #3b82f6);
+            outline-offset: -3px;
+          }
+
+          .expressive-code pre > code {
+            all: unset;
+            display: block;
+            flex: 1 0 100%;
+            padding: var(--ec-codePadBlk, 0.5rem) 0;
+            color: var(--ec-codeFg, #c9d1d9);
+            font-family: var(
+              --ec-codeFontFamily,
+              ui-monospace,
+              SFMono-Regular,
+              Menlo,
+              Monaco,
+              Consolas,
+              "Liberation Mono",
+              "Courier New",
+              monospace
+            );
+            font-size: var(--ec-codeFontSize, 0.85rem);
+            font-weight: var(--ec-codeFontWeight, 400);
+            line-height: var(--ec-codeLineHeight, 1.35);
+          }
+
+          .expressive-code pre > code::selection {
+            background: var(--ec-codeSelBg, rgba(56, 189, 248, 0.35));
+            color: inherit;
+          }
+
+          .expressive-code pre.wrap .ec-line .code {
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
+            min-width: min(20ch, var(--ecMaxLine, 20ch));
+          }
+
+          /* When lines are allowed to wrap, the absolute overlay can overlap
+             wrapped text. Disable the overlay in wrap mode and rely on per-slot
+             borders for guides (these are handled by .indent-slot). */
+          .expressive-code pre.wrap .ec-line .code .indent-overlay {
+            display: none;
+          }
+
+          .expressive-code pre.wrap .ec-line .code::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            /* use the code line-height times the element font-size to match one line */
+            height: calc(var(--ec-codeLineHeight, 1.65) * 1em);
+            width: max(0px, calc(var(--ecIndent, 0) - 2px));
+            pointer-events: none;
+            background-image: repeating-linear-gradient(
+              to right,
+              transparent 0,
+              transparent calc(var(--ec-indentStep, 4ch) - 1px),
+              var(--ec-indentGuideCol, rgba(148, 163, 184, 0.35))
+                calc(var(--ec-indentStep, 4ch) - 1px),
+              var(--ec-indentGuideCol, rgba(148, 163, 184, 0.35))
+                var(--ec-indentStep, 4ch)
+            );
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            mix-blend-mode: multiply;
+            opacity: 0.85;
+            z-index: 0;
+          }
+
+          .expressive-code pre.wrap .ec-line .code span.indent {
+            white-space: pre;
+          }
+
+          .expressive-code .ec-line .code .indent {
+            display: inline-flex;
+            white-space: pre;
+          }
+
+          .expressive-code .ec-line .code .indent-slot {
+            display: inline-flex;
+            white-space: pre;
+            position: relative;
+          }
+
+          .expressive-code.has-indent-guides .ec-line .code .indent-slot {
+            border-inline-end: 1px solid
+              var(--ec-indentGuideCol, rgba(148, 163, 184, 0.35));
+          }
+
+          .expressive-code.has-indent-guides
+            .ec-line
+            .code
+            .indent-slot.indent-slot-partial {
+            border-inline-end: none;
+          }
+
+          .expressive-code pre::-webkit-scrollbar,
+          .expressive-code pre::-webkit-scrollbar-track {
+            background-color: inherit;
+            border-radius: calc(
+              var(--ec-borderRad, 0.3rem) + var(--ec-borderWd, 1.5px)
+            );
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+          }
+
+          .expressive-code pre::-webkit-scrollbar-thumb {
+            background-color: var(
+              --ec-scrollbarThumbCol,
+              rgba(148, 163, 184, 0.4)
+            );
+            border: 4px solid transparent;
+            background-clip: content-box;
+            border-radius: 10px;
+          }
+
+          .expressive-code pre::-webkit-scrollbar-thumb:hover {
+            background-color: var(
+              --ec-scrollbarThumbHoverCol,
+              rgba(148, 163, 184, 0.55)
+            );
+          }
+
+          .expressive-code .code-lang {
+            position: absolute;
+            top: 0.25rem;
+            right: 0.6rem;
+            padding: 0;
+            display: inline-flex;
+            align-items: baseline;
+            gap: 0.25rem;
+            background: none;
+            color: var(--ec-langFg, var(--ec-codeFg, currentColor));
+            font-size: 0.68em;
+            pointer-events: none;
+            opacity: 0.6;
+            transition: opacity 160ms ease, color 160ms ease;
+            z-index: 2;
+          }
+
+          .expressive-code:focus-within .code-lang,
+          .expressive-code:hover .code-lang {
+            opacity: 1;
+            color: var(--ec-langFg, var(--ec-codeFg, currentColor));
+          }
+
+          .expressive-code .copy-button {
+            position: absolute;
+            top: 0.6rem;
+            right: 0.6rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.3rem;
+            height: 2.3rem;
+            border-radius: 0.45rem;
+            border: 1px solid rgba(148, 163, 184, 0.28);
+            background-color: var(--ec-copyBg, rgba(15, 23, 42, 0.04));
+            color: var(--ec-copyFg, rgba(15, 23, 42, 0.7));
+            cursor: pointer;
+            opacity: 0;
+            pointer-events: auto;
+            transition: opacity 160ms ease, transform 160ms ease,
+              background-color 140ms ease, color 140ms ease;
+            transform: translateY(-0.3rem);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns%3D%27http://www.w3.org/2000/svg%27 viewBox%3D%270 0 24 24%27 fill%3D%27none%27 stroke%3D%27currentColor%27 stroke-width%3D%271.75%27 stroke-linecap%3D%27round%27 stroke-linejoin%3D%27round%27%3E%3Cpath d%3D%27M3 19a2 2 0 0 1-1-2V3a2 2 0 0 1 1-1h13a2 2 0 0 1 2 1%27/%3E%3Crect x%3D%276%27 y%3D%275%27 width%3D%2716%27 height%3D%2718%27 rx%3D%271.6%27 ry%3D%271.6%27/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 60%;
+            z-index: 3;
+          }
+
+          .expressive-code .copy-button:is(:hover, :focus-visible, :active) {
+            opacity: 1;
+            transform: translateY(0);
+          }
+
+          .expressive-code .copy-button:focus-visible {
+            outline: 2px solid rgba(148, 163, 184, 0.55);
+            outline-offset: 2px;
+            background-color: var(--ec-copyBgFocus, rgba(15, 23, 42, 0.16));
+            color: var(--ec-copyFgFocus, rgba(15, 23, 42, 1));
+          }
+
+          .expressive-code .copy-button::before {
+            content: "";
+            width: 100%;
+            height: 100%;
+            border-radius: inherit;
+            background: transparent;
+            border: none;
+            pointer-events: none;
+          }
+
+          .expressive-code .copy-button::after {
+            content: none;
+            pointer-events: none;
+          }
+
+          .expressive-code .copy-button .copy-label,
+          .expressive-code .copy-button .copy-feedback {
+            display: none;
+          }
+
+          .expressive-code .copy-button:hover {
+            background-color: var(--ec-copyBgHover, rgba(15, 23, 42, 0.12));
+            color: var(--ec-copyFgHover, rgba(15, 23, 42, 0.9));
+          }
+
+          .expressive-code .copy-button span[aria-hidden="true"] {
+            font-family: var(--ec-uiFontFamily, inherit);
+          }
+
+          .expressive-code .ec-header,
+          .expressive-code .ec-footer {
+            display: block;
+            padding: 0.35rem var(--ec-codePadInl, 1.35rem);
+            color: var(--ec-uiFg, currentColor);
+          }
+
+          .expressive-code .ec-header.ec-ext,
+          .expressive-code .ec-footer.ec-ext {
+            padding: 0.25rem var(--ec-codePadInl, 1.35rem);
+          }
+
+          .expressive-code .ec-line {
+            direction: ltr;
+            unicode-bidi: isolate;
+            display: grid;
+            grid-template-areas: "gutter code";
+            grid-template-columns: auto 1fr;
+            column-gap: var(--ec-gutterGap, 0.25rem);
+            position: relative;
+            --lineBg: var(--ec-codeBg, #0d1117);
+            background: var(--lineBg);
+          }
+
+          .expressive-code .ec-line .gutter {
+            grid-area: gutter;
+            color: var(--ec-gtrFg, rgba(148, 163, 184, 0.8));
+            position: sticky;
+            left: 0;
+            z-index: 2;
+            background: var(
+              --lineBg,
+              var(--ec-gutterBg, var(--ec-codeBg, #0d1117))
+            );
+            box-shadow: 1px 0 0 var(--ec-gtrBrdCol, rgba(148, 163, 184, 0.2));
+          }
+
+          .expressive-code .ec-line .gutter > * {
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-select: none;
+          }
+
+          .expressive-code .ec-line .gutter ~ .code {
+            --ecLineBrdCol: var(--ec-gtrBrdCol, rgba(148, 163, 184, 0.2));
+          }
+
+          .expressive-code .ec-line.highlight .gutter {
+            color: var(--ec-gtrHighlightFg, rgba(226, 232, 240, 0.95));
+          }
+
+          .expressive-code .ec-line .gutter .ln {
+            display: inline-flex;
+            justify-content: flex-end;
+            align-items: flex-start;
+            box-sizing: content-box;
+            min-width: var(--lnWidth, 2ch);
+            padding-inline-start: var(--ec-gutterPadLeft, 0.5rem);
+            padding-inline-end: var(--ec-codePadInl, 1.35rem);
+            font-size: var(--ec-codeFontSize, 0.85rem);
+            font-variant-numeric: tabular-nums;
+            color: inherit;
+          }
+
+          .expressive-code .ec-line .gutter .ln > span + span {
+            margin-inline-start: 0.25em;
+          }
+
+          .expressive-code .ec-line .code {
+            position: relative;
+            z-index: 1;
+          }
+
+          .expressive-code .ec-line .code .indent-overlay {
+            display: none;
+          }
+
+          .expressive-code.has-indent-guides .ec-line .code .indent-overlay {
+            position: absolute;
+            inset: 0 auto 0 0;
+            display: block;
+            /* Shrink overlay by 1px to avoid drawing a vertical guide at the very end of
+               the inline area (prevents an extra line appearing at each row end).
+               Use max(...) to avoid negative values when --ecIndent is small. */
+            width: max(0px, calc(var(--ecIndent, 0) - 2px));
+            pointer-events: none;
+            background-image: repeating-linear-gradient(
+              to right,
+              transparent 0,
+              transparent calc(var(--ec-indentStep, 4ch) - 1px),
+              var(--ec-indentGuideCol, rgba(148, 163, 184, 0.35))
+                calc(var(--ec-indentStep, 4ch) - 1px),
+              var(--ec-indentGuideCol, rgba(148, 163, 184, 0.35))
+                var(--ec-indentStep, 4ch)
+            );
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            mix-blend-mode: multiply;
+            opacity: 0.85;
+            z-index: 0;
+          }
+          .expressive-code .ec-comment {
+            grid-column: 1 / -1;
+            padding: 0.55rem calc(var(--ec-codePadInl, 1.35rem) + 0.25rem);
+            font-size: 0.85em;
+            background: var(--ec-commentBg, rgba(56, 189, 248, 0.18));
+            color: var(--ec-commentFg, currentColor);
+            box-shadow: inset 0 1px 0 rgba(15, 23, 42, 0.08),
+              inset 0 -1px 0 rgba(15, 23, 42, 0.06);
+            position: sticky;
+            left: 0;
+            z-index: 2;
+            width: 100cqw;
+            box-sizing: border-box;
+          }
+
+          .expressive-code .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+          }
+
+          code.expressive-code-inline {
+            display: inline-block;
+            padding: 0 var(--ec-inlinePadInl, 0.4rem);
+            border-radius: calc(var(--ec-borderRad, 0.3rem) / 1.2);
+            background: var(--ec-inlineBg, rgba(148, 163, 184, 0.2));
+            color: var(--ec-inlineFg, inherit);
+            font-family: var(
+              --ec-codeFontFamily,
+              ui-monospace,
+              SFMono-Regular,
+              Menlo,
+              Monaco,
+              Consolas,
+              "Liberation Mono",
+              "Courier New",
+              monospace
+            );
+            font-size: 0.95em;
+            line-height: 1.2;
+            white-space: pre;
+          }
+        }
+      </style>
+      <script>
+        const CODE_BLOCK_SELECTOR = ".expressive-code";
+        const COPY_BUTTON_SELECTOR = ".copy-button";
+
+        const selectCodeBlocks = () =>
+          Array.from(document.querySelectorAll(CODE_BLOCK_SELECTOR));
+
+        const extractCodeText = (codeBlock) =>
+          Array.from(codeBlock.querySelectorAll(".ec-line .code"))
+            .map((line) => {
+              const indent = line.dataset.indent ?? "";
+              const content = line.textContent
+                .replace(/\u00a0/g, " ")
+                .replace(/\u200b/gi, "");
+              return indent + content;
+            })
+            .join("\n");
+
+        const fallbackCopy = (text) => {
+          const textarea = document.createElement("textarea");
+          textarea.value = text;
+          textarea.setAttribute("readonly", "true");
+          textarea.style.position = "absolute";
+          textarea.style.left = "-9999px";
+          document.body.appendChild(textarea);
+          textarea.select();
+          /** @type {any} */ (document).execCommand("copy");
+          document.body.removeChild(textarea);
+        };
+
+        const setStateWithTimeout = (button, state, delay = 1600) => {
+          button.dataset.state = state;
+          if (state === "copied") {
+            setTimeout(() => {
+              if (button.dataset.state === "copied") {
+                button.dataset.state = "idle";
+              }
+            }, delay);
+          }
+        };
+
+        const bindCopyButton = (codeBlock) => {
+          if (!codeBlock || codeBlock.dataset.copyBound === "true") return;
+
+          const copyButton = codeBlock.querySelector(COPY_BUTTON_SELECTOR);
+          if (!copyButton) return;
+
+          codeBlock.dataset.copyBound = "true";
+
+          const copyHandler = async () => {
+            const code = extractCodeText(codeBlock);
+
+            try {
+              if (navigator.clipboard?.writeText) {
+                await navigator.clipboard.writeText(code);
+              } else {
+                fallbackCopy(code);
+              }
+              setStateWithTimeout(copyButton, "copied");
+            } catch (error) {
+              try {
+                fallbackCopy(code);
+                setStateWithTimeout(copyButton, "copied");
+              } catch (fallbackError) {
+                setStateWithTimeout(copyButton, "error", 2200);
+              }
+            }
+          };
+
+          const resetHandler = () => {
+            if (copyButton.dataset.state === "copied") {
+              copyButton.dataset.state = "idle";
+            }
+          };
+
+          copyButton.addEventListener("click", copyHandler);
+          copyButton.addEventListener("blur", resetHandler);
+          copyButton.addEventListener("mouseleave", resetHandler);
+        };
+
+        selectCodeBlocks().forEach(bindCopyButton);
+
+        const observer = new MutationObserver((mutations) => {
+          for (const mutation of mutations) {
+            mutation.addedNodes.forEach((node) => {
+              if (!(node instanceof HTMLElement)) return;
+              if (node.matches?.(CODE_BLOCK_SELECTOR)) {
+                bindCopyButton(node);
+              } else {
+                node
+                  .querySelectorAll?.(CODE_BLOCK_SELECTOR)
+                  .forEach((block) => bindCopyButton(block));
+              }
+            });
+          }
+        });
+
+        observer.observe(document.documentElement, {
+          childList: true,
+          subtree: true,
+        });
+      </script>
       <h1 class="text-2xl font-bold underline">🦓 Zebraw but in HTML world</h1>
       <h2 class="text-xl font-bold">Example</h2>
       <div>
@@ -60,532 +573,6 @@
 )</pre
           >
           <div style="padding: 1em; font-size: 0.9em">
-            <style>
-              @layer components {
-                .expressive-code {
-                  position: relative;
-                  font-family: var(
-                    --ec-uiFontFamily,
-                    ui-sans-serif,
-                    system-ui,
-                    -apple-system,
-                    BlinkMacSystemFont,
-                    "Segoe UI",
-                    sans-serif
-                  );
-                  font-size: var(--ec-uiFontSize, 0.9rem);
-                  font-weight: var(--ec-uiFontWeight, 400);
-                  line-height: var(--ec-uiLineHeight, 1.65);
-                  text-size-adjust: none;
-                  -webkit-text-size-adjust: none;
-                }
-
-                .expressive-code *:not(:is(svg, svg *)) {
-                  box-sizing: border-box;
-                }
-
-                .expressive-code::selection {
-                  background: var(--ec-uiSelBg, var(--ec-codeBg, #0d1117));
-                  color: var(--ec-uiSelFg, currentColor);
-                }
-
-                .expressive-code pre {
-                  display: flex;
-                  margin: 0;
-                  padding: 0;
-                  border: var(--ec-borderWd, 1.5px) solid
-                    var(--ec-borderCol, rgba(148, 163, 184, 0.25));
-                  border-radius: calc(
-                    var(--ec-borderRad, 0.3rem) + var(--ec-borderWd, 1.5px)
-                  );
-                  background: var(--ec-codeBg, #0d1117);
-                  color: var(--ec-codeFg, #c9d1d9);
-                  overflow-x: auto;
-                  position: relative;
-                  z-index: 1;
-                  container-type: inline-size;
-                }
-
-                .expressive-code pre:focus-visible {
-                  outline: 3px solid var(--ec-focusBorder, #3b82f6);
-                  outline-offset: -3px;
-                }
-
-                .expressive-code pre > code {
-                  all: unset;
-                  display: block;
-                  flex: 1 0 100%;
-                  padding: var(--ec-codePadBlk, 0.5rem) 0;
-                  color: var(--ec-codeFg, #c9d1d9);
-                  font-family: var(
-                    --ec-codeFontFamily,
-                    ui-monospace,
-                    SFMono-Regular,
-                    Menlo,
-                    Monaco,
-                    Consolas,
-                    "Liberation Mono",
-                    "Courier New",
-                    monospace
-                  );
-                  font-size: var(--ec-codeFontSize, 0.85rem);
-                  font-weight: var(--ec-codeFontWeight, 400);
-                  line-height: var(--ec-codeLineHeight, 1.35);
-                }
-
-                .expressive-code pre > code::selection {
-                  background: var(--ec-codeSelBg, rgba(56, 189, 248, 0.35));
-                  color: inherit;
-                }
-
-                .expressive-code pre.wrap .ec-line .code {
-                  white-space: pre-wrap;
-                  overflow-wrap: break-word;
-                  min-width: min(20ch, var(--ecMaxLine, 20ch));
-                }
-
-                /* When lines are allowed to wrap, the absolute overlay can overlap
-     wrapped text. Disable the overlay in wrap mode and rely on per-slot
-     borders for guides (these are handled by .indent-slot). */
-                .expressive-code pre.wrap .ec-line .code .indent-overlay {
-                  display: none;
-                }
-
-                .expressive-code pre.wrap .ec-line .code::before {
-                  content: "";
-                  position: absolute;
-                  left: 0;
-                  top: 0;
-                  /* use the code line-height times the element font-size to match one line */
-                  height: calc(var(--ec-codeLineHeight, 1.65) * 1em);
-                  width: max(0px, calc(var(--ecIndent, 0) - 2px));
-                  pointer-events: none;
-                  background-image: repeating-linear-gradient(
-                    to right,
-                    transparent 0,
-                    transparent calc(var(--ec-indentStep, 4ch) - 1px),
-                    var(--ec-indentGuideCol, rgba(148, 163, 184, 0.35))
-                      calc(var(--ec-indentStep, 4ch) - 1px),
-                    var(--ec-indentGuideCol, rgba(148, 163, 184, 0.35))
-                      var(--ec-indentStep, 4ch)
-                  );
-                  background-repeat: no-repeat;
-                  background-size: 100% 100%;
-                  mix-blend-mode: multiply;
-                  opacity: 0.85;
-                  z-index: 0;
-                }
-
-                .expressive-code pre.wrap .ec-line .code span.indent {
-                  white-space: pre;
-                }
-
-                .expressive-code .ec-line .code .indent {
-                  display: inline-flex;
-                  white-space: pre;
-                }
-
-                .expressive-code .ec-line .code .indent-slot {
-                  display: inline-flex;
-                  white-space: pre;
-                  position: relative;
-                }
-
-                .expressive-code.has-indent-guides .ec-line .code .indent-slot {
-                  border-inline-end: 1px solid
-                    var(--ec-indentGuideCol, rgba(148, 163, 184, 0.35));
-                }
-
-                .expressive-code.has-indent-guides
-                  .ec-line
-                  .code
-                  .indent-slot.indent-slot-partial {
-                  border-inline-end: none;
-                }
-
-                .expressive-code pre::-webkit-scrollbar,
-                .expressive-code pre::-webkit-scrollbar-track {
-                  background-color: inherit;
-                  border-radius: calc(
-                    var(--ec-borderRad, 0.3rem) + var(--ec-borderWd, 1.5px)
-                  );
-                  border-top-left-radius: 0;
-                  border-top-right-radius: 0;
-                }
-
-                .expressive-code pre::-webkit-scrollbar-thumb {
-                  background-color: var(
-                    --ec-scrollbarThumbCol,
-                    rgba(148, 163, 184, 0.4)
-                  );
-                  border: 4px solid transparent;
-                  background-clip: content-box;
-                  border-radius: 10px;
-                }
-
-                .expressive-code pre::-webkit-scrollbar-thumb:hover {
-                  background-color: var(
-                    --ec-scrollbarThumbHoverCol,
-                    rgba(148, 163, 184, 0.55)
-                  );
-                }
-
-                .expressive-code .code-lang {
-                  position: absolute;
-                  top: 0.25rem;
-                  right: 0.6rem;
-                  padding: 0;
-                  display: inline-flex;
-                  align-items: baseline;
-                  gap: 0.25rem;
-                  background: none;
-                  color: var(--ec-langFg, var(--ec-codeFg, currentColor));
-                  font-size: 0.68em;
-                  pointer-events: none;
-                  opacity: 0.6;
-                  transition: opacity 160ms ease, color 160ms ease;
-                  z-index: 2;
-                }
-
-                .expressive-code:focus-within .code-lang,
-                .expressive-code:hover .code-lang {
-                  opacity: 1;
-                  color: var(--ec-langFg, var(--ec-codeFg, currentColor));
-                }
-
-                .expressive-code .copy-button {
-                  position: absolute;
-                  top: 0.6rem;
-                  right: 0.6rem;
-                  display: inline-flex;
-                  align-items: center;
-                  justify-content: center;
-                  width: 2.3rem;
-                  height: 2.3rem;
-                  border-radius: 0.45rem;
-                  border: 1px solid rgba(148, 163, 184, 0.28);
-                  background-color: var(--ec-copyBg, rgba(15, 23, 42, 0.04));
-                  color: var(--ec-copyFg, rgba(15, 23, 42, 0.7));
-                  cursor: pointer;
-                  opacity: 0;
-                  pointer-events: auto;
-                  transition: opacity 160ms ease, transform 160ms ease,
-                    background-color 140ms ease, color 140ms ease;
-                  transform: translateY(-0.3rem);
-                  background-image: url("data:image/svg+xml,%3Csvg xmlns%3D%27http://www.w3.org/2000/svg%27 viewBox%3D%270 0 24 24%27 fill%3D%27none%27 stroke%3D%27currentColor%27 stroke-width%3D%271.75%27 stroke-linecap%3D%27round%27 stroke-linejoin%3D%27round%27%3E%3Cpath d%3D%27M3 19a2 2 0 0 1-1-2V3a2 2 0 0 1 1-1h13a2 2 0 0 1 2 1%27/%3E%3Crect x%3D%276%27 y%3D%275%27 width%3D%2716%27 height%3D%2718%27 rx%3D%271.6%27 ry%3D%271.6%27/%3E%3C/svg%3E");
-                  background-repeat: no-repeat;
-                  background-position: center;
-                  background-size: 60%;
-                  z-index: 3;
-                }
-
-                .expressive-code
-                  .copy-button:is(:hover, :focus-visible, :active) {
-                  opacity: 1;
-                  transform: translateY(0);
-                }
-
-                .expressive-code .copy-button:focus-visible {
-                  outline: 2px solid rgba(148, 163, 184, 0.55);
-                  outline-offset: 2px;
-                  background-color: var(
-                    --ec-copyBgFocus,
-                    rgba(15, 23, 42, 0.16)
-                  );
-                  color: var(--ec-copyFgFocus, rgba(15, 23, 42, 1));
-                }
-
-                .expressive-code .copy-button::before {
-                  content: "";
-                  width: 100%;
-                  height: 100%;
-                  border-radius: inherit;
-                  background: transparent;
-                  border: none;
-                  pointer-events: none;
-                }
-
-                .expressive-code .copy-button::after {
-                  content: none;
-                  pointer-events: none;
-                }
-
-                .expressive-code .copy-button .copy-label,
-                .expressive-code .copy-button .copy-feedback {
-                  display: none;
-                }
-
-                .expressive-code .copy-button:hover {
-                  background-color: var(
-                    --ec-copyBgHover,
-                    rgba(15, 23, 42, 0.12)
-                  );
-                  color: var(--ec-copyFgHover, rgba(15, 23, 42, 0.9));
-                }
-
-                .expressive-code .copy-button span[aria-hidden="true"] {
-                  font-family: var(--ec-uiFontFamily, inherit);
-                }
-
-                .expressive-code .ec-header,
-                .expressive-code .ec-footer {
-                  display: block;
-                  padding: 0.35rem var(--ec-codePadInl, 1.35rem);
-                  color: var(--ec-uiFg, currentColor);
-                }
-
-                .expressive-code .ec-header.ec-ext,
-                .expressive-code .ec-footer.ec-ext {
-                  padding: 0.25rem var(--ec-codePadInl, 1.35rem);
-                }
-
-                .expressive-code .ec-line {
-                  direction: ltr;
-                  unicode-bidi: isolate;
-                  display: grid;
-                  grid-template-areas: "gutter code";
-                  grid-template-columns: auto 1fr;
-                  column-gap: var(--ec-gutterGap, 0.25rem);
-                  position: relative;
-                  --lineBg: var(--ec-codeBg, #0d1117);
-                  background: var(--lineBg);
-                }
-
-                .expressive-code .ec-line .gutter {
-                  grid-area: gutter;
-                  color: var(--ec-gtrFg, rgba(148, 163, 184, 0.8));
-                  position: sticky;
-                  left: 0;
-                  z-index: 2;
-                  background: var(
-                    --lineBg,
-                    var(--ec-gutterBg, var(--ec-codeBg, #0d1117))
-                  );
-                  box-shadow: 1px 0 0
-                    var(--ec-gtrBrdCol, rgba(148, 163, 184, 0.2));
-                }
-
-                .expressive-code .ec-line .gutter > * {
-                  pointer-events: none;
-                  user-select: none;
-                  -webkit-user-select: none;
-                }
-
-                .expressive-code .ec-line .gutter ~ .code {
-                  --ecLineBrdCol: var(--ec-gtrBrdCol, rgba(148, 163, 184, 0.2));
-                }
-
-                .expressive-code .ec-line.highlight .gutter {
-                  color: var(--ec-gtrHighlightFg, rgba(226, 232, 240, 0.95));
-                }
-
-                .expressive-code .ec-line .gutter .ln {
-                  display: inline-flex;
-                  justify-content: flex-end;
-                  align-items: flex-start;
-                  box-sizing: content-box;
-                  min-width: var(--lnWidth, 2ch);
-                  padding-inline-start: var(--ec-gutterPadLeft, 0.5rem);
-                  padding-inline-end: var(--ec-codePadInl, 1.35rem);
-                  font-size: var(--ec-codeFontSize, 0.85rem);
-                  font-variant-numeric: tabular-nums;
-                  color: inherit;
-                }
-
-                .expressive-code .ec-line .gutter .ln > span + span {
-                  margin-inline-start: 0.25em;
-                }
-
-                .expressive-code .ec-line .code {
-                  position: relative;
-                  z-index: 1;
-                }
-
-                .expressive-code .ec-line .code .indent-overlay {
-                  display: none;
-                }
-
-                .expressive-code.has-indent-guides
-                  .ec-line
-                  .code
-                  .indent-overlay {
-                  position: absolute;
-                  inset: 0 auto 0 0;
-                  display: block;
-                  /* Shrink overlay by 1px to avoid drawing a vertical guide at the very end of
-       the inline area (prevents an extra line appearing at each row end).
-       Use max(...) to avoid negative values when --ecIndent is small. */
-                  width: max(0px, calc(var(--ecIndent, 0) - 2px));
-                  pointer-events: none;
-                  background-image: repeating-linear-gradient(
-                    to right,
-                    transparent 0,
-                    transparent calc(var(--ec-indentStep, 4ch) - 1px),
-                    var(--ec-indentGuideCol, rgba(148, 163, 184, 0.35))
-                      calc(var(--ec-indentStep, 4ch) - 1px),
-                    var(--ec-indentGuideCol, rgba(148, 163, 184, 0.35))
-                      var(--ec-indentStep, 4ch)
-                  );
-                  background-repeat: no-repeat;
-                  background-size: 100% 100%;
-                  mix-blend-mode: multiply;
-                  opacity: 0.85;
-                  z-index: 0;
-                }
-                .expressive-code .ec-comment {
-                  grid-column: 1 / -1;
-                  padding: 0.55rem calc(var(--ec-codePadInl, 1.35rem) + 0.25rem);
-                  font-size: 0.85em;
-                  background: var(--ec-commentBg, rgba(56, 189, 248, 0.18));
-                  color: var(--ec-commentFg, currentColor);
-                  box-shadow: inset 0 1px 0 rgba(15, 23, 42, 0.08),
-                    inset 0 -1px 0 rgba(15, 23, 42, 0.06);
-                  position: sticky;
-                  left: 0;
-                  z-index: 2;
-                  width: 100cqw;
-                  box-sizing: border-box;
-                }
-
-                .expressive-code .sr-only {
-                  position: absolute;
-                  width: 1px;
-                  height: 1px;
-                  padding: 0;
-                  margin: -1px;
-                  overflow: hidden;
-                  clip: rect(0, 0, 0, 0);
-                  white-space: nowrap;
-                  border-width: 0;
-                }
-
-                code.expressive-code-inline {
-                  display: inline-block;
-                  padding: 0 var(--ec-inlinePadInl, 0.4rem);
-                  border-radius: calc(var(--ec-borderRad, 0.3rem) / 1.2);
-                  background: var(--ec-inlineBg, rgba(148, 163, 184, 0.2));
-                  color: var(--ec-inlineFg, inherit);
-                  font-family: var(
-                    --ec-codeFontFamily,
-                    ui-monospace,
-                    SFMono-Regular,
-                    Menlo,
-                    Monaco,
-                    Consolas,
-                    "Liberation Mono",
-                    "Courier New",
-                    monospace
-                  );
-                  font-size: 0.95em;
-                  line-height: 1.2;
-                  white-space: pre;
-                }
-              }
-            </style>
-            <script>
-              const CODE_BLOCK_SELECTOR = ".expressive-code";
-              const COPY_BUTTON_SELECTOR = ".copy-button";
-
-              const selectCodeBlocks = () =>
-                Array.from(document.querySelectorAll(CODE_BLOCK_SELECTOR));
-
-              const extractCodeText = (codeBlock) =>
-                Array.from(codeBlock.querySelectorAll(".ec-line .code"))
-                  .map((line) => {
-                    const indent = line.dataset.indent ?? "";
-                    const content = line.textContent
-                      .replace(/\u00a0/g, " ")
-                      .replace(/\u200b/gi, "");
-                    return indent + content;
-                  })
-                  .join("\n");
-
-              const fallbackCopy = (text) => {
-                const textarea = document.createElement("textarea");
-                textarea.value = text;
-                textarea.setAttribute("readonly", "true");
-                textarea.style.position = "absolute";
-                textarea.style.left = "-9999px";
-                document.body.appendChild(textarea);
-                textarea.select();
-                /** @type {any} */ (document).execCommand("copy");
-                document.body.removeChild(textarea);
-              };
-
-              const setStateWithTimeout = (button, state, delay = 1600) => {
-                button.dataset.state = state;
-                if (state === "copied") {
-                  setTimeout(() => {
-                    if (button.dataset.state === "copied") {
-                      button.dataset.state = "idle";
-                    }
-                  }, delay);
-                }
-              };
-
-              const bindCopyButton = (codeBlock) => {
-                if (!codeBlock || codeBlock.dataset.copyBound === "true")
-                  return;
-
-                const copyButton =
-                  codeBlock.querySelector(COPY_BUTTON_SELECTOR);
-                if (!copyButton) return;
-
-                codeBlock.dataset.copyBound = "true";
-
-                const copyHandler = async () => {
-                  const code = extractCodeText(codeBlock);
-
-                  try {
-                    if (navigator.clipboard?.writeText) {
-                      await navigator.clipboard.writeText(code);
-                    } else {
-                      fallbackCopy(code);
-                    }
-                    setStateWithTimeout(copyButton, "copied");
-                  } catch (error) {
-                    try {
-                      fallbackCopy(code);
-                      setStateWithTimeout(copyButton, "copied");
-                    } catch (fallbackError) {
-                      setStateWithTimeout(copyButton, "error", 2200);
-                    }
-                  }
-                };
-
-                const resetHandler = () => {
-                  if (copyButton.dataset.state === "copied") {
-                    copyButton.dataset.state = "idle";
-                  }
-                };
-
-                copyButton.addEventListener("click", copyHandler);
-                copyButton.addEventListener("blur", resetHandler);
-                copyButton.addEventListener("mouseleave", resetHandler);
-              };
-
-              selectCodeBlocks().forEach(bindCopyButton);
-
-              const observer = new MutationObserver((mutations) => {
-                for (const mutation of mutations) {
-                  mutation.addedNodes.forEach((node) => {
-                    if (!(node instanceof HTMLElement)) return;
-                    if (node.matches?.(CODE_BLOCK_SELECTOR)) {
-                      bindCopyButton(node);
-                    } else {
-                      node
-                        .querySelectorAll?.(CODE_BLOCK_SELECTOR)
-                        .forEach((block) => bindCopyButton(block));
-                    }
-                  });
-                }
-              });
-
-              observer.observe(document.documentElement, {
-                childList: true,
-                subtree: true,
-              });
-            </script>
             <div
               class="expressive-code lineno-sep has-gutter has-indent-guides"
               style="
@@ -631,7 +618,7 @@
               <pre
                 data-language="rust"
                 style="--lnWidth: 2ch"
-              ><code class="language-rust"><div class="ec-header ec-ext" style="background:#f5f5f5"></div><div class="ec-line" style="--lineBg:#f5f5f5"><div class="gutter"><div class="ln">1</div></div><div class="code" data-indent=""><span style="color:#d73a49;">pub</span> <span style="color:#d73a49;">fn</span> <span style="color:#4b69c6;">fibonacci_reccursive</span>(n: <span style="color:#d73a49;">i32</span>) -> <span style="color:#d73a49;">u64</span> {</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:4ch"><div class="gutter"><div class="ln">2</div></div><div class="code" data-indent="    "><span class="indent-overlay" aria-hidden="true"></span>    <span style="color:#d73a49;">if</span> n <span style="color:#d73a49;">&lt;</span> <span style="color:#b60157;">0</span> {</div></div><div class="ec-line highlight has-comment" style="--lineBg:#dff6f2;background:#dff6f2;--ecIndent:8ch"><div class="gutter"><div class="ln">3</div></div><div class="code" data-indent="        "><span class="indent-overlay" aria-hidden="true"></span>        <span style="color:#16718d;">panic!</span>(<span style="color:#298e0d;">"</span><span style="color:#298e0d;">{} is negative!</span><span style="color:#298e0d;">"</span>, n);</div><div class="ec-comment" style="background:#effbf9">> to avoid negative numbers</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:4ch"><div class="gutter"><div class="ln">4</div></div><div class="code" data-indent="    "><span class="indent-overlay" aria-hidden="true"></span>    }</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:4ch"><div class="gutter"><div class="ln">5</div></div><div class="code" data-indent="    "><span class="indent-overlay" aria-hidden="true"></span>    <span style="color:#d73a49;">match</span> n {</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:8ch"><div class="gutter"><div class="ln">6</div></div><div class="code" data-indent="        "><span class="indent-overlay" aria-hidden="true"></span>        <span style="color:#b60157;">0</span> <span style="color:#d73a49;">=></span> <span style="color:#16718d;">panic!</span>(<span style="color:#298e0d;">"</span><span style="color:#298e0d;">zero is not a right argument to fibonacci_reccursive()!</span><span style="color:#298e0d;">"</span>), <span style="color:#b60157;">0</span> <span style="color:#d73a49;">=></span> <span style="color:#16718d;">panic!</span>(<span style="color:#298e0d;">"</span><span style="color:#298e0d;">zero is not a right argument to fibonacci_reccursive()!</span><span style="color:#298e0d;">"</span>),</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:8ch"><div class="gutter"><div class="ln">7</div></div><div class="code" data-indent="        "><span class="indent-overlay" aria-hidden="true"></span>        <span style="color:#b60157;">1</span> <span style="color:#d73a49;">|</span> <span style="color:#b60157;">2</span> <span style="color:#d73a49;">=></span> <span style="color:#b60157;">1</span>,</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:8ch"><div class="gutter"><div class="ln">8</div></div><div class="code" data-indent="        "><span class="indent-overlay" aria-hidden="true"></span>        <span style="color:#b60157;">3</span> <span style="color:#d73a49;">=></span> <span style="color:#b60157;">2</span>,</div></div><div class="ec-line highlight has-comment" style="--lineBg:#dff6f2;background:#dff6f2;--ecIndent:8ch"><div class="gutter"><div class="ln">9</div></div><div class="code" data-indent="        "><span class="indent-overlay" aria-hidden="true"></span>        <span style="color:#d73a49;">_</span> <span style="color:#d73a49;">=></span> <span style="color:#4b69c6;">fibonacci_reccursive</span>(n <span style="color:#d73a49;">-</span> <span style="color:#b60157;">1</span>) <span style="color:#d73a49;">+</span> <span style="color:#4b69c6;">fibonacci_reccursive</span>(n <span style="color:#d73a49;">-</span> <span style="color:#b60157;">2</span>),</div><div class="ec-comment" style="background:#effbf9">> 50 => 12586269025</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:4ch"><div class="gutter"><div class="ln">10</div></div><div class="code" data-indent="    "><span class="indent-overlay" aria-hidden="true"></span>    }</div></div><div class="ec-line" style="--lineBg:#f5f5f5"><div class="gutter"><div class="ln">11</div></div><div class="code" data-indent="">}</div></div><div class="ec-footer ec-ext" style="background:#f5f5f5"></div></code></pre>
+              ><code class="language-rust"><div class="ec-header ec-ext" style="background:#f5f5f5"></div><div class="ec-line" style="--lineBg:#f5f5f5"><div class="gutter"><div class="ln">1</div></div><div class="code" data-indent><span style="color: #d73948">pub</span> <span style="color: #d73948">fn</span> <span style="color: #4b69c6">fibonacci_reccursive</span>(n: <span style="color: #d73948">i32</span>) -> <span style="color: #d73948">u64</span> {</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:4ch"><div class="gutter"><div class="ln">2</div></div><div class="code" data-indent="    "><span class="indent-overlay" aria-hidden="true"></span>    <span style="color: #d73948">if</span> n <span style="color: #d73948">&lt;</span> <span style="color: #b60157">0</span> {</div></div><div class="ec-line highlight has-comment" style="--lineBg:#dff6f2;background:#dff6f2;--ecIndent:8ch"><div class="gutter"><div class="ln">3</div></div><div class="code" data-indent="        "><span class="indent-overlay" aria-hidden="true"></span>        <span style="color: #16718d">panic!</span>(<span style="color: #198810">"</span><span style="color: #198810">{} is negative!</span><span style="color: #198810">"</span>, n);</div><div class="ec-comment" style="background:#effbf9">> to avoid negative numbers</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:4ch"><div class="gutter"><div class="ln">4</div></div><div class="code" data-indent="    "><span class="indent-overlay" aria-hidden="true"></span>    }</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:4ch"><div class="gutter"><div class="ln">5</div></div><div class="code" data-indent="    "><span class="indent-overlay" aria-hidden="true"></span>    <span style="color: #d73948">match</span> n {</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:8ch"><div class="gutter"><div class="ln">6</div></div><div class="code" data-indent="        "><span class="indent-overlay" aria-hidden="true"></span>        <span style="color: #b60157">0</span> <span style="color: #d73948">=></span> <span style="color: #16718d">panic!</span>(<span style="color: #198810">"</span><span style="color: #198810">zero is not a right argument to fibonacci_reccursive()!</span><span style="color: #198810">"</span>), <span style="color: #b60157">0</span> <span style="color: #d73948">=></span> <span style="color: #16718d">panic!</span>(<span style="color: #198810">"</span><span style="color: #198810">zero is not a right argument to fibonacci_reccursive()!</span><span style="color: #198810">"</span>),</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:8ch"><div class="gutter"><div class="ln">7</div></div><div class="code" data-indent="        "><span class="indent-overlay" aria-hidden="true"></span>        <span style="color: #b60157">1</span> <span style="color: #d73948">|</span> <span style="color: #b60157">2</span> <span style="color: #d73948">=></span> <span style="color: #b60157">1</span>,</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:8ch"><div class="gutter"><div class="ln">8</div></div><div class="code" data-indent="        "><span class="indent-overlay" aria-hidden="true"></span>        <span style="color: #b60157">3</span> <span style="color: #d73948">=></span> <span style="color: #b60157">2</span>,</div></div><div class="ec-line highlight has-comment" style="--lineBg:#dff6f2;background:#dff6f2;--ecIndent:8ch"><div class="gutter"><div class="ln">9</div></div><div class="code" data-indent="        "><span class="indent-overlay" aria-hidden="true"></span>        <span style="color: #d73948">_</span> <span style="color: #d73948">=></span> <span style="color: #4b69c6">fibonacci_reccursive</span>(n <span style="color: #d73948">-</span> <span style="color: #b60157">1</span>) <span style="color: #d73948">+</span> <span style="color: #4b69c6">fibonacci_reccursive</span>(n <span style="color: #d73948">-</span> <span style="color: #b60157">2</span>),</div><div class="ec-comment" style="background:#effbf9">> 50 => 12586269025</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:4ch"><div class="gutter"><div class="ln">10</div></div><div class="code" data-indent="    "><span class="indent-overlay" aria-hidden="true"></span>    }</div></div><div class="ec-line" style="--lineBg:#f5f5f5"><div class="gutter"><div class="ln">11</div></div><div class="code" data-indent>}</div></div><div class="ec-footer ec-ext" style="background:#f5f5f5"></div></code></pre>
             </div>
           </div>
         </div>
@@ -711,7 +698,7 @@
                 data-language="rust"
                 class="wrap"
                 style="--lnWidth: 3ch"
-              ><code class="language-rust"><div class="ec-header ec-ext" style="background:#f5f5f5"></div><div class="ec-line" style="--lineBg:#f5f5f5"><div class="gutter"><div class="ln">301</div></div><div class="code" data-indent=""><span style="color:#d73a49;">pub</span> <span style="color:#d73a49;">fn</span> <span style="color:#4b69c6;">fibonacci_reccursive</span>(n: <span style="color:#d73a49;">i32</span>) -> <span style="color:#d73a49;">u64</span> {</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:4ch"><div class="gutter"><div class="ln">302</div></div><div class="code" data-indent="    "><span class="indent-overlay" aria-hidden="true"></span>    <span style="color:#d73a49;">if</span> n <span style="color:#d73a49;">&lt;</span> <span style="color:#b60157;">0</span> {</div></div><div class="ec-line highlight has-comment" style="--lineBg:#dff6f2;background:#dff6f2;--ecIndent:8ch"><div class="gutter"><div class="ln">303</div></div><div class="code" data-indent="        "><span class="indent-overlay" aria-hidden="true"></span>        <span style="color:#16718d;">panic!</span>(<span style="color:#298e0d;">"</span><span style="color:#298e0d;">{} is negative!</span><span style="color:#298e0d;">"</span>, n);</div><div class="ec-comment" style="background:#effbf9">> to avoid negative numbers</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:4ch"><div class="gutter"><div class="ln">304</div></div><div class="code" data-indent="    "><span class="indent-overlay" aria-hidden="true"></span>    }</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:4ch"><div class="gutter"><div class="ln">305</div></div><div class="code" data-indent="    "><span class="indent-overlay" aria-hidden="true"></span>    <span style="color:#d73a49;">match</span> n {</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:8ch"><div class="gutter"><div class="ln">306</div></div><div class="code" data-indent="        "><span class="indent-overlay" aria-hidden="true"></span>        <span style="color:#b60157;">0</span> <span style="color:#d73a49;">=></span> <span style="color:#16718d;">panic!</span>(<span style="color:#298e0d;">"</span><span style="color:#298e0d;">zero is not a right argument to fibonacci_reccursive()!</span><span style="color:#298e0d;">"</span>),</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:8ch"><div class="gutter"><div class="ln">307</div></div><div class="code" data-indent="        "><span class="indent-overlay" aria-hidden="true"></span>        <span style="color:#b60157;">1</span> <span style="color:#d73a49;">|</span> <span style="color:#b60157;">2</span> <span style="color:#d73a49;">=></span> <span style="color:#b60157;">1</span>,</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:8ch"><div class="gutter"><div class="ln">308</div></div><div class="code" data-indent="        "><span class="indent-overlay" aria-hidden="true"></span>        <span style="color:#b60157;">3</span> <span style="color:#d73a49;">=></span> <span style="color:#b60157;">2</span>,</div></div><div class="ec-line highlight has-comment" style="--lineBg:#dff6f2;background:#dff6f2;--ecIndent:8ch"><div class="gutter"><div class="ln">309</div></div><div class="code" data-indent="        "><span class="indent-overlay" aria-hidden="true"></span>        <span style="color:#d73a49;">_</span> <span style="color:#d73a49;">=></span> <span style="color:#4b69c6;">fibonacci_reccursive</span>(n <span style="color:#d73a49;">-</span> <span style="color:#b60157;">1</span>) <span style="color:#d73a49;">+</span> <span style="color:#4b69c6;">fibonacci_reccursive</span>(n <span style="color:#d73a49;">-</span> <span style="color:#b60157;">2</span>),</div><div class="ec-comment" style="background:#effbf9">> 50 => 12586269025</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:4ch"><div class="gutter"><div class="ln">310</div></div><div class="code" data-indent="    "><span class="indent-overlay" aria-hidden="true"></span>    }</div></div><div class="ec-line" style="--lineBg:#f5f5f5"><div class="gutter"><div class="ln">311</div></div><div class="code" data-indent="">}</div></div><div class="ec-footer ec-ext" style="background:#f5f5f5"></div></code></pre>
+              ><code class="language-rust"><div class="ec-header ec-ext" style="background:#f5f5f5"></div><div class="ec-line" style="--lineBg:#f5f5f5"><div class="gutter"><div class="ln">301</div></div><div class="code" data-indent><span style="color: #d73948">pub</span> <span style="color: #d73948">fn</span> <span style="color: #4b69c6">fibonacci_reccursive</span>(n: <span style="color: #d73948">i32</span>) -> <span style="color: #d73948">u64</span> {</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:4ch"><div class="gutter"><div class="ln">302</div></div><div class="code" data-indent="    "><span class="indent-overlay" aria-hidden="true"></span>    <span style="color: #d73948">if</span> n <span style="color: #d73948">&lt;</span> <span style="color: #b60157">0</span> {</div></div><div class="ec-line highlight has-comment" style="--lineBg:#dff6f2;background:#dff6f2;--ecIndent:8ch"><div class="gutter"><div class="ln">303</div></div><div class="code" data-indent="        "><span class="indent-overlay" aria-hidden="true"></span>        <span style="color: #16718d">panic!</span>(<span style="color: #198810">"</span><span style="color: #198810">{} is negative!</span><span style="color: #198810">"</span>, n);</div><div class="ec-comment" style="background:#effbf9">> to avoid negative numbers</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:4ch"><div class="gutter"><div class="ln">304</div></div><div class="code" data-indent="    "><span class="indent-overlay" aria-hidden="true"></span>    }</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:4ch"><div class="gutter"><div class="ln">305</div></div><div class="code" data-indent="    "><span class="indent-overlay" aria-hidden="true"></span>    <span style="color: #d73948">match</span> n {</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:8ch"><div class="gutter"><div class="ln">306</div></div><div class="code" data-indent="        "><span class="indent-overlay" aria-hidden="true"></span>        <span style="color: #b60157">0</span> <span style="color: #d73948">=></span> <span style="color: #16718d">panic!</span>(<span style="color: #198810">"</span><span style="color: #198810">zero is not a right argument to fibonacci_reccursive()!</span><span style="color: #198810">"</span>),</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:8ch"><div class="gutter"><div class="ln">307</div></div><div class="code" data-indent="        "><span class="indent-overlay" aria-hidden="true"></span>        <span style="color: #b60157">1</span> <span style="color: #d73948">|</span> <span style="color: #b60157">2</span> <span style="color: #d73948">=></span> <span style="color: #b60157">1</span>,</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:8ch"><div class="gutter"><div class="ln">308</div></div><div class="code" data-indent="        "><span class="indent-overlay" aria-hidden="true"></span>        <span style="color: #b60157">3</span> <span style="color: #d73948">=></span> <span style="color: #b60157">2</span>,</div></div><div class="ec-line highlight has-comment" style="--lineBg:#dff6f2;background:#dff6f2;--ecIndent:8ch"><div class="gutter"><div class="ln">309</div></div><div class="code" data-indent="        "><span class="indent-overlay" aria-hidden="true"></span>        <span style="color: #d73948">_</span> <span style="color: #d73948">=></span> <span style="color: #4b69c6">fibonacci_reccursive</span>(n <span style="color: #d73948">-</span> <span style="color: #b60157">1</span>) <span style="color: #d73948">+</span> <span style="color: #4b69c6">fibonacci_reccursive</span>(n <span style="color: #d73948">-</span> <span style="color: #b60157">2</span>),</div><div class="ec-comment" style="background:#effbf9">> 50 => 12586269025</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:4ch"><div class="gutter"><div class="ln">310</div></div><div class="code" data-indent="    "><span class="indent-overlay" aria-hidden="true"></span>    }</div></div><div class="ec-line" style="--lineBg:#f5f5f5"><div class="gutter"><div class="ln">311</div></div><div class="code" data-indent>}</div></div><div class="ec-footer ec-ext" style="background:#f5f5f5"></div></code></pre>
             </div>
           </div>
         </div>
@@ -785,7 +772,7 @@
                 data-language="typst"
                 class="wrap"
                 style="--lnWidth: 2ch"
-              ><code class="language-typst"><div class="ec-header" style="background:#f5f5f5">Test</div><div class="ec-line" style="--lineBg:#f5f5f5"><div class="gutter"><div class="ln">1</div></div><div class="code" data-indent=""><strong>=</strong><strong> </strong><strong>Fibonacci Reccursive Function</strong></div></div><div class="ec-line" style="--lineBg:#f5f5f5"><div class="gutter"><div class="ln">2</div></div><div class="code" data-indent=""></div></div><div class="ec-line highlight has-comment" style="--lineBg:#dff6f2;background:#dff6f2"><div class="gutter"><div class="ln">3</div></div><div class="code" data-indent="">This function calculates the Fibonacci number at the given index using a recursive approach.</div><div class="ec-comment" style="background:#effbf9">> to avoid negative numbers</div></div><div class="ec-footer ec-ext" style="background:#f5f5f5"></div></code></pre>
+              ><code class="language-typst"><div class="ec-header" style="background:#f5f5f5">Test</div><div class="ec-line" style="--lineBg:#f5f5f5"><div class="gutter"><div class="ln">1</div></div><div class="code" data-indent><span style="text-decoration: underline"><strong>=</strong></span><span style="text-decoration: underline"><strong> </strong></span><span style="text-decoration: underline"><strong>Fibonacci Reccursive Function</strong></span></div></div><div class="ec-line" style="--lineBg:#f5f5f5"><div class="gutter"><div class="ln">2</div></div><div class="code" data-indent></div></div><div class="ec-line highlight has-comment" style="--lineBg:#dff6f2;background:#dff6f2"><div class="gutter"><div class="ln">3</div></div><div class="code" data-indent>This function calculates the Fibonacci number at the given index using a recursive approach.</div><div class="ec-comment" style="background:#effbf9">> to avoid negative numbers</div></div><div class="ec-footer ec-ext" style="background:#f5f5f5"></div></code></pre>
             </div>
           </div>
         </div>
@@ -850,7 +837,7 @@
                 data-language="python"
                 class="wrap"
                 style="--lnWidth: 2ch"
-              ><code class="language-python"><div class="ec-header ec-ext" style="background:#f5f5f5"></div><div class="ec-line highlight" style="--lineBg:#f6dad8;background:#f6dad8"><div class="gutter"><div class="ln">1</div></div><div class="code" data-indent=""><span style="color:#d73a49;">-</span> device <span style="color:#d73a49;">=</span> <span style="color:#298e0d;">"</span><span style="color:#298e0d;">cuda</span><span style="color:#298e0d;">"</span></div></div><div class="ec-line highlight" style="--lineBg:#d2e4d3;background:#d2e4d3"><div class="gutter"><div class="ln">2</div></div><div class="code" data-indent=""><span style="color:#d73a49;">+</span> device <span style="color:#d73a49;">=</span> accelerator.device</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:2ch"><div class="gutter"><div class="ln">3</div></div><div class="code" data-indent="  ">  model.<span style="color:#4b69c6;">to</span>(device)</div></div><div class="ec-footer ec-ext" style="background:#f5f5f5"></div></code></pre>
+              ><code class="language-python"><div class="ec-header ec-ext" style="background:#f5f5f5"></div><div class="ec-line highlight" style="--lineBg:#f6dad8;background:#f6dad8"><div class="gutter"><div class="ln">1</div></div><div class="code" data-indent><span style="color: #d73948">-</span> device <span style="color: #d73948">=</span> <span style="color: #198810">"</span><span style="color: #198810">cuda</span><span style="color: #198810">"</span></div></div><div class="ec-line highlight" style="--lineBg:#d2e4d3;background:#d2e4d3"><div class="gutter"><div class="ln">2</div></div><div class="code" data-indent><span style="color: #d73948">+</span> device <span style="color: #d73948">=</span> accelerator.device</div></div><div class="ec-line" style="--lineBg:#f5f5f5;--ecIndent:2ch"><div class="gutter"><div class="ln">3</div></div><div class="code" data-indent="  ">  model.<span style="color: #4b69c6">to</span>(device)</div></div><div class="ec-footer ec-ext" style="background:#f5f5f5"></div></code></pre>
             </div>
           </div>
         </div>
