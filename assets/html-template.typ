@@ -1,4 +1,4 @@
-#import "/src/lib.typ": zebraw
+#import "/src/lib.typ": zebraw, zebraw-init
 
 #let _exp(left, right) = {
   block(
@@ -33,7 +33,7 @@
     "script",
     attrs: (src: "https://unpkg.com/@tailwindcss/browser@4"),
   )
-  
+
   html.elem("style", read("template-styles.css"))
 
   html.elem(
@@ -41,6 +41,7 @@
     attrs: (class: "container xl:max-w-5xl mx-auto p-4"),
 
     {
+      show: zebraw-init
       html.elem(
         "h1",
         attrs: (
