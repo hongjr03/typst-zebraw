@@ -638,6 +638,33 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 
 请参阅 [example-html.typ](example-html.typ) 或 [GitHub Pages](https://hongjr03.github.io/typst-zebraw/) 以获取更多信息。
 
+要启用 HTML 导出，您需要在文档开头使用 `zebraw-init` 初始化 HTML 样式和脚本：
+
+````typ
+#import "@preview/zebraw:0.6.0": zebraw-init
+#show: zebraw-init
+````
+
+您可以通过传递 `copy-button` 参数来控制是否包含复制按钮脚本：
+
+````typ
+#show: zebraw-init.with(copy-button: false)  // 禁用复制按钮
+````
+
+在代码块中，您可以使用 `copy-button` 参数按块控制复制按钮的显示：
+
+````typ
+#zebraw(
+  copy-button: false,  // 隐藏此块的复制按钮
+  ```typ
+  #grid(
+    columns: (1fr, 1fr),
+    [Hello], [world!],
+  )
+  ```
+)
+````
+
 ### 自定义
 
 在您的文档中有三种自定义代码块的方式：

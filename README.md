@@ -638,6 +638,33 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 
 See [example-html.typ](example-html.typ) or [GitHub Pages](https://hongjr03.github.io/typst-zebraw/) for more information.
 
+To enable HTML export, you need to initialize the HTML styles and scripts using `zebraw-init` at the beginning of your document:
+
+````typ
+#import "@preview/zebraw:0.6.0": zebraw-init
+#show: zebraw-init
+````
+
+You can control whether to include the copy button script by passing the `copy-button` parameter:
+
+````typ
+#show: zebraw-init.with(copy-button: false)  // Disable copy button
+````
+
+In your code blocks, you can control the copy button display per block with the `copy-button` parameter:
+
+````typ
+#zebraw(
+  copy-button: false,  // Hide copy button for this block
+  ```typ
+  #grid(
+    columns: (1fr, 1fr),
+    [Hello], [world!],
+  )
+  ```
+)
+````
+
 ### Customization
 
 There are three ways to customize code blocks in your document:
