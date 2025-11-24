@@ -278,6 +278,14 @@
     background: var(--lineBg);
   }
 
+  .expressive-code:not(.has-gutter) .ec-line {
+    grid-template-columns: 1fr;
+  }
+
+  .expressive-code:not(.has-gutter) .ec-line .code {
+    padding-inline: var(--ec-codePadInl, 1.35rem);
+  }
+
   .expressive-code .ec-line .gutter {
     grid-area: gutter;
     color: var(--ec-gtrFg, rgba(148, 163, 184, 0.8));
