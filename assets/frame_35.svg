@@ -7,7 +7,7 @@
                         <g class="typst-group">
                             <g>
                                 <g transform="translate(-0 -0)">
-                                    <path class="typst-shape" fill="#effbf9" fill-rule="nonzero" d="M 0 2.992 C 0 1.3395641 1.3395641 0 2.992 0 L 30.068924 0 C 31.72136 0 33.060925 1.3395641 33.060925 2.992 L 33.060925 17.10359 L 0 17.10359 Z "/>
+                                    <path class="typst-shape" fill="#39cccc" fill-rule="nonzero" d="M 0 2.992 C 0 1.3395641 1.3395641 0 2.992 0 L 30.068924 0 C 31.72136 0 33.060925 1.3395641 33.060925 2.992 L 33.060925 17.10359 L 0 17.10359 Z "/>
                                 </g>
                                 <g transform="translate(2.992000000000001 9.206153846153848)">
                                     <g class="typst-text" transform="scale(1, -1)">
@@ -25,7 +25,7 @@
                         <path class="typst-shape" fill="#f5f5f5" fill-rule="nonzero" d="M 0 2.992 C 0 1.3395641 1.3395641 0 2.992 0 L 217.008 0 C 218.66043 0 220 1.3395641 220 2.992 L 220 51.784615 C 220 53.43705 218.66043 54.776615 217.008 54.776615 L 2.992 54.776615 C 1.3395641 54.776615 0 53.43705 0 51.784615 Z "/>
                     </g>
                     <g transform="translate(0 16.5)">
-                        <g class="typst-group" clip-path="url(#c50E3B8F779EAAC59CC945E3D3856C736)">
+                        <g class="typst-group" clip-path="url(#cEBDE389D7DA267EBA043E16C40FB015B)">
                             <g>
                                 <g transform="translate(0 0)">
                                     <g class="typst-group">
@@ -452,7 +452,7 @@
         </symbol>
     </defs>
     <defs id="clip-path">
-        <clipPath id="c50E3B8F779EAAC59CC945E3D3856C736">
+        <clipPath id="cEBDE389D7DA267EBA043E16C40FB015B">
             <path d="M 0 2.992 C 0 1.3395641 1.3395641 0 2.992 0 L 217.008 0 C 218.66043 0 220 1.3395641 220 2.992 L 220 51.784615 C 220 53.43705 218.66043 54.776615 217.008 54.776615 L 2.992 54.776615 C 1.3395641 54.776615 0 53.43705 0 51.784615 Z "/>
         </clipPath>
     </defs>
