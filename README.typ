@@ -155,7 +155,7 @@ The `zebraw` function provides a variety of parameters to customize the appearan
 - *Customization Options*
   - Custom colors for background, highlights, and comments
   - Custom fonts for different elements
-  - Customizable insets
+  - Customizable insets and stroke
   - Custom themes
 - *Export Options*
   - Experimental HTML export
@@ -855,6 +855,24 @@ Set the language tab background color with the `lang-color` parameter:
   lang: true,
   lang-color: teal,
   ```typst
+  #grid(
+    columns: (1fr, 1fr),
+    [Hello], [world!],
+  )
+  ```
+)
+````)
+
+=== Stroke
+
+Add a stroke to your code blocks, e.g. to get a solid border around striped lines:
+
+#context preview(````typ
+#zebraw(
+  background-color: (luma(255), luma(245)),
+  extend: false,
+  stroke: 2pt+luma(245),
+  ```typ
   #grid(
     columns: (1fr, 1fr),
     [Hello], [world!],
