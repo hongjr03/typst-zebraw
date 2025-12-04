@@ -203,7 +203,7 @@
             radius,
             extend,
             background-color,
-            lines.len(),
+            lines.filter(l => l.type != "comment").len(),
           )
           if footer-cell != none { (grid.footer(repeat: false, footer-cell),) } else { () }
         },
