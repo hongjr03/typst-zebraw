@@ -123,15 +123,17 @@
   indentation-state.update(indentation)
   fast-preview-state.update(fast-preview)
 
-  if counter("zebraw-html-styles").get().last() == 0 {
-    import "html.typ": zebraw-html-styles
-    zebraw-html-styles()
-    counter("zebraw-html-styles").step()
-  }
-  if counter("zebraw-html-clipboard").get().last() == 0 and copy-button {
-    import "html.typ": zebraw-html-clipboard-copy
-    zebraw-html-clipboard-copy()
-    counter("zebraw-html-clipboard").step()
+  if "target" in dictionary(std) and std.target() == "html" {
+    if counter("zebraw-html-styles").get().last() == 0 {
+      import "html.typ": zebraw-html-styles
+      zebraw-html-styles()
+      counter("zebraw-html-styles").step()
+    }
+    if counter("zebraw-html-clipboard").get().last() == 0 and copy-button {
+      import "html.typ": zebraw-html-clipboard-copy
+      zebraw-html-clipboard-copy()
+      counter("zebraw-html-clipboard").step()
+    }
   }
 
   body
