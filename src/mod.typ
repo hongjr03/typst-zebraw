@@ -22,6 +22,8 @@
   highlight-lines: (),
   numbering-offset: 0,
   line-range: (0, none),
+  smart-skip: true,
+  skip-text: "{} lines skipped",
   header: none,
   footer: none,
   it,
@@ -101,6 +103,8 @@
     line-range: line-range,
     hanging-indent: hanging-indent,
     line-colors: line-colors, // Pass line-specific colors
+    smart-skip: smart-skip, // Pass smart-skip parameter
+    skip-text: skip-text, // Pass skip-text parameter
   )
 
   // Render language tab if needed
@@ -621,6 +625,18 @@
   ///
   /// -> array | dictionary
   line-range: (1, none),
+  /// Whether to show a separator between ranges when using multiple ranges.
+  /// When set to `true`, skipped lines between ranges will be indicated.
+  /// Defaults to `true`.
+  ///
+  /// -> boolean
+  smart-skip: true,
+  /// Template text for the skip separator. Use `{}` as a placeholder for the line count.
+  /// For example: `"{} lines skipped"`, `"... {} lines ..."`, or `"略过 {} 行"`.
+  /// Can also be content instead of a string.
+  ///
+  /// -> string | content
+  skip-text: "{} lines skipped",
   /// (Only for HTML) The width of the code block.
   /// -> length | relative
   block-width: 42em,
@@ -663,6 +679,8 @@
       header: header,
       footer: footer,
       line-range: line-range,
+      smart-skip: smart-skip,
+      skip-text: skip-text,
       wrap: wrap,
       block-width: block-width,
       numbering-separator: numbering-separator,
@@ -689,6 +707,8 @@
       header: header,
       footer: footer,
       line-range: line-range,
+      smart-skip: smart-skip,
+      skip-text: skip-text,
       wrap: wrap,
       block-width: block-width,
       numbering-separator: numbering-separator,
@@ -716,6 +736,8 @@
       highlight-lines: highlight-lines,
       numbering-offset: numbering-offset,
       line-range: line-range,
+      smart-skip: smart-skip,
+      skip-text: skip-text,
       header: header,
       footer: footer,
       numbering-separator: numbering-separator,

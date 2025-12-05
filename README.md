@@ -190,6 +190,132 @@ When `keep-offset` is set to `true`, line numbers maintain their original values
 
 ![typst-frame](assets/frame_8.svg)
 
+##### Multiple Ranges
+
+The `line-range` parameter also supports multiple ranges, allowing you to display non-contiguous sections of code. This is useful for showing only the relevant parts of a larger code block.
+
+To specify multiple ranges, pass an array of range specifications. Each range can be:
+
+- A simple array `(start, end)`
+- A dictionary `(range: (start, end), keep-offset: bool)`
+
+When multiple ranges are used, a separator line is automatically inserted between ranges showing how many lines were skipped. You can disable this by setting `smart-skip: false`.
+
+````typ
+#let code = ```python
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+print(fibonacci(10))
+result = fibonacci(20)
+print(f"Result: {result}")
+```
+
+// Show lines 1-3 and 6-8
+#zebraw(
+  line-range: ((1, 3), (6, 8)),
+  code
+)
+````
+
+![typst-frame](assets/frame_9.svg)
+
+You can mix simple and dictionary range specifications:
+
+````typ
+#let code = ```python
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+print(fibonacci(10))
+result = fibonacci(20)
+print(f"Result: {result}")
+```
+
+#zebraw(
+  line-range: (
+    (range: (1, 3), keep-offset: true),
+    (range: (6, 8), keep-offset: true),
+  ),
+  code
+)
+````
+
+![typst-frame](assets/frame_10.svg)
+
+To disable the automatic separator between ranges:
+
+````typ
+#let code = ```python
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+print(fibonacci(10))
+result = fibonacci(20)
+print(f"Result: {result}")
+```
+
+#zebraw(
+  line-range: ((1, 3), (6, 8)),
+  smart-skip: false,
+  code
+)
+````
+
+![typst-frame](assets/frame_11.svg)
+
+You can customize the separator text using the `skip-text` parameter. Use `{}` as a placeholder for the line count:
+
+````typ
+#let code = ```python
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+print(fibonacci(10))
+result = fibonacci(20)
+print(f"Result: {result}")
+```
+
+#zebraw(
+  line-range: ((1, 3), (6, 8)),
+  skip-text: "... {} lines ...",
+  code
+)
+````
+
+![typst-frame](assets/frame_12.svg)
+
+The `skip-text` parameter can also be content instead of a string:
+
+````typ
+#let code = ```python
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+print(fibonacci(10))
+result = fibonacci(20)
+print(f"Result: {result}")
+```
+
+#zebraw(
+  line-range: ((1, 3), (6, 8)),
+  skip-text: strong(emph[Some lines omitted]),
+  code
+)
+````
+
+![typst-frame](assets/frame_13.svg)
+
 #### Line Highlighting
 
 Highlight specific lines in the code block by passing the `highlight-lines` parameter to the `zebraw` function. The `highlight-lines` parameter accepts either a single line number or an array of line numbers.
@@ -236,7 +362,7 @@ Highlight specific lines in the code block by passing the `highlight-lines` para
 )
 ````
 
-![typst-frame](assets/frame_9.svg)
+![typst-frame](assets/frame_14.svg)
 
 #### Comments
 
@@ -270,7 +396,7 @@ Add explanatory comments to highlighted lines by passing an array of line number
 )
 ````
 
-![typst-frame](assets/frame_10.svg)
+![typst-frame](assets/frame_15.svg)
 
 Comments begin with a flag character, which is `">"` by default. Change this flag by setting the `comment-flag` parameter:
 
@@ -299,7 +425,7 @@ Comments begin with a flag character, which is `">"` by default. Change this fla
 )
 ````
 
-![typst-frame](assets/frame_11.svg)
+![typst-frame](assets/frame_16.svg)
 
 To disable the flag feature entirely, pass an empty string `""` to the `comment-flag` parameter (this also disables comment indentation):
 
@@ -327,7 +453,7 @@ To disable the flag feature entirely, pass an empty string `""` to the `comment-
 )
 ````
 
-![typst-frame](assets/frame_12.svg)
+![typst-frame](assets/frame_17.svg)
 
 #### Multiple Highlight Colors
 
@@ -383,7 +509,7 @@ You can also mix per-line colors with a default `highlight-color`. Lines without
 )
 ````
 
-![typst-frame](assets/frame_13.svg)
+![typst-frame](assets/frame_18.svg)
 
 When combining colors with comments, the color should come before the comment in the tuple:
 
@@ -401,7 +527,7 @@ When combining colors with comments, the color should come before the comment in
 )
 ````
 
-![typst-frame](assets/frame_14.svg)
+![typst-frame](assets/frame_19.svg)
 
 #### Headers and Footers
 
@@ -433,7 +559,7 @@ You can add headers and footers to code blocks. One approach is to use special k
 )
 ````
 
-![typst-frame](assets/frame_15.svg)
+![typst-frame](assets/frame_20.svg)
 
 Alternatively, use the dedicated `header` and `footer` parameters for cleaner code:
 
@@ -462,7 +588,7 @@ Alternatively, use the dedicated `header` and `footer` parameters for cleaner co
 )
 ````
 
-![typst-frame](assets/frame_16.svg)
+![typst-frame](assets/frame_21.svg)
 
 #### Language Tab
 
@@ -480,7 +606,7 @@ Display a floating language identifier tab in the top-right corner of the code b
 )
 ````
 
-![typst-frame](assets/frame_17.svg)
+![typst-frame](assets/frame_22.svg)
 
 Customize the language display by passing a string or content to the `lang` parameter:
 
@@ -496,7 +622,7 @@ Customize the language display by passing a string or content to the `lang` para
 )
 ````
 
-![typst-frame](assets/frame_18.svg)
+![typst-frame](assets/frame_23.svg)
 
 #### Indentation Lines, Hanging Indentation and Fast Preview
 
@@ -528,7 +654,7 @@ Display indentation guides by passing a positive integer to the `indentation` pa
 )
 ````
 
-![typst-frame](assets/frame_19.svg)
+![typst-frame](assets/frame_24.svg)
 
 Enable hanging indentation by setting `hanging-indent` to `true`:
 
@@ -558,7 +684,7 @@ Enable hanging indentation by setting `hanging-indent` to `true`:
 )
 ````
 
-![typst-frame](assets/frame_20.svg)
+![typst-frame](assets/frame_25.svg)
 
 Indentation lines can slow down preview performance. For faster previews, enable fast preview mode by passing `true` to the `fast-preview` parameter in `zebraw-init` or by using `zebraw-fast-preview` in the CLI. This renders indentation lines as simple `|` characters:
 
@@ -588,7 +714,7 @@ Indentation lines can slow down preview performance. For faster previews, enable
 )
 ````
 
-![typst-frame](assets/frame_21.svg)
+![typst-frame](assets/frame_26.svg)
 
 #### Themes
 
@@ -612,7 +738,7 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 ```
 ````
 
-![typst-frame](assets/frame_22.svg)
+![typst-frame](assets/frame_27.svg)
 
 ````typ
 #show: zebraw.with(..zebraw-themes.zebra-reverse)
@@ -632,7 +758,7 @@ pub fn fibonacci_reccursive(n: i32) -> u64 {
 ```
 ````
 
-![typst-frame](assets/frame_23.svg)
+![typst-frame](assets/frame_28.svg)
 
 #### (Experimental) HTML Export
 
@@ -689,7 +815,7 @@ Customize the padding around each code line(numberings are not affected) by pass
 )
 ````
 
-![typst-frame](assets/frame_24.svg)
+![typst-frame](assets/frame_29.svg)
 
 #### Radius
 
@@ -707,7 +833,7 @@ Customize the corner radius of code blocks independently from the inset by passi
 )
 ````
 
-![typst-frame](assets/frame_25.svg)
+![typst-frame](assets/frame_30.svg)
 
 You can also set `radius: 0pt` for sharp corners:
 
@@ -723,7 +849,7 @@ You can also set `radius: 0pt` for sharp corners:
 )
 ````
 
-![typst-frame](assets/frame_26.svg)
+![typst-frame](assets/frame_31.svg)
 
 #### Colors
 
@@ -751,7 +877,7 @@ Customize the background color with a single color or an array of alternating co
 )
 ````
 
-![typst-frame](assets/frame_27.svg)
+![typst-frame](assets/frame_32.svg)
 
 Set the highlight color for marked lines with the `highlight-color` parameter:
 
@@ -766,7 +892,7 @@ Set the highlight color for marked lines with the `highlight-color` parameter:
 )
 ````
 
-![typst-frame](assets/frame_28.svg)
+![typst-frame](assets/frame_33.svg)
 
 Change the comment background color with the `comment-color` parameter:
 
@@ -785,7 +911,7 @@ Change the comment background color with the `comment-color` parameter:
 )
 ````
 
-![typst-frame](assets/frame_29.svg)
+![typst-frame](assets/frame_34.svg)
 
 Set the language tab background color with the `lang-color` parameter:
 
@@ -802,7 +928,7 @@ Set the language tab background color with the `lang-color` parameter:
 )
 ````
 
-![typst-frame](assets/frame_30.svg)
+![typst-frame](assets/frame_35.svg)
 
 #### Font
 
@@ -830,7 +956,7 @@ If no custom `lang-font-args` are provided, language tabs inherit the comment fo
 )
 ````
 
-![typst-frame](assets/frame_31.svg)
+![typst-frame](assets/frame_36.svg)
 
 Example with custom language tab styling:
 
@@ -859,7 +985,7 @@ Example with custom language tab styling:
 )
 ````
 
-![typst-frame](assets/frame_32.svg)
+![typst-frame](assets/frame_37.svg)
 
 #### Extend
 
@@ -877,7 +1003,7 @@ Extend at vertical is enabled at default. When there's header or footer it will 
 )
 ````
 
-![typst-frame](assets/frame_33.svg)
+![typst-frame](assets/frame_38.svg)
 
 ### License
 

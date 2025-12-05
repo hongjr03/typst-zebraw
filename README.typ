@@ -263,6 +263,121 @@ When `keep-offset` is set to `true`, line numbers maintain their original values
 )
 ````)
 
+==== Multiple Ranges
+
+The `line-range` parameter also supports multiple ranges, allowing you to display non-contiguous sections of code. This is useful for showing only the relevant parts of a larger code block.
+
+To specify multiple ranges, pass an array of range specifications. Each range can be:
+- A simple array `(start, end)` 
+- A dictionary `(range: (start, end), keep-offset: bool)`
+
+When multiple ranges are used, a separator line is automatically inserted between ranges showing how many lines were skipped. You can disable this by setting `smart-skip: false`.
+
+#context preview(````typ
+#let code = ```python
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+print(fibonacci(10))
+result = fibonacci(20)
+print(f"Result: {result}")
+```
+
+// Show lines 1-3 and 6-8
+#zebraw(
+  line-range: ((1, 3), (6, 8)),
+  code
+)
+````)
+
+You can mix simple and dictionary range specifications:
+
+#context preview(````typ
+#let code = ```python
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+print(fibonacci(10))
+result = fibonacci(20)
+print(f"Result: {result}")
+```
+
+#zebraw(
+  line-range: (
+    (range: (1, 3), keep-offset: true),
+    (range: (6, 8), keep-offset: true),
+  ),
+  code
+)
+````)
+
+To disable the automatic separator between ranges:
+
+#context preview(````typ
+#let code = ```python
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+print(fibonacci(10))
+result = fibonacci(20)
+print(f"Result: {result}")
+```
+
+#zebraw(
+  line-range: ((1, 3), (6, 8)),
+  smart-skip: false,
+  code
+)
+````)
+
+You can customize the separator text using the `skip-text` parameter. Use `{}` as a placeholder for the line count:
+
+#context preview(````typ
+#let code = ```python
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+print(fibonacci(10))
+result = fibonacci(20)
+print(f"Result: {result}")
+```
+
+#zebraw(
+  line-range: ((1, 3), (6, 8)),
+  skip-text: "... {} lines ...",
+  code
+)
+````)
+
+The `skip-text` parameter can also be content instead of a string:
+
+#context preview(````typ
+#let code = ```python
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+print(fibonacci(10))
+result = fibonacci(20)
+print(f"Result: {result}")
+```
+
+#zebraw(
+  line-range: ((1, 3), (6, 8)),
+  skip-text: strong(emph[Some lines omitted]),
+  code
+)
+````)
+
 === Line Highlighting
 
 Highlight specific lines in the code block by passing the `highlight-lines` parameter to the `zebraw` function. The `highlight-lines` parameter accepts either a single line number or an array of line numbers.
