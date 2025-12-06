@@ -6,6 +6,7 @@
   numbering: none,
   inset: none,
   radius: none,
+  stroke: none,
   background-color: none,
   highlight-color: none,
   comment-color: none,
@@ -33,6 +34,7 @@
     numbering: numbering,
     inset: inset,
     radius: radius,
+    stroke: stroke,
     background-color: background-color,
     highlight-color: highlight-color,
     comment-color: comment-color,
@@ -52,6 +54,7 @@
   let numbering = args.numbering
   let inset = args.inset
   let radius = args.radius
+  let stroke = args.stroke
   let background-color = args.background-color
   let highlight-color = args.highlight-color
   let comment-color = args.comment-color
@@ -107,7 +110,7 @@
   render-lang-tab(has-lang, lang, lang-color, lang-font-args, inset, radius, it)
 
   // Render the code block
-  block(breakable: true, radius: radius, clip: true, fill: background-color-at-index(background-color, 0), {
+  block(breakable: true, radius: radius, stroke: stroke, clip: true, fill: background-color-at-index(background-color, 0), {
     context layout(code-block-size => {
       // Calculate line heights for consistent rendering
       let last-line = if lines.len() > 2 {
@@ -318,6 +321,24 @@
   /// )
   /// -> length
   radius: none,
+  /// The stroke with which to surround the code block.
+  ///
+  /// #example(
+  /// ````typ
+  /// #zebraw(
+  ///   stroke: 2pt+luma(235),
+  ///   ```typ
+  ///   #grid(
+  ///     columns: (1fr, 1fr),
+  ///     [Hello], [world!],
+  ///   )
+  ///   ```
+  /// )
+  /// ````,
+  /// scale-preview: 100%,
+  /// )
+  /// -> stroke
+  stroke: none,
   /// The background color of the block and normal lines.
   ///
   /// #example(
@@ -646,6 +667,7 @@
       numbering: numbering,
       inset: inset,
       radius: radius,
+      stroke: stroke,
       background-color: background-color,
       highlight-color: highlight-color,
       comment-color: comment-color,
@@ -672,6 +694,7 @@
       numbering: numbering,
       inset: inset,
       radius: radius,
+      stroke: stroke,
       background-color: background-color,
       highlight-color: highlight-color,
       comment-color: comment-color,
@@ -701,6 +724,7 @@
       numbering: numbering,
       inset: inset,
       radius: radius,
+      stroke: stroke,
       background-color: background-color,
       highlight-color: highlight-color,
       comment-color: comment-color,
