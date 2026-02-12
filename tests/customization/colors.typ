@@ -22,6 +22,22 @@
 )
 
 #zebraw(
+  background-color: (luma(235), luma(245), luma(255), luma(245)),
+  line-range: (2, 6),
+  highlight-lines: (
+    (4, [...]),
+  ),
+  ```typ
+  ...
+  #grid(
+    columns: (1fr, 1fr),
+    [Hello], [world!],
+  )
+  ...
+  ```,
+)
+
+#zebraw(
   highlight-lines: 1,
   highlight-color: blue.lighten(90%),
   ```text
