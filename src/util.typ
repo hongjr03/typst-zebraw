@@ -36,23 +36,28 @@
   numbering-font-args: (:),
   numbering-separator: 0.3em,
 ) = {
-  grid.cell(
-    fill: line.fill,
-    block(
-      width: if not is-line-number { 100% } else { numbering-width },
-      inset: inset,
-      {
-        if is-line-number {
-          // Line number rendering
+  if is-line-number {
+    pdf.artifact(grid.cell(
+      fill: line.fill,
+      block(
+        width: numbering-width,
+        inset: inset,
+        {
           set text(..numbering-font-args)
           (line.number,).flatten().map(num => box([#num])).join(h(numbering-separator, weak: true))
-        } else {
-          // Code line rendering with optional indentation processing
-          indentation-render-line(line, height, hanging-indent, indentation, inset, fast-preview)
-        }
-      },
-    ),
-  )
+        },
+      ),
+    ))
+  } else {
+    grid.cell(
+      fill: line.fill,
+      block(
+        width: 100%,
+        inset: inset,
+        indentation-render-line(line, height, hanging-indent, indentation, inset, fast-preview),
+      ),
+    )
+  }
 }
 
 /// Create a header section for the code block
