@@ -112,7 +112,7 @@ Zebraw 是一个轻量级且快速的包，用于在 Typst 中显示带有行号
 
 == 快速开始
 
-使用 ```typ #import "@preview/zebraw:0.6.1": *``` 导入 `zebraw` 包，然后添加 ```typ #show: zebraw``` 以最简单的方式开始使用 zebraw。
+使用 ```typ #import "@preview/zebraw:0.6.2": *``` 导入 `zebraw` 包，然后添加 ```typ #show: zebraw``` 以最简单的方式开始使用 zebraw。
 
 #context preview(````typ
 #import "@preview/zebraw:0.6.1": *
