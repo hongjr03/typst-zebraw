@@ -1,0 +1,130 @@
+name: Package, release, publish
+
+on:
+  push:
+    tags: [ v* ]
+
+env:
+  REGISTRY_FORGE: https://github.com
+  REGISTRY_REPO: typst/packages
+  REGISTRY_FORK: hongjr03/packages
+  PATH_PREFIX: packages/preview
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    outputs:
+      pkg-name: ${{ steps.meta.outputs.pkg-name }}
+      pkg-version: ${{ steps.meta.outputs.pkg-version }}
+      pkg-id: ${{ steps.meta.outputs.pkg-id }}
+      git-user-name: ${{ steps.meta.outputs.git-user-name }}
+      git-user-email: ${{ steps.meta.outputs.git-user-email }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install just
+        uses: taiki-e/install-action@v2
+        with:
+          tool: just
+
+      - name: Determine and check package metadata
+        id: meta
+        run: |
+          . scripts/setup
+
+          if [[ "${GITHUB_REF_NAME}" != "v${VERSION}" ]]; then
+            echo "package version ${VERSION} does not match release tag ${GITHUB_REF_NAME}" >&2
+            exit 1
+          fi
+
+          echo "pkg-name=${PKG_PREFIX}" >> "${GITHUB_OUTPUT}"
+          echo "pkg-version=${VERSION}" >> "${GITHUB_OUTPUT}"
+          echo "pkg-id=${PKG_PREFIX}-${VERSION}" >> "${GITHUB_OUTPUT}"
+          echo "git-user-name=$(git log -1 --pretty=format:'%an')" >> "${GITHUB_OUTPUT}"
+          echo "git-user-email=$(git log -1 --pretty=format:'%ae')" >> "${GITHUB_OUTPUT}"
+
+      - name: Create archives
+        env:
+          PKG_NAME: ${{ steps.meta.outputs.pkg-name }}
+          PKG_VERSION: ${{ steps.meta.outputs.pkg-version }}
+        run: |
+          just package out
+          mkdir dist
+          cd out
+          zip -r "../dist/${PKG_NAME}-${PKG_VERSION}.zip" "${PKG_NAME}"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.meta.outputs.pkg-id }}
+          path: dist/*
+          retention-days: 3
+
+  release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: ${{ needs.build.outputs.pkg-id }}
+
+      - name: Add artifacts to release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: ${{ needs.build.outputs.pkg-id }}/*
+
+  publish:
+    name: Publish to registry fork
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout package registry
+        uses: actions/checkout@v4
+        with:
+          github-server-url: ${{ env.REGISTRY_FORGE }}
+          repository: ${{ env.REGISTRY_REPO }}
+          token: ${{ secrets.REGISTRY_TOKEN }}
+          path: package-registry
+          sparse-checkout: ${{ env.PATH_PREFIX }}/${{ needs.build.outputs.pkg-name }}/${{ needs.build.outputs.pkg-version }}
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: ${{ needs.build.outputs.pkg-id }}
+
+      - name: Commit package release
+        env:
+          PKG_NAME: ${{ needs.build.outputs.pkg-name }}
+          PKG_VERSION: ${{ needs.build.outputs.pkg-version }}
+          PKG_ID: ${{ needs.build.outputs.pkg-id }}
+          GIT_USER_NAME: ${{ needs.build.outputs.git-user-name }}
+          GIT_USER_EMAIL: ${{ needs.build.outputs.git-user-email }}
+        run: |
+          unzip "${PKG_ID}/${PKG_ID}.zip" -d "${PKG_ID}"
+          mkdir -p "package-registry/${PATH_PREFIX}/${PKG_NAME}"
+          mv "${PKG_ID}/${PKG_NAME}/${PKG_VERSION}" "package-registry/${PATH_PREFIX}/${PKG_NAME}"
+          rmdir "${PKG_ID}/${PKG_NAME}"
+
+          cd package-registry
+          git config user.name "${GIT_USER_NAME}"
+          git config user.email "${GIT_USER_EMAIL}"
+          git checkout -b "${PKG_ID}"
+          git add .
+          git commit -m "${PKG_NAME}:${PKG_VERSION}"
+
+      - name: Push package release to fork
+        env:
+          PKG_ID: ${{ needs.build.outputs.pkg-id }}
+        run: |
+          cd package-registry
+          git remote add fork "${REGISTRY_FORGE}/${REGISTRY_FORK}"
+          git push --force --set-upstream fork "${PKG_ID}"
