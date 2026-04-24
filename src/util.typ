@@ -387,7 +387,7 @@
     indentation: indent-string,
     number: display-number,
     body: body,
-    fill: background-color-at-index(background-color, index),
+    fill: if type(background-color) == color { none } else { background-color-at-index(background-color, index) },
     comment: none,
   )
 }
