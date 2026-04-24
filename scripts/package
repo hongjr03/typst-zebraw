@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+target="${1:-@local}"
+
+. scripts/setup
+
+OUT_DIR="$(resolve-target "$target")"
+TARGET="$OUT_DIR/$PKG_PREFIX/$VERSION"
+
+echo "Packaging $PKG_PREFIX v$VERSION to $TARGET"
+mkdir -p "$TARGET"
+
+rsync -a \
+  --exclude '.git' \
+  --exclude '.github' \
+  --exclude '.gitignore' \
+  --exclude '.typstignore' \
+  --exclude 'bench*' \
+  --exclude 'coverage' \
+  --exclude 'dist' \
+  --exclude 'docs' \
+  --exclude 'out' \
+  --exclude 'scripts' \
+  --exclude 'tests' \
+  --exclude 'justfile' \
+  --exclude 'README.typ' \
+  --exclude 'README.pdf' \
+  --exclude 'README_zh.typ' \
+  --exclude 'README_zh.pdf' \
+  ./ "$TARGET/"
+
+echo "Successfully packaged to $TARGET"

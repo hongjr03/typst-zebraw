@@ -13,13 +13,21 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Link local package
+        run: |
+          package_name="$(grep -Po '^name = "\K[^"]*' typst.toml)"
+          package_version="$(grep -Po '^version = "\K[^"]*' typst.toml)"
+          package_dir="${HOME}/.local/share/typst/packages/preview/${package_name}"
+          mkdir -p "${package_dir}"
+          ln -sfn "${GITHUB_WORKSPACE}" "${package_dir}/${package_version}"
     
       - name: Run Tinymist Coverage
         uses: hongjr03/tinymist-coverage-workflow@v0.1.5
         with:
           target_files: README.typ
           tinymist_version: latest
-          create_symlinks: true
+          create_symlinks: false
           report_path: coverage/output
           auto_commit: true
           readme_paths: README.md,README_zh.md
