@@ -12,7 +12,7 @@
 
 <img src="https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fhongjr03%2Ftypst-zebraw%2Frefs%2Fheads%2Fmain%2Ftypst.toml&amp;query=package.version&amp;logo=GitHub&amp;label=GitHub" alt="GitHub" />
 
-</a> <a href="coverage_report.md">
+</a> <a href="https://github.com/hongjr03/typst-zebraw/blob/main/coverage/output/coverage_report.md">
 
 <img src="https://img.shields.io/badge/coverage-67.30%25-yellow" alt="Coverage" />
 

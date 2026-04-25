@@ -92,7 +92,7 @@
       ),
     )
   ]
-  #html.elem("a", attrs: (href: "coverage_report.md"))[
+  #html.elem("a", attrs: (href: "https://github.com/hongjr03/typst-zebraw/blob/main/coverage/output/coverage_report.md"))[
     #html.elem("img", attrs: (src: "https://img.shields.io/badge/coverage-67.30%25-yellow", alt: "Coverage"))
   ]
   #html.elem("a", attrs: (href: "https://github.com/hongjr03/typst-zebraw/actions/workflows/test.yml"))[
