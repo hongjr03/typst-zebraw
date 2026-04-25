@@ -79,7 +79,7 @@
       "img",
       attrs: (
         src: "https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Ftypst.app%2Funiverse%2Fpackage%2Fzebraw&query=%2Fhtml%2Fbody%2Fdiv%2Fmain%2Fdiv%5B2%5D%2Faside%2Fsection%5B2%5D%2Fdl%2Fdd%5B3%5D&logo=typst&label=Universe&color=%2339cccc",
-        alt: "Universe",
+        alt: "Latest version on Typst Universe",
       ),
     )
   ]
@@ -88,19 +88,19 @@
       "img",
       attrs: (
         src: "https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fhongjr03%2Ftypst-zebraw%2Frefs%2Fheads%2Fmain%2Ftypst.toml&query=package.version&logo=GitHub&label=GitHub",
-        alt: "GitHub",
+        alt: "Latest GitHub release version",
       ),
     )
   ]
   #html.elem("a", attrs: (href: "https://github.com/hongjr03/typst-zebraw/blob/main/coverage/output/coverage_report.md"))[
-    #html.elem("img", attrs: (src: "https://img.shields.io/badge/coverage-67.30%25-yellow", alt: "Coverage"))
+    #html.elem("img", attrs: (src: "https://img.shields.io/badge/coverage-67.30%25-yellow", alt: "Code coverage percentage"))
   ]
   #html.elem("a", attrs: (href: "https://github.com/hongjr03/typst-zebraw/actions/workflows/test.yml"))[
     #html.elem(
       "img",
       attrs: (
         src: "https://github.com/hongjr03/typst-zebraw/actions/workflows/test.yml/badge.svg",
-        alt: "Test",
+        alt: "Test workflow status",
       ),
     )
   ]
