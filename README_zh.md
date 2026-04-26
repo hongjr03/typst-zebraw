@@ -14,7 +14,7 @@
 
 </a> <a href="https://github.com/hongjr03/typst-zebraw/blob/main/coverage/output/coverage_report.md">
 
-<img src="https://img.shields.io/badge/coverage-67.30%25-yellow" alt="Code coverage percentage" />
+<img src="https://img.shields.io/badge/coverage-64.13%25-yellow" alt="Code coverage percentage" />
 
 </a> <a href="https://github.com/hongjr03/typst-zebraw/actions/workflows/test.yml">
 
