@@ -20,7 +20,6 @@ jobs:
       pkg-id: ${{ steps.meta.outputs.pkg-id }}
       git-user-name: ${{ steps.meta.outputs.git-user-name }}
       git-user-email: ${{ steps.meta.outputs.git-user-email }}
-      release-body: ${{ steps.changelog.outputs.release-body }}
 
     steps:
       - name: Checkout
@@ -49,22 +48,6 @@ jobs:
           echo "git-user-name=$(git log -1 --pretty=format:'%an')" >> "${GITHUB_OUTPUT}"
           echo "git-user-email=$(git log -1 --pretty=format:'%ae')" >> "${GITHUB_OUTPUT}"
 
-      - name: Build release changelog
-        id: changelog
-        run: |
-          previous_tag="$(git describe --tags --abbrev=0 "${GITHUB_REF_NAME}^")"
-          delimiter="RELEASE_BODY_$(date +%s)_${RANDOM}"
-
-          {
-            echo "release-body<<${delimiter}"
-            echo "## Changelog"
-            echo
-            echo "Changes since ${previous_tag}:"
-            echo
-            git log --pretty=format:'- %s (%h)' "${previous_tag}..${GITHUB_REF_NAME}"
-            echo "${delimiter}"
-          } >> "${GITHUB_OUTPUT}"
-
       - name: Create archives
         env:
           PKG_NAME: ${{ steps.meta.outputs.pkg-name }}
@@ -90,16 +73,34 @@ jobs:
       contents: write
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
           pattern: ${{ needs.build.outputs.pkg-id }}
 
-      - name: Add artifacts to release
-        uses: ncipollo/release-action@v1
+      - name: Build release changelog
+        run: |
+          previous_tag="$(git describe --tags --abbrev=0 "${GITHUB_REF_NAME}^")"
+
+          {
+            echo "## Changelog"
+            echo
+            echo "Changes since ${previous_tag}:"
+            echo
+            git log --pretty=format:'- %s (%h)' "${previous_tag}..${GITHUB_REF_NAME}"
+          } > release-body.md
+
+      - name: Create release
+        uses: softprops/action-gh-release@v3
         with:
-          body: ${{ needs.build.outputs.release-body }}
-          artifacts: ${{ needs.build.outputs.pkg-id }}/*
+          token: ${{ secrets.GITHUB_TOKEN }}
+          body_path: release-body.md
+          files: ${{ needs.build.outputs.pkg-id }}/${{ needs.build.outputs.pkg-id }}.zip
 
   publish:
     name: Publish to registry fork
