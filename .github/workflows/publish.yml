@@ -20,10 +20,13 @@ jobs:
       pkg-id: ${{ steps.meta.outputs.pkg-id }}
       git-user-name: ${{ steps.meta.outputs.git-user-name }}
       git-user-email: ${{ steps.meta.outputs.git-user-email }}
+      release-body: ${{ steps.changelog.outputs.release-body }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install just
         uses: taiki-e/install-action@v2
@@ -45,6 +48,21 @@ jobs:
           echo "pkg-id=${PKG_PREFIX}-${VERSION}" >> "${GITHUB_OUTPUT}"
           echo "git-user-name=$(git log -1 --pretty=format:'%an')" >> "${GITHUB_OUTPUT}"
           echo "git-user-email=$(git log -1 --pretty=format:'%ae')" >> "${GITHUB_OUTPUT}"
+
+      - name: Build release changelog
+        id: changelog
+        run: |
+          previous_tag="$(git describe --tags --abbrev=0 "${GITHUB_REF_NAME}^")"
+
+          {
+            echo 'release-body<<EOF'
+            echo "## Changelog"
+            echo
+            echo "Changes since ${previous_tag}:"
+            echo
+            git log --pretty=format:'- %s (%h)' "${previous_tag}..${GITHUB_REF_NAME}"
+            echo 'EOF'
+          } >> "${GITHUB_OUTPUT}"
 
       - name: Create archives
         env:
@@ -79,6 +97,7 @@ jobs:
       - name: Add artifacts to release
         uses: ncipollo/release-action@v1
         with:
+          body: ${{ needs.build.outputs.release-body }}
           artifacts: ${{ needs.build.outputs.pkg-id }}/*
 
   publish:
