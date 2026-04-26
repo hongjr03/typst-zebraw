@@ -53,15 +53,16 @@ jobs:
         id: changelog
         run: |
           previous_tag="$(git describe --tags --abbrev=0 "${GITHUB_REF_NAME}^")"
+          delimiter="RELEASE_BODY_$(date +%s)_${RANDOM}"
 
           {
-            echo 'release-body<<EOF'
+            echo "release-body<<${delimiter}"
             echo "## Changelog"
             echo
             echo "Changes since ${previous_tag}:"
             echo
             git log --pretty=format:'- %s (%h)' "${previous_tag}..${GITHUB_REF_NAME}"
-            echo 'EOF'
+            echo "${delimiter}"
           } >> "${GITHUB_OUTPUT}"
 
       - name: Create archives
