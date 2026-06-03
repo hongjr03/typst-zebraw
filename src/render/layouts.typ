@@ -3,6 +3,8 @@
     width: 2.4em,
     gap: 0.4em,
     placement: "left",
+    separator: false,
+    separator-width: 0.05em,
   ),
   comments: (
     placement: "below-line",

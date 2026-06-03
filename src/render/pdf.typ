@@ -67,6 +67,18 @@
   placement
 }
 
+#let _gutter-separator-width(layout-plan) = {
+  if layout-plan.gutter.separator {
+    layout-plan.gutter.separator-width
+  } else {
+    0pt
+  }
+}
+
+#let _gutter-total-width(layout-plan) = {
+  layout-plan.gutter.width + _gutter-separator-width(layout-plan) + layout-plan.gutter.gap
+}
+
 #let _has-beside-comment(row, layout-plan) = {
   let is-source-row = row.kind == "code" or row.kind == "blank"
   let is-beside = _comment-placement(layout-plan) == "beside-line"
@@ -157,6 +169,18 @@
   )
 }
 
+#let _render-gutter-separator(fill, style, layout-plan) = grid.cell(
+  fill: fill,
+  inset: 0pt,
+  pdf.artifact(
+    rect(
+      width: layout-plan.gutter.separator-width,
+      height: 100%,
+      fill: style.gutter-fill.transparentize(55%),
+    ),
+  ),
+)
+
 #let _render-code-cell(model, row, fill, style, layout-plan, components-plan) = {
   grid.cell(
     fill: fill,
@@ -226,6 +250,18 @@
 #let _render-row-for-measure(model, row, gutter-width, style, layout-plan, components-plan) = {
   let fill = _row-fill(row, style)
   let gutter-placement = _gutter-placement(layout-plan)
+  let separator-width = _gutter-separator-width(layout-plan)
+  let columns = if separator-width == 0pt {
+    if gutter-placement == "right" {
+      (1fr, layout-plan.gutter.width + layout-plan.gutter.gap)
+    } else {
+      (layout-plan.gutter.width + layout-plan.gutter.gap, 1fr)
+    }
+  } else if gutter-placement == "right" {
+    (1fr, separator-width, layout-plan.gutter.width + layout-plan.gutter.gap)
+  } else {
+    (layout-plan.gutter.width + layout-plan.gutter.gap, separator-width, 1fr)
+  }
 
   if gutter-width == 0pt {
     grid(
@@ -236,18 +272,20 @@
     )
   } else if gutter-placement == "right" {
     grid(
-      columns: (1fr, gutter-width),
+      columns: columns,
       row-gutter: 0pt,
       column-gutter: 0pt,
       _render-body(model, row, fill, style, layout-plan, components-plan),
+      if separator-width != 0pt { _render-gutter-separator(fill, style, layout-plan) },
       _render-gutter(model, row, fill, style, layout-plan, components-plan),
     )
   } else {
     grid(
-      columns: (gutter-width, 1fr),
+      columns: columns,
       row-gutter: 0pt,
       column-gutter: 0pt,
       _render-gutter(model, row, fill, style, layout-plan, components-plan),
+      if separator-width != 0pt { _render-gutter-separator(fill, style, layout-plan) },
       _render-body(model, row, fill, style, layout-plan, components-plan),
     )
   }
@@ -280,7 +318,7 @@
   }
 
   if has-gutter {
-    layout-plan.gutter.width + layout-plan.gutter.gap
+    _gutter-total-width(layout-plan)
   } else {
     0pt
   }
@@ -290,6 +328,21 @@
   let cells = ()
   for row in rows {
     cells.push(_render-gutter(model, row, _row-fill(row, style), style, layout-plan, components-plan))
+  }
+
+  grid(
+    columns: (1fr,),
+    rows: heights,
+    row-gutter: 0pt,
+    column-gutter: 0pt,
+    ..cells,
+  )
+}
+
+#let _render-gutter-separator-column(rows, heights, style, layout-plan) = {
+  let cells = ()
+  for row in rows {
+    cells.push(_render-gutter-separator(_row-fill(row, style), style, layout-plan))
   }
 
   grid(
@@ -322,6 +375,7 @@
     let rows = _visible-rows(model.rows, layout-plan)
     let gutter-width = _gutter-width(rows, layout-plan)
     let gutter-placement = _gutter-placement(layout-plan)
+    let separator-width = _gutter-separator-width(layout-plan)
     // PDF uses measured columns so gutter text is not interleaved with code text.
     let heights = rows.map(row => {
       measure(
@@ -331,23 +385,44 @@
     })
 
     let body-column = _render-body-column(model, rows, heights, style, layout-plan, components-plan)
+    let gutter-column = _render-gutter-column(model, rows, heights, style, layout-plan, components-plan)
 
     if gutter-width == 0pt {
       body-column
-    } else if gutter-placement == "right" {
+    } else if gutter-placement == "right" and separator-width != 0pt {
+      let separator-column = _render-gutter-separator-column(rows, heights, style, layout-plan)
       grid(
-        columns: (1fr, gutter-width),
+        columns: (1fr, separator-width, layout-plan.gutter.width + layout-plan.gutter.gap),
         row-gutter: 0pt,
         column-gutter: 0pt,
         body-column,
-        _render-gutter-column(model, rows, heights, style, layout-plan, components-plan),
+        separator-column,
+        gutter-column,
+      )
+    } else if gutter-placement == "right" {
+      grid(
+        columns: (1fr, layout-plan.gutter.width + layout-plan.gutter.gap),
+        row-gutter: 0pt,
+        column-gutter: 0pt,
+        body-column,
+        gutter-column,
+      )
+    } else if separator-width != 0pt {
+      let separator-column = _render-gutter-separator-column(rows, heights, style, layout-plan)
+      grid(
+        columns: (layout-plan.gutter.width + layout-plan.gutter.gap, separator-width, 1fr),
+        row-gutter: 0pt,
+        column-gutter: 0pt,
+        gutter-column,
+        separator-column,
+        body-column,
       )
     } else {
       grid(
-        columns: (gutter-width, 1fr),
+        columns: (layout-plan.gutter.width + layout-plan.gutter.gap, 1fr),
         row-gutter: 0pt,
         column-gutter: 0pt,
-        _render-gutter-column(model, rows, heights, style, layout-plan, components-plan),
+        gutter-column,
         body-column,
       )
     }
