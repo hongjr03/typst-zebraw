@@ -328,6 +328,7 @@ layout: layouts.with(
   gutter: (placement: "left", width: 2.8em, separator: false),
   comments: (placement: "below-line", width: 14em),
   indent-guides: (enabled: false, unit: 2, mode: "line"),
+  code: (hanging-indent: false),
   header: (placement: "above"),
   footer: (placement: "below"),
   lang-tab: (placement: "top-right", keep-with-body: true),
@@ -339,6 +340,7 @@ The current PDF slice supports gutter placement values `left`, `right`, and `hid
 The current PDF slice supports a gutter separator through `layout.gutter.separator`; it is rendered as decorative PDF artifact between gutter and body, not as part of the numbering strategy.
 The current PDF slice supports comment placement values `below-line`, `beside-line`, and `hidden`. `beside-line` keeps the line annotation in the model but renders the comment component in a side column inside the corresponding code row.
 The current PDF slice supports indentation guides through `layout.indent-guides`. Guides consume `effective-indent-width`, inherit across blank rows through the model, render through `components.indent-guide`, and are wrapped in `pdf.artifact`. The default PDF component intentionally uses non-text shapes even for `mode: "fast-preview"` so guide markers do not enter the copyable text layer.
+The current PDF slice supports wrapped-line hanging indentation through `layout.code.hanging-indent`. The default code component uses `effective-indent-width` and Typst paragraph `hanging-indent`, so continuation lines align with the source line's structural indentation without renderer-side text parsing.
 The current PDF slice supports header/footer visibility as layout chrome: header is rendered above the measured body, footer below it, and either can be hidden through layout.
 The current PDF slice supports `lang-tab` as chrome attached to the frame's top-right edge: it is rendered as an overlay when the source block has a language label, does not create a full-width frame-colored row, consumes no extra vertical row, and can be hidden through layout. When the tab is visible, the frame delegates its top-right outer corner to the tab instead of drawing two overlapping rounded corners.
 The current PDF slice also routes frame drawing through `components.frame`; `layout.frame` still supplies layout policy such as width, clipping, and breakability, while the component owns the actual frame content.

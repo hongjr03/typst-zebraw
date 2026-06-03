@@ -17,6 +17,9 @@
     mode: "line",
     line-width: 0.05em,
   ),
+  code: (
+    hanging-indent: false,
+  ),
   skip: (
     placement: "body",
   ),
@@ -40,6 +43,7 @@
   gutter: default.gutter + layout.at("gutter", default: (:)),
   comments: default.comments + layout.at("comments", default: (:)),
   indent-guides: default.indent-guides + layout.at("indent-guides", default: (:)),
+  code: default.code + layout.at("code", default: (:)),
   skip: default.skip + layout.at("skip", default: (:)),
   header: default.header + layout.at("header", default: (:)),
   footer: default.footer + layout.at("footer", default: (:)),

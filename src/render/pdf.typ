@@ -119,6 +119,12 @@
   columns
 }
 
+#let _code-plan(layout-plan) = {
+  let plan = layout-plan.code
+  assert(type(plan.hanging-indent) == bool, message: "zebraw: layout.code.hanging-indent must be a boolean")
+  plan
+}
+
 #let _has-beside-comment(row, layout-plan) = {
   let is-source-row = row.kind == "code" or row.kind == "blank"
   let is-beside = _comment-placement(layout-plan) == "beside-line"
@@ -447,6 +453,7 @@
 
 #let _render-measured-columns(model, style, layout-plan, components-plan) = {
   context layout(size => {
+    let code-plan = _code-plan(layout-plan)
     let rows = _visible-rows(model.rows, layout-plan)
     let gutter-width = _gutter-width(rows, layout-plan)
     let gutter-placement = _gutter-placement(layout-plan)

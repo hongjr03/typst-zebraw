@@ -25,7 +25,25 @@
   )
 }
 
-#let code(ctx) = block(width: 100%, _code-body(ctx.row))
+#let code(ctx) = {
+  let body = _code-body(ctx.row)
+  if not ctx.layout.code.hanging-indent or ctx.row.effective-indent-width == 0 {
+    block(width: 100%, body)
+  } else {
+    context {
+      let advance = measure(raw("x")).width
+      block(
+        width: 100%,
+        par(
+          hanging-indent: ctx.row.effective-indent-width * advance,
+          justify: false,
+          linebreaks: "simple",
+          body,
+        ),
+      )
+    }
+  }
+}
 
 #let comment(ctx) = pdf.artifact(ctx.row.body)
 
