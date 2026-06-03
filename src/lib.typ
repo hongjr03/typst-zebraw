@@ -6,16 +6,17 @@
 #import "render/components.typ" as components
 #import "selectors.typ" as selectors
 #import "annotations.typ" as annotations
+#import "numbering.typ" as numbering
 
 #let default-layout = layouts.default
 #let default-components = components.default
+#let default-numbering = numbering.line()
 
 /// Render a raw block with Zebraw.
 #let zebraw(
   select: none,
   annotate: none,
-  numbering: true,
-  numbering-offset: 0,
+  numbering: default-numbering,
   style: (:),
   layout: default-layout,
   components: default-components,
@@ -32,7 +33,6 @@
     select: select,
     annotate: annotate,
     numbering: numbering,
-    numbering-offset: numbering-offset,
   )
 
   if debug {

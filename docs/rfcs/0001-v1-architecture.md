@@ -248,11 +248,14 @@ Numbering should be a strategy, not just a boolean or offset.
 Possible strategies:
 
 ```typst
-numbering.none
+numbering.off()
 numbering.line(offset: 0)
-numbering.custom(columns)
+numbering.line(offset: 300, keep-offset: false)
+numbering.custom(("A", "B", "C"), ("stable", "stable", "changed"))
 numbering.continue-from(<label>)
 ```
+
+The public `numbering:` parameter should receive a strategy function, not a boolean, raw array, or a separate `numbering-offset` value. Offsets and renumbering behavior belong inside the selected strategy.
 
 `numbering.continue-from(<label>)` should support Codly-style continuation, but with a lighter implementation.
 

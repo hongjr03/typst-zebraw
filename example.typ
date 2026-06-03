@@ -1,4 +1,4 @@
-#import "zebraw.typ": zebraw, selectors, annotations, layouts
+#import "zebraw.typ": zebraw, selectors, annotations, numbering, layouts
 
 #set document(title: [Zebraw v1 smoke])
 
@@ -8,6 +8,7 @@
     annotations.highlight(selectors.line(1)),
     annotations.comment(selectors.line(3), [continues after a skipped blank line]),
   ),
+  numbering: numbering.line(offset: 0),
   layout: layouts.with(gutter: (width: 2.8em)),
 )
 
