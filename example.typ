@@ -1,10 +1,12 @@
-#import "zebraw.typ": zebraw, selectors
+#import "zebraw.typ": zebraw, selectors, annotations
+
+#set document(title: [Zebraw v1 smoke])
 
 #show raw: zebraw.with(
   select: selectors.ranges((1, 2), (3, none)),
-  highlight-lines: (
-    1,
-    (3, [continues after a skipped blank line]),
+  annotate: annotations.compose(
+    annotations.highlight(selectors.line(1)),
+    annotations.comment(selectors.line(3), [continues after a skipped blank line]),
   ),
 )
 

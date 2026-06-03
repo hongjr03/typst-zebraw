@@ -68,6 +68,16 @@
   )
 }
 
+#let line(number, keep-offset: true) = range(start: number, end: number, keep-offset: keep-offset, inclusive: true)
+
+#let lines(..numbers) = {
+  let segments = ()
+  for number in numbers.pos() {
+    segments.push((number, number))
+  }
+  ranges(..segments, keep-offset: numbers.named().at("keep-offset", default: true), inclusive: true, skip: false)
+}
+
 #let ranges(..args) = {
   let items = args.pos()
   let named = args.named()

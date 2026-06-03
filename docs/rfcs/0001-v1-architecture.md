@@ -162,7 +162,53 @@ SelectionPlan = (
 )
 ```
 
-Legacy `line-range` can remain as a compatibility wrapper, but the core should only know about `SelectionPlan`.
+The v1 API does not need to preserve `line-range`. The core should only know about selector functions and `SelectionPlan`.
+
+## Annotations
+
+Annotations should use the same function-shaped model as selection. `highlight-lines` should not remain a separate parameter because it would recreate a second range language.
+
+Example API direction:
+
+```typst
+#zebraw(
+  annotate: annotations.compose(
+    annotations.highlight(selectors.line(3)),
+    annotations.comment(selectors.range(8, 12), [important path]),
+    annotations.fill(selectors.lines(14, 18), rgb("#ffeeaa")),
+  ),
+  raw,
+)
+```
+
+The conceptual signature is:
+
+```typst
+annotation: SourceBlock -> AnnotationPlan
+```
+
+Line-level annotations should normalize into one record per source line. They should not be stored as parallel dictionaries such as `comments`, `colors`, and `highlighted`.
+
+```typst
+LineAnnotation = (
+  highlighted: bool,
+  fill: none | color,
+  comment: none | content,
+)
+
+AnnotationPlan = (
+  lines: (
+    "3": LineAnnotation,
+    "8": LineAnnotation,
+  ),
+  block: (
+    header: none | content,
+    footer: none | content,
+  ),
+)
+```
+
+This keeps override and layout code simple: selector helpers decide which source lines receive a patch, while renderers and components read a single annotation record.
 
 ## Visual Rows
 
@@ -188,9 +234,7 @@ VisualRow = (
   text: str,
   body: content,
   indent: str,
-  highlighted: bool,
-  fill: none | color,
-  annotation: none | content,
+  annotation: none | LineAnnotation,
   copy-text: str,
 )
 ```
@@ -332,11 +376,14 @@ PDF rendering should:
 
 - render one visual row at a time,
 - mark line numbers and decorative elements as artifacts,
+- wrap artifact content inside layout cells rather than wrapping the cells themselves, so layout metadata such as `colspan`, `inset`, and `align` remains visible to Typst,
 - keep code content as real selectable content,
 - avoid measuring each line unless a layout option truly needs measurement,
 - make blank rows explicit rather than relying on measured gutter/code height.
 
 This simplifies the renderer and makes the model more honest: each visible row becomes one renderable unit.
+
+One caveat: `pdf.artifact` expresses PDF tagging semantics, but local validation with Typst 0.14.2 and Poppler `pdftotext` still extracts artifact text. Viewer copy behavior and stronger PDF tag inspection need separate validation before claiming that artifacts fully solve copy-text behavior across tools. If hard exclusion from generic text extraction becomes required, line numbers and decorative labels may need non-text components.
 
 ## HTML Rendering
 
@@ -382,7 +429,6 @@ Design rules:
 ## Open Questions
 
 - Exact naming: `select`, `selector`, or `range`.
-- Whether legacy `line-range` should stay indefinitely or only through a migration period.
 - Whether `numbering.continue-from(<label>)` should infer summary labels from the original block label or require an explicit Zebraw label namespace.
 - Whether line references should be a separate feature module.
 - Whether HTML export should be in the initial v1 milestone or follow after the PDF renderer is stable.

@@ -1,5 +1,5 @@
 #import "selectors.typ" as selectors
-#import "annotations.typ": parse-highlight-lines, has-highlight, line-comment, line-color
+#import "annotations.typ" as annotations
 
 #let _selected-lines(source, segment) = {
   let from = if segment.from == none { 1 } else { segment.from }
@@ -30,9 +30,8 @@
   }
 }
 
-#let _code-row(source-line, segment, annotations, numbering, numbering-offset, total-lines) = {
-  let comment = line-comment(annotations, source-line.source-number)
-  let highlighted = has-highlight(annotations, source-line.source-number)
+#let _code-row(source-line, segment, annotation-plan, numbering, numbering-offset, total-lines) = {
+  let annotation = annotations.line(annotation-plan, source-line.source-number)
 
   (
     kind: if source-line.text.trim().len() == 0 { "blank" } else { "code" },
@@ -41,23 +40,19 @@
     text: source-line.text,
     body: source-line.body,
     indent: source-line.indent,
-    highlighted: highlighted,
-    fill: line-color(annotations, source-line.source-number),
-    annotation: comment,
+    annotation: annotation,
     copy-text: source-line.text,
   )
 }
 
-#let _comment-row(source-line, comment) = (
+#let _comment-row(source-line, annotation) = (
   kind: "comment",
   source-number: source-line.source-number,
   display-number: none,
   text: "",
-  body: comment,
+  body: annotation.comment,
   indent: source-line.indent,
-  highlighted: false,
-  fill: none,
-  annotation: none,
+  annotation: annotation,
   copy-text: "",
 )
 
@@ -68,8 +63,6 @@
   text: "",
   body: segment.label,
   indent: "",
-  highlighted: false,
-  fill: none,
   annotation: none,
   copy-text: "",
   skipped-lines: segment.count,
@@ -78,14 +71,17 @@
 #let build-block-model(
   source,
   select: none,
-  highlight-lines: (),
+  annotate: none,
   numbering: true,
   numbering-offset: 0,
 ) = {
   let selector = if select == none { selectors.all } else { select }
   assert(type(selector) == function, message: "zebraw: select must be a selector function")
 
-  let annotations = parse-highlight-lines(highlight-lines)
+  let annotation-fn = if annotate == none { annotations.noop } else { annotate }
+  assert(type(annotation-fn) == function, message: "zebraw: annotate must be an annotation function")
+
+  let annotation-plan = annotation-fn(source)
   let selection = selector(source)
   let rows = ()
 
@@ -94,10 +90,10 @@
       rows.push(_skip-row(segment))
     } else if segment.kind == "lines" {
       for source-line in _selected-lines(source, segment) {
-        let row = _code-row(source-line, segment, annotations, numbering, numbering-offset, source.lines.len())
+        let row = _code-row(source-line, segment, annotation-plan, numbering, numbering-offset, source.lines.len())
         rows.push(row)
 
-        if row.annotation != none {
+        if row.annotation.comment != none {
           rows.push(_comment-row(source-line, row.annotation))
         }
       }
@@ -111,11 +107,11 @@
     lang: source.lang,
     source-lines: source.lines.len(),
     selection: selection,
-    annotations: annotations,
+    annotations: annotation-plan,
     rows: rows,
     chrome: (
-      header: annotations.header,
-      footer: annotations.footer,
+      header: annotation-plan.block.header,
+      footer: annotation-plan.block.footer,
       lang-label: source.lang,
     ),
   )

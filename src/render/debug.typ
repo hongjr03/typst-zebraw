@@ -1,11 +1,17 @@
 #let _value(value) = if value == none { "-" } else { repr(value) }
 
+#let _has-line-annotation(annotation) = {
+  annotation != none and (
+    annotation.highlighted or annotation.fill != none or annotation.comment != none
+  )
+}
+
 #let _row-summary(index, row) = {
   let source-number = _value(row.source-number)
   let display-number = _value(row.display-number)
   let indent-width = if row.indent == none { 0 } else { row.indent.len() }
-  let highlight = if row.highlighted { "yes" } else { "no" }
-  let annotation = if row.annotation == none { "no" } else { "yes" }
+  let highlight = if row.annotation != none and row.annotation.highlighted { "yes" } else { "no" }
+  let annotation = if _has-line-annotation(row.annotation) { "yes" } else { "no" }
 
   (
     str(index),
