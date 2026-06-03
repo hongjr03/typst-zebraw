@@ -370,20 +370,20 @@ style: (
 
 ## PDF Rendering
 
-The previous implementation used layout measurement partly to control PDF copy order and keep line numbers out of copied text. With `pdf.artifact`, that is no longer the right foundation.
+The previous implementation used layout measurement partly to control PDF selection and copy behavior. `pdf.artifact` is still useful because it marks line numbers and decorative labels as non-semantic PDF content, but it does not remove text glyphs from the PDF content stream and does not guarantee that a viewer will skip those glyphs during mouse selection.
 
 PDF rendering should:
 
-- render one visual row at a time,
-- mark line numbers and decorative elements as artifacts,
-- wrap artifact content inside layout cells rather than wrapping the cells themselves, so layout metadata such as `colspan`, `inset`, and `align` remains visible to Typst,
+- render gutter and body as separate measured columns,
+- measure visual row heights once so the gutter column and body column stay aligned,
+- mark line numbers and decorative labels as artifacts,
+- wrap artifact content inside layout cells rather than wrapping the cells themselves, so layout metadata such as `inset` and `align` remains visible to Typst,
 - keep code content as real selectable content,
-- avoid measuring each line unless a layout option truly needs measurement,
 - make blank rows explicit rather than relying on measured gutter/code height.
 
-This simplifies the renderer and makes the model more honest: each visible row becomes one renderable unit.
+This keeps the model honest while preserving the old PDF behavior: each visible row is still a `VisualRow`, but the PDF backend can choose a two-column physical layout to keep gutter text out of the code column's normal selection path.
 
-One caveat: `pdf.artifact` expresses PDF tagging semantics, but local validation with Typst 0.14.2 and Poppler `pdftotext` still extracts artifact text. Viewer copy behavior and stronger PDF tag inspection need separate validation before claiming that artifacts fully solve copy-text behavior across tools. If hard exclusion from generic text extraction becomes required, line numbers and decorative labels may need non-text components.
+One caveat: `pdf.artifact` expresses PDF tagging semantics, but generic text extraction tools may not honor those semantics. Local validation with qpdf 12.3.2 confirms that Typst 0.14.2 emits a tagged PDF, wraps line numbers, skip labels, and comment rows in `/Artifact BMC ... EMC`, and leaves code tokens as ordinary `/Span ... BDC` marked content. Poppler `pdftotext` still extracts artifact text from that same PDF, so viewer copy behavior and extractor compatibility need separate validation.
 
 ## HTML Rendering
 
@@ -419,7 +419,7 @@ Design rules:
 
 - Do one pass over raw lines to build `VisualRows`.
 - Normalize selector, annotations, and numbering strategies before that pass.
-- Avoid `measure` on the default path.
+- Keep `measure` renderer-local. The default PDF renderer may measure visible row heights once to keep the gutter and body columns aligned, but selector, annotation, and numbering normalization must not depend on measurement.
 - Avoid per-line `query` and per-line `state`.
 - Keep label continuation block-level unless line references are explicitly enabled.
 - Prefer direct local override parameters over global state changes for per-block customization.

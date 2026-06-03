@@ -74,7 +74,6 @@
     fill: fill,
     inset: style.inset,
     align: left + top,
-    colspan: 2,
     pdf.artifact(row.body),
   )
 }
@@ -84,33 +83,116 @@
     fill: fill,
     inset: style.inset,
     align: center + horizon,
-    colspan: 2,
     pdf.artifact(text(fill: style.gutter-fill, row.body)),
   )
 }
 
-#let _render-row(row, style) = {
+#let _render-body(row, fill, style) = {
+  if row.kind == "comment" {
+    _render-comment(row, fill, style)
+  } else if row.kind == "skip" {
+    _render-skip(row, fill, style)
+  } else {
+    _render-code(row, fill, style)
+  }
+}
+
+#let _render-row-for-measure(row, gutter-width, style) = {
   let fill = _row-fill(row, style)
 
-  if row.kind == "comment" {
-    (_render-comment(row, fill, style),)
-  } else if row.kind == "skip" {
-    (_render-skip(row, fill, style),)
+  if gutter-width == 0pt {
+    grid(
+      columns: (1fr,),
+      row-gutter: 0pt,
+      column-gutter: 0pt,
+      _render-body(row, fill, style),
+    )
   } else {
-    (
+    grid(
+      columns: (gutter-width, 1fr),
+      row-gutter: 0pt,
+      column-gutter: 0pt,
       _render-gutter(row, fill, style),
-      _render-code(row, fill, style),
+      _render-body(row, fill, style),
     )
   }
 }
 
+#let _gutter-width(rows, style) = {
+  let has-gutter = false
+  for row in rows {
+    if row.display-number != none {
+      has-gutter = true
+    }
+  }
+
+  if has-gutter {
+    style.gutter-width + style.gutter-gap
+  } else {
+    0pt
+  }
+}
+
+#let _render-gutter-column(rows, heights, style) = {
+  let cells = ()
+  for row in rows {
+    cells.push(_render-gutter(row, _row-fill(row, style), style))
+  }
+
+  grid(
+    columns: (1fr,),
+    rows: heights,
+    row-gutter: 0pt,
+    column-gutter: 0pt,
+    ..cells,
+  )
+}
+
+#let _render-body-column(rows, heights, style) = {
+  let cells = ()
+  for row in rows {
+    let fill = _row-fill(row, style)
+    cells.push(_render-body(row, fill, style))
+  }
+
+  grid(
+    columns: (1fr,),
+    rows: heights,
+    row-gutter: 0pt,
+    column-gutter: 0pt,
+    ..cells,
+  )
+}
+
+#let _render-measured-columns(model, style) = {
+  context layout(size => {
+    let gutter-width = _gutter-width(model.rows, style)
+    // PDF uses measured columns so gutter text is not interleaved with code text.
+    let heights = model.rows.map(row => {
+      measure(
+        _render-row-for-measure(row, gutter-width, style),
+        width: size.width,
+      ).height
+    })
+
+    let body-column = _render-body-column(model.rows, heights, style)
+
+    if gutter-width == 0pt {
+      body-column
+    } else {
+      grid(
+        columns: (gutter-width, 1fr),
+        row-gutter: 0pt,
+        column-gutter: 0pt,
+        _render-gutter-column(model.rows, heights, style),
+        body-column,
+      )
+    }
+  })
+}
+
 #let render-pdf(model, style: (:)) = {
   let style = _style(style)
-  let cells = ()
-
-  for row in model.rows {
-    cells += _render-row(row, style)
-  }
 
   block(
     breakable: true,
@@ -118,11 +200,6 @@
     radius: style.radius,
     clip: true,
     fill: style.background,
-    grid(
-      columns: (style.gutter-width + style.gutter-gap, 1fr),
-      row-gutter: 0pt,
-      column-gutter: 0pt,
-      ..cells,
-    ),
+    _render-measured-columns(model, style),
   )
 }
