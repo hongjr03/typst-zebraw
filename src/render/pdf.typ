@@ -156,7 +156,28 @@
   copy-text: "",
 )
 
-#let _render-chrome(model, slot, style, layout-plan, components-plan) = {
+#let _render-chrome-body(model, slot, style, layout-plan, components-plan) = {
+  let component = if slot == "header" {
+    components-plan.header
+  } else {
+    components-plan.footer
+  }
+
+  grid.cell(
+    fill: style.background,
+    inset: style.inset,
+    align: left + top,
+    (component)(_ctx(model, none, style, layout-plan, components-plan)),
+  )
+}
+
+#let _render-chrome-spacer(style) = grid.cell(
+  fill: style.background,
+  inset: 0pt,
+  pdf.artifact([]),
+)
+
+#let _render-chrome(model, slot, gutter-width, style, layout-plan, components-plan) = {
   let content = if slot == "header" {
     model.chrome.header
   } else {
@@ -178,18 +199,36 @@
   if content == none or placement == "hidden" {
     []
   } else {
-    let component = if slot == "header" {
-      components-plan.header
-    } else {
-      components-plan.footer
-    }
+    let gutter-placement = _gutter-placement(layout-plan)
+    let separator-width = _gutter-separator-width(layout-plan)
+    let body-cell = _render-chrome-body(model, slot, style, layout-plan, components-plan)
 
-    block(
-      width: 100%,
-      fill: style.background,
-      inset: style.inset,
-      (component)(_ctx(model, none, style, layout-plan, components-plan)),
-    )
+    if gutter-width == 0pt {
+      grid(
+        columns: (1fr,),
+        row-gutter: 0pt,
+        column-gutter: 0pt,
+        body-cell,
+      )
+    } else if gutter-placement == "right" {
+      grid(
+        columns: (1fr, separator-width, layout-plan.gutter.width + layout-plan.gutter.gap),
+        row-gutter: 0pt,
+        column-gutter: 0pt,
+        body-cell,
+        _render-chrome-spacer(style),
+        _render-chrome-spacer(style),
+      )
+    } else {
+      grid(
+        columns: (layout-plan.gutter.width + layout-plan.gutter.gap, separator-width, 1fr),
+        row-gutter: 0pt,
+        column-gutter: 0pt,
+        _render-chrome-spacer(style),
+        _render-chrome-spacer(style),
+        body-cell,
+      )
+    }
   }
 }
 
@@ -511,9 +550,11 @@
 
 #let _render-frame(model, style, layout-plan, components-plan) = {
   let body = {
-    _render-chrome(model, "header", style, layout-plan, components-plan)
+    let rows = _visible-rows(model.rows, layout-plan)
+    let gutter-width = _gutter-width(rows, layout-plan)
+    _render-chrome(model, "header", gutter-width, style, layout-plan, components-plan)
     _render-measured-columns(model, style, layout-plan, components-plan)
-    _render-chrome(model, "footer", style, layout-plan, components-plan)
+    _render-chrome(model, "footer", gutter-width, style, layout-plan, components-plan)
   }
 
   (components-plan.frame)(
