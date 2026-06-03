@@ -5,6 +5,7 @@
     placement: "left",
     separator: false,
     separator-width: 0.05em,
+    number-gap: 0.35em,
   ),
   comments: (
     placement: "below-line",

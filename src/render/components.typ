@@ -1,8 +1,31 @@
-#let _number-content(number) = {
+#let _number-cell(number) = {
+  if number == none {
+    []
+  } else {
+    [#number]
+  }
+}
+
+#let _number-content(number, gap) = {
   if number == none {
     []
   } else if type(number) == array {
-    number.map(item => [#item]).join(h(0.35em, weak: true))
+    if number.len() == 0 {
+      []
+    } else {
+      let columns = ()
+      let cells = ()
+      for item in number {
+        columns.push(1fr)
+        cells.push(align(right, _number-cell(item)))
+      }
+
+      grid(
+        columns: columns,
+        column-gutter: gap,
+        ..cells,
+      )
+    }
   } else {
     [#number]
   }
@@ -20,7 +43,7 @@
   pdf.artifact(
     box(
       width: ctx.layout.gutter.width,
-      text(fill: ctx.style.gutter-fill, _number-content(ctx.row.display-number)),
+      text(fill: ctx.style.gutter-fill, _number-content(ctx.row.display-number, ctx.layout.gutter.number-gap)),
     ),
   )
 }

@@ -76,6 +76,7 @@
     layout-plan.gutter.at("enabled", default: none) == none,
     message: "zebraw: layout.gutter.enabled was removed; use gutter placement hidden instead",
   )
+  assert(type(layout-plan.gutter.number-gap) == length, message: "zebraw: layout.gutter.number-gap must be a length")
 
   let placement = layout-plan.gutter.placement
   assert(
