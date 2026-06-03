@@ -1,5 +1,5 @@
-#import "mod.typ": (
-  zebraw,
-  zebraw-init,
-)
-#import "theme.typ" as zebraw-themes
+#let zebraw(body) = {
+  if body.func() == raw {
+    yaml.encode(body)
+  }
+}
