@@ -1,26 +1,18 @@
+#import "layouts.typ" as layout-presets
+#import "components.typ" as component-presets
+
 #let default-style = (
   background: luma(245),
+  stroke: none,
   highlight: rgb("#94e2d5").lighten(70%),
   comment-background: rgb("#94e2d5").lighten(85%),
   skip-background: luma(235),
   gutter-fill: luma(120),
   inset: (top: 0.34em, right: 0.5em, bottom: 0.34em, left: 0.5em),
   radius: 0.34em,
-  gutter-width: 2.4em,
-  gutter-gap: 0.4em,
 )
 
 #let _style(style) = default-style + style
-
-#let _number-content(number) = {
-  if number == none {
-    []
-  } else if type(number) == array {
-    number.map(item => [#item]).join(h(0.35em, weak: true))
-  } else {
-    [#number]
-  }
-}
 
 #let _line-annotation(row) = row.annotation
 
@@ -38,66 +30,62 @@
   }
 }
 
-#let _code-body(row) = {
-  if row.kind == "blank" {
-    [\ ]
-  } else {
-    row.body
-  }
-}
+#let _ctx(model, row, style, layout-plan, components-plan) = (
+  target: "pdf",
+  block: model,
+  row: row,
+  layout: layout-plan,
+  style: style,
+  components: components-plan,
+)
 
-#let _render-gutter(row, fill, style) = {
+#let _render-gutter(model, row, fill, style, layout-plan, components-plan) = {
   grid.cell(
     fill: fill,
     inset: style.inset,
     align: right + top,
-    pdf.artifact(
-      box(
-        width: style.gutter-width,
-        text(fill: style.gutter-fill, _number-content(row.display-number)),
-      ),
-    ),
+    (components-plan.gutter)(_ctx(model, row, style, layout-plan, components-plan)),
   )
 }
 
-#let _render-code(row, fill, style) = {
+#let _render-code(model, row, fill, style, layout-plan, components-plan) = {
   grid.cell(
     fill: fill,
     inset: style.inset,
     align: left + top,
-    block(width: 100%, _code-body(row)),
+    (components-plan.code)(_ctx(model, row, style, layout-plan, components-plan)),
   )
 }
 
-#let _render-comment(row, fill, style) = {
+#let _render-comment(model, row, fill, style, layout-plan, components-plan) = {
   grid.cell(
     fill: fill,
     inset: style.inset,
     align: left + top,
-    pdf.artifact(row.body),
+    (components-plan.comment)(_ctx(model, row, style, layout-plan, components-plan)),
   )
 }
 
-#let _render-skip(row, fill, style) = {
+#let _render-skip(model, row, fill, style, layout-plan, components-plan) = {
   grid.cell(
     fill: fill,
     inset: style.inset,
     align: center + horizon,
-    pdf.artifact(text(fill: style.gutter-fill, row.body)),
+    (components-plan.skip)(_ctx(model, row, style, layout-plan, components-plan)),
   )
 }
 
-#let _render-body(row, fill, style) = {
+#let _render-body(model, row, fill, style, layout-plan, components-plan) = {
   if row.kind == "comment" {
-    _render-comment(row, fill, style)
+    _render-comment(model, row, fill, style, layout-plan, components-plan)
   } else if row.kind == "skip" {
-    _render-skip(row, fill, style)
+    _render-skip(model, row, fill, style, layout-plan, components-plan)
   } else {
-    _render-code(row, fill, style)
+    _render-code(model, row, fill, style, layout-plan, components-plan)
   }
 }
 
-#let _render-row-for-measure(row, gutter-width, style) = {
+#let _render-row-for-measure(model, row, gutter-width, style, layout-plan, components-plan) = {
   let fill = _row-fill(row, style)
 
   if gutter-width == 0pt {
@@ -105,20 +93,32 @@
       columns: (1fr,),
       row-gutter: 0pt,
       column-gutter: 0pt,
-      _render-body(row, fill, style),
+      _render-body(model, row, fill, style, layout-plan, components-plan),
     )
   } else {
     grid(
       columns: (gutter-width, 1fr),
       row-gutter: 0pt,
       column-gutter: 0pt,
-      _render-gutter(row, fill, style),
-      _render-body(row, fill, style),
+      _render-gutter(model, row, fill, style, layout-plan, components-plan),
+      _render-body(model, row, fill, style, layout-plan, components-plan),
     )
   }
 }
 
-#let _gutter-width(rows, style) = {
+#let _visible-rows(rows, layout-plan) = {
+  let visible = ()
+  for row in rows {
+    if row.kind == "comment" and layout-plan.comments.placement == "hidden" {
+    } else if row.kind == "skip" and layout-plan.skip.placement == "hidden" {
+    } else {
+      visible.push(row)
+    }
+  }
+  visible
+}
+
+#let _gutter-width(rows, layout-plan) = {
   let has-gutter = false
   for row in rows {
     if row.display-number != none {
@@ -126,17 +126,17 @@
     }
   }
 
-  if has-gutter {
-    style.gutter-width + style.gutter-gap
+  if layout-plan.gutter.enabled and has-gutter {
+    layout-plan.gutter.width + layout-plan.gutter.gap
   } else {
     0pt
   }
 }
 
-#let _render-gutter-column(rows, heights, style) = {
+#let _render-gutter-column(model, rows, heights, style, layout-plan, components-plan) = {
   let cells = ()
   for row in rows {
-    cells.push(_render-gutter(row, _row-fill(row, style), style))
+    cells.push(_render-gutter(model, row, _row-fill(row, style), style, layout-plan, components-plan))
   }
 
   grid(
@@ -148,11 +148,11 @@
   )
 }
 
-#let _render-body-column(rows, heights, style) = {
+#let _render-body-column(model, rows, heights, style, layout-plan, components-plan) = {
   let cells = ()
   for row in rows {
     let fill = _row-fill(row, style)
-    cells.push(_render-body(row, fill, style))
+    cells.push(_render-body(model, row, fill, style, layout-plan, components-plan))
   }
 
   grid(
@@ -164,18 +164,19 @@
   )
 }
 
-#let _render-measured-columns(model, style) = {
+#let _render-measured-columns(model, style, layout-plan, components-plan) = {
   context layout(size => {
-    let gutter-width = _gutter-width(model.rows, style)
+    let rows = _visible-rows(model.rows, layout-plan)
+    let gutter-width = _gutter-width(rows, layout-plan)
     // PDF uses measured columns so gutter text is not interleaved with code text.
-    let heights = model.rows.map(row => {
+    let heights = rows.map(row => {
       measure(
-        _render-row-for-measure(row, gutter-width, style),
+        _render-row-for-measure(model, row, gutter-width, style, layout-plan, components-plan),
         width: size.width,
       ).height
     })
 
-    let body-column = _render-body-column(model.rows, heights, style)
+    let body-column = _render-body-column(model, rows, heights, style, layout-plan, components-plan)
 
     if gutter-width == 0pt {
       body-column
@@ -184,22 +185,25 @@
         columns: (gutter-width, 1fr),
         row-gutter: 0pt,
         column-gutter: 0pt,
-        _render-gutter-column(model.rows, heights, style),
+        _render-gutter-column(model, rows, heights, style, layout-plan, components-plan),
         body-column,
       )
     }
   })
 }
 
-#let render-pdf(model, style: (:)) = {
+#let render-pdf(model, style: (:), layout-plan: layout-presets.default, components-plan: component-presets.default) = {
   let style = _style(style)
+  let layout-plan = layout-presets.resolve(layout-plan)
+  let components-plan = component-presets.resolve(components-plan)
 
   block(
-    breakable: true,
-    width: 100%,
+    breakable: layout-plan.frame.breakable,
+    width: layout-plan.frame.width,
     radius: style.radius,
-    clip: true,
+    clip: layout-plan.frame.clip,
     fill: style.background,
-    _render-measured-columns(model, style),
+    stroke: style.stroke,
+    _render-measured-columns(model, style, layout-plan, components-plan),
   )
 }

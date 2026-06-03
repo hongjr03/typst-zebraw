@@ -35,7 +35,7 @@ Open issues and pending feature requests also point in this direction:
 - Make component override a first-class customization mechanism.
 - Keep performance predictable by avoiding unnecessary state, query, measure, and content reconstruction.
 - Preserve access to Typst's existing `raw.line` data and syntax-highlighted content.
-- Use `pdf.artifact` for non-copyable line numbers and decorative parts instead of layout tricks for PDF copy order.
+- Combine measured PDF columns with `pdf.artifact` so line numbers and decorative parts are visually aligned, tagged as non-semantic, and kept out of the code column's normal selection path.
 
 ## Non-Goals
 
@@ -239,7 +239,7 @@ VisualRow = (
 )
 ```
 
-The `copy-text` field is mainly for HTML and future export behavior. PDF line numbers and decoration should use `pdf.artifact` so they do not enter copied text.
+The `copy-text` field is mainly for HTML and future export behavior. PDF line numbers and decoration should be rendered in the gutter/decorative path and tagged with `pdf.artifact`, but viewer copy behavior still depends on the PDF renderer's physical layout.
 
 ## Numbering
 
@@ -297,8 +297,8 @@ Layout responsibilities:
 Possible API direction:
 
 ```typst
-layout: layouts.default.with(
-  gutter: (enabled: true, placement: "left"),
+layout: layouts.with(
+  gutter: (enabled: true, placement: "left", width: 2.8em),
   comments: (placement: "below-line"),
   lang-tab: (placement: "attached", keep-with-body: true),
 )
@@ -313,7 +313,7 @@ Components render individual parts. They consume context and return content or t
 Possible API direction:
 
 ```typst
-components: components.default.with(
+components: components.with(
   frame: my-frame,
   gutter: my-gutter,
   lang-tab: my-lang-tab,
@@ -333,6 +333,8 @@ ctx = (
   components: components,
 )
 ```
+
+Default components may mark decorative PDF content with `pdf.artifact`, but a custom component owns the content it returns. If a replacement gutter or skip component should remain non-semantic in PDF, that component should preserve the artifact wrapper.
 
 Components should not decide data semantics. For example:
 
@@ -440,9 +442,9 @@ Design rules:
 2. Implement `selectors.typ` and normalize all selection into `SelectionPlan`.
 3. Implement `annotations.typ` for highlights, comments, per-line colors, header, and footer.
 4. Implement `model.typ` to produce `VisualRows` in one pass.
-5. Implement a minimal PDF renderer that renders rows one by one and uses `pdf.artifact` for gutter/decorations.
-6. Add style tokens and default components.
-7. Add layout options for gutter, comments, language tab, and frame.
+5. Implement a minimal PDF renderer that uses measured gutter/body columns and `pdf.artifact` for gutter/decorations.
+6. Add style tokens, default components, and component overrides.
+7. Add layout options for gutter, comments, skip rows, language tab, and frame.
 8. Add block summary metadata for label-based continuation.
 9. Add optional line reference metadata only if needed.
 10. Add HTML renderer after the PDF model is stable.
