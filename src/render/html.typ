@@ -82,7 +82,11 @@
   }
 }
 
-#let _line-attrs(row) = {
+#let _css-inset(inset) = {
+  "padding:" + repr(inset.top) + " " + repr(inset.right) + " " + repr(inset.bottom) + " " + repr(inset.left)
+}
+
+#let _line-attrs(row, layout-plan) = {
   let attrs = (
     class: _classes(
       "zebraw-row",
@@ -90,6 +94,7 @@
       if row.annotation != none and row.annotation.highlighted { "is-highlighted" },
       if row.annotation != none and row.annotation.comment != none { "has-comment" },
     ),
+    style: _css-inset(layout-plan.inset),
   )
 
   if row.source-number != none {
@@ -342,6 +347,7 @@
     attrs: _attr-dict(
       class: _classes("zebraw-row", "is-comment"),
       data_source_line: str(row.source-number),
+      style: _css-inset(layout-plan.inset),
     ),
     if placement == "end" {
       body
@@ -383,7 +389,7 @@
 
   html.elem(
     "span",
-    attrs: _line-attrs(row),
+    attrs: _line-attrs(row, layout-plan),
     if placement == "end" {
       body
       separator
@@ -448,6 +454,14 @@
   plan
 }
 
+#let _chrome-inset(layout-plan, slot) = {
+  if slot == "header" {
+    layout-plan.header.inset
+  } else {
+    layout-plan.footer.inset
+  }
+}
+
 #let _chrome(model, layout-plan, slot) = {
   let content = if slot == "header" {
     model.chrome.header
@@ -459,7 +473,14 @@
   if content == none or placement == "hidden" {
     []
   } else {
-    html.elem("div", attrs: _attr-dict(class: "zebraw-" + slot), content)
+    html.elem(
+      "div",
+      attrs: _attr-dict(
+        class: "zebraw-" + slot,
+        style: _css-inset(_chrome-inset(layout-plan, slot)),
+      ),
+      content,
+    )
   }
 }
 
