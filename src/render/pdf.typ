@@ -12,7 +12,6 @@
   lang-background: none,
   lang-fill: luma(80),
   lang-inset: (x: 0.5em, y: 0.24em),
-  inset: (top: 0.34em, right: 0.5em, bottom: 0.34em, left: 0.5em),
   radius: 0.34em,
 )
 
@@ -158,10 +157,15 @@
   } else {
     components-plan.footer
   }
+  let inset = if slot == "header" {
+    layout-plan.header.inset
+  } else {
+    layout-plan.footer.inset
+  }
 
   grid.cell(
     fill: style.background,
-    inset: layout-plan.inset,
+    inset: inset,
     align: left + top,
     (component)(_ctx(model, none, style, layout-plan, components-plan)),
   )

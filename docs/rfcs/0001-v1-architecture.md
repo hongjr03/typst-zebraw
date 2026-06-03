@@ -331,14 +331,14 @@ layout: layouts.with(
   comments: (placement: "below-line", width: 14em, flag: none, indent: false),
   indent-guides: (enabled: false, unit: 2, mode: "line"),
   code: (hanging-indent: false),
-  header: (placement: "above"),
-  footer: (placement: "below"),
+  header: (placement: "above", inset: auto),
+  footer: (placement: "below", inset: auto),
   lang-tab: (placement: "top-right", keep-with-body: true),
 )
 ```
 
 The language tab page-break issue should be solved here, not in the language-tab component.
-`layout.inset` follows Typst's layout vocabulary: it is padding for row/chrome cells, not a color/style token. It accepts either a single inset value or a four-side dictionary that renderers normalize before measuring.
+`layout.inset` follows Typst's layout vocabulary: it is padding for row cells, not a color/style token. It accepts either a single inset value or a four-side dictionary that renderers normalize before measuring. Header/footer chrome defaults to edge-aware inset: the header inherits top/left/right and drops bottom padding, while the footer inherits bottom/left/right and drops top padding. `layout.header.inset` and `layout.footer.inset` can override that default explicitly.
 The current PDF slice supports numbering-column placement values `start`, `end`, and `hidden`; line-number existence still belongs to the numbering strategy, while `layout.numbers.placement` only controls where or whether that display column is rendered.
 The current PDF slice supports a numbering separator through `layout.numbers.separator`; it is rendered as decorative PDF artifact between numbers and body, not as part of the numbering strategy.
 The measured PDF column shape remains the same when the separator is hidden: the separator column is still present at `0pt` width. This keeps row measurement and final rendering on the same path instead of making the no-separator case a separate two-column layout.

@@ -30,9 +30,11 @@
   ),
   header: (
     placement: "above",
+    inset: auto,
   ),
   footer: (
     placement: "below",
+    inset: auto,
   ),
   lang-tab: (
     placement: "top-right",
@@ -56,18 +58,42 @@
   }
 }
 
-#let resolve(layout) = (
-  inset: _resolve-inset(layout.at("inset", default: default.inset)),
-  numbers: default.numbers + layout.at("numbers", default: (:)),
-  comments: default.comments + layout.at("comments", default: (:)),
-  indent-guides: default.indent-guides + layout.at("indent-guides", default: (:)),
-  code: default.code + layout.at("code", default: (:)),
-  skip: default.skip + layout.at("skip", default: (:)),
-  header: default.header + layout.at("header", default: (:)),
-  footer: default.footer + layout.at("footer", default: (:)),
-  lang-tab: default.lang-tab + layout.at("lang-tab", default: (:)),
-  html: default.html + layout.at("html", default: (:)),
-  frame: default.frame + layout.at("frame", default: (:)),
-)
+#let _edge-inset(inset, slot) = {
+  if slot == "header" {
+    inset + (bottom: 0pt)
+  } else {
+    inset + (top: 0pt)
+  }
+}
+
+#let _resolve-chrome(plan, base-inset, slot) = {
+  let inset = if plan.inset == auto {
+    _edge-inset(base-inset, slot)
+  } else {
+    _resolve-inset(plan.inset)
+  }
+
+  plan + (inset: inset)
+}
+
+#let resolve(layout) = {
+  let inset = _resolve-inset(layout.at("inset", default: default.inset))
+  let header = _resolve-chrome(default.header + layout.at("header", default: (:)), inset, "header")
+  let footer = _resolve-chrome(default.footer + layout.at("footer", default: (:)), inset, "footer")
+
+  (
+    inset: inset,
+    numbers: default.numbers + layout.at("numbers", default: (:)),
+    comments: default.comments + layout.at("comments", default: (:)),
+    indent-guides: default.indent-guides + layout.at("indent-guides", default: (:)),
+    code: default.code + layout.at("code", default: (:)),
+    skip: default.skip + layout.at("skip", default: (:)),
+    header: header,
+    footer: footer,
+    lang-tab: default.lang-tab + layout.at("lang-tab", default: (:)),
+    html: default.html + layout.at("html", default: (:)),
+    frame: default.frame + layout.at("frame", default: (:)),
+  )
+}
 
 #let with(..overrides) = resolve(overrides.named())
