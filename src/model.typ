@@ -52,7 +52,7 @@
   let last-number = none
 
   for row in rows {
-    if row.source-number != none {
+    if row.kind == "code" or row.kind == "blank" {
       visible-lines += 1
       if type(row.display-number) == int {
         last-number = row.display-number
