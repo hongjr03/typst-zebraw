@@ -36,6 +36,9 @@
   lang-tab: (
     placement: "top-right",
   ),
+  html: (
+    copy-button: false,
+  ),
   frame: (
     breakable: true,
     width: 100%,
@@ -52,6 +55,7 @@
   header: default.header + layout.at("header", default: (:)),
   footer: default.footer + layout.at("footer", default: (:)),
   lang-tab: default.lang-tab + layout.at("lang-tab", default: (:)),
+  html: default.html + layout.at("html", default: (:)),
   frame: default.frame + layout.at("frame", default: (:)),
 )
 

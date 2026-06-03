@@ -12,22 +12,31 @@
 
 #let _attr-dict(
   class: none,
+  type: none,
   translate: none,
   aria_hidden: none,
+  aria_label: none,
   data_language: none,
   data_source_line: none,
   data_indent: none,
   data_copy_text: none,
+  data_state: none,
 ) = {
   let attrs = (:)
   if class != none {
     attrs.insert("class", class)
+  }
+  if type != none {
+    attrs.insert("type", type)
   }
   if translate != none {
     attrs.insert("translate", translate)
   }
   if aria_hidden != none {
     attrs.insert("aria-hidden", aria_hidden)
+  }
+  if aria_label != none {
+    attrs.insert("aria-label", aria_label)
   }
   if data_language != none {
     attrs.insert("data-language", data_language)
@@ -40,6 +49,9 @@
   }
   if data_copy_text != none {
     attrs.insert("data-copy-text", data_copy_text)
+  }
+  if data_state != none {
+    attrs.insert("data-state", data_state)
   }
   attrs
 }
@@ -194,8 +206,30 @@
 
 #let _style() = html.elem(
   "style",
-  ".zebraw{display:block}.zebraw-pre{margin:0;overflow:auto}.zebraw-code-root{display:block;white-space:pre}.zebraw-row{display:block}.zebraw-gutter{display:inline-block;min-width:3ch;margin-right:1ch;text-align:right;user-select:none}.zebraw-number-cell{display:inline-block;min-width:2ch;text-align:right}.zebraw-number-cell+.zebraw-number-cell{margin-left:.5ch}.zebraw-comment,.zebraw-skip-label{user-select:none}",
+  ".zebraw{display:block}.zebraw-pre{margin:0;overflow:auto}.zebraw-code-root{display:block;white-space:pre}.zebraw-row{display:block}.zebraw-gutter{display:inline-block;min-width:3ch;margin-right:1ch;text-align:right;user-select:none}.zebraw-number-cell{display:inline-block;min-width:2ch;text-align:right}.zebraw-number-cell+.zebraw-number-cell{margin-left:.5ch}.zebraw-comment,.zebraw-skip-label{user-select:none}.zebraw-copy-button{float:right}",
 )
+
+#let _copy-button() = html.elem(
+  "button",
+  attrs: _attr-dict(
+    class: "zebraw-copy-button",
+    type: "button",
+    aria_label: "Copy code",
+    data_state: "idle",
+  ),
+  [Copy],
+)
+
+#let _copy-script() = html.elem(
+  "script",
+  "if(!window.__zebrawCopyHandler){window.__zebrawCopyHandler=true;document.addEventListener('click',function(event){var button=event.target.closest('.zebraw-copy-button');if(!button){return;}var root=button.closest('.zebraw');if(!root){return;}var text=root.getAttribute('data-copy-text')||'';var done=function(){button.setAttribute('data-state','copied');setTimeout(function(){button.setAttribute('data-state','idle');},1200);};if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(done,done);}else{var area=document.createElement('textarea');area.value=text;area.setAttribute('readonly','');area.style.position='fixed';area.style.opacity='0';document.body.appendChild(area);area.select();try{document.execCommand('copy');}finally{document.body.removeChild(area);done();}}});}",
+)
+
+#let _html-plan(layout-plan) = {
+  let plan = layout-plan.html
+  assert(type(plan.copy-button) == bool, message: "zebraw: layout.html.copy-button must be a boolean")
+  plan
+}
 
 #let _chrome(model, layout-plan, slot) = {
   let content = if slot == "header" {
@@ -218,6 +252,7 @@
 
 #let render-html(model, style: (:), layout-plan: layout-presets.default, components-plan: (:)) = {
   let layout-plan = layout-presets.resolve(layout-plan)
+  let html-plan = _html-plan(layout-plan)
   let rows = _visible-rows(model.rows, layout-plan)
   let code-attrs = _attr-dict(
     class: _classes("zebraw-code-root", if model.lang != none { "language-" + model.lang }),
@@ -233,6 +268,10 @@
     ),
     {
       _style()
+      if html-plan.copy-button {
+        _copy-button()
+        _copy-script()
+      }
       if model.chrome.lang-label != none {
         html.elem("div", attrs: _attr-dict(class: "zebraw-lang", aria_hidden: "true"), [#model.chrome.lang-label])
       }

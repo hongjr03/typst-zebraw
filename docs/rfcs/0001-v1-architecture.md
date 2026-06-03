@@ -469,7 +469,7 @@ One caveat: `pdf.artifact` expresses PDF tagging semantics, but generic text ext
 ## HTML Rendering
 
 HTML should be an independent backend that consumes the same `VisualRows`.
-The current HTML slice renders a stable wrapper/pre/code/row DOM from `VisualRows`, marks code containers with `translate="no"`, keeps gutter/comment/skip decoration `aria-hidden`, exposes `data-copy-text` from `VisualRows.copy-text`, and consumes header/footer plus comment placement from the same model/layout data as PDF. It intentionally does not yet include a copy button or full Expressive Code styling.
+The current HTML slice renders a stable wrapper/pre/code/row DOM from `VisualRows`, marks code containers with `translate="no"`, keeps gutter/comment/skip decoration `aria-hidden`, exposes `data-copy-text` from `VisualRows.copy-text`, and consumes header/footer plus comment placement from the same model/layout data as PDF. It supports an optional `layout.html.copy-button` that copies `data-copy-text`; full Expressive Code styling is still out of scope for this slice.
 
 HTML-specific requirements:
 
