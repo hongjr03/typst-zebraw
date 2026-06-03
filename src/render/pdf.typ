@@ -53,6 +53,20 @@
   placement
 }
 
+#let _gutter-placement(layout-plan) = {
+  assert(
+    layout-plan.gutter.at("enabled", default: none) == none,
+    message: "zebraw: layout.gutter.enabled was removed; use gutter placement hidden instead",
+  )
+
+  let placement = layout-plan.gutter.placement
+  assert(
+    placement == "left" or placement == "right" or placement == "hidden",
+    message: "zebraw: pdf gutter placement currently supports left, right, or hidden",
+  )
+  placement
+}
+
 #let _has-beside-comment(row, layout-plan) = {
   let is-source-row = row.kind == "code" or row.kind == "blank"
   let is-beside = _comment-placement(layout-plan) == "beside-line"
@@ -211,6 +225,7 @@
 
 #let _render-row-for-measure(model, row, gutter-width, style, layout-plan, components-plan) = {
   let fill = _row-fill(row, style)
+  let gutter-placement = _gutter-placement(layout-plan)
 
   if gutter-width == 0pt {
     grid(
@@ -218,6 +233,14 @@
       row-gutter: 0pt,
       column-gutter: 0pt,
       _render-body(model, row, fill, style, layout-plan, components-plan),
+    )
+  } else if gutter-placement == "right" {
+    grid(
+      columns: (1fr, gutter-width),
+      row-gutter: 0pt,
+      column-gutter: 0pt,
+      _render-body(model, row, fill, style, layout-plan, components-plan),
+      _render-gutter(model, row, fill, style, layout-plan, components-plan),
     )
   } else {
     grid(
@@ -245,6 +268,10 @@
 }
 
 #let _gutter-width(rows, layout-plan) = {
+  if _gutter-placement(layout-plan) == "hidden" {
+    return 0pt
+  }
+
   let has-gutter = false
   for row in rows {
     if row.display-number != none {
@@ -252,7 +279,7 @@
     }
   }
 
-  if layout-plan.gutter.enabled and has-gutter {
+  if has-gutter {
     layout-plan.gutter.width + layout-plan.gutter.gap
   } else {
     0pt
@@ -294,6 +321,7 @@
   context layout(size => {
     let rows = _visible-rows(model.rows, layout-plan)
     let gutter-width = _gutter-width(rows, layout-plan)
+    let gutter-placement = _gutter-placement(layout-plan)
     // PDF uses measured columns so gutter text is not interleaved with code text.
     let heights = rows.map(row => {
       measure(
@@ -306,6 +334,14 @@
 
     if gutter-width == 0pt {
       body-column
+    } else if gutter-placement == "right" {
+      grid(
+        columns: (1fr, gutter-width),
+        row-gutter: 0pt,
+        column-gutter: 0pt,
+        body-column,
+        _render-gutter-column(model, rows, heights, style, layout-plan, components-plan),
+      )
     } else {
       grid(
         columns: (gutter-width, 1fr),

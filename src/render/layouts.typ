@@ -1,6 +1,5 @@
 #let default = (
   gutter: (
-    enabled: true,
     width: 2.4em,
     gap: 0.4em,
     placement: "left",
