@@ -118,10 +118,13 @@ SourceBlock = (
       text: str,
       body: content,
       indent: str,
+      effective-indent: str,
     ),
   ),
 )
 ```
+
+`indent` is the line's literal leading whitespace after normalization. `effective-indent` is the structural indentation used by visual features such as indentation guides and hanging indentation. Blank lines should preserve their literal empty `indent`, but inherit `effective-indent` from the previous non-blank source line so visual structure does not collapse at blank rows.
 
 ## Selection
 
@@ -248,6 +251,7 @@ VisualRow = (
   text: str,
   body: content,
   indent: str,
+  effective-indent: str,
   annotation: none | LineAnnotation,
   copy-text: str,
 )
@@ -372,6 +376,35 @@ Components should not decide data semantics. For example:
 - language tab appearance belongs to component,
 - stroke belongs to style/component customization.
 
+## Visual Features
+
+The old implementation had several visual features that should remain in v1, but they should not return as unrelated top-level switches.
+
+Inventory from the previous package:
+
+- multiple line-number columns for diff-style blocks,
+- line-number separator between gutter and code,
+- indentation guide lines,
+- hanging indentation for wrapped or visually long code lines,
+- fast-preview indentation mode,
+- per-line background colors,
+- comment flag and comment indentation behavior,
+- language tab content, color, and font customization,
+- header/footer/frame extension,
+- HTML wrapping and copy button behavior.
+
+Proposed v1 ownership:
+
+- Multiple numbering belongs to the numbering strategy. `numbering.custom(...)` can return array display values per source line; gutter components decide how those columns are drawn.
+- The line-number separator is gutter decoration. It belongs to `layout.gutter` and the default gutter/frame components, not to numbering.
+- Indentation guide data belongs to the source/model layer because it depends on leading whitespace and blank-line inheritance. Rendering those guides belongs to a dedicated `indent-guide` component. Renderers should consume `effective-indent`; they should not re-parse code text.
+- Hanging indentation is layout behavior for the code component. It should consume model indentation data instead of parsing code content again.
+- Fast-preview is a performance/layout mode for indentation rendering. It should be explicit in the indentation layout plan, not global state.
+- Per-line colors are annotations; they should continue to merge through the single `LineAnnotation` record instead of a separate `line-colors` dictionary.
+- Comment flags and comment indentation are comment component choices. The model should store comment content and source-line association only.
+- Language appearance belongs to `components.lang-tab` and style tokens; language placement belongs to `layout.lang-tab`.
+- HTML wrapping and copy buttons are HTML-target behavior, but they must consume `VisualRows.copy-text` rather than reconstructing raw text from rendered content.
+
 ## Style And Overrides
 
 Most visual customization should use style tokens before replacing components.
@@ -476,8 +509,9 @@ Design rules:
 6. Add style tokens, default components, and component overrides.
 7. Add layout options for gutter, comments, skip rows, header/footer chrome, language tab, and frame.
 8. Add block summary metadata for label-based continuation.
-9. Add optional line reference metadata only if needed.
-10. Add HTML renderer after the PDF model is stable and route it through the public `target` parameter.
+9. Add visual layout/component slices for gutter separators, indentation guides, hanging indentation, and comment flags.
+10. Add optional line reference metadata only if needed.
+11. Add HTML renderer after the PDF model is stable and route it through the public `target` parameter.
 
 ## References
 

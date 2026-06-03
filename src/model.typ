@@ -19,6 +19,7 @@
     text: source-line.text,
     body: source-line.body,
     indent: source-line.indent,
+    effective-indent: source-line.effective-indent,
     annotation: annotation,
     copy-text: source-line.text,
   )
@@ -31,6 +32,7 @@
   text: "",
   body: annotation.comment,
   indent: source-line.indent,
+  effective-indent: source-line.effective-indent,
   annotation: annotation,
   copy-text: "",
 )
@@ -42,6 +44,7 @@
   text: "",
   body: segment.label,
   indent: "",
+  effective-indent: "",
   annotation: none,
   copy-text: "",
   skipped-lines: segment.count,

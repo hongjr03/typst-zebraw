@@ -10,6 +10,7 @@
   let source-number = _value(row.source-number)
   let display-number = _value(row.display-number)
   let indent-width = if row.indent == none { 0 } else { row.indent.len() }
+  let effective-indent-width = if row.effective-indent == none { 0 } else { row.effective-indent.len() }
   let highlight = if row.annotation != none and row.annotation.highlighted { "yes" } else { "no" }
   let annotation = if _has-line-annotation(row.annotation) { "yes" } else { "no" }
 
@@ -19,6 +20,7 @@
     " | src=", source-number,
     " | num=", display-number,
     " | indent=", str(indent-width),
+    " | effective-indent=", str(effective-indent-width),
     " | highlight=", highlight,
     " | annotation=", annotation,
     " | text=", repr(row.text),
