@@ -7,6 +7,8 @@
   ),
   comments: (
     placement: "below-line",
+    width: 14em,
+    gap: 0.5em,
   ),
   skip: (
     placement: "body",

@@ -42,6 +42,29 @@
   components: components-plan,
 )
 
+#let _comment-placement(layout-plan) = {
+  let placement = layout-plan.comments.placement
+  assert(
+    placement == "below-line" or placement == "beside-line" or placement == "hidden",
+    message: "zebraw: pdf comments placement currently supports below-line, beside-line, or hidden",
+  )
+  placement
+}
+
+#let _has-beside-comment(row, layout-plan) = {
+  let is-source-row = row.kind == "code" or row.kind == "blank"
+  let is-beside = _comment-placement(layout-plan) == "beside-line"
+  is-source-row and is-beside and row.annotation.comment != none
+}
+
+#let _comment-row-for(row) = row + (
+  kind: "comment",
+  display-number: none,
+  text: "",
+  body: row.annotation.comment,
+  copy-text: "",
+)
+
 #let _render-chrome(model, slot, style, layout-plan, components-plan) = {
   let content = if slot == "header" {
     model.chrome.header
@@ -112,13 +135,42 @@
   )
 }
 
-#let _render-code(model, row, fill, style, layout-plan, components-plan) = {
+#let _render-code-cell(model, row, fill, style, layout-plan, components-plan) = {
   grid.cell(
     fill: fill,
     inset: style.inset,
     align: left + top,
     (components-plan.code)(_ctx(model, row, style, layout-plan, components-plan)),
   )
+}
+
+#let _render-side-comment-cell(model, row, style, layout-plan, components-plan) = {
+  let comment-row = _comment-row-for(row)
+  grid.cell(
+    fill: style.comment-background,
+    inset: style.inset,
+    align: left + top,
+    (components-plan.comment)(_ctx(model, comment-row, style, layout-plan, components-plan)),
+  )
+}
+
+#let _render-code(model, row, fill, style, layout-plan, components-plan) = {
+  if _has-beside-comment(row, layout-plan) {
+    grid.cell(
+      fill: fill,
+      inset: 0pt,
+      align: left + top,
+      grid(
+        columns: (1fr, layout-plan.comments.width),
+        row-gutter: 0pt,
+        column-gutter: layout-plan.comments.gap,
+        _render-code-cell(model, row, fill, style, layout-plan, components-plan),
+        _render-side-comment-cell(model, row, style, layout-plan, components-plan),
+      ),
+    )
+  } else {
+    _render-code-cell(model, row, fill, style, layout-plan, components-plan)
+  }
 }
 
 #let _render-comment(model, row, fill, style, layout-plan, components-plan) = {
@@ -171,9 +223,11 @@
 }
 
 #let _visible-rows(rows, layout-plan) = {
+  let comments-placement = _comment-placement(layout-plan)
   let visible = ()
   for row in rows {
-    if row.kind == "comment" and layout-plan.comments.placement == "hidden" {
+    if row.kind == "comment" and comments-placement == "hidden" {
+    } else if row.kind == "comment" and comments-placement == "beside-line" {
     } else if row.kind == "skip" and layout-plan.skip.placement == "hidden" {
     } else {
       visible.push(row)

@@ -304,7 +304,7 @@ Possible API direction:
 ```typst
 layout: layouts.with(
   gutter: (enabled: true, placement: "left", width: 2.8em),
-  comments: (placement: "below-line"),
+  comments: (placement: "below-line", width: 14em),
   header: (placement: "above"),
   footer: (placement: "below"),
   lang-tab: (placement: "attached", keep-with-body: true),
@@ -312,6 +312,7 @@ layout: layouts.with(
 ```
 
 The language tab page-break issue should be solved here, not in the language-tab component.
+The current PDF slice supports comment placement values `below-line`, `beside-line`, and `hidden`. `beside-line` keeps the line annotation in the model but renders the comment component in a side column inside the corresponding code row.
 The current PDF slice supports header/footer visibility as layout chrome: header is rendered above the measured body, footer below it, and either can be hidden through layout.
 The current PDF slice also supports `lang-tab` as attached chrome: it is rendered above the measured body when the source block has a language label, and it can be hidden through layout.
 
