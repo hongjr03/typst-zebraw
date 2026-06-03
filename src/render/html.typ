@@ -99,22 +99,17 @@
   attrs
 }
 
-#let _gutter-placement(layout-plan) = {
+#let _numbers-placement(layout-plan) = {
+  let placement = layout-plan.numbers.placement
   assert(
-    layout-plan.gutter.at("enabled", default: none) == none,
-    message: "zebraw: layout.gutter.enabled was removed; use gutter placement hidden instead",
-  )
-
-  let placement = layout-plan.gutter.placement
-  assert(
-    placement == "left" or placement == "right" or placement == "hidden",
-    message: "zebraw: html gutter placement currently supports left, right, or hidden",
+    placement == "start" or placement == "end" or placement == "hidden",
+    message: "zebraw: html numbers placement currently supports start, end, or hidden",
   )
   placement
 }
 
-#let _has-gutter(rows, layout-plan) = {
-  if _gutter-placement(layout-plan) == "hidden" {
+#let _has-numbers(rows, layout-plan) = {
+  if _numbers-placement(layout-plan) == "hidden" {
     return false
   }
 
@@ -126,14 +121,14 @@
   false
 }
 
-#let _gutter(row, has-gutter) = {
-  if not has-gutter {
+#let _numbers(row, has-numbers) = {
+  if not has-numbers {
     []
   } else {
     html.elem(
       "span",
       attrs: _attr-dict(
-        class: "zebraw-gutter",
+        class: "zebraw-numbers",
         aria_hidden: "true",
       ),
       _display-number(row.display-number),
@@ -141,14 +136,14 @@
   }
 }
 
-#let _gutter-separator(layout-plan, has-gutter) = {
-  if not has-gutter or not layout-plan.gutter.separator {
+#let _number-separator(layout-plan, has-numbers) = {
+  if not has-numbers or not layout-plan.numbers.separator {
     []
   } else {
     html.elem(
       "span",
       attrs: _attr-dict(
-        class: "zebraw-gutter-separator",
+        class: "zebraw-number-separator",
         aria_hidden: "true",
       ),
     )
@@ -328,10 +323,10 @@
   }
 }
 
-#let _comment-row(row, layout-plan, has-gutter) = {
-  let placement = _gutter-placement(layout-plan)
-  let gutter = _gutter(row, has-gutter)
-  let separator = _gutter-separator(layout-plan, has-gutter)
+#let _comment-row(row, layout-plan, has-numbers) = {
+  let placement = _numbers-placement(layout-plan)
+  let numbers = _numbers(row, has-numbers)
+  let separator = _number-separator(layout-plan, has-numbers)
   let body = html.elem(
     "span",
     attrs: _attr-dict(
@@ -348,12 +343,12 @@
       class: _classes("zebraw-row", "is-comment"),
       data_source_line: str(row.source-number),
     ),
-    if placement == "right" {
+    if placement == "end" {
       body
       separator
-      gutter
+      numbers
     } else {
-      gutter
+      numbers
       separator
       body
     },
@@ -369,14 +364,14 @@
   row.body,
 )
 
-#let _row(row, layout-plan, has-gutter) = {
+#let _row(row, layout-plan, has-numbers) = {
   if row.kind == "comment" {
-    return _comment-row(row, layout-plan, has-gutter)
+    return _comment-row(row, layout-plan, has-numbers)
   }
 
-  let placement = _gutter-placement(layout-plan)
-  let gutter = _gutter(row, has-gutter)
-  let separator = _gutter-separator(layout-plan, has-gutter)
+  let placement = _numbers-placement(layout-plan)
+  let numbers = _numbers(row, has-numbers)
+  let separator = _number-separator(layout-plan, has-numbers)
   let body = if row.kind == "skip" {
     _skip(row)
   } else {
@@ -389,12 +384,12 @@
   html.elem(
     "span",
     attrs: _line-attrs(row),
-    if placement == "right" {
+    if placement == "end" {
       body
       separator
-      gutter
+      numbers
     } else {
-      gutter
+      numbers
       separator
       body
     },
@@ -427,7 +422,7 @@
 
 #let _style() = html.elem(
   "style",
-  ".zebraw{display:block}.zebraw-pre{margin:0;overflow:auto}.zebraw-code-root{display:block;white-space:pre}.zebraw.is-wrapped .zebraw-code-root{white-space:pre-wrap;overflow-wrap:anywhere}.zebraw-row{display:block}.zebraw-gutter{display:inline-block;min-width:3ch;text-align:right;user-select:none}.zebraw-gutter-separator{display:inline-block;width:0;margin:0 .5ch;border-left:1px solid currentColor;opacity:.35;user-select:none}.zebraw-number-cell{display:inline-block;min-width:2ch;text-align:right}.zebraw-number-cell+.zebraw-number-cell{margin-left:.5ch}.zebraw-code{position:relative}.zebraw-indent-guide{position:absolute;top:0;bottom:0;left:calc(var(--zebraw-guide-column)*1ch);border-left:1px solid currentColor;opacity:.35;pointer-events:none}.zebraw-comment,.zebraw-skip-label{user-select:none}.zebraw-comment-indent{display:inline-block;width:calc(var(--zebraw-comment-indent)*1ch)}.zebraw-comment-flag{display:inline-block}.zebraw-copy-button{float:right}",
+  ".zebraw{display:block}.zebraw-pre{margin:0;overflow:auto}.zebraw-code-root{display:block;white-space:pre}.zebraw.is-wrapped .zebraw-code-root{white-space:pre-wrap;overflow-wrap:anywhere}.zebraw-row{display:block}.zebraw-numbers{display:inline-block;min-width:3ch;text-align:right;user-select:none}.zebraw-number-separator{display:inline-block;width:0;margin:0 .5ch;border-left:1px solid currentColor;opacity:.35;user-select:none}.zebraw-number-cell{display:inline-block;min-width:2ch;text-align:right}.zebraw-number-cell+.zebraw-number-cell{margin-left:.5ch}.zebraw-code{position:relative}.zebraw-indent-guide{position:absolute;top:0;bottom:0;left:calc(var(--zebraw-guide-column)*1ch);border-left:1px solid currentColor;opacity:.35;pointer-events:none}.zebraw-comment,.zebraw-skip-label{user-select:none}.zebraw-comment-indent{display:inline-block;width:calc(var(--zebraw-comment-indent)*1ch)}.zebraw-comment-flag{display:inline-block}.zebraw-copy-button{float:right}",
 )
 
 #let _copy-button() = html.elem(
@@ -472,7 +467,7 @@
   let layout-plan = layout-presets.resolve(layout-plan)
   let html-plan = _html-plan(layout-plan)
   let rows = _visible-rows(model.rows, layout-plan)
-  let has-gutter = _has-gutter(rows, layout-plan)
+  let has-numbers = _has-numbers(rows, layout-plan)
   let code-attrs = _attr-dict(
     class: _classes("zebraw-code-root", if model.lang != none { "language-" + model.lang }),
     translate: "no",
@@ -502,7 +497,7 @@
           attrs: code-attrs,
           {
             _chrome(model, layout-plan, "header")
-            rows.map(row => _row(row, layout-plan, has-gutter)).join()
+            rows.map(row => _row(row, layout-plan, has-numbers)).join()
             _chrome(model, layout-plan, "footer")
           },
         ),

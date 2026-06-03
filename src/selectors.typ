@@ -11,38 +11,6 @@
   label: label,
 )
 
-#let _end-bound(to, inclusive) = {
-  if to == none {
-    none
-  } else if inclusive {
-    to + 1
-  } else {
-    to
-  }
-}
-#let _normalize-range(item, keep-offset, inclusive) = {
-  if type(item) == int {
-    _line-segment(item, item + 1, keep-offset)
-  } else if type(item) == array {
-    assert(item.len() == 2, message: "zebraw: range arrays must have exactly two items")
-    _line-segment(
-      item.at(0, default: 1),
-      _end-bound(item.at(1, default: none), inclusive),
-      keep-offset,
-    )
-  } else if type(item) == dictionary {
-    let from = item.at("from", default: item.at("start", default: item.at("0", default: 1)))
-    let to = item.at("to", default: item.at("end", default: item.at("1", default: none)))
-    _line-segment(
-      from,
-      _end-bound(to, item.at("inclusive", default: inclusive)),
-      item.at("keep-offset", default: keep-offset),
-    )
-  } else {
-    panic("zebraw: unsupported range selector item " + repr(item))
-  }
-}
-
 #let _skip-label(count, template) = {
   if template == none {
     [#count lines skipped]
@@ -62,27 +30,29 @@
   _line-segment(1, none, true),
 )
 
-#let range(start: 1, end: none, keep-offset: true, inclusive: false) = {
+#let range(..args) = {
+  let pos = args.pos()
+  let named = args.named()
+  assert(pos.len() == 2, message: "zebraw: selectors.range expects start and end positional arguments")
+
   block => (
-    _line-segment(start, _end-bound(end, inclusive), keep-offset),
+    _line-segment(pos.at(0), pos.at(1), named.at("keep-offset", default: true)),
   )
 }
 
-#let line(number, keep-offset: true) = range(start: number, end: number, keep-offset: keep-offset, inclusive: true)
+#let line(number, keep-offset: true) = range(number, number + 1, keep-offset: keep-offset)
 
 #let lines(..numbers) = {
   let segments = ()
   for number in numbers.pos() {
-    segments.push((number, number))
+    segments.push(line(number, keep-offset: numbers.named().at("keep-offset", default: true)))
   }
-  ranges(..segments, keep-offset: numbers.named().at("keep-offset", default: true), inclusive: true, skip: false)
+  ranges(..segments, skip: false)
 }
 
 #let ranges(..args) = {
-  let items = args.pos()
+  let selectors = args.pos()
   let named = args.named()
-  let keep-offset = named.at("keep-offset", default: true)
-  let inclusive = named.at("inclusive", default: false)
   let skip = named.at("skip", default: true)
   let skip-label = named.at("skip-label", default: "{} lines skipped")
 
@@ -90,13 +60,19 @@
     let segments = ()
     let previous-end = none
 
-    for item in items {
-      let segment = _normalize-range(item, keep-offset, inclusive)
-      if skip and previous-end != none and segment.from > previous-end {
-        segments.push(_skip-segment(segment.from - previous-end, _skip-label(segment.from - previous-end, skip-label)))
+    for selector in selectors {
+      assert(type(selector) == function, message: "zebraw: selectors.ranges expects selector functions")
+
+      for segment in selector(block) {
+        if segment.kind == "lines" {
+          if skip and previous-end != none and segment.from > previous-end {
+            segments.push(_skip-segment(segment.from - previous-end, _skip-label(segment.from - previous-end, skip-label)))
+          }
+          previous-end = if segment.to == none { block.lines.len() + 1 } else { segment.to }
+        }
+
+        segments.push(segment)
       }
-      segments.push(segment)
-      previous-end = if segment.to == none { block.lines.len() + 1 } else { segment.to }
     }
 
     if segments.len() == 0 {

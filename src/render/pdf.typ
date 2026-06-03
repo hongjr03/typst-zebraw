@@ -7,7 +7,7 @@
   highlight: rgb("#94e2d5").lighten(70%),
   comment-background: rgb("#94e2d5").lighten(85%),
   skip-background: luma(235),
-  gutter-fill: luma(120),
+  number-fill: luma(120),
   indent-guide-fill: luma(150).transparentize(45%),
   lang-background: none,
   lang-fill: luma(80),
@@ -71,17 +71,13 @@
   placement
 }
 
-#let _gutter-placement(layout-plan) = {
-  assert(
-    layout-plan.gutter.at("enabled", default: none) == none,
-    message: "zebraw: layout.gutter.enabled was removed; use gutter placement hidden instead",
-  )
-  assert(type(layout-plan.gutter.number-gap) == length, message: "zebraw: layout.gutter.number-gap must be a length")
+#let _numbers-placement(layout-plan) = {
+  assert(type(layout-plan.numbers.column-gutter) == length, message: "zebraw: layout.numbers.column-gutter must be a length")
 
-  let placement = layout-plan.gutter.placement
+  let placement = layout-plan.numbers.placement
   assert(
-    placement == "left" or placement == "right" or placement == "hidden",
-    message: "zebraw: pdf gutter placement currently supports left, right, or hidden",
+    placement == "start" or placement == "end" or placement == "hidden",
+    message: "zebraw: pdf numbers placement currently supports start, end, or hidden",
   )
   placement
 }
@@ -95,16 +91,16 @@
   placement
 }
 
-#let _gutter-separator-width(layout-plan) = {
-  if layout-plan.gutter.separator {
-    layout-plan.gutter.separator-width
+#let _numbers-separator-width(layout-plan) = {
+  if layout-plan.numbers.separator {
+    layout-plan.numbers.separator-width
   } else {
     0pt
   }
 }
 
-#let _gutter-total-width(layout-plan) = {
-  layout-plan.gutter.width + _gutter-separator-width(layout-plan) + layout-plan.gutter.gap
+#let _numbers-total-width(layout-plan) = {
+  layout-plan.numbers.width + _numbers-separator-width(layout-plan) + layout-plan.numbers.gutter
 }
 
 #let _indent-guide-plan(layout-plan) = {
@@ -165,7 +161,7 @@
 
   grid.cell(
     fill: style.background,
-    inset: style.inset,
+    inset: layout-plan.inset,
     align: left + top,
     (component)(_ctx(model, none, style, layout-plan, components-plan)),
   )
@@ -177,7 +173,7 @@
   pdf.artifact([]),
 )
 
-#let _render-chrome(model, slot, gutter-width, style, layout-plan, components-plan) = {
+#let _render-chrome(model, slot, numbers-width, style, layout-plan, components-plan) = {
   let content = if slot == "header" {
     model.chrome.header
   } else {
@@ -199,20 +195,20 @@
   if content == none or placement == "hidden" {
     []
   } else {
-    let gutter-placement = _gutter-placement(layout-plan)
-    let separator-width = _gutter-separator-width(layout-plan)
+    let numbers-placement = _numbers-placement(layout-plan)
+    let separator-width = _numbers-separator-width(layout-plan)
     let body-cell = _render-chrome-body(model, slot, style, layout-plan, components-plan)
 
-    if gutter-width == 0pt {
+    if numbers-width == 0pt {
       grid(
         columns: (1fr,),
         row-gutter: 0pt,
         column-gutter: 0pt,
         body-cell,
       )
-    } else if gutter-placement == "right" {
+    } else if numbers-placement == "end" {
       grid(
-        columns: (1fr, separator-width, layout-plan.gutter.width + layout-plan.gutter.gap),
+        columns: (1fr, separator-width, layout-plan.numbers.width + layout-plan.numbers.gutter),
         row-gutter: 0pt,
         column-gutter: 0pt,
         body-cell,
@@ -221,7 +217,7 @@
       )
     } else {
       grid(
-        columns: (layout-plan.gutter.width + layout-plan.gutter.gap, separator-width, 1fr),
+        columns: (layout-plan.numbers.width + layout-plan.numbers.gutter, separator-width, 1fr),
         row-gutter: 0pt,
         column-gutter: 0pt,
         _render-chrome-spacer(style),
@@ -262,24 +258,24 @@
   (components-plan.lang-tab)(_ctx(model, none, style, layout-plan, components-plan))
 }
 
-#let _render-gutter(model, row, fill, style, layout-plan, components-plan) = {
+#let _render-numbers(model, row, fill, style, layout-plan, components-plan) = {
   grid.cell(
     fill: fill,
-    inset: style.inset,
+    inset: layout-plan.inset,
     align: right + top,
-    (components-plan.gutter)(_ctx(model, row, style, layout-plan, components-plan)),
+    (components-plan.numbers)(_ctx(model, row, style, layout-plan, components-plan)),
   )
 }
 
-#let _render-gutter-separator(fill, style, layout-plan) = grid.cell(
+#let _render-number-separator(fill, style, layout-plan) = grid.cell(
   fill: fill,
   inset: 0pt,
-  if layout-plan.gutter.separator {
+  if layout-plan.numbers.separator {
     pdf.artifact(
       rect(
-        width: layout-plan.gutter.separator-width,
+        width: layout-plan.numbers.separator-width,
         height: 100%,
-        fill: style.gutter-fill.transparentize(55%),
+        fill: style.number-fill.transparentize(55%),
       ),
     )
   },
@@ -301,7 +297,7 @@
       place(
         left + top,
         dx: column * advance,
-        dy: -style.inset.top,
+        dy: -layout-plan.inset.top,
         (components-plan.indent-guide)(
           _ctx(
             model,
@@ -320,7 +316,7 @@
 #let _render-code-cell(model, row, fill, style, layout-plan, components-plan, row-height: none) = {
   grid.cell(
     fill: fill,
-    inset: style.inset,
+    inset: layout-plan.inset,
     align: left + top,
     {
       _render-indent-guides(model, row, row-height, style, layout-plan, components-plan)
@@ -333,7 +329,7 @@
   let comment-row = _comment-row-for(row)
   grid.cell(
     fill: style.comment-background,
-    inset: style.inset,
+    inset: layout-plan.inset,
     align: left + top,
     (components-plan.comment)(_ctx(model, comment-row, style, layout-plan, components-plan)),
   )
@@ -361,7 +357,7 @@
 #let _render-comment(model, row, fill, style, layout-plan, components-plan) = {
   grid.cell(
     fill: fill,
-    inset: style.inset,
+    inset: layout-plan.inset,
     align: left + top,
     (components-plan.comment)(_ctx(model, row, style, layout-plan, components-plan)),
   )
@@ -370,7 +366,7 @@
 #let _render-skip(model, row, fill, style, layout-plan, components-plan) = {
   grid.cell(
     fill: fill,
-    inset: style.inset,
+    inset: layout-plan.inset,
     align: center + horizon,
     (components-plan.skip)(_ctx(model, row, style, layout-plan, components-plan)),
   )
@@ -386,39 +382,39 @@
   }
 }
 
-#let _render-row-for-measure(model, row, gutter-width, style, layout-plan, components-plan) = {
+#let _render-row-for-measure(model, row, numbers-width, style, layout-plan, components-plan) = {
   let fill = _row-fill(row, style)
-  let gutter-placement = _gutter-placement(layout-plan)
-  let separator-width = _gutter-separator-width(layout-plan)
-  let columns = if gutter-placement == "right" {
-    (1fr, separator-width, layout-plan.gutter.width + layout-plan.gutter.gap)
+  let numbers-placement = _numbers-placement(layout-plan)
+  let separator-width = _numbers-separator-width(layout-plan)
+  let columns = if numbers-placement == "end" {
+    (1fr, separator-width, layout-plan.numbers.width + layout-plan.numbers.gutter)
   } else {
-    (layout-plan.gutter.width + layout-plan.gutter.gap, separator-width, 1fr)
+    (layout-plan.numbers.width + layout-plan.numbers.gutter, separator-width, 1fr)
   }
 
-  if gutter-width == 0pt {
+  if numbers-width == 0pt {
     grid(
       columns: (1fr,),
       row-gutter: 0pt,
       column-gutter: 0pt,
       _render-body(model, row, fill, style, layout-plan, components-plan),
     )
-  } else if gutter-placement == "right" {
+  } else if numbers-placement == "end" {
     grid(
       columns: columns,
       row-gutter: 0pt,
       column-gutter: 0pt,
       _render-body(model, row, fill, style, layout-plan, components-plan),
-      _render-gutter-separator(fill, style, layout-plan),
-      _render-gutter(model, row, fill, style, layout-plan, components-plan),
+      _render-number-separator(fill, style, layout-plan),
+      _render-numbers(model, row, fill, style, layout-plan, components-plan),
     )
   } else {
     grid(
       columns: columns,
       row-gutter: 0pt,
       column-gutter: 0pt,
-      _render-gutter(model, row, fill, style, layout-plan, components-plan),
-      _render-gutter-separator(fill, style, layout-plan),
+      _render-numbers(model, row, fill, style, layout-plan, components-plan),
+      _render-number-separator(fill, style, layout-plan),
       _render-body(model, row, fill, style, layout-plan, components-plan),
     )
   }
@@ -439,29 +435,29 @@
   visible
 }
 
-#let _gutter-width(rows, layout-plan) = {
-  if _gutter-placement(layout-plan) == "hidden" {
+#let _numbers-width(rows, layout-plan) = {
+  if _numbers-placement(layout-plan) == "hidden" {
     return 0pt
   }
 
-  let has-gutter = false
+  let has-numbers = false
   for row in rows {
     if row.display-number != none {
-      has-gutter = true
+      has-numbers = true
     }
   }
 
-  if has-gutter {
-    _gutter-total-width(layout-plan)
+  if has-numbers {
+    _numbers-total-width(layout-plan)
   } else {
     0pt
   }
 }
 
-#let _render-gutter-column(model, rows, heights, style, layout-plan, components-plan) = {
+#let _render-numbers-column(model, rows, heights, style, layout-plan, components-plan) = {
   let cells = ()
   for row in rows {
-    cells.push(_render-gutter(model, row, _row-fill(row, style), style, layout-plan, components-plan))
+    cells.push(_render-numbers(model, row, _row-fill(row, style), style, layout-plan, components-plan))
   }
 
   grid(
@@ -473,10 +469,10 @@
   )
 }
 
-#let _render-gutter-separator-column(rows, heights, style, layout-plan) = {
+#let _render-number-separator-column(rows, heights, style, layout-plan) = {
   let cells = ()
   for row in rows {
-    cells.push(_render-gutter-separator(_row-fill(row, style), style, layout-plan))
+    cells.push(_render-number-separator(_row-fill(row, style), style, layout-plan))
   }
 
   grid(
@@ -508,39 +504,39 @@
   context layout(size => {
     let code-plan = _code-plan(layout-plan)
     let rows = _visible-rows(model.rows, layout-plan)
-    let gutter-width = _gutter-width(rows, layout-plan)
-    let gutter-placement = _gutter-placement(layout-plan)
-    let separator-width = _gutter-separator-width(layout-plan)
-    // PDF uses measured columns so gutter text is not interleaved with code text.
+    let numbers-width = _numbers-width(rows, layout-plan)
+    let numbers-placement = _numbers-placement(layout-plan)
+    let separator-width = _numbers-separator-width(layout-plan)
+    // PDF uses measured columns so number text is not interleaved with code text.
     let heights = rows.map(row => {
       measure(
-        _render-row-for-measure(model, row, gutter-width, style, layout-plan, components-plan),
+        _render-row-for-measure(model, row, numbers-width, style, layout-plan, components-plan),
         width: size.width,
       ).height
     })
 
     let body-column = _render-body-column(model, rows, heights, style, layout-plan, components-plan)
-    let gutter-column = _render-gutter-column(model, rows, heights, style, layout-plan, components-plan)
+    let numbers-column = _render-numbers-column(model, rows, heights, style, layout-plan, components-plan)
 
-    if gutter-width == 0pt {
+    if numbers-width == 0pt {
       body-column
-    } else if gutter-placement == "right" {
-      let separator-column = _render-gutter-separator-column(rows, heights, style, layout-plan)
+    } else if numbers-placement == "end" {
+      let separator-column = _render-number-separator-column(rows, heights, style, layout-plan)
       grid(
-        columns: (1fr, separator-width, layout-plan.gutter.width + layout-plan.gutter.gap),
+        columns: (1fr, separator-width, layout-plan.numbers.width + layout-plan.numbers.gutter),
         row-gutter: 0pt,
         column-gutter: 0pt,
         body-column,
         separator-column,
-        gutter-column,
+        numbers-column,
       )
     } else {
-      let separator-column = _render-gutter-separator-column(rows, heights, style, layout-plan)
+      let separator-column = _render-number-separator-column(rows, heights, style, layout-plan)
       grid(
-        columns: (layout-plan.gutter.width + layout-plan.gutter.gap, separator-width, 1fr),
+        columns: (layout-plan.numbers.width + layout-plan.numbers.gutter, separator-width, 1fr),
         row-gutter: 0pt,
         column-gutter: 0pt,
-        gutter-column,
+        numbers-column,
         separator-column,
         body-column,
       )
@@ -551,10 +547,10 @@
 #let _render-frame(model, style, layout-plan, components-plan) = {
   let body = {
     let rows = _visible-rows(model.rows, layout-plan)
-    let gutter-width = _gutter-width(rows, layout-plan)
-    _render-chrome(model, "header", gutter-width, style, layout-plan, components-plan)
+    let numbers-width = _numbers-width(rows, layout-plan)
+    _render-chrome(model, "header", numbers-width, style, layout-plan, components-plan)
     _render-measured-columns(model, style, layout-plan, components-plan)
-    _render-chrome(model, "footer", gutter-width, style, layout-plan, components-plan)
+    _render-chrome(model, "footer", numbers-width, style, layout-plan, components-plan)
   }
 
   (components-plan.frame)(

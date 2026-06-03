@@ -8,33 +8,53 @@
   }
 }
 
+#let _context(source, source-line, segment) = (
+  source: source,
+  line: source-line,
+  source-number: source-line.source-number,
+  number: _display-line(0, auto, source-line, segment),
+  segment: segment,
+)
+
+#let _formatter(format) = {
+  if format == auto {
+    n => n
+  } else {
+    assert(type(format) == function, message: "zebraw: numbering format must be a function")
+    format
+  }
+}
+
 #let off() = {
-  source => (source-line, segment) => none
+  source => ctx => none
 }
 
-#let line(offset: 0, keep-offset: auto) = {
-  source => (source-line, segment) => _display-line(offset, keep-offset, source-line, segment)
+#let line(offset: 0, keep-offset: auto, format: auto) = {
+  source => {
+    let format = _formatter(format)
+    ctx => format(_display-line(offset, keep-offset, ctx.line, ctx.segment))
+  }
 }
 
-#let custom(..columns) = {
+#let columns(..columns) = {
   let columns = columns.pos()
-  assert(columns.len() > 0, message: "zebraw: numbering.custom expects at least one column")
+  assert(columns.len() > 0, message: "zebraw: numbering.columns expects at least one column")
 
   source => {
     for column in columns {
-      assert(type(column) == array, message: "zebraw: numbering.custom columns must be arrays")
+      assert(type(column) == array, message: "zebraw: numbering.columns columns must be arrays")
       assert(
         column.len() == source.lines.len(),
-        message: "zebraw: numbering.custom columns must match the source line count",
+        message: "zebraw: numbering.columns columns must match the source line count",
       )
     }
 
-    (source-line, segment) => columns.map(column => column.at(source-line.source-number - 1))
+    ctx => columns.map(column => column.at(ctx.source-number - 1))
   }
 }
 
 #let constant(value) = {
-  source => (source-line, segment) => value
+  source => ctx => value
 }
 
 #let _summary-kind = "zebraw-block-summary"
@@ -53,9 +73,10 @@
   }
 }
 
-#let continue-from(target, offset: 0, keep-offset: auto, fallback: 0) = {
+#let continue-from(target, offset: 0, keep-offset: auto, fallback: 0, format: auto) = {
   source => {
     assert(type(target) == label, message: "zebraw: numbering.continue-from expects a label")
+    let format = _formatter(format)
     let summary = _last-summary(target)
     let base = if summary == none or summary.last-number == none {
       fallback
@@ -63,13 +84,13 @@
       summary.last-number + offset
     }
 
-    (source-line, segment) => base + _display-line(0, keep-offset, source-line, segment)
+    ctx => format(base + _display-line(0, keep-offset, ctx.line, ctx.segment))
   }
 }
 
 #let resolve(strategy, source) = {
-  assert(type(strategy) == function, message: "zebraw: numbering must be a numbering strategy")
+  assert(type(strategy) == function, message: "zebraw: numbering must be a strategy function")
   let display = strategy(source)
-  assert(type(display) == function, message: "zebraw: numbering strategies must return display functions")
-  display
+  assert(type(display) == function, message: "zebraw: numbering strategies must return a display function")
+  (source-line, segment) => display(_context(source, source-line, segment))
 }

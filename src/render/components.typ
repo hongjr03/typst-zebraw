@@ -39,11 +39,11 @@
   }
 }
 
-#let gutter(ctx) = {
+#let numbers(ctx) = {
   pdf.artifact(
     box(
-      width: ctx.layout.gutter.width,
-      text(fill: ctx.style.gutter-fill, _number-content(ctx.row.display-number, ctx.layout.gutter.number-gap)),
+      width: ctx.layout.numbers.width,
+      text(fill: ctx.style.number-fill, _number-content(ctx.row.display-number, ctx.layout.numbers.column-gutter)),
     ),
   )
 }
@@ -95,7 +95,7 @@
   }
 }
 
-#let skip(ctx) = pdf.artifact(text(fill: ctx.style.gutter-fill, ctx.row.body))
+#let skip(ctx) = pdf.artifact(text(fill: ctx.style.number-fill, ctx.row.body))
 
 #let indent-guide(ctx) = {
   let guide-style = ctx.layout.indent-guides
@@ -146,7 +146,7 @@
 
 #let default = (
   frame: frame,
-  gutter: gutter,
+  numbers: numbers,
   code: code,
   comment: comment,
   skip: skip,

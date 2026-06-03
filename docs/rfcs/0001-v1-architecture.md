@@ -71,12 +71,12 @@ core:
   VisualRows
 
 layout:
-  frame, header, footer, gutter, code, comment, skip, language tab placement
+  frame, header, footer, numbering columns, code, comment, skip, language tab placement
   pagination and keep-with-body policies
 
 components:
   frame
-  gutter
+  numbers
   code row
   comment row
   skip row
@@ -147,13 +147,15 @@ Example API direction:
 
 #zebraw(
   select: selectors.ranges(
-    (1, 4),
-    (10, 20),
+    selectors.range(1, 4),
+    selectors.range(10, 20),
     skip: true,
   ),
   raw,
 )
 ```
+
+`selectors.range(start, end)` follows Typst's half-open range convention: `start` is inclusive and `end` is exclusive. `selectors.ranges(...)` composes selector functions, not raw arrays or dictionaries. Those shorter forms can be added later as syntax sugar, but the core v1 shape stays selector functions plus normalized `SelectionPlan`.
 
 The conceptual signature is:
 
@@ -263,23 +265,21 @@ VisualRow = (
 )
 ```
 
-The `copy-text` field is mainly for HTML and future export behavior. PDF line numbers and decoration should be rendered in the gutter/decorative path and tagged with `pdf.artifact`, but viewer copy behavior still depends on the PDF renderer's physical layout.
+The `copy-text` field is mainly for HTML and future export behavior. PDF line numbers and decoration should be rendered in the numbers/decorative path and tagged with `pdf.artifact`, but viewer copy behavior still depends on the PDF renderer's physical layout.
 
 ## Numbering
 
-Numbering should be a strategy, not just a boolean or offset.
+Numbering should be a strategy function, not a boolean, raw array, or offset flag.
 
-Possible strategies:
+Core shape:
 
 ```typst
-numbering.off()
-numbering.line(offset: 0)
-numbering.line(offset: 300, keep-offset: false)
-numbering.custom(("A", "B", "C"), ("stable", "stable", "changed"))
-numbering.continue-from(<label>)
+numbering: source => ctx => ctx.number
+numbering: source => ctx => if ctx.line.text.starts-with("+") { none } else { ctx.source-number }
+numbering: source => ctx => (old.at(ctx.source-number - 1), new.at(ctx.source-number - 1))
 ```
 
-The public `numbering:` parameter should receive a strategy function, not a boolean, raw array, or a separate `numbering-offset` value. Offsets and renumbering behavior belong inside the selected strategy.
+`source` is the normalized source block. `ctx` is a per-line numbering context containing the normalized source line, source number, selected segment, and default `number`. Helper functions such as `numbering.line(...)`, `numbering.off()`, `numbering.columns(...)`, and `numbering.continue-from(...)` may exist, but they must return this same function shape instead of creating a second public model.
 
 `numbering.continue-from(<label>)` should support Codly-style continuation, but with a lighter implementation.
 
@@ -311,7 +311,7 @@ Layout should decide how model parts relate spatially. It should not decide what
 
 Layout responsibilities:
 
-- gutter placement,
+- numbering-column placement,
 - code column placement,
 - comment placement,
 - skip row placement,
@@ -326,7 +326,8 @@ Possible API direction:
 
 ```typst
 layout: layouts.with(
-  gutter: (placement: "left", width: 2.8em, separator: false, number-gap: 0.35em),
+  inset: (top: 0.34em, right: 0.5em, bottom: 0.34em, left: 0.5em),
+  numbers: (placement: "start", width: 2.8em, gutter: 0.35em, separator: false, column-gutter: 0.35em),
   comments: (placement: "below-line", width: 14em, flag: none, indent: false),
   indent-guides: (enabled: false, unit: 2, mode: "line"),
   code: (hanging-indent: false),
@@ -337,16 +338,17 @@ layout: layouts.with(
 ```
 
 The language tab page-break issue should be solved here, not in the language-tab component.
-The current PDF slice supports gutter placement values `left`, `right`, and `hidden`; line-number existence still belongs to the numbering strategy, while gutter placement only controls where or whether that display column is rendered. The old boolean-style `gutter.enabled` split is intentionally removed.
-The current PDF slice supports a gutter separator through `layout.gutter.separator`; it is rendered as decorative PDF artifact between gutter and body, not as part of the numbering strategy.
+`layout.inset` follows Typst's layout vocabulary: it is padding for row/chrome cells, not a color/style token. It accepts either a single inset value or a four-side dictionary that renderers normalize before measuring.
+The current PDF slice supports numbering-column placement values `start`, `end`, and `hidden`; line-number existence still belongs to the numbering strategy, while `layout.numbers.placement` only controls where or whether that display column is rendered.
+The current PDF slice supports a numbering separator through `layout.numbers.separator`; it is rendered as decorative PDF artifact between numbers and body, not as part of the numbering strategy.
 The measured PDF column shape remains the same when the separator is hidden: the separator column is still present at `0pt` width. This keeps row measurement and final rendering on the same path instead of making the no-separator case a separate two-column layout.
-The current PDF slice supports multiple display-number columns from `numbering.custom(...)`. The default gutter component preserves `none` as an empty column, right-aligns each number column, and uses `layout.gutter.number-gap` for spacing. Numbering strategies still own the display values; the gutter component owns only their visual layout.
+The current PDF slice supports multiple display-number columns when a numbering strategy returns an array. The default numbers component preserves `none` as an empty column, right-aligns each number column, and uses `layout.numbers.column-gutter` for spacing. Numbering strategies still own the display values; the numbers component owns only their visual layout.
 The current PDF slice supports comment placement values `below-line`, `beside-line`, and `hidden`. `beside-line` keeps the line annotation in the model but renders the comment component in a side column inside the corresponding code row.
 The current PDF slice supports comment flags and comment indentation through `layout.comments.flag` and `layout.comments.indent`. The default comment component consumes the associated source row's `effective-indent-width`; annotation data still stores only comment content and source-line association.
 The current PDF slice supports skip placement values `body` and `hidden`; invalid skip placement is rejected instead of being treated as `body`.
 The current PDF slice supports indentation guides through `layout.indent-guides`. Guides consume `effective-indent-width`, inherit across blank rows through the model, render through `components.indent-guide`, and are wrapped in `pdf.artifact`. The default PDF component intentionally uses non-text shapes even for `mode: "fast-preview"` so guide markers do not enter the copyable text layer.
 The current PDF slice supports wrapped-line hanging indentation through `layout.code.hanging-indent`. The default code component uses `effective-indent-width` and Typst paragraph `hanging-indent`, so continuation lines align with the source line's structural indentation without renderer-side text parsing.
-The current PDF slice supports header/footer visibility as layout chrome: header is rendered above the measured body, footer below it, and either can be hidden through layout. Header/footer rows reuse the same gutter/separator/body column shape as source rows, but keep the separator column decorative and empty. This makes chrome content align with the body column instead of inventing a separate full-frame inset model.
+The current PDF slice supports header/footer visibility as layout chrome: header is rendered above the measured body, footer below it, and either can be hidden through layout. Header/footer rows reuse the same numbers/separator/body column shape as source rows, but keep the separator column decorative and empty. This makes chrome content align with the body column instead of inventing a separate full-frame inset model.
 The current PDF slice supports `lang-tab` as chrome attached to the frame's top-right edge: it is rendered as an overlay when the source block has a language label, does not create a full-width frame-colored row, consumes no extra vertical row, and can be hidden through layout. When the tab is visible, the frame delegates its top-right outer corner to the tab instead of drawing two overlapping rounded corners.
 The current PDF slice also routes frame drawing through `components.frame`; `layout.frame` still supplies layout policy such as width, clipping, and breakability, while the component owns the actual frame content.
 
@@ -359,7 +361,7 @@ Possible API direction:
 ```typst
 components: components.with(
   frame: my-frame,
-  gutter: my-gutter,
+  numbers: my-numbers,
   header: my-header,
   footer: my-footer,
   lang-tab: my-lang-tab,
@@ -381,7 +383,7 @@ ctx = (
 )
 ```
 
-Default components may mark decorative PDF content with `pdf.artifact`, but a custom component owns the content it returns. If a replacement gutter or skip component should remain non-semantic in PDF, that component should preserve the artifact wrapper.
+Default components may mark decorative PDF content with `pdf.artifact`, but a custom component owns the content it returns. If a replacement numbers or skip component should remain non-semantic in PDF, that component should preserve the artifact wrapper.
 The default frame component receives `ctx.body` and `ctx.frame-radius`, so renderer-computed geometry such as the language tab's shared top-right corner remains available without hard-coding the frame shell in the renderer.
 The default indent guide component receives `ctx.guide-height` from the measured PDF row pass. It should not determine row height itself; otherwise decorative guide geometry can change the measured code layout.
 
@@ -400,7 +402,7 @@ The old implementation had several visual features that should remain in v1, but
 Inventory from the previous package:
 
 - multiple line-number columns for diff-style blocks,
-- line-number separator between gutter and code,
+- line-number separator between the numbers column and code,
 - indentation guide lines,
 - hanging indentation for wrapped or visually long code lines,
 - fast-preview indentation mode,
@@ -412,8 +414,8 @@ Inventory from the previous package:
 
 Proposed v1 ownership:
 
-- Multiple numbering belongs to the numbering strategy. `numbering.custom(...)` can return array display values per source line; gutter components decide how those columns are drawn.
-- The line-number separator is gutter decoration. It belongs to `layout.gutter` and the default gutter/frame components, not to numbering.
+- Multiple numbering belongs to the numbering strategy. A strategy can return array display values per source line; the numbers component decides how those columns are drawn.
+- The line-number separator is numbering-column decoration. It belongs to `layout.numbers` and the default numbers/frame components, not to numbering.
 - Indentation guide data belongs to the source/model layer because it depends on leading whitespace and blank-line inheritance. PDF rendering goes through the `indent-guide` component, while HTML rendering uses empty overlay spans. Both renderers consume `effective-indent-width`; neither should re-parse code text.
 - Hanging indentation is layout behavior for the code component. It should consume model indentation data instead of parsing code content again.
 - Fast-preview is a performance/layout mode for indentation rendering. It should be explicit in the indentation layout plan, not global state.
@@ -436,17 +438,18 @@ style: (
     stroke: none,
   ),
   row: (
-    inset: (top: 0.34em, right: 0.34em, bottom: 0.34em, left: 0.34em),
     background: (luma(245), luma(250)),
     highlight: rgb("#94e2d5").lighten(70%),
   ),
-  gutter: (...),
+  numbers: (
+    fill: luma(120),
+  ),
   comment: (...),
   lang-tab: (...),
 )
 ```
 
-`stroke` belongs here. It is a frame customization or frame component override, not a core feature.
+`stroke` belongs here. It is a frame customization or frame component override, not a core feature. `inset` does not belong here because Typst treats inset as layout padding for boxes, blocks, and grid cells; v1 keeps it in `layout.inset`.
 
 ## PDF Rendering
 
@@ -456,22 +459,22 @@ Therefore `pdf.artifact` should stay in the renderer as PDF tag semantics even w
 
 PDF rendering should:
 
-- render gutter and body as separate measured columns,
+- render numbers and body as separate measured columns,
 - render language labels as decorative chrome outside the code column,
-- measure visual row heights once so the gutter column and body column stay aligned,
+- measure visual row heights once so the numbers column and body column stay aligned,
 - mark line numbers and decorative labels as artifacts,
 - wrap artifact content inside layout cells rather than wrapping the cells themselves, so layout metadata such as `inset` and `align` remains visible to Typst,
 - keep code content as real selectable content,
-- make blank rows explicit rather than relying on measured gutter/code height.
+- make blank rows explicit rather than relying on measured numbers/code height.
 
-This keeps the model honest while preserving the old PDF behavior: each visible row is still a `VisualRow`, but the PDF backend can choose a two-column physical layout to keep gutter text out of the code column's normal selection path.
+This keeps the model honest while preserving the old PDF behavior: each visible row is still a `VisualRow`, but the PDF backend can choose a separate-column physical layout to keep number text out of the code column's normal selection path.
 
 One caveat: `pdf.artifact` expresses PDF tagging semantics, but generic text extraction tools may not honor those semantics. Local validation with qpdf 12.3.2 confirms that Typst 0.14.2 emits a tagged PDF, wraps line numbers, skip labels, and comment rows in `/Artifact BMC ... EMC`, and leaves code tokens as ordinary `/Span ... BDC` marked content. Poppler `pdftotext` still extracts artifact text from that same PDF, so viewer copy behavior and extractor compatibility need separate validation.
 
 ## HTML Rendering
 
 HTML should be an independent backend that consumes the same `VisualRows`.
-The current HTML slice renders a stable wrapper/pre/code/row DOM from `VisualRows`, marks code containers with `translate="no"`, keeps gutter/comment/skip decoration `aria-hidden`, exposes `data-copy-text` from `VisualRows.copy-text`, and consumes header/footer plus comment placement from the same model/layout data as PDF. It supports `layout.html.wrap` for code wrapping and an optional `layout.html.copy-button` that copies `data-copy-text`. It also supports `layout.gutter.placement` values `left`, `right`, and `hidden`, gutter separators, and empty gutter cells for `none` values in multi-column numbering so custom numbering stays aligned. HTML comments consume `layout.comments.placement`, `layout.comments.flag`, `layout.comments.flag-gap`, and `layout.comments.indent`; flag and indentation are decorative DOM fragments, while annotations still store only comment content and source-line association. HTML chrome consumes `layout.header.placement`, `layout.footer.placement`, `layout.lang-tab.placement`, and `layout.skip.placement`, so those elements can be hidden without changing the underlying row model or copy text. It supports `layout.indent-guides` through empty `aria-hidden` overlay spans positioned from `effective-indent-width`, including blank-line inherited indentation; those spans are not part of `data-copy-text`. Full Expressive Code styling is still out of scope for this slice.
+The current HTML slice renders a stable wrapper/pre/code/row DOM from `VisualRows`, marks code containers with `translate="no"`, keeps numbers/comment/skip decoration `aria-hidden`, exposes `data-copy-text` from `VisualRows.copy-text`, and consumes header/footer plus comment placement from the same model/layout data as PDF. It supports `layout.html.wrap` for code wrapping and an optional `layout.html.copy-button` that copies `data-copy-text`. It also supports `layout.numbers.placement` values `start`, `end`, and `hidden`, numbering separators, and empty number cells for `none` values in multi-column numbering so custom numbering stays aligned. HTML comments consume `layout.comments.placement`, `layout.comments.flag`, `layout.comments.flag-gap`, and `layout.comments.indent`; flag and indentation are decorative DOM fragments, while annotations still store only comment content and source-line association. HTML chrome consumes `layout.header.placement`, `layout.footer.placement`, `layout.lang-tab.placement`, and `layout.skip.placement`, so those elements can be hidden without changing the underlying row model or copy text. It supports `layout.indent-guides` through empty `aria-hidden` overlay spans positioned from `effective-indent-width`, including blank-line inherited indentation; those spans are not part of `data-copy-text`. Full Expressive Code styling is still out of scope for this slice.
 
 HTML-specific requirements:
 
@@ -503,7 +506,7 @@ Design rules:
 
 - Do one pass over raw lines to build `VisualRows`.
 - Normalize selector, annotations, and numbering strategies before that pass.
-- Keep `measure` renderer-local. The default PDF renderer may measure visible row heights once to keep the gutter and body columns aligned, but selector, annotation, and numbering normalization must not depend on measurement.
+- Keep `measure` renderer-local. The default PDF renderer may measure visible row heights once to keep the numbers and body columns aligned, but selector, annotation, and numbering normalization must not depend on measurement.
 - Avoid per-line `query` and per-line `state`.
 - Keep label continuation block-level unless line references are explicitly enabled.
 - Prefer direct local override parameters over global state changes for per-block customization.
@@ -523,11 +526,11 @@ Design rules:
 2. Implement `selectors.typ` and normalize all selection into `SelectionPlan`.
 3. Implement `annotations.typ` for highlights, comments, per-line colors, header, and footer.
 4. Implement `model.typ` to produce `VisualRows` in one pass.
-5. Implement a minimal PDF renderer that uses measured gutter/body columns and `pdf.artifact` for gutter/decorations.
+5. Implement a minimal PDF renderer that uses measured numbers/body columns and `pdf.artifact` for numbering decorations.
 6. Add style tokens, default components, and component overrides.
-7. Add layout options for gutter, comments, skip rows, header/footer chrome, language tab, and frame.
+7. Add layout options for numbers, comments, skip rows, header/footer chrome, language tab, and frame.
 8. Add block summary metadata for label-based continuation.
-9. Add visual layout/component slices for gutter separators, indentation guides, hanging indentation, and comment flags.
+9. Add visual layout/component slices for numbering separators, indentation guides, hanging indentation, and comment flags.
 10. Add optional line reference metadata only if needed.
 11. Add HTML renderer after the PDF model is stable and route it through the public `target` parameter.
 

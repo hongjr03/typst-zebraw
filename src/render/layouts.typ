@@ -1,11 +1,12 @@
 #let default = (
-  gutter: (
+  inset: (top: 0.34em, right: 0.5em, bottom: 0.34em, left: 0.5em),
+  numbers: (
     width: 2.4em,
-    gap: 0.4em,
-    placement: "left",
+    gutter: 0.4em,
+    placement: "start",
     separator: false,
     separator-width: 0.05em,
-    number-gap: 0.35em,
+    column-gutter: 0.35em,
   ),
   comments: (
     placement: "below-line",
@@ -47,8 +48,17 @@
   ),
 )
 
+#let _resolve-inset(inset) = {
+  if type(inset) == dictionary {
+    (top: 0pt, right: 0pt, bottom: 0pt, left: 0pt) + inset
+  } else {
+    (top: inset, right: inset, bottom: inset, left: inset)
+  }
+}
+
 #let resolve(layout) = (
-  gutter: default.gutter + layout.at("gutter", default: (:)),
+  inset: _resolve-inset(layout.at("inset", default: default.inset)),
+  numbers: default.numbers + layout.at("numbers", default: (:)),
   comments: default.comments + layout.at("comments", default: (:)),
   indent-guides: default.indent-guides + layout.at("indent-guides", default: (:)),
   code: default.code + layout.at("code", default: (:)),

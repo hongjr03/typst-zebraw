@@ -10,21 +10,21 @@
   highlight: rgb("#dff3f0"),
   comment-background: rgb("#fff1c7"),
   skip-background: rgb("#ecece8"),
-  gutter-fill: luma(105),
+  number-fill: luma(105),
   indent-guide-fill: rgb("#879aa6").transparentize(35%),
   lang-background: rgb("#eceee9"),
   lang-fill: luma(70),
   radius: 0.32em,
-  inset: (top: 0.32em, right: 0.5em, bottom: 0.32em, left: 0.5em),
 )
 
 #let demo-layout = layouts.with(
-  gutter: (
+  inset: (top: 0.32em, right: 0.5em, bottom: 0.32em, left: 0.5em),
+  numbers: (
     width: 3.8em,
-    gap: 0.45em,
+    gutter: 0.45em,
     separator: true,
     separator-width: 0.045em,
-    number-gap: 0.4em,
+    column-gutter: 0.4em,
   ),
   comments: (
     placement: "beside-line",
@@ -49,7 +49,7 @@
 
 #show raw: zebraw.with(
   target: "pdf",
-  select: selectors.ranges((1, 6), (8, none), skip-label: "{} hidden"),
+  select: selectors.ranges(selectors.range(1, 6), selectors.range(8, none), skip-label: "{} hidden"),
   annotate: annotations.compose(
     annotations.header([model pass]),
     annotations.highlight(selectors.line(1)),
@@ -98,6 +98,12 @@ render(dataset)
 
 #v(0.9em)
 
+#let diff-numbering = source => {
+  let old = (10, 11, none, 12, 13)
+  let new = (10, none, 11, 12, 13)
+  ctx => (old.at(ctx.source-number - 1), new.at(ctx.source-number - 1))
+}
+
 #show raw: zebraw.with(
   target: "pdf",
   annotate: annotations.compose(
@@ -106,13 +112,10 @@ render(dataset)
     annotations.fill(selectors.line(3), rgb("#e5f5df")),
     annotations.comment(selectors.line(4), [multiple columns come from numbering]),
   ),
-  numbering: numbering.custom(
-    (10, 11, none, 12, 13),
-    (10, none, 11, 12, 13),
-  ),
+  numbering: diff-numbering,
   style: demo-style,
   layout: layouts.with(
-    gutter: demo-layout.gutter + (width: 4.8em),
+    numbers: demo-layout.numbers + (width: 4.8em),
     comments: demo-layout.comments,
     indent-guides: demo-layout.indent-guides,
     code: demo-layout.code,
