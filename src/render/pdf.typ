@@ -39,6 +39,43 @@
   components: components-plan,
 )
 
+#let _render-chrome(model, slot, style, layout-plan, components-plan) = {
+  let content = if slot == "header" {
+    model.chrome.header
+  } else {
+    model.chrome.footer
+  }
+
+  let placement = if slot == "header" {
+    layout-plan.header.placement
+  } else {
+    layout-plan.footer.placement
+  }
+  let expected-placement = if slot == "header" { "above" } else { "below" }
+
+  assert(
+    placement == expected-placement or placement == "hidden",
+    message: "zebraw: pdf " + slot + " placement currently supports " + expected-placement + " or hidden",
+  )
+
+  if content == none or placement == "hidden" {
+    []
+  } else {
+    let component = if slot == "header" {
+      components-plan.header
+    } else {
+      components-plan.footer
+    }
+
+    block(
+      width: 100%,
+      fill: style.background,
+      inset: style.inset,
+      (component)(_ctx(model, none, style, layout-plan, components-plan)),
+    )
+  }
+}
+
 #let _render-gutter(model, row, fill, style, layout-plan, components-plan) = {
   grid.cell(
     fill: fill,
@@ -204,6 +241,10 @@
     clip: layout-plan.frame.clip,
     fill: style.background,
     stroke: style.stroke,
-    _render-measured-columns(model, style, layout-plan, components-plan),
+    {
+      _render-chrome(model, "header", style, layout-plan, components-plan)
+      _render-measured-columns(model, style, layout-plan, components-plan)
+      _render-chrome(model, "footer", style, layout-plan, components-plan)
+    },
   )
 }

@@ -305,11 +305,14 @@ Possible API direction:
 layout: layouts.with(
   gutter: (enabled: true, placement: "left", width: 2.8em),
   comments: (placement: "below-line"),
+  header: (placement: "above"),
+  footer: (placement: "below"),
   lang-tab: (placement: "attached", keep-with-body: true),
 )
 ```
 
 The language tab page-break issue should be solved here, not in the language-tab component.
+The current PDF slice supports header/footer visibility as layout chrome: header is rendered above the measured body, footer below it, and either can be hidden through layout.
 
 ## Components
 
@@ -321,6 +324,8 @@ Possible API direction:
 components: components.with(
   frame: my-frame,
   gutter: my-gutter,
+  header: my-header,
+  footer: my-footer,
   lang-tab: my-lang-tab,
   skip: my-skip-row,
 )
@@ -378,6 +383,8 @@ style: (
 ## PDF Rendering
 
 The previous implementation used layout measurement partly to control PDF selection and copy behavior. `pdf.artifact` is still useful because it marks line numbers and decorative labels as non-semantic PDF content, but it does not remove text glyphs from the PDF content stream and does not guarantee that a viewer will skip those glyphs during mouse selection.
+
+Therefore `pdf.artifact` should stay in the renderer as PDF tag semantics even when measured columns are also required. Artifacts answer "is this semantic document text"; measurement answers "where do PDF glyphs land, and in which order will a viewer normally traverse them".
 
 PDF rendering should:
 
@@ -448,7 +455,7 @@ Design rules:
 4. Implement `model.typ` to produce `VisualRows` in one pass.
 5. Implement a minimal PDF renderer that uses measured gutter/body columns and `pdf.artifact` for gutter/decorations.
 6. Add style tokens, default components, and component overrides.
-7. Add layout options for gutter, comments, skip rows, language tab, and frame.
+7. Add layout options for gutter, comments, skip rows, header/footer chrome, language tab, and frame.
 8. Add block summary metadata for label-based continuation.
 9. Add optional line reference metadata only if needed.
 10. Add HTML renderer after the PDF model is stable.

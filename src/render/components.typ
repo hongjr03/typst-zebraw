@@ -31,11 +31,17 @@
 
 #let skip(ctx) = pdf.artifact(text(fill: ctx.style.gutter-fill, ctx.row.body))
 
+#let header(ctx) = ctx.block.chrome.header
+
+#let footer(ctx) = ctx.block.chrome.footer
+
 #let default = (
   gutter: gutter,
   code: code,
   comment: comment,
   skip: skip,
+  header: header,
+  footer: footer,
 )
 
 #let resolve(components) = default + components
