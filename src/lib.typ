@@ -2,6 +2,7 @@
 #import "model.typ": build-block-model
 #import "render/debug.typ": render-debug
 #import "render/pdf.typ": render-pdf
+#import "render/html.typ": render-html
 #import "render/layouts.typ" as layouts
 #import "render/components.typ" as components
 #import "selectors.typ" as selectors
@@ -49,6 +50,13 @@
       render-debug(model)
     } else if target == "pdf" {
       render-pdf(
+        model,
+        style: style,
+        layout-plan: layout,
+        components-plan: components,
+      )
+    } else if target == "html" {
+      render-html(
         model,
         style: style,
         layout-plan: layout,

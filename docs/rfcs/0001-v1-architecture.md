@@ -185,6 +185,7 @@ Example API direction:
 ```
 
 The initial v1 slice supports `pdf` and `debug`. The old `debug: true` style should not be preserved; future targets such as HTML should extend the same `target` axis.
+The current v1 slice also supports `target: "html"` as an experimental backend. With Typst 0.14.2, compiling that target requires `typst compile --format html --features html`.
 
 ## Annotations
 
@@ -468,6 +469,7 @@ One caveat: `pdf.artifact` expresses PDF tagging semantics, but generic text ext
 ## HTML Rendering
 
 HTML should be an independent backend that consumes the same `VisualRows`.
+The current HTML slice renders a stable wrapper/pre/code/row DOM from `VisualRows`, marks code containers with `translate="no"`, keeps gutter/comment/skip decoration `aria-hidden`, and exposes `data-copy-text` from `VisualRows.copy-text`. It intentionally does not yet include a copy button or full Expressive Code styling.
 
 HTML-specific requirements:
 
