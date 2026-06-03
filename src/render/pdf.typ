@@ -56,6 +56,13 @@
 )
 
 #let _comment-placement(layout-plan) = {
+  assert(type(layout-plan.comments.indent) == bool, message: "zebraw: layout.comments.indent must be a boolean")
+  let flag = layout-plan.comments.flag
+  assert(
+    flag == none or type(flag) == str or type(flag) == content,
+    message: "zebraw: layout.comments.flag must be none, a string, or content",
+  )
+
   let placement = layout-plan.comments.placement
   assert(
     placement == "below-line" or placement == "beside-line" or placement == "hidden",

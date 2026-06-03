@@ -326,7 +326,7 @@ Possible API direction:
 ```typst
 layout: layouts.with(
   gutter: (placement: "left", width: 2.8em, separator: false),
-  comments: (placement: "below-line", width: 14em),
+  comments: (placement: "below-line", width: 14em, flag: none, indent: false),
   indent-guides: (enabled: false, unit: 2, mode: "line"),
   code: (hanging-indent: false),
   header: (placement: "above"),
@@ -339,6 +339,7 @@ The language tab page-break issue should be solved here, not in the language-tab
 The current PDF slice supports gutter placement values `left`, `right`, and `hidden`; line-number existence still belongs to the numbering strategy, while gutter placement only controls where or whether that display column is rendered. The old boolean-style `gutter.enabled` split is intentionally removed.
 The current PDF slice supports a gutter separator through `layout.gutter.separator`; it is rendered as decorative PDF artifact between gutter and body, not as part of the numbering strategy.
 The current PDF slice supports comment placement values `below-line`, `beside-line`, and `hidden`. `beside-line` keeps the line annotation in the model but renders the comment component in a side column inside the corresponding code row.
+The current PDF slice supports comment flags and comment indentation through `layout.comments.flag` and `layout.comments.indent`. The default comment component consumes the associated source row's `effective-indent-width`; annotation data still stores only comment content and source-line association.
 The current PDF slice supports indentation guides through `layout.indent-guides`. Guides consume `effective-indent-width`, inherit across blank rows through the model, render through `components.indent-guide`, and are wrapped in `pdf.artifact`. The default PDF component intentionally uses non-text shapes even for `mode: "fast-preview"` so guide markers do not enter the copyable text layer.
 The current PDF slice supports wrapped-line hanging indentation through `layout.code.hanging-indent`. The default code component uses `effective-indent-width` and Typst paragraph `hanging-indent`, so continuation lines align with the source line's structural indentation without renderer-side text parsing.
 The current PDF slice supports header/footer visibility as layout chrome: header is rendered above the measured body, footer below it, and either can be hidden through layout.

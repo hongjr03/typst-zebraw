@@ -45,7 +45,32 @@
   }
 }
 
-#let comment(ctx) = pdf.artifact(ctx.row.body)
+#let _comment-flag(flag) = {
+  if flag == none or flag == "" {
+    none
+  } else if type(flag) == str {
+    [#flag]
+  } else {
+    flag
+  }
+}
+
+#let comment(ctx) = {
+  let flag = _comment-flag(ctx.layout.comments.flag)
+  let has-flag = flag != none
+  let should-indent = ctx.layout.comments.indent and ctx.row.effective-indent-width > 0
+
+  if not has-flag and not should-indent {
+    pdf.artifact(ctx.row.body)
+  } else {
+    context {
+      let advance = measure(raw("x")).width
+      let indent = if should-indent { h(ctx.row.effective-indent-width * advance) } else { [] }
+      let flag-gap = if has-flag { h(ctx.layout.comments.flag-gap) } else { [] }
+      pdf.artifact([#indent#if has-flag { flag }#flag-gap#ctx.row.body])
+    }
+  }
+}
 
 #let skip(ctx) = pdf.artifact(text(fill: ctx.style.gutter-fill, ctx.row.body))
 

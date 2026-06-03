@@ -10,6 +10,9 @@
     placement: "below-line",
     width: 14em,
     gap: 0.5em,
+    flag: none,
+    flag-gap: 0.35em,
+    indent: false,
   ),
   indent-guides: (
     enabled: false,

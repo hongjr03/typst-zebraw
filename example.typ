@@ -13,7 +13,7 @@
   numbering: numbering.line(offset: 0),
   layout: layouts.with(
     gutter: (width: 2.8em, separator: true),
-    comments: (placement: "beside-line", width: 12em),
+    comments: (placement: "beside-line", width: 12em, flag: [>]),
     indent-guides: (enabled: true, unit: 2),
   ),
 )
