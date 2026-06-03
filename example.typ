@@ -12,6 +12,8 @@
   layout: layouts.with(gutter: (width: 2.8em)),
 )
 
-#raw(block: true, `== Heading
+```typ
+== Heading
 
-#let value = 1`.text, lang: "typ")<r1>
+#let value = 1
+```<r1>
