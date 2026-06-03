@@ -206,7 +206,7 @@
 
 #let _style() = html.elem(
   "style",
-  ".zebraw{display:block}.zebraw-pre{margin:0;overflow:auto}.zebraw-code-root{display:block;white-space:pre}.zebraw-row{display:block}.zebraw-gutter{display:inline-block;min-width:3ch;margin-right:1ch;text-align:right;user-select:none}.zebraw-number-cell{display:inline-block;min-width:2ch;text-align:right}.zebraw-number-cell+.zebraw-number-cell{margin-left:.5ch}.zebraw-comment,.zebraw-skip-label{user-select:none}.zebraw-copy-button{float:right}",
+  ".zebraw{display:block}.zebraw-pre{margin:0;overflow:auto}.zebraw-code-root{display:block;white-space:pre}.zebraw.is-wrapped .zebraw-code-root{white-space:pre-wrap;overflow-wrap:anywhere}.zebraw-row{display:block}.zebraw-gutter{display:inline-block;min-width:3ch;margin-right:1ch;text-align:right;user-select:none}.zebraw-number-cell{display:inline-block;min-width:2ch;text-align:right}.zebraw-number-cell+.zebraw-number-cell{margin-left:.5ch}.zebraw-comment,.zebraw-skip-label{user-select:none}.zebraw-copy-button{float:right}",
 )
 
 #let _copy-button() = html.elem(
@@ -227,6 +227,7 @@
 
 #let _html-plan(layout-plan) = {
   let plan = layout-plan.html
+  assert(type(plan.wrap) == bool, message: "zebraw: layout.html.wrap must be a boolean")
   assert(type(plan.copy-button) == bool, message: "zebraw: layout.html.copy-button must be a boolean")
   plan
 }
@@ -262,7 +263,7 @@
   html.elem(
     "div",
     attrs: _attr-dict(
-      class: _classes("zebraw", if model.lang != none { "language-" + model.lang }),
+      class: _classes("zebraw", if html-plan.wrap { "is-wrapped" }, if model.lang != none { "language-" + model.lang }),
       data_language: if model.lang == none { "plaintext" } else { model.lang },
       data_copy_text: _copy-text(rows),
     ),

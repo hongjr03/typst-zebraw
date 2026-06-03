@@ -37,6 +37,7 @@
     placement: "top-right",
   ),
   html: (
+    wrap: true,
     copy-button: false,
   ),
   frame: (
