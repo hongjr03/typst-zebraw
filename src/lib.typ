@@ -11,6 +11,7 @@
 #let default-layout = layouts.default
 #let default-components = components.default
 #let default-numbering = numbering.line()
+#let default-target = "pdf"
 
 #let _summary-marker(model) = {
   if model.label == none {
@@ -22,13 +23,13 @@
 
 /// Render a raw block with Zebraw.
 #let zebraw(
+  target: default-target,
   select: none,
   annotate: none,
   numbering: default-numbering,
   style: (:),
   layout: default-layout,
   components: default-components,
-  debug: false,
   body,
 ) = {
   if type(body) != content or body.func() != raw {
@@ -44,15 +45,17 @@
       numbering: numbering,
     )
 
-    if debug {
+    if target == "debug" {
       render-debug(model)
-    } else {
+    } else if target == "pdf" {
       render-pdf(
         model,
         style: style,
         layout-plan: layout,
         components-plan: components,
       )
+    } else {
+      panic("zebraw: unsupported render target " + repr(target))
     }
 
     _summary-marker(model)

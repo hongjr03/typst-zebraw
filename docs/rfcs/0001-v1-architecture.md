@@ -165,6 +165,19 @@ SelectionPlan = (
 
 The v1 API does not need to preserve `line-range`. The core should only know about selector functions and `SelectionPlan`.
 
+## Target Rendering
+
+Rendering target selection should be explicit, not a collection of booleans.
+
+Example API direction:
+
+```typst
+#zebraw(target: "pdf", raw)
+#zebraw(target: "debug", raw)
+```
+
+The initial v1 slice supports `pdf` and `debug`. The old `debug: true` style should not be preserved; future targets such as HTML should extend the same `target` axis.
+
 ## Annotations
 
 Annotations should use the same function-shaped model as selection. `highlight-lines` should not remain a separate parameter because it would recreate a second range language.
@@ -464,7 +477,7 @@ Design rules:
 7. Add layout options for gutter, comments, skip rows, header/footer chrome, language tab, and frame.
 8. Add block summary metadata for label-based continuation.
 9. Add optional line reference metadata only if needed.
-10. Add HTML renderer after the PDF model is stable.
+10. Add HTML renderer after the PDF model is stable and route it through the public `target` parameter.
 
 ## References
 

@@ -1,8 +1,11 @@
+#set page(height: auto, margin: 3em)
+
 #import "zebraw.typ": zebraw, selectors, annotations, numbering, layouts
 
 #set document(title: [Zebraw v1 smoke])
 
 #show raw: zebraw.with(
+  target: "pdf",
   select: selectors.ranges((1, 2), (3, none)),
   annotate: annotations.compose(
     annotations.highlight(selectors.line(1)),
