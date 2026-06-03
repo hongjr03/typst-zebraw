@@ -155,6 +155,22 @@
   }
 }
 
+#let _comment-placement(layout-plan) = {
+  assert(type(layout-plan.comments.indent) == bool, message: "zebraw: layout.comments.indent must be a boolean")
+  let flag = layout-plan.comments.flag
+  assert(
+    flag == none or type(flag) == str or type(flag) == content,
+    message: "zebraw: layout.comments.flag must be none, a string, or content",
+  )
+
+  let placement = layout-plan.comments.placement
+  assert(
+    placement == "below-line" or placement == "beside-line" or placement == "hidden",
+    message: "zebraw: html comments placement currently supports below-line, beside-line, or hidden",
+  )
+  placement
+}
+
 #let _indent-guide-plan(layout-plan) = {
   let plan = layout-plan.indent-guides
   if not plan.enabled {
@@ -214,8 +230,54 @@
   )
 }
 
+#let _comment-flag(flag) = {
+  if flag == none or flag == "" {
+    none
+  } else if type(flag) == str {
+    [#flag]
+  } else {
+    flag
+  }
+}
+
+#let _comment-indent(row, layout-plan) = {
+  if not layout-plan.comments.indent or row.effective-indent-width == 0 {
+    []
+  } else {
+    html.elem(
+      "span",
+      attrs: _attr-dict(
+        class: "zebraw-comment-indent",
+        aria_hidden: "true",
+        style: "--zebraw-comment-indent:" + str(row.effective-indent-width),
+      ),
+    )
+  }
+}
+
+#let _comment-content(row, body, layout-plan) = {
+  let flag = _comment-flag(layout-plan.comments.flag)
+  _comment-indent(row, layout-plan)
+  if flag != none {
+    html.elem(
+      "span",
+      attrs: _attr-dict(
+        class: "zebraw-comment-flag",
+        aria_hidden: "true",
+        style: "margin-right:" + repr(layout-plan.comments.flag-gap),
+      ),
+      flag,
+    )
+  }
+  html.elem(
+    "span",
+    attrs: _attr-dict(class: "zebraw-comment-body"),
+    body,
+  )
+}
+
 #let _comment(row, layout-plan) = {
-  if row.annotation == none or row.annotation.comment == none or layout-plan.comments.placement == "hidden" {
+  if row.annotation == none or row.annotation.comment == none or _comment-placement(layout-plan) == "hidden" {
     []
   } else {
     html.elem(
@@ -224,7 +286,7 @@
         class: "zebraw-comment",
         aria_hidden: "true",
       ),
-      row.annotation.comment,
+      _comment-content(row, row.annotation.comment, layout-plan),
     )
   }
 }
@@ -240,7 +302,7 @@
       data_indent: str(row.effective-indent-width),
       aria_hidden: "true",
     ),
-    row.body,
+    _comment-content(row, row.body, layout-plan),
   )
 
   html.elem(
@@ -282,7 +344,7 @@
     _skip(row)
   } else {
     _code(row, layout-plan)
-    if layout-plan.comments.placement == "beside-line" {
+    if _comment-placement(layout-plan) == "beside-line" {
       _comment(row, layout-plan)
     }
   }
@@ -303,9 +365,10 @@
 }
 
 #let _visible-rows(rows, layout-plan) = {
+  let placement = _comment-placement(layout-plan)
   let visible = ()
   for row in rows {
-    if row.kind == "comment" and layout-plan.comments.placement != "below-line" {
+    if row.kind == "comment" and placement != "below-line" {
     } else if row.kind == "skip" and layout-plan.skip.placement == "hidden" {
     } else {
       visible.push(row)
@@ -326,7 +389,7 @@
 
 #let _style() = html.elem(
   "style",
-  ".zebraw{display:block}.zebraw-pre{margin:0;overflow:auto}.zebraw-code-root{display:block;white-space:pre}.zebraw.is-wrapped .zebraw-code-root{white-space:pre-wrap;overflow-wrap:anywhere}.zebraw-row{display:block}.zebraw-gutter{display:inline-block;min-width:3ch;text-align:right;user-select:none}.zebraw-gutter-separator{display:inline-block;width:0;margin:0 .5ch;border-left:1px solid currentColor;opacity:.35;user-select:none}.zebraw-number-cell{display:inline-block;min-width:2ch;text-align:right}.zebraw-number-cell+.zebraw-number-cell{margin-left:.5ch}.zebraw-code{position:relative}.zebraw-indent-guide{position:absolute;top:0;bottom:0;left:calc(var(--zebraw-guide-column)*1ch);border-left:1px solid currentColor;opacity:.35;pointer-events:none}.zebraw-comment,.zebraw-skip-label{user-select:none}.zebraw-copy-button{float:right}",
+  ".zebraw{display:block}.zebraw-pre{margin:0;overflow:auto}.zebraw-code-root{display:block;white-space:pre}.zebraw.is-wrapped .zebraw-code-root{white-space:pre-wrap;overflow-wrap:anywhere}.zebraw-row{display:block}.zebraw-gutter{display:inline-block;min-width:3ch;text-align:right;user-select:none}.zebraw-gutter-separator{display:inline-block;width:0;margin:0 .5ch;border-left:1px solid currentColor;opacity:.35;user-select:none}.zebraw-number-cell{display:inline-block;min-width:2ch;text-align:right}.zebraw-number-cell+.zebraw-number-cell{margin-left:.5ch}.zebraw-code{position:relative}.zebraw-indent-guide{position:absolute;top:0;bottom:0;left:calc(var(--zebraw-guide-column)*1ch);border-left:1px solid currentColor;opacity:.35;pointer-events:none}.zebraw-comment,.zebraw-skip-label{user-select:none}.zebraw-comment-indent{display:inline-block;width:calc(var(--zebraw-comment-indent)*1ch)}.zebraw-comment-flag{display:inline-block}.zebraw-copy-button{float:right}",
 )
 
 #let _copy-button() = html.elem(
