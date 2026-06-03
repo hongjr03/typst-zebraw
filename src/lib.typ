@@ -9,7 +9,7 @@
 #import "annotations.typ" as annotations
 #import "numbering.typ" as numbering
 
-#let default-layout = layouts.default
+#let default-layout = layouts.compose()
 #let default-components = components.default
 #let default-numbering = numbering.line()
 #let default-target = "pdf"

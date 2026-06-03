@@ -592,8 +592,17 @@
 
 #let render-pdf(model, style: (:), layout-plan: layout-presets.default, components-plan: component-presets.default) = {
   let style = _style(style)
-  let layout-plan = layout-presets.resolve(layout-plan)
   let components-plan = component-presets.resolve(components-plan)
+  let ctx = (
+    target: "pdf",
+    block: model,
+    style: style,
+    components: components-plan,
+  )
 
-  _render-frame-with-lang-tab(model, style, layout-plan, components-plan)
+  layout-presets.render(
+    layout-plan,
+    ctx,
+    plan => _render-frame-with-lang-tab(model, style, plan, components-plan),
+  )
 }

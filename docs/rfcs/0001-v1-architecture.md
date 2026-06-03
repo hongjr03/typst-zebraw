@@ -322,19 +322,36 @@ Layout responsibilities:
 - whether the language tab must stay with the block body,
 - whether comments are below lines, beside lines, or omitted in a target.
 
-Possible API direction:
+API direction:
 
 ```typst
-layout: layouts.with(
-  inset: (top: 0.34em, right: 0.5em, bottom: 0.34em, left: 0.5em),
-  numbers: (placement: "start", width: 2.8em, gutter: 0.35em, separator: false, column-gutter: 0.35em),
-  comments: (placement: "below-line", width: 14em, flag: none, indent: false),
-  indent-guides: (enabled: false, unit: 2, mode: "line"),
-  code: (hanging-indent: false),
-  header: (placement: "above", inset: auto),
-  footer: (placement: "below", inset: auto),
-  lang-tab: (placement: "top-right", keep-with-body: true),
-)
+layout: layouts.compose({
+  layouts.inset((top: 0.34em, right: 0.5em, bottom: 0.34em, left: 0.5em))
+  layouts.numbers(placement: "start", width: 2.8em, gutter: 0.35em, separator: false, column-gutter: 0.35em)
+  layouts.comments(placement: "below-line", width: 14em, flag: none, indent: false)
+  layouts.indent-guides(enabled: false, unit: 2, mode: "line")
+  layouts.code(hanging-indent: false)
+  layouts.header(placement: "above", inset: auto)
+  layouts.footer(placement: "below", inset: auto)
+  layouts.lang-tab(placement: "top-right", keep-with-body: true)
+})
+```
+
+`layout` is a function body, not a bag of unrelated fields. Layout primitives return invisible layout elements, and `layouts.compose({ ... })` collects those elements in body order, similar to Fletcher/CeTZ-style drawing APIs where ordered primitive calls build a final diagram. The renderer delegates to a layout runner; the runner may either normalize a default `LayoutPlan` and call the renderer's default layout, or return user content directly.
+The default primitives patch the standard layout plan, but the model must not trap users inside that default structure. A user can pass a direct layout function that returns content, or use `layouts.custom(render)` inside a composed layout body to replace the whole block structure while still receiving the normalized block model, style, components, target, and plan state.
+Layout primitives should be deterministic and local. They may inspect the block model and target, but they should not read Typst state, perform queries, or measure content.
+
+```typst
+layout: ctx => block[
+  #ctx.block.rows.map(row => row.body).join()
+]
+
+layout: layouts.compose({
+  layouts.inset(0.4em)
+  layouts.custom(ctx => block(fill: ctx.style.background)[
+    #ctx.block.rows.map(row => row.body).join()
+  ])
+})
 ```
 
 The language tab page-break issue should be solved here, not in the language-tab component.
@@ -518,7 +535,7 @@ Design rules:
 - Exact naming: `select`, `selector`, or `range`.
 - Whether line references should be a separate feature module.
 - Whether HTML export should be in the initial v1 milestone or follow after the PDF renderer is stable.
-- How much of `layout` should be user-replaceable versus controlled through style tokens.
+- How far the layout primitive set should go before a user needs a fully custom renderer.
 
 ## Initial Implementation Plan
 
@@ -528,7 +545,7 @@ Design rules:
 4. Implement `model.typ` to produce `VisualRows` in one pass.
 5. Implement a minimal PDF renderer that uses measured numbers/body columns and `pdf.artifact` for numbering decorations.
 6. Add style tokens, default components, and component overrides.
-7. Add layout options for numbers, comments, skip rows, header/footer chrome, language tab, and frame.
+7. Add layout primitives for numbers, comments, skip rows, header/footer chrome, language tab, and frame.
 8. Add block summary metadata for label-based continuation.
 9. Add visual layout/component slices for numbering separators, indentation guides, hanging indentation, and comment flags.
 10. Add optional line reference metadata only if needed.
@@ -542,6 +559,9 @@ Design rules:
 - Typst `raw` implementation: https://github.com/typst/typst/blob/6ca538fc228c6b1f734e44f514c8f97de24cb77a/crates/typst-library/src/text/raw.rs
 - Typst query documentation: https://typst.app/docs/reference/introspection/query/
 - Typst state documentation: https://typst.app/docs/reference/introspection/state/
+- CeTZ canvas documentation: https://cetz-package.github.io/docs/basics/canvas/
+- CeTZ custom element model: https://cetz-package.github.io/docs/advanced/custom-types/
+- Fletcher repository and examples: https://github.com/Jollywatt/typst-fletcher
 - Zebraw issue #21: https://github.com/hongjr03/typst-zebraw/issues/21
 - Zebraw issue #23: https://github.com/hongjr03/typst-zebraw/issues/23
 - Zebraw issue #31: https://github.com/hongjr03/typst-zebraw/issues/31

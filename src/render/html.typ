@@ -464,43 +464,55 @@
 }
 
 #let render-html(model, style: (:), layout-plan: layout-presets.default, components-plan: (:)) = {
-  let layout-plan = layout-presets.resolve(layout-plan)
-  let html-plan = _html-plan(layout-plan)
-  let rows = _visible-rows(model.rows, layout-plan)
-  let has-numbers = _has-numbers(rows, layout-plan)
-  let code-attrs = _attr-dict(
-    class: _classes("zebraw-code-root", if model.lang != none { "language-" + model.lang }),
-    translate: "no",
+  let ctx = (
+    target: "html",
+    block: model,
+    style: style,
+    components: components-plan,
   )
 
-  html.elem(
-    "div",
-    attrs: _attr-dict(
-      class: _classes("zebraw", if html-plan.wrap { "is-wrapped" }, if model.lang != none { "language-" + model.lang }),
-      data_language: if model.lang == none { "plaintext" } else { model.lang },
-      data_copy_text: _copy-text(rows),
-    ),
-    {
-      _style()
-      if html-plan.copy-button {
-        _copy-button()
-        _copy-script()
-      }
-      if _has-lang-tab(model, layout-plan) {
-        html.elem("div", attrs: _attr-dict(class: "zebraw-lang", aria_hidden: "true"), [#model.chrome.lang-label])
-      }
+  layout-presets.render(
+    layout-plan,
+    ctx,
+    layout-plan => {
+      let html-plan = _html-plan(layout-plan)
+      let rows = _visible-rows(model.rows, layout-plan)
+      let has-numbers = _has-numbers(rows, layout-plan)
+      let code-attrs = _attr-dict(
+        class: _classes("zebraw-code-root", if model.lang != none { "language-" + model.lang }),
+        translate: "no",
+      )
+
       html.elem(
-        "pre",
-        attrs: (class: "zebraw-pre"),
-        html.elem(
-          "code",
-          attrs: code-attrs,
-          {
-            _chrome(model, layout-plan, "header")
-            rows.map(row => _row(row, layout-plan, has-numbers)).join()
-            _chrome(model, layout-plan, "footer")
-          },
+        "div",
+        attrs: _attr-dict(
+          class: _classes("zebraw", if html-plan.wrap { "is-wrapped" }, if model.lang != none { "language-" + model.lang }),
+          data_language: if model.lang == none { "plaintext" } else { model.lang },
+          data_copy_text: _copy-text(rows),
         ),
+        {
+          _style()
+          if html-plan.copy-button {
+            _copy-button()
+            _copy-script()
+          }
+          if _has-lang-tab(model, layout-plan) {
+            html.elem("div", attrs: _attr-dict(class: "zebraw-lang", aria_hidden: "true"), [#model.chrome.lang-label])
+          }
+          html.elem(
+            "pre",
+            attrs: (class: "zebraw-pre"),
+            html.elem(
+              "code",
+              attrs: code-attrs,
+              {
+                _chrome(model, layout-plan, "header")
+                rows.map(row => _row(row, layout-plan, has-numbers)).join()
+                _chrome(model, layout-plan, "footer")
+              },
+            ),
+          )
+        },
       )
     },
   )

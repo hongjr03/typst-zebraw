@@ -17,30 +17,30 @@
   radius: 0.32em,
 )
 
-#let demo-layout = layouts.with(
-  inset: (top: 0.32em, right: 0.5em, bottom: 0.32em, left: 0.5em),
-  numbers: (
+#let demo-layout = layouts.compose({
+  layouts.inset((top: 0.32em, right: 0.5em, bottom: 0.32em, left: 0.5em))
+  layouts.numbers(
     width: 3.8em,
     gutter: 0.45em,
     separator: true,
     separator-width: 0.045em,
     column-gutter: 0.4em,
-  ),
-  comments: (
+  )
+  layouts.comments(
     placement: "beside-line",
     width: 12em,
     gap: 0.55em,
     flag: [>],
     indent: true,
-  ),
-  indent-guides: (
+  )
+  layouts.indent-guides(
     enabled: true,
     unit: 2,
-  ),
-  code: (
+  )
+  layouts.code(
     hanging-indent: true,
-  ),
-)
+  )
+})
 
 #let demo-components = components.with(
   header: ctx => text(weight: "semibold", fill: luma(60), ctx.block.chrome.header),
@@ -114,12 +114,10 @@ render(dataset)
   ),
   numbering: diff-numbering,
   style: demo-style,
-  layout: layouts.with(
-    numbers: demo-layout.numbers + (width: 4.8em),
-    comments: demo-layout.comments,
-    indent-guides: demo-layout.indent-guides,
-    code: demo-layout.code,
-  ),
+  layout: layouts.compose({
+    layouts.apply(demo-layout)
+    layouts.numbers(width: 4.8em)
+  }),
   components: demo-components,
 )
 
