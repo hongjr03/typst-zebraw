@@ -57,7 +57,18 @@
   }
 }
 
+#let frame(ctx) = block(
+  breakable: ctx.layout.frame.breakable,
+  width: ctx.layout.frame.width,
+  radius: ctx.frame-radius,
+  clip: ctx.layout.frame.clip,
+  fill: ctx.style.background,
+  stroke: ctx.style.stroke,
+  ctx.body,
+)
+
 #let default = (
+  frame: frame,
   gutter: gutter,
   code: code,
   comment: comment,

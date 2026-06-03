@@ -33,10 +33,12 @@
   }
 }
 
-#let _ctx(model, row, style, layout-plan, components-plan) = (
+#let _ctx(model, row, style, layout-plan, components-plan, body: none, frame-radius: none) = (
   target: "pdf",
   block: model,
   row: row,
+  body: body,
+  frame-radius: frame-radius,
   layout: layout-plan,
   style: style,
   components: components-plan,
@@ -316,19 +318,25 @@
   })
 }
 
-#let _render-frame(model, style, layout-plan, components-plan) = block(
-  breakable: layout-plan.frame.breakable,
-  width: layout-plan.frame.width,
-  radius: _frame-radius(model, style, layout-plan),
-  clip: layout-plan.frame.clip,
-  fill: style.background,
-  stroke: style.stroke,
-  {
+#let _render-frame(model, style, layout-plan, components-plan) = {
+  let body = {
     _render-chrome(model, "header", style, layout-plan, components-plan)
     _render-measured-columns(model, style, layout-plan, components-plan)
     _render-chrome(model, "footer", style, layout-plan, components-plan)
-  },
-)
+  }
+
+  (components-plan.frame)(
+    _ctx(
+      model,
+      none,
+      style,
+      layout-plan,
+      components-plan,
+      body: body,
+      frame-radius: _frame-radius(model, style, layout-plan),
+    ),
+  )
+}
 
 #let _render-frame-with-lang-tab(model, style, layout-plan, components-plan) = {
   let frame = _render-frame(model, style, layout-plan, components-plan)

@@ -315,6 +315,7 @@ The language tab page-break issue should be solved here, not in the language-tab
 The current PDF slice supports comment placement values `below-line`, `beside-line`, and `hidden`. `beside-line` keeps the line annotation in the model but renders the comment component in a side column inside the corresponding code row.
 The current PDF slice supports header/footer visibility as layout chrome: header is rendered above the measured body, footer below it, and either can be hidden through layout.
 The current PDF slice supports `lang-tab` as chrome attached to the frame's top-right edge: it is rendered as an overlay when the source block has a language label, does not create a full-width frame-colored row, consumes no extra vertical row, and can be hidden through layout. When the tab is visible, the frame delegates its top-right outer corner to the tab instead of drawing two overlapping rounded corners.
+The current PDF slice also routes frame drawing through `components.frame`; `layout.frame` still supplies layout policy such as width, clipping, and breakability, while the component owns the actual frame content.
 
 ## Components
 
@@ -347,6 +348,7 @@ ctx = (
 ```
 
 Default components may mark decorative PDF content with `pdf.artifact`, but a custom component owns the content it returns. If a replacement gutter or skip component should remain non-semantic in PDF, that component should preserve the artifact wrapper.
+The default frame component receives `ctx.body` and `ctx.frame-radius`, so renderer-computed geometry such as the language tab's shared top-right corner remains available without hard-coding the frame shell in the renderer.
 
 Components should not decide data semantics. For example:
 
