@@ -1,13 +1,13 @@
-#import "zebraw.typ": zebraw
+#import "zebraw.typ": zebraw, selectors
 
-#show raw: zebraw
+#show raw: zebraw.with(
+  select: selectors.ranges((1, 2), (3, none)),
+  highlight-lines: (
+    1,
+    (3, [continues after a skipped blank line]),
+  ),
+)
 
-#raw(block: true, `== Heading`.text, lang: "typ")<r1>
+#raw(block: true, `== Heading
 
-Should provide:
-
-- line highlighting;
-- comments;
-- components customization;
-- line slicing;
-- continuous raw block;
+#let value = 1`.text, lang: "typ")<r1>
