@@ -125,6 +125,22 @@
   }
 }
 
+#let _comment-row(row) = html.elem(
+  "span",
+  attrs: _attr-dict(
+    class: _classes("zebraw-row", "is-comment"),
+    data_source_line: str(row.source-number),
+  ),
+  html.elem(
+    "span",
+    attrs: _attr-dict(
+      class: "zebraw-comment",
+      data_indent: str(row.effective-indent-width),
+    ),
+    row.body,
+  ),
+)
+
 #let _skip(row) = html.elem(
   "span",
   attrs: _attr-dict(
@@ -136,7 +152,7 @@
 
 #let _row(row, layout-plan) = {
   if row.kind == "comment" {
-    return []
+    return _comment-row(row)
   }
 
   html.elem(
@@ -154,6 +170,18 @@
   )
 }
 
+#let _visible-rows(rows, layout-plan) = {
+  let visible = ()
+  for row in rows {
+    if row.kind == "comment" and layout-plan.comments.placement != "below-line" {
+    } else if row.kind == "skip" and layout-plan.skip.placement == "hidden" {
+    } else {
+      visible.push(row)
+    }
+  }
+  visible
+}
+
 #let _copy-text(rows) = {
   let lines = ()
   for row in rows {
@@ -169,9 +197,28 @@
   ".zebraw{display:block}.zebraw-pre{margin:0;overflow:auto}.zebraw-code-root{display:block;white-space:pre}.zebraw-row{display:block}.zebraw-gutter{display:inline-block;min-width:3ch;margin-right:1ch;text-align:right;user-select:none}.zebraw-number-cell{display:inline-block;min-width:2ch;text-align:right}.zebraw-number-cell+.zebraw-number-cell{margin-left:.5ch}.zebraw-comment,.zebraw-skip-label{user-select:none}",
 )
 
+#let _chrome(model, layout-plan, slot) = {
+  let content = if slot == "header" {
+    model.chrome.header
+  } else {
+    model.chrome.footer
+  }
+  let placement = if slot == "header" {
+    layout-plan.header.placement
+  } else {
+    layout-plan.footer.placement
+  }
+
+  if content == none or placement == "hidden" {
+    []
+  } else {
+    html.elem("div", attrs: _attr-dict(class: "zebraw-" + slot), content)
+  }
+}
+
 #let render-html(model, style: (:), layout-plan: layout-presets.default, components-plan: (:)) = {
   let layout-plan = layout-presets.resolve(layout-plan)
-  let rows = model.rows.filter(row => row.kind != "comment")
+  let rows = _visible-rows(model.rows, layout-plan)
   let code-attrs = _attr-dict(
     class: _classes("zebraw-code-root", if model.lang != none { "language-" + model.lang }),
     translate: "no",
@@ -195,7 +242,11 @@
         html.elem(
           "code",
           attrs: code-attrs,
-          rows.map(row => _row(row, layout-plan)).join(),
+          {
+            _chrome(model, layout-plan, "header")
+            rows.map(row => _row(row, layout-plan)).join()
+            _chrome(model, layout-plan, "footer")
+          },
         ),
       )
     },
