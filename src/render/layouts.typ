@@ -20,7 +20,7 @@
     placement: "below",
   ),
   lang-tab: (
-    placement: "attached",
+    placement: "top-right",
   ),
   frame: (
     breakable: true,

@@ -102,28 +102,34 @@
   }
 }
 
-#let _render-lang-tab(model, style, layout-plan, components-plan) = {
+#let _lang-tab-placement(layout-plan) = {
   let placement = layout-plan.lang-tab.placement
   assert(
-    placement == "attached" or placement == "hidden",
-    message: "zebraw: pdf lang-tab placement currently supports attached or hidden",
+    placement == "top-right" or placement == "hidden",
+    message: "zebraw: pdf lang-tab placement currently supports top-right or hidden",
   )
+  placement
+}
 
-  if model.chrome.lang-label == none or placement == "hidden" {
-    []
-  } else {
-    block(
-      width: 100%,
-      fill: style.background,
-      inset: (
-        top: style.inset.top,
-        right: style.inset.right,
-        bottom: 0pt,
-        left: style.inset.left,
-      ),
-      align(right, (components-plan.lang-tab)(_ctx(model, none, style, layout-plan, components-plan))),
+#let _has-lang-tab(model, layout-plan) = {
+  model.chrome.lang-label != none and _lang-tab-placement(layout-plan) != "hidden"
+}
+
+#let _frame-radius(model, style, layout-plan) = {
+  if _has-lang-tab(model, layout-plan) {
+    (
+      top-left: style.radius,
+      top-right: 0pt,
+      bottom-left: style.radius,
+      bottom-right: style.radius,
     )
+  } else {
+    style.radius
   }
+}
+
+#let _lang-tab(model, style, layout-plan, components-plan) = {
+  (components-plan.lang-tab)(_ctx(model, none, style, layout-plan, components-plan))
 }
 
 #let _render-gutter(model, row, fill, style, layout-plan, components-plan) = {
@@ -310,23 +316,44 @@
   })
 }
 
+#let _render-frame(model, style, layout-plan, components-plan) = block(
+  breakable: layout-plan.frame.breakable,
+  width: layout-plan.frame.width,
+  radius: _frame-radius(model, style, layout-plan),
+  clip: layout-plan.frame.clip,
+  fill: style.background,
+  stroke: style.stroke,
+  {
+    _render-chrome(model, "header", style, layout-plan, components-plan)
+    _render-measured-columns(model, style, layout-plan, components-plan)
+    _render-chrome(model, "footer", style, layout-plan, components-plan)
+  },
+)
+
+#let _render-frame-with-lang-tab(model, style, layout-plan, components-plan) = {
+  let frame = _render-frame(model, style, layout-plan, components-plan)
+
+  if not _has-lang-tab(model, layout-plan) {
+    frame
+  } else {
+    context {
+      let tab = _lang-tab(model, style, layout-plan, components-plan)
+      block(
+        breakable: layout-plan.frame.breakable,
+        width: layout-plan.frame.width,
+        {
+          frame
+          place(top + right, dy: -measure(tab).height, tab)
+        },
+      )
+    }
+  }
+}
+
 #let render-pdf(model, style: (:), layout-plan: layout-presets.default, components-plan: component-presets.default) = {
   let style = _style(style)
   let layout-plan = layout-presets.resolve(layout-plan)
   let components-plan = component-presets.resolve(components-plan)
 
-  block(
-    breakable: layout-plan.frame.breakable,
-    width: layout-plan.frame.width,
-    radius: style.radius,
-    clip: layout-plan.frame.clip,
-    fill: style.background,
-    stroke: style.stroke,
-    {
-      _render-chrome(model, "header", style, layout-plan, components-plan)
-      _render-lang-tab(model, style, layout-plan, components-plan)
-      _render-measured-columns(model, style, layout-plan, components-plan)
-      _render-chrome(model, "footer", style, layout-plan, components-plan)
-    },
-  )
+  _render-frame-with-lang-tab(model, style, layout-plan, components-plan)
 }

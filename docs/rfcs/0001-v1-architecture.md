@@ -307,14 +307,14 @@ layout: layouts.with(
   comments: (placement: "below-line", width: 14em),
   header: (placement: "above"),
   footer: (placement: "below"),
-  lang-tab: (placement: "attached", keep-with-body: true),
+  lang-tab: (placement: "top-right", keep-with-body: true),
 )
 ```
 
 The language tab page-break issue should be solved here, not in the language-tab component.
 The current PDF slice supports comment placement values `below-line`, `beside-line`, and `hidden`. `beside-line` keeps the line annotation in the model but renders the comment component in a side column inside the corresponding code row.
 The current PDF slice supports header/footer visibility as layout chrome: header is rendered above the measured body, footer below it, and either can be hidden through layout.
-The current PDF slice also supports `lang-tab` as attached chrome: it is rendered above the measured body when the source block has a language label, and it can be hidden through layout.
+The current PDF slice supports `lang-tab` as chrome attached to the frame's top-right edge: it is rendered as an overlay when the source block has a language label, does not create a full-width frame-colored row, consumes no extra vertical row, and can be hidden through layout. When the tab is visible, the frame delegates its top-right outer corner to the tab instead of drawing two overlapping rounded corners.
 
 ## Components
 
