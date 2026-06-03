@@ -21,6 +21,7 @@
   data_indent: none,
   data_copy_text: none,
   data_state: none,
+  style: none,
 ) = {
   let attrs = (:)
   if class != none {
@@ -52,6 +53,9 @@
   }
   if data_state != none {
     attrs.insert("data-state", data_state)
+  }
+  if style != none {
+    attrs.insert("style", style)
   }
   attrs
 }
@@ -110,7 +114,51 @@
   }
 }
 
-#let _code(row) = {
+#let _indent-guide-plan(layout-plan) = {
+  let plan = layout-plan.indent-guides
+  if not plan.enabled {
+    return plan
+  }
+
+  assert(plan.unit > 0, message: "zebraw: layout.indent-guides.unit must be positive")
+  assert(
+    plan.mode == "line" or plan.mode == "fast-preview",
+    message: "zebraw: html indent guide mode currently supports line or fast-preview",
+  )
+  plan
+}
+
+#let _indent-guide-columns(row, layout-plan) = {
+  let plan = _indent-guide-plan(layout-plan)
+  if not plan.enabled or not (row.kind == "code" or row.kind == "blank") {
+    return ()
+  }
+
+  let columns = ()
+  for column in range(row.effective-indent-width) {
+    if calc.rem(column, plan.unit) == 0 {
+      columns.push(column)
+    }
+  }
+  columns
+}
+
+#let _indent-guides(row, layout-plan) = {
+  let guides = ()
+  for column in _indent-guide-columns(row, layout-plan) {
+    guides.push(html.elem(
+      "span",
+      attrs: _attr-dict(
+        class: "zebraw-indent-guide",
+        aria_hidden: "true",
+        style: "--zebraw-guide-column:" + str(column),
+      ),
+    ))
+  }
+  guides.join()
+}
+
+#let _code(row, layout-plan) = {
   html.elem(
     "span",
     attrs: _attr-dict(
@@ -118,7 +166,10 @@
       translate: "no",
       data_indent: str(row.effective-indent-width),
     ),
-    if row.kind == "blank" { [] } else { row.body },
+    {
+      _indent-guides(row, layout-plan)
+      if row.kind == "blank" { [] } else { row.body }
+    },
   )
 }
 
@@ -174,7 +225,7 @@
       _skip(row)
     } else {
       _gutter(row, layout-plan)
-      _code(row)
+      _code(row, layout-plan)
       if layout-plan.comments.placement == "beside-line" {
         _comment(row, layout-plan)
       }
@@ -206,7 +257,7 @@
 
 #let _style() = html.elem(
   "style",
-  ".zebraw{display:block}.zebraw-pre{margin:0;overflow:auto}.zebraw-code-root{display:block;white-space:pre}.zebraw.is-wrapped .zebraw-code-root{white-space:pre-wrap;overflow-wrap:anywhere}.zebraw-row{display:block}.zebraw-gutter{display:inline-block;min-width:3ch;margin-right:1ch;text-align:right;user-select:none}.zebraw-number-cell{display:inline-block;min-width:2ch;text-align:right}.zebraw-number-cell+.zebraw-number-cell{margin-left:.5ch}.zebraw-comment,.zebraw-skip-label{user-select:none}.zebraw-copy-button{float:right}",
+  ".zebraw{display:block}.zebraw-pre{margin:0;overflow:auto}.zebraw-code-root{display:block;white-space:pre}.zebraw.is-wrapped .zebraw-code-root{white-space:pre-wrap;overflow-wrap:anywhere}.zebraw-row{display:block}.zebraw-gutter{display:inline-block;min-width:3ch;margin-right:1ch;text-align:right;user-select:none}.zebraw-number-cell{display:inline-block;min-width:2ch;text-align:right}.zebraw-number-cell+.zebraw-number-cell{margin-left:.5ch}.zebraw-code{position:relative}.zebraw-indent-guide{position:absolute;top:0;bottom:0;left:calc(var(--zebraw-guide-column)*1ch);border-left:1px solid currentColor;opacity:.35;pointer-events:none}.zebraw-comment,.zebraw-skip-label{user-select:none}.zebraw-copy-button{float:right}",
 )
 
 #let _copy-button() = html.elem(

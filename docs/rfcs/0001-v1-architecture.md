@@ -412,7 +412,7 @@ Proposed v1 ownership:
 
 - Multiple numbering belongs to the numbering strategy. `numbering.custom(...)` can return array display values per source line; gutter components decide how those columns are drawn.
 - The line-number separator is gutter decoration. It belongs to `layout.gutter` and the default gutter/frame components, not to numbering.
-- Indentation guide data belongs to the source/model layer because it depends on leading whitespace and blank-line inheritance. Rendering those guides belongs to a dedicated `indent-guide` component. Renderers should consume `effective-indent`; they should not re-parse code text.
+- Indentation guide data belongs to the source/model layer because it depends on leading whitespace and blank-line inheritance. PDF rendering goes through the `indent-guide` component, while HTML rendering uses empty overlay spans. Both renderers consume `effective-indent-width`; neither should re-parse code text.
 - Hanging indentation is layout behavior for the code component. It should consume model indentation data instead of parsing code content again.
 - Fast-preview is a performance/layout mode for indentation rendering. It should be explicit in the indentation layout plan, not global state.
 - Per-line colors are annotations; they should continue to merge through the single `LineAnnotation` record instead of a separate `line-colors` dictionary.
@@ -469,7 +469,7 @@ One caveat: `pdf.artifact` expresses PDF tagging semantics, but generic text ext
 ## HTML Rendering
 
 HTML should be an independent backend that consumes the same `VisualRows`.
-The current HTML slice renders a stable wrapper/pre/code/row DOM from `VisualRows`, marks code containers with `translate="no"`, keeps gutter/comment/skip decoration `aria-hidden`, exposes `data-copy-text` from `VisualRows.copy-text`, and consumes header/footer plus comment placement from the same model/layout data as PDF. It supports `layout.html.wrap` for code wrapping and an optional `layout.html.copy-button` that copies `data-copy-text`; full Expressive Code styling is still out of scope for this slice.
+The current HTML slice renders a stable wrapper/pre/code/row DOM from `VisualRows`, marks code containers with `translate="no"`, keeps gutter/comment/skip decoration `aria-hidden`, exposes `data-copy-text` from `VisualRows.copy-text`, and consumes header/footer plus comment placement from the same model/layout data as PDF. It supports `layout.html.wrap` for code wrapping and an optional `layout.html.copy-button` that copies `data-copy-text`. It also supports `layout.indent-guides` through empty `aria-hidden` overlay spans positioned from `effective-indent-width`, including blank-line inherited indentation; those spans are not part of `data-copy-text`. Full Expressive Code styling is still out of scope for this slice.
 
 HTML-specific requirements:
 
