@@ -86,6 +86,15 @@
   placement
 }
 
+#let _skip-placement(layout-plan) = {
+  let placement = layout-plan.skip.placement
+  assert(
+    placement == "body" or placement == "hidden",
+    message: "zebraw: pdf skip placement currently supports body or hidden",
+  )
+  placement
+}
+
 #let _gutter-separator-width(layout-plan) = {
   if layout-plan.gutter.separator {
     layout-plan.gutter.separator-width
@@ -382,11 +391,12 @@
 
 #let _visible-rows(rows, layout-plan) = {
   let comments-placement = _comment-placement(layout-plan)
+  let skip-placement = _skip-placement(layout-plan)
   let visible = ()
   for row in rows {
     if row.kind == "comment" and comments-placement == "hidden" {
     } else if row.kind == "comment" and comments-placement == "beside-line" {
-    } else if row.kind == "skip" and layout-plan.skip.placement == "hidden" {
+    } else if row.kind == "skip" and skip-placement == "hidden" {
     } else {
       visible.push(row)
     }

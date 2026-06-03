@@ -171,6 +171,43 @@
   placement
 }
 
+#let _skip-placement(layout-plan) = {
+  let placement = layout-plan.skip.placement
+  assert(
+    placement == "body" or placement == "hidden",
+    message: "zebraw: html skip placement currently supports body or hidden",
+  )
+  placement
+}
+
+#let _chrome-placement(layout-plan, slot) = {
+  let placement = if slot == "header" {
+    layout-plan.header.placement
+  } else {
+    layout-plan.footer.placement
+  }
+  let expected-placement = if slot == "header" { "above" } else { "below" }
+
+  assert(
+    placement == expected-placement or placement == "hidden",
+    message: "zebraw: html " + slot + " placement currently supports " + expected-placement + " or hidden",
+  )
+  placement
+}
+
+#let _lang-tab-placement(layout-plan) = {
+  let placement = layout-plan.lang-tab.placement
+  assert(
+    placement == "top-right" or placement == "hidden",
+    message: "zebraw: html lang-tab placement currently supports top-right or hidden",
+  )
+  placement
+}
+
+#let _has-lang-tab(model, layout-plan) = {
+  model.chrome.lang-label != none and _lang-tab-placement(layout-plan) != "hidden"
+}
+
 #let _indent-guide-plan(layout-plan) = {
   let plan = layout-plan.indent-guides
   if not plan.enabled {
@@ -366,10 +403,11 @@
 
 #let _visible-rows(rows, layout-plan) = {
   let placement = _comment-placement(layout-plan)
+  let skip-placement = _skip-placement(layout-plan)
   let visible = ()
   for row in rows {
     if row.kind == "comment" and placement != "below-line" {
-    } else if row.kind == "skip" and layout-plan.skip.placement == "hidden" {
+    } else if row.kind == "skip" and skip-placement == "hidden" {
     } else {
       visible.push(row)
     }
@@ -421,11 +459,7 @@
   } else {
     model.chrome.footer
   }
-  let placement = if slot == "header" {
-    layout-plan.header.placement
-  } else {
-    layout-plan.footer.placement
-  }
+  let placement = _chrome-placement(layout-plan, slot)
 
   if content == none or placement == "hidden" {
     []
@@ -457,7 +491,7 @@
         _copy-button()
         _copy-script()
       }
-      if model.chrome.lang-label != none {
+      if _has-lang-tab(model, layout-plan) {
         html.elem("div", attrs: _attr-dict(class: "zebraw-lang", aria_hidden: "true"), [#model.chrome.lang-label])
       }
       html.elem(
