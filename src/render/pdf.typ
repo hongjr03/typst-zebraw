@@ -235,13 +235,15 @@
 #let _render-gutter-separator(fill, style, layout-plan) = grid.cell(
   fill: fill,
   inset: 0pt,
-  pdf.artifact(
-    rect(
-      width: layout-plan.gutter.separator-width,
-      height: 100%,
-      fill: style.gutter-fill.transparentize(55%),
-    ),
-  ),
+  if layout-plan.gutter.separator {
+    pdf.artifact(
+      rect(
+        width: layout-plan.gutter.separator-width,
+        height: 100%,
+        fill: style.gutter-fill.transparentize(55%),
+      ),
+    )
+  },
 )
 
 #let _render-indent-guides(model, row, row-height, style, layout-plan, components-plan) = {
@@ -349,13 +351,7 @@
   let fill = _row-fill(row, style)
   let gutter-placement = _gutter-placement(layout-plan)
   let separator-width = _gutter-separator-width(layout-plan)
-  let columns = if separator-width == 0pt {
-    if gutter-placement == "right" {
-      (1fr, layout-plan.gutter.width + layout-plan.gutter.gap)
-    } else {
-      (layout-plan.gutter.width + layout-plan.gutter.gap, 1fr)
-    }
-  } else if gutter-placement == "right" {
+  let columns = if gutter-placement == "right" {
     (1fr, separator-width, layout-plan.gutter.width + layout-plan.gutter.gap)
   } else {
     (layout-plan.gutter.width + layout-plan.gutter.gap, separator-width, 1fr)
@@ -374,7 +370,7 @@
       row-gutter: 0pt,
       column-gutter: 0pt,
       _render-body(model, row, fill, style, layout-plan, components-plan),
-      if separator-width != 0pt { _render-gutter-separator(fill, style, layout-plan) },
+      _render-gutter-separator(fill, style, layout-plan),
       _render-gutter(model, row, fill, style, layout-plan, components-plan),
     )
   } else {
@@ -383,7 +379,7 @@
       row-gutter: 0pt,
       column-gutter: 0pt,
       _render-gutter(model, row, fill, style, layout-plan, components-plan),
-      if separator-width != 0pt { _render-gutter-separator(fill, style, layout-plan) },
+      _render-gutter-separator(fill, style, layout-plan),
       _render-body(model, row, fill, style, layout-plan, components-plan),
     )
   }
@@ -489,7 +485,7 @@
 
     if gutter-width == 0pt {
       body-column
-    } else if gutter-placement == "right" and separator-width != 0pt {
+    } else if gutter-placement == "right" {
       let separator-column = _render-gutter-separator-column(rows, heights, style, layout-plan)
       grid(
         columns: (1fr, separator-width, layout-plan.gutter.width + layout-plan.gutter.gap),
@@ -499,15 +495,7 @@
         separator-column,
         gutter-column,
       )
-    } else if gutter-placement == "right" {
-      grid(
-        columns: (1fr, layout-plan.gutter.width + layout-plan.gutter.gap),
-        row-gutter: 0pt,
-        column-gutter: 0pt,
-        body-column,
-        gutter-column,
-      )
-    } else if separator-width != 0pt {
+    } else {
       let separator-column = _render-gutter-separator-column(rows, heights, style, layout-plan)
       grid(
         columns: (layout-plan.gutter.width + layout-plan.gutter.gap, separator-width, 1fr),
@@ -515,14 +503,6 @@
         column-gutter: 0pt,
         gutter-column,
         separator-column,
-        body-column,
-      )
-    } else {
-      grid(
-        columns: (layout-plan.gutter.width + layout-plan.gutter.gap, 1fr),
-        row-gutter: 0pt,
-        column-gutter: 0pt,
-        gutter-column,
         body-column,
       )
     }
