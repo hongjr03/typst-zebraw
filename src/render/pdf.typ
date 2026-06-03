@@ -8,6 +8,7 @@
   comment-background: rgb("#94e2d5").lighten(85%),
   skip-background: luma(235),
   gutter-fill: luma(120),
+  indent-guide-fill: luma(150).transparentize(45%),
   lang-background: none,
   lang-fill: luma(80),
   lang-inset: (x: 0.5em, y: 0.24em),
@@ -33,12 +34,22 @@
   }
 }
 
-#let _ctx(model, row, style, layout-plan, components-plan, body: none, frame-radius: none) = (
+#let _ctx(
+  model,
+  row,
+  style,
+  layout-plan,
+  components-plan,
+  body: none,
+  frame-radius: none,
+  guide-height: none,
+) = (
   target: "pdf",
   block: model,
   row: row,
   body: body,
   frame-radius: frame-radius,
+  guide-height: guide-height,
   layout: layout-plan,
   style: style,
   components: components-plan,
@@ -77,6 +88,35 @@
 
 #let _gutter-total-width(layout-plan) = {
   layout-plan.gutter.width + _gutter-separator-width(layout-plan) + layout-plan.gutter.gap
+}
+
+#let _indent-guide-plan(layout-plan) = {
+  let plan = layout-plan.indent-guides
+  if not plan.enabled {
+    return plan
+  }
+
+  assert(plan.unit > 0, message: "zebraw: layout.indent-guides.unit must be positive")
+  assert(
+    plan.mode == "line" or plan.mode == "fast-preview",
+    message: "zebraw: pdf indent guide mode currently supports line or fast-preview",
+  )
+  plan
+}
+
+#let _indent-guide-columns(row, layout-plan) = {
+  let plan = _indent-guide-plan(layout-plan)
+  if not plan.enabled or not (row.kind == "code" or row.kind == "blank") {
+    return ()
+  }
+
+  let columns = ()
+  for column in range(row.effective-indent-width) {
+    if calc.rem(column, plan.unit) == 0 {
+      columns.push(column)
+    }
+  }
+  columns
 }
 
 #let _has-beside-comment(row, layout-plan) = {
@@ -181,12 +221,47 @@
   ),
 )
 
-#let _render-code-cell(model, row, fill, style, layout-plan, components-plan) = {
+#let _render-indent-guides(model, row, row-height, style, layout-plan, components-plan) = {
+  if row-height == none {
+    return []
+  }
+
+  let columns = _indent-guide-columns(row, layout-plan)
+  if columns.len() == 0 {
+    return []
+  }
+
+  context {
+    let advance = measure(raw("x")).width
+    for column in columns {
+      place(
+        left + top,
+        dx: column * advance,
+        dy: -style.inset.top,
+        (components-plan.indent-guide)(
+          _ctx(
+            model,
+            row,
+            style,
+            layout-plan,
+            components-plan,
+            guide-height: row-height,
+          ),
+        ),
+      )
+    }
+  }
+}
+
+#let _render-code-cell(model, row, fill, style, layout-plan, components-plan, row-height: none) = {
   grid.cell(
     fill: fill,
     inset: style.inset,
     align: left + top,
-    (components-plan.code)(_ctx(model, row, style, layout-plan, components-plan)),
+    {
+      _render-indent-guides(model, row, row-height, style, layout-plan, components-plan)
+      (components-plan.code)(_ctx(model, row, style, layout-plan, components-plan))
+    },
   )
 }
 
@@ -200,7 +275,7 @@
   )
 }
 
-#let _render-code(model, row, fill, style, layout-plan, components-plan) = {
+#let _render-code(model, row, fill, style, layout-plan, components-plan, row-height: none) = {
   if _has-beside-comment(row, layout-plan) {
     grid.cell(
       fill: fill,
@@ -210,12 +285,12 @@
         columns: (1fr, layout-plan.comments.width),
         row-gutter: 0pt,
         column-gutter: layout-plan.comments.gap,
-        _render-code-cell(model, row, fill, style, layout-plan, components-plan),
+        _render-code-cell(model, row, fill, style, layout-plan, components-plan, row-height: row-height),
         _render-side-comment-cell(model, row, style, layout-plan, components-plan),
       ),
     )
   } else {
-    _render-code-cell(model, row, fill, style, layout-plan, components-plan)
+    _render-code-cell(model, row, fill, style, layout-plan, components-plan, row-height: row-height)
   }
 }
 
@@ -237,13 +312,13 @@
   )
 }
 
-#let _render-body(model, row, fill, style, layout-plan, components-plan) = {
+#let _render-body(model, row, fill, style, layout-plan, components-plan, row-height: none) = {
   if row.kind == "comment" {
     _render-comment(model, row, fill, style, layout-plan, components-plan)
   } else if row.kind == "skip" {
     _render-skip(model, row, fill, style, layout-plan, components-plan)
   } else {
-    _render-code(model, row, fill, style, layout-plan, components-plan)
+    _render-code(model, row, fill, style, layout-plan, components-plan, row-height: row-height)
   }
 }
 
@@ -356,9 +431,9 @@
 
 #let _render-body-column(model, rows, heights, style, layout-plan, components-plan) = {
   let cells = ()
-  for row in rows {
+  for (index, row) in rows.enumerate() {
     let fill = _row-fill(row, style)
-    cells.push(_render-body(model, row, fill, style, layout-plan, components-plan))
+    cells.push(_render-body(model, row, fill, style, layout-plan, components-plan, row-height: heights.at(index)))
   }
 
   grid(

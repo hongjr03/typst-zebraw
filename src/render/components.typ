@@ -31,6 +31,17 @@
 
 #let skip(ctx) = pdf.artifact(text(fill: ctx.style.gutter-fill, ctx.row.body))
 
+#let indent-guide(ctx) = {
+  let guide-style = ctx.layout.indent-guides
+  pdf.artifact(
+    rect(
+      width: guide-style.line-width,
+      height: ctx.guide-height,
+      fill: ctx.style.indent-guide-fill,
+    ),
+  )
+}
+
 #let header(ctx) = ctx.block.chrome.header
 
 #let footer(ctx) = ctx.block.chrome.footer
@@ -73,6 +84,7 @@
   code: code,
   comment: comment,
   skip: skip,
+  indent-guide: indent-guide,
   header: header,
   footer: footer,
   lang-tab: lang-tab,

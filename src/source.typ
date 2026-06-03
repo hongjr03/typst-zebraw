@@ -25,18 +25,33 @@
   indent
 }
 
+#let indentation-width(indent, tab-size) = {
+  let width = 0
+  for c in indent {
+    if c == "\u{0009}" {
+      let offset = calc.rem(width, tab-size)
+      width += if offset == 0 { tab-size } else { tab-size - offset }
+    } else {
+      width += 1
+    }
+  }
+  width
+}
+
 #let _is-blank-line(line) = line.text.trim().len() == 0
 
-#let _source-line(line, effective-indent) = (
+#let _source-line(line, indent, effective-indent, tab-size) = (
   source-number: line.number,
   source-count: line.count,
   text: line.text,
   body: line.body,
-  indent: indentation-from-text(line.text),
+  indent: indent,
   effective-indent: effective-indent,
+  indent-width: indentation-width(indent, tab-size),
+  effective-indent-width: indentation-width(effective-indent, tab-size),
 )
 
-#let _source-lines(raw-lines) = {
+#let _source-lines(raw-lines, tab-size) = {
   let lines = ()
   let inherited-indent = ""
 
@@ -49,7 +64,7 @@
       indent
     }
 
-    lines.push(_source-line(line, effective-indent))
+    lines.push(_source-line(line, indent, effective-indent, tab-size))
   }
 
   lines
@@ -58,11 +73,14 @@
 #let source-from-raw(it) = {
   assert(type(it) == content and it.func() == raw, message: "zebraw: expected raw content")
   let fields = it.fields()
+  let tab-size = fields.at("tab-size", default: 2)
+  assert(tab-size > 0, message: "zebraw: raw tab-size must be positive")
 
   (
     kind: if it.block { "block" } else { "inline" },
     label: fields.at("label", default: none),
     lang: it.lang,
-    lines: _source-lines(it.lines),
+    tab-size: tab-size,
+    lines: _source-lines(it.lines, tab-size),
   )
 }

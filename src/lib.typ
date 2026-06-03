@@ -32,7 +32,7 @@
   components: default-components,
   body,
 ) = {
-  if type(body) != content or body.func() != raw {
+  if type(body) != content or body.func() != raw or not body.block {
     return body
   }
 

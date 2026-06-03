@@ -9,8 +9,8 @@
 #let _row-summary(index, row) = {
   let source-number = _value(row.source-number)
   let display-number = _value(row.display-number)
-  let indent-width = if row.indent == none { 0 } else { row.indent.len() }
-  let effective-indent-width = if row.effective-indent == none { 0 } else { row.effective-indent.len() }
+  let indent-width = if row.indent-width == none { 0 } else { row.indent-width }
+  let effective-indent-width = if row.effective-indent-width == none { 0 } else { row.effective-indent-width }
   let highlight = if row.annotation != none and row.annotation.highlighted { "yes" } else { "no" }
   let annotation = if _has-line-annotation(row.annotation) { "yes" } else { "no" }
 

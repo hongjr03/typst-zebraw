@@ -11,6 +11,12 @@
     width: 14em,
     gap: 0.5em,
   ),
+  indent-guides: (
+    enabled: false,
+    unit: 2,
+    mode: "line",
+    line-width: 0.05em,
+  ),
   skip: (
     placement: "body",
   ),
@@ -33,6 +39,7 @@
 #let resolve(layout) = (
   gutter: default.gutter + layout.at("gutter", default: (:)),
   comments: default.comments + layout.at("comments", default: (:)),
+  indent-guides: default.indent-guides + layout.at("indent-guides", default: (:)),
   skip: default.skip + layout.at("skip", default: (:)),
   header: default.header + layout.at("header", default: (:)),
   footer: default.footer + layout.at("footer", default: (:)),
