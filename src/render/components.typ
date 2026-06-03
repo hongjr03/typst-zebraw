@@ -35,6 +35,28 @@
 
 #let footer(ctx) = ctx.block.chrome.footer
 
+#let lang-tab(ctx) = {
+  let label = ctx.block.chrome.lang-label
+  if label == none {
+    []
+  } else {
+    let fill = if ctx.style.lang-background == none {
+      ctx.style.comment-background
+    } else {
+      ctx.style.lang-background
+    }
+
+    pdf.artifact(
+      box(
+        inset: ctx.style.lang-inset,
+        fill: fill,
+        radius: (top: ctx.style.radius),
+        text(fill: ctx.style.lang-fill, [#label]),
+      ),
+    )
+  }
+}
+
 #let default = (
   gutter: gutter,
   code: code,
@@ -42,6 +64,7 @@
   skip: skip,
   header: header,
   footer: footer,
+  lang-tab: lang-tab,
 )
 
 #let resolve(components) = default + components

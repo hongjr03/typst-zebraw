@@ -8,6 +8,9 @@
   comment-background: rgb("#94e2d5").lighten(85%),
   skip-background: luma(235),
   gutter-fill: luma(120),
+  lang-background: none,
+  lang-fill: luma(80),
+  lang-inset: (x: 0.5em, y: 0.24em),
   inset: (top: 0.34em, right: 0.5em, bottom: 0.34em, left: 0.5em),
   radius: 0.34em,
 )
@@ -72,6 +75,30 @@
       fill: style.background,
       inset: style.inset,
       (component)(_ctx(model, none, style, layout-plan, components-plan)),
+    )
+  }
+}
+
+#let _render-lang-tab(model, style, layout-plan, components-plan) = {
+  let placement = layout-plan.lang-tab.placement
+  assert(
+    placement == "attached" or placement == "hidden",
+    message: "zebraw: pdf lang-tab placement currently supports attached or hidden",
+  )
+
+  if model.chrome.lang-label == none or placement == "hidden" {
+    []
+  } else {
+    block(
+      width: 100%,
+      fill: style.background,
+      inset: (
+        top: style.inset.top,
+        right: style.inset.right,
+        bottom: 0pt,
+        left: style.inset.left,
+      ),
+      align(right, (components-plan.lang-tab)(_ctx(model, none, style, layout-plan, components-plan))),
     )
   }
 }
@@ -243,6 +270,7 @@
     stroke: style.stroke,
     {
       _render-chrome(model, "header", style, layout-plan, components-plan)
+      _render-lang-tab(model, style, layout-plan, components-plan)
       _render-measured-columns(model, style, layout-plan, components-plan)
       _render-chrome(model, "footer", style, layout-plan, components-plan)
     },

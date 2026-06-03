@@ -313,6 +313,7 @@ layout: layouts.with(
 
 The language tab page-break issue should be solved here, not in the language-tab component.
 The current PDF slice supports header/footer visibility as layout chrome: header is rendered above the measured body, footer below it, and either can be hidden through layout.
+The current PDF slice also supports `lang-tab` as attached chrome: it is rendered above the measured body when the source block has a language label, and it can be hidden through layout.
 
 ## Components
 
@@ -389,6 +390,7 @@ Therefore `pdf.artifact` should stay in the renderer as PDF tag semantics even w
 PDF rendering should:
 
 - render gutter and body as separate measured columns,
+- render language labels as decorative chrome outside the code column,
 - measure visual row heights once so the gutter column and body column stay aligned,
 - mark line numbers and decorative labels as artifacts,
 - wrap artifact content inside layout cells rather than wrapping the cells themselves, so layout metadata such as `inset` and `align` remains visible to Typst,

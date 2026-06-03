@@ -17,6 +17,9 @@
   footer: (
     placement: "below",
   ),
+  lang-tab: (
+    placement: "attached",
+  ),
   frame: (
     breakable: true,
     width: 100%,
@@ -30,6 +33,7 @@
   skip: default.skip + layout.at("skip", default: (:)),
   header: default.header + layout.at("header", default: (:)),
   footer: default.footer + layout.at("footer", default: (:)),
+  lang-tab: default.lang-tab + layout.at("lang-tab", default: (:)),
   frame: default.frame + layout.at("frame", default: (:)),
 )
 
