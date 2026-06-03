@@ -26,9 +26,11 @@
 }
 #let source-from-raw(it) = {
   assert(type(it) == content and it.func() == raw, message: "zebraw: expected raw content")
+  let fields = it.fields()
 
   (
     kind: if it.block { "block" } else { "inline" },
+    label: fields.at("label", default: none),
     lang: it.lang,
     lines: it.lines.map(line => (
       source-number: line.number,

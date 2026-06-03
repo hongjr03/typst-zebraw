@@ -12,6 +12,14 @@
 #let default-components = components.default
 #let default-numbering = numbering.line()
 
+#let _summary-marker(model) = {
+  if model.label == none {
+    []
+  } else {
+    [#metadata(model.summary) #model.label]
+  }
+}
+
 /// Render a raw block with Zebraw.
 #let zebraw(
   select: none,
@@ -27,22 +35,26 @@
     return body
   }
 
-  let source = source-from-raw(body)
-  let model = build-block-model(
-    source,
-    select: select,
-    annotate: annotate,
-    numbering: numbering,
-  )
-
-  if debug {
-    render-debug(model)
-  } else {
-    render-pdf(
-      model,
-      style: style,
-      layout-plan: layout,
-      components-plan: components,
+  context {
+    let source = source-from-raw(body)
+    let model = build-block-model(
+      source,
+      select: select,
+      annotate: annotate,
+      numbering: numbering,
     )
+
+    if debug {
+      render-debug(model)
+    } else {
+      render-pdf(
+        model,
+        style: style,
+        layout-plan: layout,
+        components-plan: components,
+      )
+    }
+
+    _summary-marker(model)
   }
 }

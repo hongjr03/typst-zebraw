@@ -37,6 +37,36 @@
   source => (source-line, segment) => value
 }
 
+#let _summary-kind = "zebraw-block-summary"
+
+#let _last-summary(target) = {
+  let summaries = query(selector(target).before(here())).filter(item => {
+    let is-metadata = item.func() == metadata
+    let value = if is-metadata { item.value } else { none }
+    is-metadata and type(value) == dictionary and value.at("kind", default: none) == _summary-kind
+  })
+
+  if summaries.len() == 0 {
+    none
+  } else {
+    summaries.last().value
+  }
+}
+
+#let continue-from(target, offset: 0, keep-offset: auto, fallback: 0) = {
+  source => {
+    assert(type(target) == label, message: "zebraw: numbering.continue-from expects a label")
+    let summary = _last-summary(target)
+    let base = if summary == none or summary.last-number == none {
+      fallback
+    } else {
+      summary.last-number + offset
+    }
+
+    (source-line, segment) => base + _display-line(0, keep-offset, source-line, segment)
+  }
+}
+
 #let resolve(strategy, source) = {
   assert(type(strategy) == function, message: "zebraw: numbering must be a numbering strategy")
   let display = strategy(source)

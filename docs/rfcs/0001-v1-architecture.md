@@ -109,6 +109,7 @@ Proposed model:
 ```typst
 SourceBlock = (
   kind: "block" | "inline",
+  label: none | label,
   lang: none | str,
   lines: (
     (
@@ -263,7 +264,8 @@ Codly's `offset-from` works by querying per-line marker elements between a label
 
 Preferred approach:
 
-- Emit one block summary marker for labelled blocks.
+- Emit one block summary metadata marker for labelled raw blocks.
+- Reuse the raw block's label for that summary marker and filter query results by metadata `kind`.
 - Query only that summary for `continue-from`.
 - Generate per-line reference metadata only when an explicit line-reference feature is enabled.
 
@@ -275,7 +277,7 @@ metadata((
   source-lines: 37,
   visible-lines: 20,
   last-number: 42,
-)) <zebraw:some-label:end>
+)) <some-label>
 ```
 
 This keeps continuation block-level by default.
@@ -434,7 +436,6 @@ Design rules:
 ## Open Questions
 
 - Exact naming: `select`, `selector`, or `range`.
-- Whether `numbering.continue-from(<label>)` should infer summary labels from the original block label or require an explicit Zebraw label namespace.
 - Whether line references should be a separate feature module.
 - Whether HTML export should be in the initial v1 milestone or follow after the PDF renderer is stable.
 - How much of `layout` should be user-replaceable versus controlled through style tokens.

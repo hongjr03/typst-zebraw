@@ -29,8 +29,10 @@
   let rows = (
     [Zebraw debug model],
     [kind: #model.kind],
+    [label: #_value(model.label)],
     [lang: #_value(model.lang)],
     [source lines: #model.source-lines],
+    [summary: #repr(model.summary)],
     [visual rows: #model.rows.len()],
     [---],
   )

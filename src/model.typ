@@ -47,6 +47,27 @@
   skipped-lines: segment.count,
 )
 
+#let _summary(rows, source) = {
+  let visible-lines = 0
+  let last-number = none
+
+  for row in rows {
+    if row.source-number != none {
+      visible-lines += 1
+      if type(row.display-number) == int {
+        last-number = row.display-number
+      }
+    }
+  }
+
+  (
+    kind: "zebraw-block-summary",
+    source-lines: source.lines.len(),
+    visible-lines: visible-lines,
+    last-number: last-number,
+  )
+}
+
 #let build-block-model(
   source,
   select: none,
@@ -83,10 +104,12 @@
 
   (
     kind: source.kind,
+    label: source.label,
     lang: source.lang,
     source-lines: source.lines.len(),
     selection: selection,
     annotations: annotation-plan,
+    summary: _summary(rows, source),
     rows: rows,
     chrome: (
       header: annotation-plan.block.header,
