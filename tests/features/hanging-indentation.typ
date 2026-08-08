@@ -7,6 +7,7 @@
 
 #zebraw(
   hanging-indent: true,
+  lang: true,
   ```typ
   #let forecast(day) = block[
     #box(square(

@@ -1,4 +1,4 @@
-#import "@preview/zebraw:0.6.3": *
+#import "@preview/zebraw:0.7.0": *
 
 #set raw(theme: "assets/tokyo-night.tmTheme") if sys.inputs.at("x-color-theme", default: none) == "dark"
 #show raw: set text(font: "Fira Code")
@@ -112,10 +112,10 @@ Zebraw is a lightweight and fast package for displaying code blocks with line nu
 
 == Quick Start
 
-Import the `zebraw` package with ```typ #import "@preview/zebraw:0.6.3": *``` then add ```typ #show: zebraw``` to start using zebraw in the simplest way.
+Import the `zebraw` package with ```typ #import "@preview/zebraw:0.7.0": *``` then add ```typ #show: zebraw``` to start using zebraw in the simplest way.
 
 #context preview(````typ
-#import "@preview/zebraw:0.6.3": *
+#import "@preview/zebraw:0.7.0": *
 #show: zebraw
 
 ```typ
@@ -527,7 +527,8 @@ Alternatively, use the dedicated `header` and `footer` parameters for cleaner co
 
 Display a floating language identifier tab in the top-right corner of the code block by setting `lang` to `true`:
 
-#context preview(````typ
+#context preview(
+  ````typ
 #zebraw(
   lang: true,
   ```typst

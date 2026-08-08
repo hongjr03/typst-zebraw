@@ -26,10 +26,10 @@ Zebraw is a lightweight and fast package for displaying code blocks with line nu
 
 ### Quick Start
 
-Import the `zebraw` package with `#import "@preview/zebraw:0.6.3": *` then add `#show: zebraw` to start using zebraw in the simplest way.
+Import the `zebraw` package with `#import "@preview/zebraw:0.7.0": *` then add `#show: zebraw` to start using zebraw in the simplest way.
 
 ````typ
-#import "@preview/zebraw:0.6.3": *
+#import "@preview/zebraw:0.7.0": *
 #show: zebraw
 
 ```typ

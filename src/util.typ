@@ -1,5 +1,6 @@
 #import "state.typ": *
 #import "indentation.typ": *
+#import "@preview/codly-languages:0.1.10": *
 
 /// Get the current background color based on type (single color or array)
 #let background-color-at-index(background-color, idx) = {
@@ -166,21 +167,60 @@
   lang,
   lang-color,
   lang-font-args,
+  lang-icon,
   inset,
   radius,
   it,
 ) = context {
   if has-lang {
+    let use-codly = lang-icon == true
+    let codly-language = if use-codly {
+      codly-languages.at(it.lang)
+    }
+    let lang-title = if type(lang) != bool {
+      lang
+    } else if use-codly {
+      codly-language.name
+    } else {
+      it.lang
+    }
+    let lang-icon-content = if use-codly {
+      codly-language.icon
+    } else if type(lang-icon) == bool {
+      none
+    } else {
+      lang-icon
+    }
+    let lang-col = if use-codly and lang-color == none {
+      codly-language.color.lighten(40%)
+    } else {
+      lang-color
+    }
+    let lang-content = if lang-icon-content == none {
+      text(
+        bottom-edge: "bounds",
+        ..lang-font-args,
+        lang-title,
+      )
+    } else {
+      grid(
+        columns: (auto,)*2,
+        align: horizon,
+        column-gutter: 0.34em,
+        box(height: 0.8em, lang-icon-content),
+        text(
+          bottom-edge: "bounds",
+          ..lang-font-args,
+          lang-title,
+        ),
+      )
+    }
     let lang-tab = box(
       inset: 0.34em,
       outset: (bottom: radius),
       radius: (top: radius),
-      fill: lang-color,
-      text(
-        bottom-edge: "bounds",
-        ..lang-font-args,
-        if type(lang) == bool { it.lang } else { lang },
-      ),
+      fill: lang-col,
+      lang-content,
     )
     v(-measure(lang-tab).height)
     h(1fr)

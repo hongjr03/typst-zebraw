@@ -20,3 +20,21 @@
   )
   ```
 )
+
+#zebraw(
+  lang: true,
+  lang-icon: true,
+  ```typst
+  #grid(
+    columns: (1fr, 1fr),
+    [Hello], [world!],
+  )
+  ```
+)
+
+#zebraw(
+  lang: true,
+  ```custom-language
+  This language is not in codly-languages.
+  ```
+)
